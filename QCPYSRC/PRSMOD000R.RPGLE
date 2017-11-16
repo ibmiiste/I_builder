@@ -1453,3 +1453,14 @@
        DCL-PR Gst_Err_Cstr;
          P_Failed PACKED(10:0);
        END-PR ;
+
+       // --------------------------------------------------
+       // Prototype for Programme:Envoi vers système distant
+       // --------------------------------------------------
+       Dcl-Pr I_Push;
+         P_Objet char(20) Const;
+         P_Sys_Dst CHAR(32);
+         P_User LIKE(R_NomObj);
+         P_Mot_De_Passe CHAR(10);
+       End-Pr;
+
