@@ -1,0 +1,40 @@
+      /* >>PRE-COMPILER<<                                                 */
+      /*   >>CRTCMD<<  CRTBNDCL SRCFILE(&SL/&SF) SRCMBR(&SM);             */
+      /*   >>IMPORTANT<<                                                  */
+      /*     >>PARM<<  PGM(&LI/&OB);                                      */
+      /*     >>PARM<<  OPTION(*EVENTF);                                   */
+      /*     >>PARM<<  DBGVIEW(*ALL);                                     */
+      /*   >>END-IMPORTANT<<                                              */
+      /*   >>EXECUTE<<                                                    */
+      /* >>END-PRE-COMPILER<<                                             */
+
+             PGM        PARM(&PREBIBSRC &PREFICSRC &USESRCMBR &BIBDST +
+                          &OBJDST &BIBSRC &FICSRC &MBRSRC &OPTIMIZE +
+                          &FAILED)
+
+             DCL        VAR(&OPTIMIZE) TYPE(*CHAR) LEN(20)
+             DCL        VAR(&PREBIBSRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&PREFICSRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&USESRCMBR) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&BIBDST) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&OBJDST) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&BIBSRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&FICSRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&MBRSRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&OPTIMIZE) TYPE(*CHAR) LEN(20)
+             DCL        VAR(&FAILED) TYPE(*DEC) LEN(10 0)
+
+             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Génération d''un objet avec +
+                          STRPREPRC') BNDDIR(SERVICE)
+
+             STRPREPRC  USESRCFILE(&PREBIBSRC/&PREFICSRC) +
+                          USESRCMBR(&USESRCMBR) OPTION(*EVENTF) +
+                          CHGOBJD(*NO) LIB(&BIBDST) OBJ(&OBJDST) +
+                          SRCLIB(&BIBSRC) SRCFILE(&FICSRC) SRCMBR(&MBRSRC) +
+                          USER0(&OPTIMIZE)
+
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CALLPRC    PRC(GESTERR) PARM((&FAILED))
+             ENDDO
+
+             endpgm
