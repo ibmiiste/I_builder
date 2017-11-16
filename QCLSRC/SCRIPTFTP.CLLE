@@ -1,0 +1,44 @@
+      /* >>PRE-COMPILER<<                                                 */
+      /*   >>CRTCMD<<  CRTCLMOD MODULE(&LI/&OB) SRCFILE(&SL/&SF) +        */
+      /*                 SRCMBR(&SM);                                     */
+      /*   >>IMPORTANT<<                                                  */
+      /*     >>PARM<<  OPTION(*EVENTF);                                   */
+      /*     >>PARM<<  DBGVIEW(*LIST);                                    */
+      /*   >>END-IMPORTANT<<                                              */
+      /*   >>EXECUTE<<                                                    */
+      /* >>END-PRE-COMPILER<<                                             */
+
+             pgm        PARM((&USER) (&MDP) (&SAVF) (&SRCF))
+
+             DCL        VAR(&USER) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&MDP) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&SRCF) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&SAVF) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&CHEMINSAVO) TYPE(*CHAR) LEN(256)
+             DCL        VAR(&CHEMINSAVD) TYPE(*CHAR) LEN(256)
+             DCL        VAR(&SAVF) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&NUMALEA) TYPE(*DEC) LEN(15 0)
+             DCL        VAR(&NUMALEC) TYPE(*CHAR) LEN(9)
+             DCL        VAR(&RAND) TYPE(*DEC) LEN(15 0) VALUE(999999999)
+             DCL        VAR(&FILE) TYPE(*CHAR) LEN(128)
+             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Envoi ftp') BNDDIR(VERSIOBND)
+
+             CALLPRC    PRC(ALEATOIRE) PARM((&RAND)) RTNVAL(&NUMALEA)
+
+             CHGVAR     VAR(&NUMALEC) VALUE(&NUMALEA)
+
+             CHGVAR     VAR(&SRCF) VALUE('F' *TCAT &NUMALEC)
+
+             CRTSRCPF   FILE(QTEMP/&SRCF) RCDLEN(240)
+
+             ADDPFM     FILE(QTEMP/&SRCF) MBR(IN) TEXT('Commandes ftp')
+             ADDPFM     FILE(QTEMP/&SRCF) MBR(OUT) TEXT('log du ftp')
+
+             OVRDBF     FILE(FTPCMD) TOFILE(QTEMP/&SRCF) MBR(IN)
+             CHGVAR     VAR(&CHEMINSAVO) VALUE('/QSYS.LIB/QTEMP.LIB/')
+             CHGVAR     VAR(&CHEMINSAVD) VALUE('/QSYS.LIB/QGPL.LIB/')
+             CHGVAR     VAR(&FILE) VALUE(&SAVF)
+             CALLPRC    PRC(ECRITURE_SCRIPT_FTP) PARM((&USER) (&MDP) (&FILE) (&CHEMINSAVO) +
+                          (&CHEMINSAVD))
+
+             ENDPGM

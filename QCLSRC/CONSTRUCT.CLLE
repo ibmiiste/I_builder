@@ -1,9 +1,9 @@
       /* >>PRE-COMPILER<<                                                 */
-      /*   >>CRTCMD<<  CRTBNDCL SRCFILE(&SL/&SF) SRCMBR(&SM);             */
+      /*   >>CRTCMD<<  CRTCLMOD MODULE(&LI/&OB) SRCFILE(&SL/&SF) +        */
+      /*                 SRCMBR(&SM);                                     */
       /*   >>IMPORTANT<<                                                  */
-      /*     >>PARM<<  PGM(&LI/&OB);                                      */
       /*     >>PARM<<  OPTION(*EVENTF);                                   */
-      /*     >>PARM<<  DBGVIEW(*ALL);                                     */
+      /*     >>PARM<<  DBGVIEW(*ALL);                                    */
       /*   >>END-IMPORTANT<<                                              */
       /*   >>EXECUTE<<                                                    */
       /* >>END-PRE-COMPILER<<                                             */
@@ -34,7 +34,7 @@
                           USER0(&OPTIMIZE)
 
              MONMSG     MSGID(CPF0000) EXEC(DO)
-                CALLPRC    PRC(GESTERR) PARM((&FAILED))
+                CALLPRC    PRC(GSTERRSTR) PARM((&FAILED))
              ENDDO
 
              endpgm

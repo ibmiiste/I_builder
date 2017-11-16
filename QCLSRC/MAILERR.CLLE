@@ -1,0 +1,139 @@
+             PGM        PARM(&PROGRAM &MODULE &PROCEDURE &ERROR &ADRINFO)
+             DCLF       FILE(FGESTERR)
+             DCL        VAR(&DEST1) TYPE(*CHAR) LEN(36)
+             DCL        VAR(&DEST2) TYPE(*CHAR) LEN(36)
+             DCL        VAR(&DEST3) TYPE(*CHAR) LEN(36)
+             DCL        VAR(&DEST4) TYPE(*CHAR) LEN(36)
+             DCL        VAR(&DEST5) TYPE(*CHAR) LEN(36)
+             DCL        VAR(&DEST6) TYPE(*CHAR) LEN(36)
+             DCL        VAR(&DEST7) TYPE(*CHAR) LEN(36)
+             DCL        VAR(&DEST8) TYPE(*CHAR) LEN(36)
+             DCL        VAR(&DEST9) TYPE(*CHAR) LEN(36)
+             DCL        VAR(&DEST10) TYPE(*CHAR) LEN(36)
+             DCL        VAR(&JOBTYP) TYPE(*CHAR) LEN(1) /* Type de travail +
+                          0 => Batch 1=> interactif */
+/*   Email contact                                                    */
+             DCL        VAR(&ADRINFO) TYPE(*CHAR) LEN(320)
+/*   PARAMETRE D'APPELS PARAMETRABLE                                  */
+             DCL        VAR(&ADRMAIL) TYPE(*CHAR) LEN(320)
+             DCL        VAR(&CMD) TYPE(*CHAR) LEN(500)
+             DCL        VAR(&LNG) TYPE(*DEC) LEN(15 5) VALUE(500)
+             DCL        VAR(&SYSTEM) TYPE(*CHAR) LEN(8)
+             DCL        VAR(&SUJET)    TYPE(*CHAR) LEN(50)
+             DCL        VAR(&PROCEDURE) TYPE(*CHAR) LEN(60)
+             DCL        VAR(&DATA) TYPE(*CHAR) LEN(70)
+             DCL        VAR(&ERR) TYPE(*CHAR) LEN(8) +
+                          VALUE(X'0000000000000000')
+
+             ADDLIBLE   LIB(SMTP) POSITION(*LAST)
+             MONMSG     MSGID(CPF2103)
+             CHGVAR     VAR(&PROCED1) VALUE(%SST(&PROCEDURE 1 30))
+             CHGVAR     VAR(&PROCED2) VALUE(%SST(&PROCEDURE 31 30))
+             CHGVAR     VAR(&DEST1) VALUE('(''' *TCAT %SST(&ADRINFO 1 32) +
+                          *TCAT ''')')
+             IF         COND(%SST(&ADRINFO 33 32) *NE ' ') THEN(CHGVAR +
+                          VAR(&DEST2) VALUE('(''' *TCAT %SST(&ADRINFO 33 +
+                          32) *TCAT ''')'))
+             IF         COND(%SST(&ADRINFO 65 32) *NE ' ') THEN(CHGVAR +
+                          VAR(&DEST3) VALUE('(''' *TCAT %SST(&ADRINFO 65 +
+                          32) *TCAT ''')'))
+             IF         COND(%SST(&ADRINFO 97 32) *NE ' ') THEN(CHGVAR +
+                          VAR(&DEST4) VALUE('('''' *TCAT %SST(&ADRINFO 97 +
+                          32) *TCAT '''')'))
+             IF         COND(%SST(&ADRINFO 129 32) *NE ' ') THEN(CHGVAR +
+                          VAR(&DEST5) VALUE('('''' *TCAT %SST(&ADRINFO 129 +
+                          32) *TCAT '''')'))
+             IF         COND(%SST(&ADRINFO 161 32) *NE ' ') THEN(CHGVAR +
+                          VAR(&DEST6) VALUE('('''' *TCAT %SST(&ADRINFO 161 +
+                          32) *TCAT '''')'))
+             IF         COND(%SST(&ADRINFO 193 32) *NE ' ') THEN(CHGVAR +
+                          VAR(&DEST7) VALUE('('''' *TCAT %SST(&ADRINFO 193 +
+                          32) *TCAT '''')'))
+             IF         COND(%SST(&ADRINFO 224 32) *NE ' ') THEN(CHGVAR +
+                          VAR(&DEST8) VALUE('('''' *TCAT %SST(&ADRINFO 224 +
+                          32) *TCAT '''')'))
+             IF         COND(%SST(&ADRINFO 256 32) *NE ' ') THEN(CHGVAR +
+                          VAR(&DEST9) VALUE('('''' *TCAT %SST(&ADRINFO 256 +
+                          32) *TCAT '''')'))
+             IF         COND(%SST(&ADRINFO 288 32) *NE ' ') THEN(CHGVAR +
+                          VAR(&DEST10) VALUE('('''' *TCAT %SST(&ADRINFO +
+                          288 32) *TCAT '''')'))
+
+             CHGVAR     VAR(&ADRMAIL) VALUE(&DEST1)
+             IF         COND(&DEST2 *NE ' ') THEN(CHGVAR VAR(&ADRMAIL) +
+                          VALUE(&ADRMAIL *BCAT &DEST2))
+             IF         COND(&DEST3 *NE ' ') THEN(CHGVAR VAR(&ADRMAIL) +
+                          VALUE(&ADRMAIL *BCAT &DEST3))
+             IF         COND(&DEST4 *NE ' ') THEN(CHGVAR VAR(&ADRMAIL) +
+                          VALUE(&ADRMAIL *BCAT &DEST4))
+             IF         COND(&DEST5 *NE ' ') THEN(CHGVAR VAR(&ADRMAIL) +
+                          VALUE(&ADRMAIL *BCAT &DEST5))
+             IF         COND(&DEST6 *NE ' ') THEN(CHGVAR VAR(&ADRMAIL) +
+                          VALUE(&ADRMAIL *BCAT &DEST6))
+             IF         COND(&DEST7 *NE ' ') THEN(CHGVAR VAR(&ADRMAIL) +
+                          VALUE(&ADRMAIL *BCAT &DEST7))
+             IF         COND(&DEST8 *NE ' ') THEN(CHGVAR VAR(&ADRMAIL) +
+                          VALUE(&ADRMAIL *BCAT &DEST8))
+             IF         COND(&DEST9 *NE ' ') THEN(CHGVAR VAR(&ADRMAIL) +
+                          VALUE(&ADRMAIL *BCAT &DEST9))
+             IF         COND(&DEST10 *NE ' ') THEN(CHGVAR VAR(&ADRMAIL) +
+                          VALUE(&ADRMAIL *BCAT &DEST10))
+
+             DSPJOBLOG  OUTPUT(*PRINT)
+             RTVNETA    SYSNAME(&SYSTEM)
+
+             RTVJOBA    TYPE(&JOBTYP)
+                          /* R520 offers the easy way to find a spool file */
+             CALL       PGM(QSPRILSP) PARM(&DATA X'00000046' 'SPRL0100' +
+                          &ERR)
+             MONMSG     MSGID(CPF333A CPF9999) EXEC(DO)
+                /* No splf found */
+                SNDPGMMSG  MSGID(CPF9898) MSGF(QCPFMSG) MSGDTA('NO +
+                             SPOOLFILE FOUND') MSGTYPE(*INFO)
+             ENDDO
+
+             /* parse the spool file info */
+             CHGVAR     VAR(&JOB_NAME) VALUE(%SST(&DATA 19 26))
+             CHGVAR     VAR(&JOB_NUM) VALUE(%SST(&DATA 39 6))
+             CHGVAR     VAR(&USER) VALUE(%SST(&DATA 29 10))
+
+
+             IF         COND(&JOBTYP *EQ '1') THEN(DO)
+
+ FENETRE:       SNDRCVF
+                IF         COND(&IN05) THEN(GOTO CMDLBL(MAIL))
+                ELSE       CMD(GOTO CMDLBL(FENETRE))
+             ENDDO
+
+
+ MAIL:
+
+
+             CHKOBJ     OBJ(QTEMP/ERRORLST) OBJTYPE(*FILE)
+             MONMSG     MSGID(CPF9801) EXEC(CRTPF FILE(QTEMP/ERRORLST) +
+                          RCDLEN(80) SIZE(*NOMAX))
+
+             CPYSPLF    FILE(ERRORLST) TOFILE(QTEMP/ERRORLST) +
+                          JOB(&JOB_NUM/&USER/&JOB_NAME) SPLNBR(*LAST) +
+                          TOMBR(*FIRST)
+             CPYSPLF    FILE(QPPGMDMP) TOFILE(QTEMP/ERRORLST) +
+                          JOB(&JOB_NUM/&USER/&JOB_NAME) SPLNBR(*LAST) +
+                          TOMBR(*FIRST) MBROPT(*ADD)
+             CPYSPLF    FILE(QPJOBLOG) TOFILE(QTEMP/ERRORLST) +
+                          JOB(&JOB_NUM/&USER/&JOB_NAME) SPLNBR(*LAST) +
+                          TOMBR(*FIRST) MBROPT(*ADD)
+
+             CHGVAR     VAR(&SUJET) VALUE('''ERREUR systme''')
+
+             CHGVAR     VAR(&CMD) VALUE( 'SNDM FROM(''noreply@ista.fr'') +
+                          TO(' *TCAT &ADRMAIL *TCAT ') +
+                          FILE(QTEMP/ERRORLST) MBR(*FIRST) SUBJECT(' *TCAT +
+                          &SUJET *TCAT ')')
+
+             OVRPRTF    FILE(QPQUPRFIL) DEVTYPE(*AFPDS)
+
+             CALL       PGM(QCMDEXC) PARM(&CMD &LNG)
+
+             DLTF       FILE(QTEMP/ERRORLST)
+
+ FIN:        ENDPGM
