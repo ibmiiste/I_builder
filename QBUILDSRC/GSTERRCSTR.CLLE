@@ -1,0 +1,57 @@
+      /* >>PRE-COMPILER<<                                                 */
+      /*   >>CRTCMD<<  CRTBNDCL SRCFILE(&SL/&SF) SRCMBR(&SM);             */
+      /*   >>IMPORTANT<<                                                  */
+      /*     >>PARM<<  PGM(&LI/&OB);                                      */
+      /*     >>PARM<<  OPTION(*EVENTF);                                   */
+      /*     >>PARM<<  DBGVIEW(*ALL);                                     */
+      /*   >>END-IMPORTANT<<                                              */
+      /*   >>EXECUTE<<                                                    */
+      /* >>END-PRE-COMPILER<<                                             */
+
+             PGM        PARM(&FAILED)
+             DCL        VAR(&FAILED) TYPE(*DEC) LEN(10 0)
+             DCL        VAR(&FILEATTACH) TYPE(*CHAR) LEN(500)
+             DCL        VAR(&INSPLNA) TYPE(*CHAR) LEN(4)
+             DCL        VAR(&OBJET) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&USER) TYPE(*CHAR) LEN(10)
+
+  /* Composition du mail                                                    */
+             DCL        VAR(&FOLDER) TYPE(*CHAR) LEN(256)
+
+
+  /* Appel au programme SPOOLFIND.CLLE                          */
+             DCL        VAR(&INSPLF) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&INJOB) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&INUSER) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&INJOBN) TYPE(*CHAR) LEN(6)
+             DCL        VAR(&INSPLN) TYPE(*INT) LEN(4)
+             DCL        VAR(&EXISTS) TYPE(*LGL)
+
+             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Génération de l''email +
+                          rapport de construction') BNDDIR(SERVICE)
+
+             RTVJOBA    USER(&USER)
+             CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+
+
+             CALL       PGM(SPOOLFIND) PARM(&INSPLF &INJOB &INUSER &INJOBN +
+                          &INSPLN &EXISTS)
+             CHGVAR     VAR(&INSPLN) VALUE(&INSPLN-1)
+
+ CONST_SPLF: CHGVAR     VAR(&INSPLN) VALUE(&INSPLN-1)
+             CHGVAR     VAR(&INSPLNA) VALUE(&INSPLN)
+             CHGVAR     VAR(&FOLDER) VALUE('''/home/' *TCAT &USER *TCAT +
+                          '/' *TCAT &OBJET *TCAT &INSPLNA *TCAT '.pdf''')
+             CPYSPLF    FILE(&OBJET) TOFILE(*TOSTMF) SPLNBR(&INSPLN) +
+                          JOBSYSNAME(*ONLY) CRTDATE(*ONLY) TOSTMF(&FOLDER) +
+                          WSCST(*PDF) STMFOPT(*REPLACE)
+
+
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(FIN_EMAIL))
+
+             CHGVAR     VAR(&FILEATTACH) VALUE( &FILEATTACH *TCAT ' (' +
+                          *TCAT &FOLDER *BCAT '*PDF)')
+
+             GOTO       CMDLBL(CONST_SPLF)
+
+ FIN_EMAIL:  ENDPGM
