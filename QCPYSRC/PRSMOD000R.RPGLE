@@ -1448,7 +1448,7 @@
        END-PR ;
 
        // --------------------------------------------------
-       // Prototype for procedure: Construct
+       // Prototype for procedure: Elaboration du rapport de construction
        // --------------------------------------------------
        DCL-PR Gst_Err_Cstr;
          P_Failed PACKED(10:0);
