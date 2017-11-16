@@ -1,0 +1,241 @@
+/*-------------------- Script de compilation du pgm de service BERGERSRV ------------------*/
+/*                                                                                         */
+/* Paramètres :                                                                            */
+/*   &Lib_Lot  Bibliothèque des objets (variabilisé pour faciliter tests et recettes)      */
+/*   &OPTIMIZE Admet *NONE, *BASIC et *FULL (Réduit le débogage au profit des perfs)       */
+/*                     car le débogage est moins pertinant sur ce type de sources)         */
+/*                                                                                         */
+/*   A lancer comme suit : CALL CBERGERSRV PARM('BERGER' '*FULL')                          */
+/*-----------------------------------------------------------------------------------------*/
+/* Les fonctions sont appelables à travers un répertoire de liage : Berger/Service         */
+/* dont le source est                                                                      */
+/*-----------------------------------------------------------------------------------------*/
+      /* >>PRE-COMPILER<<                                                 */
+      /*   >>CRTCMD<<  CRTBNDCL SRCFILE(&SL/&SF) SRCMBR(&SM);             */
+      /*   >>IMPORTANT<<                                                  */
+      /*     >>PARM<<  PGM(&LI/&OB);                                      */
+      /*     >>PARM<<  OPTION(*EVENTF);                                   */
+      /*     >>PARM<<  DBGVIEW(*LIST);                                    */
+      /*   >>END-IMPORTANT<<                                              */
+      /*   >>EXECUTE<<                                                    */
+      /* >>END-PRE-COMPILER<<                                             */
+
+             PGM        PARM(&LIB_LOT &OPTIMIZE)
+
+             dcl        &LIB_LOT *char 10
+             DCL        &FAILED TYPE(*DEC) LEN(10 0) VALUE(0)
+             DCL        &FAILEDSTR TYPE(*CHAR) LEN(10)
+             DCL        &OPTIMIZE TYPE(*CHAR) LEN(6)
+             DCL        &OPTIMIZRPG *char 16
+
+             MONMSG     MSGID(CPF0000)
+
+             CHGVAR     VAR(&OPTIMIZRPG) VALUE('OPTIMIZE(' *TCAT &OPTIMIZE +
+                          *TCAT ')')
+
+             DLTSRVPGM  SRVPGM(&LIB_LOT/BERGERSRV)
+             MONMSG     MSGID(CPF0000)
+
+             CRTRPGMOD  MODULE(&LIB_LOT/GESTERR) +
+                          SRCFILE(&LIB_LOT/QRPGLESRC) DBGVIEW(*ALL) +
+                          OPTIMIZE(&OPTIMIZE)
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+             CRTCLMOD   MODULE(&LIB_LOT/MAILERR) SRCFILE(&LIB_LOT/QCLSRC) +
+                          OPTIMIZE(&OPTIMIZE) DBGVIEW(*ALL)
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+             CRTSQLRPGI OBJ(&LIB_LOT/BBMOD000R) +
+                          SRCFILE(&LIB_LOT/QRPGLESRC) SRCMBR(BBMOD000R) +
+                          COMMIT(*NONE) OBJTYPE(*MODULE) OPTION(*EVENTF) +
+                          REPLACE(*YES) DBGVIEW(*SOURCE) +
+                          COMPILEOPT(&OPTIMIZRPG)
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+             CRTRPGMOD  MODULE(&LIB_LOT/BBMOD020R) +
+                          SRCFILE(&LIB_LOT/QRPGLESRC) DBGVIEW(*ALL) +
+                          OPTIMIZE(&OPTIMIZE) REPLACE(*YES)
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+             CRTRPGMOD  MODULE(&LIB_LOT/BBMOD030R) +
+                          SRCFILE(&LIB_LOT/QRPGLESRC) DBGVIEW(*ALL) +
+                          OPTIMIZE(&OPTIMIZE) REPLACE(*YES)
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+             CRTRPGMOD  MODULE(&LIB_LOT/UTIQRY) +
+                          SRCFILE(&LIB_LOT/QRPGLESRC) SRCMBR(UTIQRY) +
+                          DBGVIEW(*SOURCE) OPTIMIZE(&OPTIMIZE) +
+                          REPLACE(*YES)
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+
+             CRTRPGMOD  MODULE(&LIB_LOT/UTIEXEC) +
+                          SRCFILE(&LIB_LOT/QRPGLESRC) SRCMBR(UTIEXEC) +
+                          DBGVIEW(*SOURCE) OPTIMIZE(&OPTIMIZE) +
+                          REPLACE(*YES)
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+
+             ISPHERE/STRPREPRC USESRCFILE(&LIB_LOT/QRPGLESRC) USESRCMBR(UTISTACK) +
+                          OPTION(*EVENTF) LIB(&LIB_LOT) OBJ(UTISTACK) SRCLIB(&LIB_LOT) +
+                          SRCFILE(QRPGLESRC) SRCMBR(UTISTACK)
+
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+
+             CRTRPGMOD  MODULE(&LIB_LOT/UTIMSG) SRCFILE(&LIB_LOT/QRPGLESRC) DBGVIEW(*ALL) +
+                          REPLACE(*YES)
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+             CRTSQLRPGI OBJ(&LIB_LOT/UTIENV) SRCFILE(&LIB_LOT/QRPGLESRC) SRCMBR(UTIENV) +
+                          COMMIT(*NONE) OBJTYPE(*MODULE) OPTION(*EVENTF) RPGPPOPT(*LVL2) +
+                          REPLACE(*YES) DBGVIEW(*SOURCE)
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+             CRTCLMOD   MODULE(&LIB_LOT/EMS010C) SRCFILE(&LIB_LOT/QCLSRC) OPTIMIZE(&OPTIMIZE) +
+                          DBGVIEW(*ALL)
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+             CRTRPGMOD  MODULE(&LIB_LOT/UTIUUID) SRCFILE(&LIB_LOT/QRPGLESRC) DBGVIEW(*ALL) +
+                          REPLACE(*YES)
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+             ISPHERE/STRPREPRC USESRCFILE(&LIB_LOT/QRPGLESRC) USESRCMBR(UTISUI) +
+                          OPTION(*EVENTF) LIB(&LIB_LOT) OBJ(UTISUI) SRCLIB(&LIB_LOT) +
+                          SRCFILE(QRPGLESRC) SRCMBR(UTISUI)
+
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+             CRTRPGMOD  MODULE(&LIB_LOT/UTISQLUDF) SRCFILE(&LIB_LOT/QRPGLESRC) DBGVIEW(*ALL) +
+                          REPLACE(*YES)
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+             ISPHERE/STRPREPRC USESRCFILE(&LIB_LOT/QRPGLESRC) USESRCMBR(UTISQL) +
+                          OPTION(*EVENTF) LIB(&LIB_LOT) OBJ(UTISQL) SRCLIB(&LIB_LOT) +
+                          SRCFILE(QRPGLESRC) SRCMBR(UTISQL)
+
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+
+             ISPHERE/STRPREPRC USESRCFILE(&LIB_LOT/QRPGLESRC) USESRCMBR(UTIDSP) +
+                          OPTION(*EVENTF) LIB(&LIB_LOT) OBJ(UTIDSP) SRCLIB(&LIB_LOT) +
+                          SRCFILE(QRPGLESRC) SRCMBR(UTIDSP) USER0(LIBALEGROT)
+
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+             ISPHERE/STRPREPRC USESRCFILE(&LIB_LOT/QRPGLESRC) USESRCMBR(UTICHN) +
+                          OPTION(*EVENTF) LIB(&LIB_LOT) OBJ(UTICHN) SRCLIB(&LIB_LOT) +
+                          SRCFILE(QRPGLESRC) SRCMBR(UTICHN)
+
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+             ISPHERE/STRPREPRC USESRCFILE(&LIB_LOT/QRPGLESRC) +
+                          USESRCMBR(ALEATOIRE) OPTION(*EVENTF) +
+                          LIB(&LIB_LOT) OBJ(ALEATOIRE) SRCLIB(&LIB_LOT) +
+                          SRCFILE(QRPGLESRC) SRCMBR(ALEATOIRE)
+
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+             ISPHERE/STRPREPRC USESRCFILE(&LIB_LOT/QCLSRC) +
+                          USESRCMBR(MSG_INCRMK) OPTION(*EVENTF) +
+                          LIB(&LIB_LOT) OBJ(MSG_INCRMK) +
+                          SRCLIB(&LIB_LOT) SRCFILE(QCLSRC) +
+                          SRCMBR(MSG_INCRMK)
+
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+
+             ISPHERE/STRPREPRC USESRCFILE(&LIB_LOT/QCLSRC) USESRCMBR(SCRIPTFTP) +
+                          OPTION(*EVENTF) LIB(&LIB_LOT) OBJ(SCRIPTFTP) SRCLIB(&LIB_LOT) +
+                          SRCFILE(QCLSRC) SRCMBR(SCRIPTFTP)
+
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+             ISPHERE/STRPREPRC USESRCFILE(&LIB_LOT/QRPGLESRC) USESRCMBR(WFTPSCRIPT) +
+                          OPTION(*EVENTF) LIB(&LIB_LOT) OBJ(WFTPSCRIPT) SRCLIB(&LIB_LOT) +
+                          SRCFILE(QRPGLESRC) SRCMBR(WFTPSCRIPT)
+
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+             ISPHERE/STRPREPRC USESRCFILE(&LIB_LOT/QRPGLESRC) +
+                          USESRCMBR(SCANRPL) OPTION(*EVENTF) LIB(&LIB_LOT) +
+                          OBJ(SCANRPL) SRCLIB(&LIB_LOT) SRCFILE(QRPGLESRC) +
+                          SRCMBR(SCANRPL)
+
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+             ISPHERE/STRPREPRC USESRCFILE(&LIB_LOT/QCLSRC) +
+                          USESRCMBR(CONSTRUCT) OPTION(*EVENTF) +
+                          LIB(&LIB_LOT) OBJ(CONSTRUCT) SRCLIB(&LIB_LOT) +
+                          SRCFILE(QCLSRC) SRCMBR(CONSTRUCT)
+
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+             ISPHERE/STRPREPRC USESRCFILE(&LIB_LOT/QCLSRC) +
+                          USESRCMBR(GSTERRSTR) OPTION(*EVENTF) +
+                          LIB(&LIB_LOT) OBJ(GSTERRSTR) SRCLIB(&LIB_LOT) +
+                          SRCFILE(QCLSRC) SRCMBR(GSTERRSTR)
+
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+             CRTSRVPGM  SRVPGM(&LIB_LOT/BERGERSRV) MODULE(GESTERR MAILERR +
+                          BBMOD000R UTIQRY UTIEXEC BBMOD020R BBMOD030R +
+                          UTISTACK UTIMSG UTIENV EMS010C UTIUUID UTISQLUDF +
+                          UTISUI UTISQL UTIDSP UTICHN ALEATOIRE SCRIPTFTP +
+                          WFTPSCRIPT MSG_INCRMK SCANRPL CONSTRUCT +
+                          GSTERRSTR) SRCFILE(&LIB_LOT/QSRVSRC)
+
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+             CHGVAR     VAR(&FAILEDSTR) VALUE(&FAILED)
+             ADDENVVAR  ENVVAR(QRB_NUMBER_FAILED) VALUE(&FAILEDSTR) +
+                          REPLACE(*YES)
+             ENDPGM

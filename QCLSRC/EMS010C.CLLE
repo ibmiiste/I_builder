@@ -1,0 +1,83 @@
+/***************************************************************/
+/* Nom du programme : EMS010C           TYPE CLP               */
+/* Fonctions ...... : Gestion des messages programmes          */
+/*                                                             */
+/* Date création .. : 20/10/89                                 */
+/* Auteur ......... : CR                                       */
+/*                                                             */
+/*                                                             */
+/* Pgm appelant ... : tous les programmes utilisant les        */
+/*                    sous-fichiers de messages                */
+/* Pgms appelés ... : *NONE                                    */
+/*                                                             */
+/* Modifications .. : §nn le 21/05/90 par LGU :                */
+/*   Rajout d'une variable &MSGPGM permettant d'envoyer un     */
+/*  message d'un pgm vers un autre.                            */
+/*                                                             */
+/***************************************************************/
+
+             PGM        PARM(&MSGBIB &MSGFIC &MSGNUM &MSGPGM &MSGDT1 +
+                             &MSGDT2 &MSGDT3 &MSGDT4 &MSGDT5 &MSGCLR)
+
+             DCL        VAR(&MSGBIB) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&MSGFIC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&MSGNUM) TYPE(*CHAR) LEN(7)
+             DCL        VAR(&MSGPGM) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&MSGDT1) TYPE(*CHAR) LEN(20)
+             DCL        VAR(&MSGDT2) TYPE(*CHAR) LEN(20)
+             DCL        VAR(&MSGDT3) TYPE(*CHAR) LEN(20)
+             DCL        VAR(&MSGDT4) TYPE(*CHAR) LEN(20)
+             DCL        VAR(&MSGDT5) TYPE(*CHAR) LEN(20)
+             DCL        VAR(&MSGCLR) TYPE(*CHAR) LEN(1)
+             DCL        VAR(&MSGDTA) TYPE(*CHAR) LEN(100)
+
+/* Mise à blanc de la file de message programme si 1er message */
+/*-------------------------------------------------------------*/
+             IF         COND(&MSGCLR *EQ '1') THEN(DO)
+
+             IF         COND(&MSGPGM *EQ '          ') THEN(DO)
+
+/* Mise à blanc de la file d'attente du programme prévious  */
+             RMVMSG     PGMQ(*PRV) CLEAR(*ALL)
+             MONMSG     MSGID(CPF0000)
+
+             ENDDO
+
+             IF         COND(&MSGPGM *NE '          ') THEN(DO)
+
+/* Mise à blanc de la file d'attente du programme nommé     */
+             RMVMSG     PGMQ(*SAME &MSGPGM) CLEAR(*ALL)
+             MONMSG     MSGID(CPF0000)
+
+             ENDDO
+             GOTO       CMDLBL(FIN)
+
+             ENDDO
+
+/* Regroupement des variables à afficher (&1 + &2 + &3 + &4 + &5) */
+/*----------------------------------------------------------------*/
+             CHGVAR     VAR(&MSGDTA) VALUE(&MSGDT1 !! &MSGDT2 !! +
+                          &MSGDT3 !! &MSGDT4 !! &MSGDT5)
+
+/* Envoi du message à la file d'attente du programme           */
+/*-------------------------------------------------------------*/
+
+             IF         COND(&MSGPGM *EQ '          ') THEN(DO)
+
+/* Envoi du message à la file d'attente du programme prévious  */
+             SNDPGMMSG  MSGID(&MSGNUM) MSGF(&MSGBIB/&MSGFIC) +
+                          MSGDTA(&MSGDTA) TOPGMQ(*PRV *)
+
+             ENDDO
+
+             IF         COND(&MSGPGM *NE '          ') THEN(DO)
+
+/* Envoi du message à la file d'attente du programme nommé     */
+             SNDPGMMSG  MSGID(&MSGNUM) MSGF(&MSGBIB/&MSGFIC) +
+                          MSGDTA(&MSGDTA) TOPGMQ(*SAME &MSGPGM)
+
+             ENDDO
+
+/*-------------------------------------------------------------*/
+
+FIN:         ENDPGM
