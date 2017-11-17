@@ -1443,6 +1443,7 @@
          P_ObjDst CHAR(10) CONST;
          P_BibSrc CHAR(10)  CONST;
          P_FicSrc CHAR(10)  CONST;
+         P_MbrSrc CHAR(10) CONST;
          P_Optimize CHAR(6)  CONST;
          P_Failed PACKED(10:0);
        END-PR ;
