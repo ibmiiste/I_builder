@@ -89,6 +89,7 @@
                      :g_ObjDst
                      :g_BibSrc
                      :g_FicSrc
+                     :g_MbrSrc
                      :P_Optim_Compil
                      :g_Failed);
 
