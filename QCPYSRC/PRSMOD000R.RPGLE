@@ -1457,10 +1457,9 @@
        // --------------------------------------------------
        // Prototype for Programme:Envoi vers système distant
        // --------------------------------------------------
-       Dcl-Pr I_Push;
+       Dcl-Pr I_Push ExtPgm('I_PUSH');
          P_Objet char(20) Const;
          P_Sys_Dst CHAR(32);
          P_User LIKE(R_NomObj);
          P_Mot_De_Passe CHAR(10);
        End-Pr;
-
