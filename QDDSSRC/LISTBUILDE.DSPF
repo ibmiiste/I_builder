@@ -1,0 +1,146 @@
+     /* >>PRE-COMPILER<<                                                 */
+     /*   >>CRTCMD<<  CRTDSPF FILE(&LI/&OB) SRCFILE(&SL/&SF) +           */
+     /*                 SRCMBR(&SM);                                     */
+     /*   >>IMPORTANT<<                                                  */
+     /*     >>PARM<<  OPTION(*EVENTF);                                   */
+     /*   >>END-IMPORTANT<<                                              */
+     /*   >>EXECUTE<<                                                    */
+     /* >>END-PRE-COMPILER<<                                             */
+     A*%%TS  SD  20150713  134652  DEVOD       REL-V6R1M0  5761-WDS
+     A*%%EC
+     A                                      DSPSIZ(*DS4)
+     A                                      MSGLOC(27)
+     A                                      PRINT
+     A                                      HLPTITLE('Aide générale sur PGMF01')
+     A                                      HLPPNLGRP(PGMF01 PGMF01)
+     A                                      INDARA
+     A                                      ALTHELP(CA01)
+     A                                      HELP
+     A          R SFL01                     SFL
+     A  08                                  SFLNXTCHG
+     A            ZOPT           2   B  8  2
+     A  20                                  DSPATR(PR)
+     A            ZOBJDST       10   B  8 13
+     A  30                                  COLOR(RED)
+     A            ZDESCOBJET    50   B  8 45
+     A            HNREC         40   H
+     A            HPROJET       10   H
+     A            ZBIBDST       10   B  8 24
+     A            ZBIBSRC       10   B  8 97
+     A            ZFICSRC       10   B  8110
+     A            ZMBRSRC       10   B  8122
+     A            ZORDRE         6Y 0B  8  6
+     A                                      EDTCDE(Z)
+     A            ZTYPOBJ        7   B  8 36
+     A          R FORE1                     SFLCTL(SFL01)
+     A                                      RTNCSRLOC(&WLICSR &WZOCSR &WPRCSR)
+     A                                      OVERLAY
+     A                                      PUTOVR
+     A N07                                  ROLLUP(02)
+     A                                      CSRLOC(WLIGN WCOLN)
+     A                                      CHANGE(91)
+     A N04                                  ERASE(SFL01)
+     A  04                                  SFLDSP
+
+     A  05                                  SFLDSPCTL
+     A  06                                  SFLCLR
+     A  07                                  SFLEND
+     A                                      SFLSIZ(9999)
+     A                                      SFLPAG(18)
+     A                                      SFLCSRRRN(&WRACSR)
+     A            WRACSR         5S 0H
+     A            WRAN01         4S 0H      SFLRCDNBR
+     A            ZPGM          10   O  1  2
+     A                                      OVRDTA
+     A                                  1 55'Liste des objets'
+     A                                      COLOR(WHT)
+     A            ZUSER         10   O  1122
+     A                                      OVRDTA
+     A            ZDATE          8  0O  2  2
+     A                                      EDTWRD('  /  /    ')
+     A                                      OVRDTA
+     A            ZHEUR          6  0O  2 14
+     A                                      EDTWRD('  :  :  ')
+     A                                      OVRDTA
+     A            ZJOB          10   O  2122
+     A                                      OVRDTA
+     A                                  3  3'Indiquez vos options, puis appuyez-
+     A                                       sur ENTREE.'
+     A                                      COLOR(BLU)
+     A                                  4  3'2=Modifier  3=Copier 4=Supprimer  -
+     A                                       5=Afficher  6=Imprimer'
+     A                                      COLOR(BLU)
+     A                                  5  3'Selection par nom :'
+     A            ZSOBJET       10   B  5 23
+     A                                      CHECK(LC)
+     A                                      COLOR(WHT)
+     A                                      OVRDTA
+     A                                  6  2'Opt Ordre Nom objet   Bib.Dest.   -
+     A                                      Typ.obj. Description de l''objet   --
+     A                                                                 Bib.sour-
+     A                                      .    Fic.Sourc.  Membre so.'
+     A                                      COLOR(WHT)
+     A            WLICSR        10A  H
+     A            WZOCSR        10A  H
+     A            WPRCSR         4S 0H
+     A            WLIGN          3S 0H
+     A            WCOLN          3S 0H
+     A            ZPROJET       10   O  2 58COLOR(WHT)
+     A            ZOPTC          2   B  7  2
+     A            ZORDREC        6  0B  7  6EDTCDE(Z)
+     A            ZOBJDSTC      10   B  7 13
+     A            ZBIBDSTC      10   B  7 24
+     A            ZDESCOBJEC    50   B  7 45
+     A  15                                  DSPATR(PC)
+     A            ZBIBSRCC      10   B  7 97
+     A            ZFICSRCC      10   B  7110
+     A            ZMBRSRCC      10   B  7122
+     A            ZTYPOBJC       7   B  7 36CHECK(ER)
+     A          R FORB1
+     A                                      CF03
+     A                                      CF05
+     A                                      CF06
+     A                                      CF08
+     A                                      CF12
+     A                                      RTNCSRLOC(&WLICSR &WZOCSR &WPRCSR)
+     A                                      OVERLAY
+     A                                      PUTOVR
+     A                                      CSRLOC(WLIGN WCOLN)
+     A                                      CHANGE(91)
+     A                                      HLPCLR
+     A          H                           HLPARA(6 23 6 58)
+     A                                      HLPPNLGRP('ZSNOM' PGMF01)
+     A          H                           HLPARA(8 2 26 3)
+     A                                      HLPPNLGRP('ZOPT' PGMF01)
+     A                                 26  3'F3=Exit  F5=Réafficher  -
+     A                                      F6=Créer  F8=Imprimer  -
+     A                                      F12=Annuler'
+     A                                      COLOR(BLU)
+     A            WLICSR        10A  H
+     A            WZOCSR        10A  H
+     A            WPRCSR         4S 0H
+     A            WLIGN          3S 0H
+     A            WCOLN          3S 0H
+     A          R WSFMSG                    SFL
+     A                                      SFLMSGRCD(24)
+     A            WMGKEY                    SFLMSGKEY
+     A            WPGMQ                     SFLPGMQ
+     A          R WSFCTL                    SFLCTL(WSFMSG)
+     A                                      SFLSIZ(2)
+     A                                      SFLPAG(1)
+     A                                      OVERLAY
+     A  10                                  SFLINZ
+     A                                      SFLDSP
+     A                                      SFLDSPCTL
+     A  09                                  SFLEND
+     A            WPGMQ                     SFLPGMQ
+     A*%%RS+<record-sequences>
+     A*%%RS+ <sequence name="Liste des objets">
+     A*%%RS+  <device type="display" width="132" height="27" />
+     A*%%RS+  <record-write record-format="FORB1" />
+     A*%%RS+  <record-write record-format="SFL01" />
+     A*%%RS+  <record-write record-format="FORE1" />
+     A*%%RS+  <record-write record-format="WSFMSG" />
+     A*%%RS+  <record-write record-format="WSFCTL" />
+     A*%%RS+ </sequence>
+     A*%%RS </record-sequences>
