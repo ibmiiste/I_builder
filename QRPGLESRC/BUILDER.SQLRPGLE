@@ -51,6 +51,7 @@
        Dcl-S g_MbrSrc LIKE(R_NomObj);
        Dcl-S g_BibDst LIKE(R_NomObj);
        Dcl-S g_ObjDst LIKE(R_NomObj);
+       Dcl-S g_Failed packed(10:0);
 
          *InLr=*Off;
 
