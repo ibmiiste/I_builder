@@ -58,6 +58,9 @@
 
        // local functions prototypes
        // prototypes fonctions locales
+         Dcl-pr reincrement_liste_objet;
+           P_Projet like(R_NomObj);
+         End-Pr;
 
        // global variables
        // variables globales
@@ -77,6 +80,7 @@
        dcl-s a_chx char(2);
        dcl-s a_nrec like(r_uuid_db2);
        dcl-s a_uuid like(r_uuid_db2);
+       Dcl-S g_verif packed(1:0);
 
        // Indicateurs
        dcl-s g_sortie ind;
@@ -84,6 +88,8 @@
        dcl-s g_selection ind;
        dcl-s g_alimsfl ind;
        dcl-s g_filtre ind;
+
+
        dcl-s g_ROWID_BUILD char(40) dim(9999);
        dcl-s g_ROWID_BUILDW sqltype(rowid);
 
@@ -318,6 +324,11 @@
 
          exec sql open list_obj;
          // chargement de la première page
+         // lecture de l'enregistrement suivant
+         EXEC SQL
+           FETCH list_obj
+             INTO :g_rowid_buildw, :hprojet, :zordre, :zbibsrc, :zficsrc,
+               :zmbrsrc, :zbibdst, :zobjdst, :ztypobj;
          exsr chgpag;
        endsr;
        // traitement des options, on ne lit que les enregistrements modifiés
@@ -328,25 +339,48 @@
          g_alimsfl = *off;
          // Gestion de la création d'enregistrement
          if (zoptc = '1') or (zoptc = ' 1');
-         //  rtvObj( OBJD0400_T
-         //         :%len(OBJD0400_T
-         //         :'OBJD0400'
-         //         :obj:%trim(p_type)
-         //         :w_errApi);
-         //  if w_errApi.ErrRtn > 0;
-         //    clear OBJD0400;
-         //  endif;
+           //  rtvObj( OBJD0400_T
+           //         :%len(OBJD0400_T
+           //         :'OBJD0400'
+           //         :obj:%trim(p_type)
+           //         :w_errApi);
+           //  if w_errApi.ErrRtn > 0;
+           //    clear OBJD0400;
+           //  endif;
+           EXEC SQL
+             SELECT 1
+               INTO :g_verif
+               FROM list_objet_build
+               WHERE projet = :zprojet AND
+                     ordre = :zordrec;
+           if sqlcode = 0;
+             // envoyer un message pour dire que l'option n'existe pas
+             a_typ='1';
+             a_fim='FICMSG   ';
+             a_mid='MSG0002';
+             gst_message(  a_typ
+                         : a_fim
+                         : a_mid
+                         : a_mdt);
+           ELSE;
 
-           exec sql insert into LIST_OBJET_BUILD
-           values( default,
-                   :zprojet,
-                   :zordrec,
-                   :zbibsrcc,
-                   :zficsrcc,
-                   :zmbrsrcc,
-                   :zbibdstc,
-                   :zobjdstc,
-                   :ztypobjc);
+             EXEC SQL
+               INSERT INTO list_objet_build
+                 VALUES (DEFAULT,
+                         :zprojet,
+                         :zordrec,
+                         :zbibsrcc,
+                         :zficsrcc,
+                         :zmbrsrcc,
+                         :zbibdstc,
+                         :zobjdstc,
+                         :ztypobjc);
+
+             if sqlcode=0;
+               reincrement_liste_objet(zprojet);
+             EndIf;
+           EndIf;
+
            zoptc=*blank;
            zordrec=*zero;
            zbibsrcc=*blank;
@@ -357,25 +391,32 @@
            ztypobjc=*blank;
            g_alimsfl=*on;
          EndIf;
+
          readc sfl01;
          dow not %eof;
            a_nrec=hnrec;
            g_filtre = *on;
            // selection en fonction du choix saisi
            select;
-            when (zopt = '2') or (zopt = ' 2');
+            WHEN
+             (zopt = ' 2') or (zopt = '2');
               a_chx='MO';
               g_ROWID_BUILDW=g_ROWID_BUILD(wran01);
-              exec sql update LIST_OBJET_BUILD
-                          set projet=:hprojet,
-                              Ordre=:zordre,
-                              Bibliotheque_Source=:zbibsrc,
-                              Fichier_Source=:zficsrc,
-                              Membre_Source=:ZMBRSRC,
-                              Bibliotheque_Destination=:zbibsrc,
-                              Objet_Destination=:zobjdst,
-                              Type_objet=:ztypobj
-                        where ROWID_BUILD=:g_ROWID_BUILDW;
+              EXEC SQL
+                UPDATE list_objet_build
+                  SET projet = :hprojet,
+                      ordre = :zordre,
+                      bibliotheque_source = :zbibsrc,
+                      fichier_source = :zficsrc,
+                      membre_source = :zmbrsrc,
+                      bibliotheque_destination = :zbibdst,
+                      objet_destination = :zobjdst,
+                      type_objet = :ztypobj
+                  WHERE rowid_build = :g_rowid_buildw;
+              If sqlcode=0;
+                reincrement_liste_objet( hprojet);
+              EndIf;
+
             when (zopt = '3') or (zopt = ' 3');
               a_chx='CO';
             when (zopt = '4') or (zopt = ' 4');
@@ -385,7 +426,7 @@
             when (zopt = '5') or (zopt = ' 5');
               a_chx='AF';
             when (zopt = '6') or (zopt = ' 6');
-             g_filtre = *off;
+              g_filtre = *off;
             when (zopt = '99');
               a_chx='PE';
             other;
@@ -400,7 +441,7 @@
                           : a_mid
                           : a_mdt);
            endsl;
-            // nettoyage
+           // nettoyage
            zopt=*blanks;
            update(e) sfl01;
            // on aurait pu aussi faire if..., en tout cas le choix est bon
@@ -421,18 +462,7 @@
          sflnxtchg = *off;
          //                  seton                                        04
          wran01=g_lstlig;
-         // lecture de l'enregistrement suivant
-         exec sql fetch list_obj
-                   into :g_ROWID_BUILDW,
-                        :hprojet,
-                        :ZORDRE,
-                        :ZBIBSRC,
-                        :ZFICSRC,
-                        :ZMBRSRC,
-                        :ZBIBDST,
-                        :ZOBJDST,
-                        :ztypobj;
-                 // remise à zéro du compteur de ligne, mais on pourrait faire autrement
+         // remise à zéro du compteur de ligne, mais on pourrait faire autrement
          g_nbrlig=0;
 
          dow sqlcode<>100
@@ -478,7 +508,7 @@
                         :ZBIBDST,
                         :ZOBJDST,
                         :ztypobj;
-           enddo;
+         enddo;
          // on quitte la boucle soit en fin de page
          //                     soit en fin de fichier
          if sqlcode=100;
@@ -512,5 +542,55 @@
            write sfl01;
          endif;
        endsr;
-      /end-free
+
+
+       Dcl-Proc reincrement_liste_objet;
+         Dcl-pi reincrement_liste_objet;
+           P_Projet like(R_NomObj);
+         End-Pi;
+
+         Dcl-S l_Projet like(R_NomObj);
+         Dcl-S l_Ordre packed(6:0);
+
+         EXEC SQL
+           DROP SEQUENCE order_seq;
+
+         EXEC SQL
+           CREATE SEQUENCE order_seq
+             START WITH 10
+             INCREMENT BY 10
+             MAXVALUE 9990
+             CYCLE
+             CACHE 24;
+
+
+           EXEC SQL
+             CLOSE list_obj_projet;
+           // positionnement en début de fichier
+           EXEC SQL
+             DECLARE list_obj_projet CURSOR FOR
+               SELECT projet,
+                      ordre
+                 FROM list_objet_build
+                 WHERE projet = :p_projet
+                 ORDER BY ordre,
+                          RRN(list_objet_build) ;
+
+           EXEC SQL
+             OPEN list_obj_projet;
+
+           EXEC SQL
+             FETCH list_obj_projet INTO :l_projet, :l_ordre;
+
+           Dow sqlcode=0;
+             EXEC SQL
+               UPDATE list_objet_build
+                 SET ordre = NEXT VALUE FOR order_seq
+                 WHERE CURRENT OF list_obj_projet;
+
+             EXEC SQL
+               FETCH list_obj_projet INTO :l_projet, :l_ordre;
+           EndDo;
+
+         End-proc;
 
