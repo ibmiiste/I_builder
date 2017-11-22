@@ -53,18 +53,15 @@
                           CHGOBJD(*NO) LIB(&BIBDST) OBJ(&OBJDST) +
                           SRCLIB(&BIBSRC) SRCFILE(&FICSRC) SRCMBR(&MBRSRC) +
                           USER0(&OPTIMIZE)
-             MONMSG     MSGID(CPF0000) EXEC(DO)
-                IF         COND(&TYPOBJ *EQ 'TABLE') THEN(CPYF +
-                             FROMFILE(&BIBDST/&OBJDST) +
-                             TOFILE(&QTEMP/&SAUV_TAB) MBROPT(*ADD) +
-                             CRTFILE(*NO) FMTOPT(*MAP *DROP))
-                CALLPRC    PRC(GSTERRSTR) PARM((&FAILED))
+             MONMSG     MSGID(CPF0000) EXEC(CALLPRC    PRC(GSTERRSTR) +
+                          PARM((&FAILED)))
+
+
+             IF         COND(&TYPOBJ *EQ 'TABLE') THEN(DO)
+                CPYF       FROMFILE(&QTEMP/&SAUV_TAB) +
+                             TOFILE(&BIBDST/&OBJDST) MBROPT(*ADD) +
+                             CRTFILE(*NO) FMTOPT(*MAP *DROP)
+
+                DLTF       FILE(&QTEMP/&SAUV_TAB)
              ENDDO
-
-             IF         COND(&TYPOBJ *EQ 'TABLE') THEN(CPYF +
-                          FROMFILE(&BIBDST/&OBJDST) +
-                          TOFILE(&QTEMP/&SAUV_TAB) MBROPT(*ADD) +
-                          CRTFILE(*NO) FMTOPT(*MAP *DROP))
-
-             DLTF       FILE(&QTEMP/&SAUV_TAB)
              ENDPGM
