@@ -28,7 +28,7 @@
          P_Projet LIKE(R_NomObj);
          P_Biblio_Lot LIKE(R_NomObj);
          P_Env_Dest CHAR(1);
-         P_Optim_Compil CHAR(6);
+         P_Optim_Compil CHAR(20);
          P_Livr_Env_Dst IND;
          P_Sys_Dst CHAR(32);
          P_User LIKE(R_NomObj);
@@ -39,7 +39,7 @@
          P_Projet LIKE(R_NomObj);
          P_Biblio_Lot LIKE(R_NomObj);
          P_Env_Dest CHAR(1);
-         P_Optim_Compil CHAR(6);
+         P_Optim_Compil CHAR(20);
          P_Livr_Env_Dst IND;
          P_Sys_Dst CHAR(32);
          P_User LIKE(R_NomObj);
@@ -52,41 +52,41 @@
        Dcl-S g_BibDst LIKE(R_NomObj);
        Dcl-S g_ObjDst LIKE(R_NomObj);
        Dcl-S g_Failed packed(10:0);
+       Dcl-S g_TypObj like(R_TypObj);
 
          *InLr=*Off;
 
          exec sql close list_obj;
          // positionnement en début de fichier
-         exec sql declare list_obj cursor for
-                    select Projet,
-                           Bibliotheque_Source,
-                           Fichier_Source,
-                           Membre_Source,
-                           Bibliotheque_Destination,
-                           Objet_Destination
-                      from LIST_OBJET_BUILD
-                     where Projet=:P_Projet
-                  order by ordre;
+         EXEC SQL
+           DECLARE list_obj CURSOR FOR
+             SELECT projet,
+                    bibliotheque_source,
+                    fichier_source,
+                    membre_source,
+                    bibliotheque_destination,
+                    objet_destination,
+                    type_objet
+               FROM list_objet_build
+               WHERE projet = :p_projet
+               ORDER BY ordre;
 
          exec sql open list_obj;
 
-         exec sql fetch list_obj
-                    into :P_projet,
-                         :g_BibSrc,
-                         :g_FicSrc,
-                         :g_MbrSrc,
-                         :g_BibDst,
-                         :g_ObjDst
-                         ;
+         EXEC SQL
+           FETCH list_obj
+             INTO :p_projet, :g_bibsrc, :g_ficsrc, :g_mbrsrc, :g_bibdst,
+               :g_objdst, :g_typobj ;
 
 
-         dow sqlcode<>100;
+         dow sqlcode = 0;
 
            Construct( g_BIBSRC
                      :g_FicSrc
                      :g_MbrSrc
                      :g_BibDst
                      :g_ObjDst
+                     :g_typobj
                      :g_BibSrc
                      :g_FicSrc
                      :g_MbrSrc
@@ -100,13 +100,9 @@
                           :P_Mot_De_Passe);
            EndIf;
 
-           exec sql fetch list_obj
-                     into :P_projet,
-                          :g_BibSrc,
-                          :g_FicSrc,
-                          :g_MbrSrc,
-                          :g_BibDst,
-                          :g_ObjDst
-                          ;
+           EXEC SQL
+             FETCH list_obj
+               INTO :p_projet, :g_bibsrc, :g_ficsrc, :g_mbrsrc, :g_bibdst,
+                 :g_objdst, :g_typobj ;
          enddo;
 

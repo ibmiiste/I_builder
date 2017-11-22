@@ -9,31 +9,62 @@
       /* >>END-PRE-COMPILER<<                                             */
 
              PGM        PARM(&PREBIBSRC &PREFICSRC &USESRCMBR &BIBDST +
-                          &OBJDST &BIBSRC &FICSRC &MBRSRC &OPTIMIZE +
-                          &FAILED)
+                          &OBJDST &TYPOBJ &BIBSRC &FICSRC &MBRSRC +
+                          &OPTIMIZE &FAILED)
 
              DCL        VAR(&PREBIBSRC) TYPE(*CHAR) LEN(10)
              DCL        VAR(&PREFICSRC) TYPE(*CHAR) LEN(10)
              DCL        VAR(&USESRCMBR) TYPE(*CHAR) LEN(10)
              DCL        VAR(&BIBDST) TYPE(*CHAR) LEN(10)
              DCL        VAR(&OBJDST) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&TYPOBJ) TYPE(*CHAR) LEN(7)
              DCL        VAR(&BIBSRC) TYPE(*CHAR) LEN(10)
              DCL        VAR(&FICSRC) TYPE(*CHAR) LEN(10)
              DCL        VAR(&MBRSRC) TYPE(*CHAR) LEN(10)
-             DCL        VAR(&OPTIMIZE) TYPE(*CHAR) LEN(6)
+             DCL        VAR(&OPTIMIZE) TYPE(*CHAR) LEN(20)
              DCL        VAR(&FAILED) TYPE(*DEC) LEN(10 0)
+             DCL        VAR(&TYPSRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&NUMALEA) TYPE(*DEC) LEN(15 0)
+             DCL        VAR(&NUMALEC) TYPE(*CHAR) LEN(9)
+             DCL        VAR(&RAND) TYPE(*DEC) LEN(15 0) VALUE(999999999)
+             DCL        VAR(&SAUV_TAB) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&QTEMP) TYPE(*CHAR) LEN(10) VALUE('QTEMP')
+
 
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Génération d''un objet avec +
                           STRPREPRC') BNDDIR(SERVICE)
+             RTVMBRD    FILE(&BIBSRC/&FICSRC) MBR(&MBRSRC *SAME) +
+                          SRCTYPE(&TYPSRC)
+
+             IF         COND(&TYPSRC *EQ 'SQLRPGLE') THEN(CHGVAR +
+                          VAR(&OPTIMIZE) VALUE('''OPTIMIZE(' *TCAT +
+                          &OPTIMIZE *TCAT ')'''))
+             IF         COND(&TYPOBJ *EQ 'TABLE') THEN(DO)
+                CALLPRC    PRC(ALEATOIRE) PARM((&RAND)) RTNVAL(&NUMALEA)
+                CHGVAR     VAR(&NUMALEC) VALUE(&NUMALEA)
+                CHGVAR     VAR(&SAUV_TAB) VALUE('A' *TCAT &NUMALEC)
+                CPYF       FROMFILE(&BIBDST/&OBJDST) +
+                             TOFILE(&QTEMP/&SAUV_TAB) MBROPT(*REPLACE) +
+                             CRTFILE(*YES)
+             ENDDO
 
              STRPREPRC  USESRCFILE(&PREBIBSRC/&PREFICSRC) +
                           USESRCMBR(&USESRCMBR) OPTION(*EVENTF) +
                           CHGOBJD(*NO) LIB(&BIBDST) OBJ(&OBJDST) +
                           SRCLIB(&BIBSRC) SRCFILE(&FICSRC) SRCMBR(&MBRSRC) +
                           USER0(&OPTIMIZE)
-
              MONMSG     MSGID(CPF0000) EXEC(DO)
+                IF         COND(&TYPOBJ *EQ 'TABLE') THEN(CPYF +
+                             FROMFILE(&BIBDST/&OBJDST) +
+                             TOFILE(&QTEMP/&SAUV_TAB) MBROPT(*ADD) +
+                             CRTFILE(*NO) FMTOPT(*MAP *DROP))
                 CALLPRC    PRC(GSTERRSTR) PARM((&FAILED))
              ENDDO
 
-             endpgm
+             IF         COND(&TYPOBJ *EQ 'TABLE') THEN(CPYF +
+                          FROMFILE(&BIBDST/&OBJDST) +
+                          TOFILE(&QTEMP/&SAUV_TAB) MBROPT(*ADD) +
+                          CRTFILE(*NO) FMTOPT(*MAP *DROP))
+
+             DLTF       FILE(&QTEMP/&SAUV_TAB)
+             ENDPGM
