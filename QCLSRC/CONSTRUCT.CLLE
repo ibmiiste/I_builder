@@ -29,7 +29,9 @@
              DCL        VAR(&RAND) TYPE(*DEC) LEN(15 0) VALUE(999999999)
              DCL        VAR(&SAUV_TAB) TYPE(*CHAR) LEN(10)
              DCL        VAR(&QTEMP) TYPE(*CHAR) LEN(10) VALUE('QTEMP')
-
+             DCL        VAR(&EXISTS) TYPE(*LGL)
+             DCL        VAR(&OBJET) TYPE(*CHAR) LEN(20)
+             DCL        VAR(&TYPOBJE) TYPE(*CHAR) LEN(7) VALUE('*FILE')
 
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Génération d''un objet avec +
                           STRPREPRC') BNDDIR(SERVICE)
@@ -40,12 +42,17 @@
                           VAR(&OPTIMIZE) VALUE('''OPTIMIZE(' *TCAT +
                           &OPTIMIZE *TCAT ')'''))
              IF         COND(&TYPOBJ *EQ 'TABLE') THEN(DO)
+                CHGVAR     VAR(&OBJET) VALUE(&OBJDST *CAT &BIBDST)
+                CALLPRC    PRC(EXISTS) PARM((&OBJET) (&TYPOBJE)) +
+                             RTNVAL(&EXISTS)
+                IF         COND(&EXISTS *EQ '1') THEN(DO)
                 CALLPRC    PRC(ALEATOIRE) PARM((&RAND)) RTNVAL(&NUMALEA)
                 CHGVAR     VAR(&NUMALEC) VALUE(&NUMALEA)
                 CHGVAR     VAR(&SAUV_TAB) VALUE('A' *TCAT &NUMALEC)
                 CPYF       FROMFILE(&BIBDST/&OBJDST) +
                              TOFILE(&QTEMP/&SAUV_TAB) MBROPT(*REPLACE) +
                              CRTFILE(*YES)
+                ENDDO
              ENDDO
 
              STRPREPRC  USESRCFILE(&PREBIBSRC/&PREFICSRC) +
@@ -57,7 +64,8 @@
                           PARM((&FAILED)))
 
 
-             IF         COND(&TYPOBJ *EQ 'TABLE') THEN(DO)
+             IF         COND(&TYPOBJ *EQ 'TABLE' *AND &EXISTS *EQ '1') +
+                          THEN(DO)
                 CPYF       FROMFILE(&QTEMP/&SAUV_TAB) +
                              TOFILE(&BIBDST/&OBJDST) MBROPT(*ADD) +
                              CRTFILE(*NO) FMTOPT(*MAP *DROP)
