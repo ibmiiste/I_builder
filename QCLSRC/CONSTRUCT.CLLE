@@ -22,6 +22,7 @@
              DCL        VAR(&FICSRC) TYPE(*CHAR) LEN(10)
              DCL        VAR(&MBRSRC) TYPE(*CHAR) LEN(10)
              DCL        VAR(&OPTIMIZE) TYPE(*CHAR) LEN(20)
+             DCL        VAR(&OPTIMIZESQL) TYPE(*CHAR) LEN(20)
              DCL        VAR(&FAILED) TYPE(*DEC) LEN(10 0)
              DCL        VAR(&TYPSRC) TYPE(*CHAR) LEN(10)
              DCL        VAR(&NUMALEA) TYPE(*DEC) LEN(15 0)
@@ -38,9 +39,12 @@
              RTVMBRD    FILE(&BIBSRC/&FICSRC) MBR(&MBRSRC *SAME) +
                           SRCTYPE(&TYPSRC)
 
-             IF         COND(&TYPSRC *EQ 'SQLRPGLE') THEN(CHGVAR +
-                          VAR(&OPTIMIZE) VALUE('''OPTIMIZE(' *TCAT +
-                          &OPTIMIZE *TCAT ')'''))
+             IF         COND(&TYPSRC *EQ 'SQLRPGLE') THEN(DO)
+                CHGVAR     VAR(&OPTIMIZESQL) VALUE('''OPTIMIZE(' *TCAT +
+                             &OPTIMIZE *TCAT ')'''))
+                CHGVAR     VAR(&OPTIMIZE) VALUE(&OPTIMIZESQL)
+             ENDDO
+
              IF         COND(&TYPOBJ *EQ 'TABLE') THEN(DO)
                 CHGVAR     VAR(&OBJET) VALUE(&OBJDST *CAT &BIBDST)
                 CALLPRC    PRC(EXISTS) PARM((&OBJET) (&TYPOBJE)) +
@@ -60,7 +64,7 @@
                           CHGOBJD(*NO) LIB(&BIBDST) OBJ(&OBJDST) +
                           SRCLIB(&BIBSRC) SRCFILE(&FICSRC) SRCMBR(&MBRSRC) +
                           USER0(&OPTIMIZE)
-             MONMSG     MSGID(CPF0000) EXEC(CALLPRC    PRC(GSTERRSTR) +
+             MONMSG     MSGID(CPF0000) EXEC(CALLPRC PRC(GSTERRSTR) +
                           PARM((&FAILED)))
 
 
