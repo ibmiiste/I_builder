@@ -1,0 +1,67 @@
+      /* >>PRE-COMPILER<<                                                 */
+      /*   >>CRTCMD<<  CRTBNDCL SRCFILE(&SL/&SF) SRCMBR(&SM);             */
+      /*   >>IMPORTANT<<                                                  */
+      /*     >>PARM<<  PGM(&LI/&OB);                                      */
+      /*     >>PARM<<  OPTION(*EVENTF);                                   */
+      /*     >>PARM<<  DBGVIEW(*ALL);                                     */
+      /*   >>END-IMPORTANT<<                                              */
+      /*   >>EXECUTE<<                                                    */
+      /* >>END-PRE-COMPILER<<                                             */
+             PGM        PARM(&INSPLF &INJOB &INUSER &INJOBN &INSPLN +
+                          &EXISTS)
+             /* Thanks to Scott Campbell and Larry Nies */
+
+             /* Incoming parms */
+             DCL        VAR(&INSPLF) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&INJOB) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&INUSER) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&INJOBN) TYPE(*CHAR) LEN(6)
+             DCL        VAR(&INSPLN) TYPE(*INT) LEN(4)
+             DCL        VAR(&EXISTS) TYPE(*LGL)
+             /* Data struct for API call to QSPRILSP */
+             DCL        VAR(&RCVVAR) TYPE(*CHAR) LEN(70)
+             DCL        VAR(&BYTESAVAIL) TYPE(*INT) STG(*DEFINED) LEN(4) +
+                          DEFVAR(&RCVVAR 1)
+             DCL        VAR(&BYTESRTN) TYPE(*INT) STG(*DEFINED) LEN(4) +
+                          DEFVAR(&RCVVAR 5)
+             DCL        VAR(&SPLFNAME) TYPE(*CHAR) STG(*DEFINED) LEN(10) +
+                          DEFVAR(&RCVVAR 9)
+             DCL        VAR(&JOBNAME) TYPE(*CHAR) STG(*DEFINED) LEN(10) +
+                          DEFVAR(&RCVVAR 19)
+             DCL        VAR(&USERNAME) TYPE(*CHAR) STG(*DEFINED) LEN(10) +
+                          DEFVAR(&RCVVAR 29)
+             DCL        VAR(&JOBNBR) TYPE(*CHAR) STG(*DEFINED) LEN(6) +
+                          DEFVAR(&RCVVAR 39)
+             DCL        VAR(&SPLFNBR) TYPE(*INT) STG(*DEFINED) LEN(4) +
+                          DEFVAR(&RCVVAR 45)
+             DCL        VAR(&SYSNAME) TYPE(*CHAR) STG(*DEFINED) LEN(8) +
+                          DEFVAR(&RCVVAR 49)
+             DCL        VAR(&SPLFCRTDAT) TYPE(*CHAR) STG(*DEFINED) LEN(7) +
+                          DEFVAR(&RCVVAR 57)
+             DCL        VAR(&SPLFCRTTIM) TYPE(*CHAR) STG(*DEFINED) LEN(6) +
+                          DEFVAR(&RCVVAR 65)
+
+             DCL        VAR(&RCVVARLEN) TYPE(*INT) LEN(4) VALUE(70)
+             DCL        VAR(&FMTNAME) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&ERRORCODE) TYPE(*CHAR) LEN(8)
+
+             DCL        VAR(&STAT) TYPE(*LGL)
+             DCL        VAR(&SPLFEXISTS) TYPE(*LGL)
+             CHGVAR     VAR(&BYTESAVAIL) VALUE(70)
+             CHGVAR     VAR(&FMTNAME) VALUE('SPRL0100')
+             CHGVAR     VAR(&ERRORCODE) VALUE(X'0000000000000000')
+             CHGVAR     VAR(&SPLFEXISTS) VALUE('1')
+
+             CALL       PGM(QSPRILSP) PARM(&RCVVAR &RCVVARLEN &FMTNAME +
+                          &ERRORCODE)
+             MONMSG     MSGID(CPF333A) EXEC(CHGVAR VAR(&SPLFEXISTS) +
+                          VALUE('0'))
+             /* Send the values back to the calling program  */
+             CHGVAR     VAR(&INSPLF) VALUE(&SPLFNAME)
+             CHGVAR     VAR(&INJOB) VALUE(&JOBNAME)
+             CHGVAR     VAR(&INUSER) VALUE(&USERNAME)
+             CHGVAR     VAR(&INJOBN) VALUE(&JOBNBR)
+             CHGVAR     VAR(&INSPLN) VALUE(&SPLFNBR)
+             CHGVAR     VAR(&EXISTS) VALUE(&SPLFEXISTS)
+
+             ENDPGM
