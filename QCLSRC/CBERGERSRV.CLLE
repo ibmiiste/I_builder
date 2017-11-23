@@ -224,12 +224,30 @@
                 CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
              ENDDO
 
+             ISPHERE/STRPREPRC USESRCFILE(&LIB_LOT/QRPGLESRC) +
+                          USESRCMBR(RTVSRCSTD) OPTION(*EVENTF) +
+                          LIB(&LIB_LOT) OBJ(RTVSRCSTD) SRCLIB(&LIB_LOT) +
+                          SRCFILE(QRPGLESRC) SRCMBR(RTVSRCSTD)
+
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
+
+             ISPHERE/STRPREPRC USESRCFILE(&LIB_LOT/QCLSRC) +
+                          USESRCMBR(ENVRAPMEL) OPTION(*EVENTF) +
+                          LIB(&LIB_LOT) OBJ(ENVRAPMEL) SRCLIB(&LIB_LOT) +
+                          SRCFILE(QCLSRC) SRCMBR(ENVRAPMEL)
+
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+                CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+             ENDDO
              CRTSRVPGM  SRVPGM(&LIB_LOT/BERGERSRV) MODULE(GESTERR MAILERR +
                           BBMOD000R UTIQRY UTIEXEC BBMOD020R BBMOD030R +
                           UTISTACK UTIMSG UTIENV EMS010C UTIUUID UTISQLUDF +
                           UTISUI UTISQL UTIDSP UTICHN ALEATOIRE SCRIPTFTP +
                           WFTPSCRIPT MSG_INCRMK SCANRPL CONSTRUCT +
-                          GSTERRSTR) SRCFILE(&LIB_LOT/QSRVSRC)
+                          GSTERRSTR RTVSRCSTD ENVRAPMEL) +
+                          SRCFILE(&LIB_LOT/QSRVSRC)
 
              MONMSG     MSGID(CPF0000) EXEC(DO)
                 CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)

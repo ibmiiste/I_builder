@@ -8,9 +8,9 @@
       /*   >>EXECUTE<<                                                    */
       /* >>END-PRE-COMPILER<<                                             */
 
-             PGM        PARM(&FAILED)
+             PGM        PARM(&FAILED &FILEATTACH)
              DCL        VAR(&FAILED) TYPE(*DEC) LEN(10 0)
-             DCL        VAR(&FILEATTACH) TYPE(*CHAR) LEN(500)
+             DCL        VAR(&FILEATTACH) TYPE(*CHAR) LEN(10000)
              DCL        VAR(&INSPLNA) TYPE(*CHAR) LEN(4)
              DCL        VAR(&OBJET) TYPE(*CHAR) LEN(10)
              DCL        VAR(&USER) TYPE(*CHAR) LEN(10)

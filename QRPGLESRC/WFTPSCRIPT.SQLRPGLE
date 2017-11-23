@@ -1,5 +1,4 @@
-       ctl-opt nomain;
-        /copy qcpysrc,cpyctlstm
+      /copy qcpysrc,cpyctlstm
 
       // >>PRE-COMPILER<<                                              */
       //   >>CRTCMD<<  CRTSQLRPGI SRCFILE(&SL/&SF) SRCMBR(&SM);        */
