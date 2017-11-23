@@ -1,0 +1,9 @@
+      /* >>PRE-COMPILER<<                                                 */
+      /*   >>CRTCMD<<  CRTBNDCL SRCFILE(&SL/&SF) SRCMBR(&SM);             */
+      /*   >>IMPORTANT<<                                                  */
+      /*     >>PARM<<  PGM(&LI/&OB);                                      */
+      /*     >>PARM<<  OPTION(*EVENTF);                                   */
+      /*     >>PARM<<  DBGVIEW(*ALL);                                     */
+      /*   >>END-IMPORTANT<<                                              */
+      /*   >>EXECUTE<<                                                    */
+      /* >>END-PRE-COMPILER<<                                             */
