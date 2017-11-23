@@ -63,7 +63,8 @@
                            Fichier_Source,
                            Membre_Source,
                            Bibliotheque_Destination,
-                           Objet_Destination
+                           Objet_Destination,
+                           Type_objet
                       from LIST_OBJET_BUILD
                      where Projet=:P_Projet
                   order by ordre;
@@ -76,28 +77,44 @@
                          :g_FicSrc,
                          :g_MbrSrc,
                          :g_BibDst,
-                         :g_ObjDst
+                         :g_ObjDst,
+                         :g_typobj
                          ;
 
 
          dow sqlcode<>100;
-
-           Construct( g_BIBSRC
-                     :g_FicSrc
-                     :g_MbrSrc
-                     :g_BibDst
-                     :g_ObjDst
-                     :g_BibSrc
-                     :g_FicSrc
-                     :g_MbrSrc
-                     :P_Optim_Compil
-                     :g_Failed);
+           If g_typobj<>'*MSGF';
+             Construct( g_BibSrc
+                       :g_FicSrc
+                       :g_MbrSrc
+                       :g_BibDst
+                       :g_ObjDst
+                       :g_BibSrc
+                       :g_FicSrc
+                       :g_MbrSrc
+                       :P_Optim_Compil
+                       :g_Failed);
+           Else;
+             callp i_MrgMsgf( g_ObjDst + g_BibDst
+                             :g_MbrSrc
+                             :P_Sys_Dst
+                             :P_User
+                             :P_Mot_De_Passe);
+           EndIf;
 
            if P_Livr_Env_Dst=*on;
-             callp i_push( g_ObjDst + g_BibDst
-                          :P_Sys_Dst
-                          :P_User
-                          :P_Mot_De_Passe);
+             If g_typobj='*MSGF';
+               callp i_MrgMsgf( g_ObjDst + g_BibDst
+                               :g_MbrSrc
+                               :P_Sys_Dst
+                               :P_User
+                               :P_Mot_De_Passe);
+             Else;
+               callp i_push( g_ObjDst + g_BibDst
+                            :P_Sys_Dst
+                            :P_User
+                            :P_Mot_De_Passe);
+             ENDIF;
            EndIf;
 
            exec sql fetch list_obj
@@ -106,7 +123,8 @@
                           :g_FicSrc,
                           :g_MbrSrc,
                           :g_BibDst,
-                          :g_ObjDst
+                          :g_ObjDst,
+                          :g_typobj
                           ;
          enddo;
 
