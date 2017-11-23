@@ -1,0 +1,66 @@
+      /* >>PRE-COMPILER<<                                                 */
+      /*   >>CRTCMD<<  CRTBNDCL SRCFILE(&SL/&SF) SRCMBR(&SM);             */
+      /*   >>IMPORTANT<<                                                  */
+      /*     >>PARM<<  PGM(&LI/&OB);                                      */
+      /*     >>PARM<<  OPTION(*EVENTF);                                   */
+      /*     >>PARM<<  DBGVIEW(*LIST);                                    */
+      /*   >>END-IMPORTANT<<                                              */
+      /*   >>EXECUTE<<                                                    */
+      /* >>END-PRE-COMPILER<<                                             */
+             PGM        PARM(&OBJETQ &MACHINE &USER &MDP)
+
+             DCL        VAR(&OBJETQ) TYPE(*CHAR) LEN(20)
+             DCL        VAR(&OBJET) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&BIBLIO) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&MACHINE) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&USER) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&MDP) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&SAVF) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&SRCF) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&CMD) TYPE(*CHAR) LEN(2000)
+             DCL        VAR(&NUMALEA) TYPE(*DEC) LEN(15 0)
+             DCL        VAR(&NUMALEC) TYPE(*CHAR) LEN(9)
+             DCL        VAR(&RAND) TYPE(*DEC) LEN(15 0) VALUE(999999999)
+
+
+             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Livraison sur une autre machine') BNDDIR(SERVICE)
+             MONMSG     MSGID(CPF0000)
+
+
+             CHGVAR     VAR(&OBJET) VALUE(%SST( &OBJETQ 1 10))
+             CHGVAR     VAR(&BIBLIO) VALUE(%SST( &OBJETQ 11 10))
+
+             CALLPRC    PRC(ALEATOIRE) PARM((&RAND)) RTNVAL(&NUMALEA)
+
+             CHGVAR     VAR(&NUMALEC) VALUE(&NUMALEA)
+
+             CHGVAR     VAR(&SAVF) VALUE('S' *TCAT &NUMALEC)
+
+             CRTSAVF    FILE(QTEMP/&SAVF)
+             CHGVAR     VAR(&CMD) VALUE('CRTSAVF FILE(QGPL/' *TCAT &SAVF *TCAT ')')
+
+             RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) RMTPWD(&MDP)
+
+             SAVOBJ     OBJ(&OBJET) LIB(&BIBLIO) DEV(*SAVF) SAVF(QTEMP/&SAVF)
+
+             CALLPRC    PRC(SCRIPTFTP) PARM((&MACHINE) (&USER) (&MDP) (&SAVF) (&SRCF))
+
+             OVRDBF     FILE(INPUT) TOFILE(&SRCF) MBR(IN)
+             OVRDBF     FILE(OUTPUT) TOFILE(&SRCF) MBR(OUT)
+
+             FTP        RMTSYS(&MACHINE)
+
+             CHGVAR     VAR(&CMD) VALUE('RSTOBJ OBJ(*ALL) SAVLIB(' *TCAT &BIBLIO *TCAT ') +
+                          DEV(*SAVF) SAVF(QGPL/' *TCAT &SAVF *TCAT ')')
+
+             RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) RMTPWD(&MDP)
+
+             CHGVAR     VAR(&CMD) VALUE('DLTF FILE(QGPL/' *TCAT &SAVF *TCAT ')')
+
+             RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) RMTPWD(&MDP)
+
+             DLTF       FILE(QTEMP/&SAVF)
+
+             DLTOVR     FILE(*ALL)
+
+             ENDPGM

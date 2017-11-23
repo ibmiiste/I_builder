@@ -81,25 +81,39 @@
 
 
          dow sqlcode = 0;
+           If g_typobj<>'*MSGF';
+             Construct( g_BibSrc
+                       :g_FicSrc
+                       :g_MbrSrc
+                       :g_BibDst
+                       :g_ObjDst
+                       :g_BibSrc
+                       :g_FicSrc
+                       :g_MbrSrc
+                       :P_Optim_Compil
+                       :g_Failed);
+           Else;
+             callp i_MrgMsgf( g_ObjDst + g_BibDst
+                             :g_MbrSrc
+                             :P_Sys_Dst
+                             :P_User
+                             :P_Mot_De_Passe);
+           EndIf;
 
-           Construct( g_BIBSRC
-                     :g_FicSrc
-                     :g_MbrSrc
-                     :g_BibDst
-                     :g_ObjDst
-                     :g_typobj
-                     :g_BibSrc
-                     :g_FicSrc
-                     :g_MbrSrc
-                     :P_Optim_Compil
-                     :g_Failed
-                     :g_FileAttach);
 
            if P_Livr_Env_Dst=*on;
-             callp i_push( g_ObjDst + g_BibDst
-                          :P_Sys_Dst
-                          :P_User
-                          :P_Mot_De_Passe);
+             If g_typobj='*MSGF';
+               callp i_MrgMsgf( g_ObjDst + g_BibDst
+                               :g_MbrSrc
+                               :P_Sys_Dst
+                               :P_User
+                               :P_Mot_De_Passe);
+             Else;
+               callp i_push( g_ObjDst + g_BibDst
+                            :P_Sys_Dst
+                            :P_User
+                            :P_Mot_De_Passe);
+             ENDIF;
            EndIf;
 
            EXEC SQL
