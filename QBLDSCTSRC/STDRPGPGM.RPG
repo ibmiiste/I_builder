@@ -1,0 +1,10 @@
+      * >>PRE-COMPILER<<                                              */
+      *   >>CRTCMD<<  CRTRPGPGM PGM(&LI/&OB) SRCFILE(&SL/&SF) +       */
+      *                 SRCMBR(&SM);                                  */
+      *   >>IMPORTANT<<                                               */
+      *     >>PARM<<  OPTION(*LSTDBG *SRCDBG);                        */
+      *     >>PARM<<  IGNDECERR(*NO);                                 */
+      *   >>END-IMPORTANT<<                                           */
+      *   >>EXECUTE<<                                                 */
+      * >>END-PRE-COMPILER<<                                          */
+
