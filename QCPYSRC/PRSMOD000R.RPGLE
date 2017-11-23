@@ -1465,3 +1465,16 @@
          P_User LIKE(R_NomObj);
          P_Mot_De_Passe CHAR(10);
        End-Pr;
+
+
+
+       // --------------------------------------------------
+       // Prototype for procedure: source_standard
+       // --------------------------------------------------
+       DCL-PR source_standard IND;
+         P_Type_Source LIKE(R_NomObj) CONST;
+         P_Type_Objet LIKE(R_TypObj) CONST;
+         P_Biblio_Src_PRE LIKE(R_NomObj);
+         P_Fichier_Src_PRE LIKE(R_NomObj);
+         P_Membre_Src_PRE LIKE(R_NomObj);
+       END-PR ;
