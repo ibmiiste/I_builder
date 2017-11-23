@@ -1,0 +1,9 @@
+-- >>PRE-COMPILER<<                                              */
+--   >>CRTCMD<<  RUNSQLSTM SRCFILE(&SL/&SF) SRCMBR(&SM);         */
+--   >>IMPORTANT<<                                               */
+--     >>PARM<<  COMMIT(*NONE);                                  */
+--     >>PARM<<  NAMING(*SQL);                                   */
+--     >>PARM<<  DFTRDBCOL(&LI);                                 */
+--   >>END-IMPORTANT<<                                           */
+--   >>EXECUTE<<                                                 */
+-- >>END-PRE-COMPILER<<                                          */
