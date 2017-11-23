@@ -53,8 +53,9 @@
        Dcl-S g_ObjDst LIKE(R_NomObj);
        Dcl-S g_Failed packed(10:0);
        Dcl-S g_TypObj like(R_TypObj);
+       Dcl-S g_FileAttach char(10000);
 
-         *InLr=*Off;
+         *InLr=*On;
 
          exec sql close list_obj;
          // positionnement en début de fichier
@@ -91,7 +92,8 @@
                      :g_FicSrc
                      :g_MbrSrc
                      :P_Optim_Compil
-                     :g_Failed);
+                     :g_Failed
+                     :g_FileAttach);
 
            if P_Livr_Env_Dst=*on;
              callp i_push( g_ObjDst + g_BibDst
@@ -106,3 +108,8 @@
                  :g_objdst, :g_typobj ;
          enddo;
 
+         if g_Failed<>0;
+           EnvRapMel(g_FileAttach);
+         EndIf;
+
+         Return;

@@ -1,0 +1,30 @@
+      /* >>PRE-COMPILER<<                                                 */
+      /*   >>CRTCMD<<  CRTCLMOD MODULE(&LI/&OB) SRCFILE(&SL/&SF) +        */
+      /*                 SRCMBR(&SM);                                     */
+      /*   >>IMPORTANT<<                                                  */
+      /*     >>PARM<<  OPTION(*EVENTF);                                   */
+      /*     >>PARM<<  DBGVIEW(*ALL);                                     */
+      /*   >>END-IMPORTANT<<                                              */
+      /*   >>EXECUTE<<                                                    */
+      /* >>END-PRE-COMPILER<<                                             */
+
+             PGM        PARM(&FILEATTACH)
+
+             DCL        VAR(&FILEATTACH) TYPE(*CHAR) LEN(10000)
+             DCL        VAR(&CMD) TYPE(*CHAR) LEN(32000)
+             DCL        VAR(&MAILUSERS) TYPE(*CHAR) LEN(1000)
+             DCL        VAR(&LENCMD) TYPE(*DEC) LEN(15 5) VALUE(32000)
+
+             CHGVAR     VAR(&MAILUSERS) VALUE('(''odrubigny@ista.fr'' +
+                          *PRI)')
+
+             CHGVAR     VAR(&CMD) VALUE('SNDSMTPEMM RCP(' *TCAT &MAILUSERS +
+                          *TCAT ') NOTE(''Le projet MIRUS a des erreurs de +
+                          construction, Trouver ci-joint les éditions des +
+                          objets en erreur'') SUBJECT(''Erreur de +
+                          construction de MIRUS'') ATTACH(' *TCAT +
+                          &FILEATTACH *TCAT ')')
+
+             CALL       PGM(QCMDEXC) PARM(&CMD &LENCMD)
+
+             ENDPGM

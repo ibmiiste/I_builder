@@ -3,14 +3,14 @@
       /*                 SRCMBR(&SM);                                     */
       /*   >>IMPORTANT<<                                                  */
       /*     >>PARM<<  OPTION(*EVENTF);                                   */
-      /*     >>PARM<<  DBGVIEW(*ALL);                                    */
+      /*     >>PARM<<  DBGVIEW(*ALL);                                     */
       /*   >>END-IMPORTANT<<                                              */
       /*   >>EXECUTE<<                                                    */
       /* >>END-PRE-COMPILER<<                                             */
 
              PGM        PARM(&PREBIBSRC &PREFICSRC &USESRCMBR &BIBDST +
                           &OBJDST &TYPOBJ &BIBSRC &FICSRC &MBRSRC +
-                          &OPTIMIZE &FAILED)
+                          &OPTIMIZE &FAILED &FILEATTACH)
 
              DCL        VAR(&PREBIBSRC) TYPE(*CHAR) LEN(10)
              DCL        VAR(&PREFICSRC) TYPE(*CHAR) LEN(10)
@@ -33,6 +33,8 @@
              DCL        VAR(&EXISTS) TYPE(*LGL)
              DCL        VAR(&OBJET) TYPE(*CHAR) LEN(20)
              DCL        VAR(&TYPOBJE) TYPE(*CHAR) LEN(7) VALUE('*FILE')
+             DCL        VAR(&RTRSRCSTD) TYPE(*LGL)
+             DCL        VAR(&FILEATTACH) TYPE(*CHAR) LEN(10000)
 
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Génération d''un objet avec +
                           STRPREPRC') BNDDIR(SERVICE)
@@ -77,8 +79,9 @@
                 CALLPRC    PRC(SOURCE_STANDARD) PARM((&TYPOBJ) (&TYPSRC) +
                              (&PREBIBSRC) (&PREFICSRC) (&USESRCMBR)) +
                              RTNVAL(&RTRSRCSTD)
-                IF         COND(&RTRSRCSTD *EQ '1') THEN(GOTO       +
+                IF         COND(&RTRSRCSTD *EQ '1') THEN(GOTO +
                              CMDLBL(STANDARD))
+             ENDDO
              MONMSG     MSGID(CPF0000) EXEC(CALLPRC PRC(GSTERRSTR) +
                           PARM((&FAILED)))
 

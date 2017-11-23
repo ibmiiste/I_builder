@@ -498,4 +498,6 @@
                 EXPORT     SYMBOL(ScanRpl)
                 EXPORT     SYMBOL(CONSTRUCT)
                 EXPORT     SYMBOL(GSTERRSTR)
+                EXPORT     SYMBOL(SOURCE_STANDARD)
+                EXPORT     SYMBOL(ENVRAPMEL)
              ENDPGMEXP
