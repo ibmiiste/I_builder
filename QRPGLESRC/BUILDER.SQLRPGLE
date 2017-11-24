@@ -105,6 +105,7 @@
            if P_Livr_Env_Dst=*on;
              If g_typobj='*MSGF';
                callp i_MrgMsgf( g_ObjDst + g_BibDst
+                               :g_BibSrc
                                :g_MbrSrc
                                :P_Sys_Dst
                                :P_User
