@@ -30,7 +30,7 @@
       * >>END-PRE-COMPILER<<                                          */
       /copy qcpysrc,cpyctlstm
 
-       DCL-PROC source_standard ;
+       DCL-PROC source_standard export;
          DCL-PI *N IND;
            P_Type_Source LIKE(R_NomObj) CONST;
            P_Type_Objet LIKE(R_TypObj) CONST;
