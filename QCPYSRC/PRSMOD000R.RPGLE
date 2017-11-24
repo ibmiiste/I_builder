@@ -1468,8 +1468,6 @@
          P_Mot_De_Passe CHAR(10);
        End-Pr;
 
-
-
        // --------------------------------------------------
        // Prototype for procedure: source_standard
        // --------------------------------------------------
@@ -1488,3 +1486,16 @@
        DCL-PR EnvRapMel;
          P_FileAttach char(10000);
        END-PR ;
+
+       // --------------------------------------------------
+       // Prototype for Programme:Envoi vers système distant
+       // --------------------------------------------------
+       Dcl-Pr i_MrgMsgf ExtPgm('I_MRGMSGF');
+         P_Objet char(20) Const;
+         P_BibSrc like(R_NomObj);
+         P_MbrSrc like(R_NomObj);
+         P_Sys_Dst CHAR(32);
+         P_User LIKE(R_NomObj);
+         P_Mot_De_Passe CHAR(10);
+       End-Pr;
+

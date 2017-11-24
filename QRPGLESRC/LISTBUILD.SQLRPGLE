@@ -78,8 +78,8 @@
        dcl-s a_mdt like(r_msgdta);
 
        dcl-s a_chx char(2);
-       dcl-s a_nrec like(r_uuid_db2);
-       dcl-s a_uuid like(r_uuid_db2);
+       //dcl-s a_nrec like(r_uuid_db2);
+       //dcl-s a_uuid like(r_uuid_db2);
        Dcl-S g_verif packed(1:0);
 
        // Indicateurs
@@ -362,7 +362,7 @@
                          : a_fim
                          : a_mid
                          : a_mdt);
-           ELSE;
+           Else;
 
              EXEC SQL
                INSERT INTO list_objet_build
@@ -376,9 +376,6 @@
                          :zobjdstc,
                          :ztypobjc);
 
-             if sqlcode=0;
-               reincrement_liste_objet(zprojet);
-             EndIf;
            EndIf;
 
            zoptc=*blank;
@@ -394,7 +391,7 @@
 
          readc sfl01;
          dow not %eof;
-           a_nrec=hnrec;
+           //a_nrec=hnrec;
            g_filtre = *on;
            // selection en fonction du choix saisi
            select;
@@ -413,9 +410,6 @@
                       objet_destination = :zobjdst,
                       type_objet = :ztypobj
                   WHERE rowid_build = :g_rowid_buildw;
-              If sqlcode=0;
-                reincrement_liste_objet( hprojet);
-              EndIf;
 
             when (zopt = '3') or (zopt = ' 3');
               a_chx='CO';
@@ -453,6 +447,7 @@
          enddo;
          // potentiellement il y a eu mise  jour, on pourrait affiner
          if g_alimsfl;
+           reincrement_liste_objet( hprojet);
            exsr initsf;
          ENDIF;
        endsr;

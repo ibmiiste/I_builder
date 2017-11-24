@@ -29,6 +29,7 @@
              DCL        VAR(&NUMALEC) TYPE(*CHAR) LEN(9)
              DCL        VAR(&RAND) TYPE(*DEC) LEN(15 0) VALUE(999999999)
              DCL        VAR(&SAUV_TAB) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&ATROBJ) TYPE(*CHAR) LEN(10)
              DCL        VAR(&QTEMP) TYPE(*CHAR) LEN(10) VALUE('QTEMP')
              DCL        VAR(&EXISTS) TYPE(*LGL)
              DCL        VAR(&OBJET) TYPE(*CHAR) LEN(20)
@@ -40,9 +41,8 @@
                           STRPREPRC') BNDDIR(SERVICE)
 
              /* Récupération du type de source                             */
-             RTVMBRD    FILE(&BIBSRC/&FICSRC) MBR(&MBRSRC *SAME) +
-                          SRCTYPE(&TYPSRC)
-
+             RTVOBJD    OBJ(&BIBDST/&OBJDST) OBJTYPE(&TYPOBJ) +
+                          OBJATR(&ATROBJ)
              /* En cas de précompilation SQL l'OPTIMIZE doit être mis dans COMPILOPT*/
              /* de la commande de compilation                                       */
              IF         COND(&TYPSRC *EQ 'SQLRPGLE') THEN(DO)
@@ -53,7 +53,7 @@
 
              /* Si le type d'objet est TABLE ou FICHIER, les données sont conservées */
              /* dans un fichier temporaire pour être recopiées en fin de CONSTRUCT   */
-             IF         COND(&TYPOBJ *EQ 'TABLE') THEN(DO)
+             IF         COND(&ATROBJ *EQ 'PF') THEN(DO)
                 CHGVAR     VAR(&OBJET) VALUE(&OBJDST *CAT &BIBDST)
                 CALLPRC    PRC(EXISTS) PARM((&OBJET) (&TYPOBJE)) +
                              RTNVAL(&EXISTS)
@@ -86,7 +86,7 @@
                           PARM((&FAILED)))
 
 
-             IF         COND(&TYPOBJ *EQ 'TABLE' *AND &EXISTS *EQ '1') +
+             IF         COND(&ATROBJ *EQ 'PF' *AND &EXISTS *EQ '1') +
                           THEN(DO)
                 CPYF       FROMFILE(&QTEMP/&SAUV_TAB) +
                              TOFILE(&BIBDST/&OBJDST) MBROPT(*ADD) +
