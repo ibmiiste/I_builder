@@ -82,16 +82,18 @@
 
          dow sqlcode = 0;
            If g_typobj<>'*MSGF';
-             Construct( g_BibSrc
+             Construct( g_BIBSRC
                        :g_FicSrc
                        :g_MbrSrc
                        :g_BibDst
                        :g_ObjDst
+                       :g_typobj
                        :g_BibSrc
                        :g_FicSrc
                        :g_MbrSrc
                        :P_Optim_Compil
-                       :g_Failed);
+                       :g_Failed
+                       :g_FileAttach);
            Else;
              callp i_MrgMsgf( g_ObjDst + g_BibDst
                              :g_MbrSrc
@@ -99,8 +101,7 @@
                              :P_User
                              :P_Mot_De_Passe);
            EndIf;
-
-
+           
            if P_Livr_Env_Dst=*on;
              If g_typobj='*MSGF';
                callp i_MrgMsgf( g_ObjDst + g_BibDst
