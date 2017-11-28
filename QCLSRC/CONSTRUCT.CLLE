@@ -85,7 +85,7 @@
                              CMDLBL(STANDARD))
              ENDDO
              MONMSG     MSGID(CPF0000) EXEC(CALLPRC PRC(GSTERRSTR) +
-                          PARM((&FAILED)))
+                          PARM((&FAILED) (&FILEATTACH) (&OBJET)))
 
 
              IF         COND(&ATROBJ *EQ 'PF' *AND &EXISTS *EQ '1') +
