@@ -33,7 +33,8 @@
              DCL        VAR(&QTEMP) TYPE(*CHAR) LEN(10) VALUE('QTEMP')
              DCL        VAR(&EXISTS) TYPE(*LGL)
              DCL        VAR(&OBJET) TYPE(*CHAR) LEN(20)
-             DCL        VAR(&TYPOBJE) TYPE(*CHAR) LEN(7) VALUE('*FILE')
+             DCL        VAR(&TYPOBJE) TYPE(*CHAR) LEN(10) VALUE('*FILE     +
+                          ')
              DCL        VAR(&RTRSRCSTD) TYPE(*LGL)
              DCL        VAR(&FILEATTACH) TYPE(*CHAR) LEN(10000)
 
@@ -43,6 +44,7 @@
              /* Récupération du type de source                             */
              RTVOBJD    OBJ(&BIBDST/&OBJDST) OBJTYPE(&TYPOBJ) +
                           OBJATR(&ATROBJ)
+             MONMSG     MSGID(CPF9812)
              /* En cas de précompilation SQL l'OPTIMIZE doit être mis dans COMPILOPT*/
              /* de la commande de compilation                                       */
              IF         COND(&TYPSRC *EQ 'SQLRPGLE') THEN(DO)
