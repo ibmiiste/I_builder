@@ -1447,7 +1447,7 @@
          P_MbrSrc CHAR(10) CONST;
          P_Optimize CHAR(20);
          P_Failed PACKED(10:0);
-         P_FileAttach char(5000);
+         P_FileAttach char(10000);
        END-PR ;
 
        // --------------------------------------------------

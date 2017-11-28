@@ -42,9 +42,8 @@
                           STRPREPRC') BNDDIR(SERVICE)
 
              /* Récupération du type de source                             */
-             RTVOBJD    OBJ(&BIBDST/&OBJDST) OBJTYPE(&TYPOBJ) +
-                          OBJATR(&ATROBJ)
-             MONMSG     MSGID(CPF9812)
+             RTVMBRD    FILE(&BIBSRC/&FICSRC) MBR(&MBRSRC *SAME) +
+                          SRCTYPE(&TYPSRC)
              /* En cas de précompilation SQL l'OPTIMIZE doit être mis dans COMPILOPT*/
              /* de la commande de compilation                                       */
              IF         COND(&TYPSRC *EQ 'SQLRPGLE') THEN(DO)
@@ -55,7 +54,7 @@
 
              /* Si le type d'objet est TABLE ou FICHIER, les données sont conservées */
              /* dans un fichier temporaire pour être recopiées en fin de CONSTRUCT   */
-             IF         COND(&ATROBJ *EQ 'PF') THEN(DO)
+             IF         COND(&TYPSRC *EQ 'PF') THEN(DO)
                 CHGVAR     VAR(&OBJET) VALUE(&OBJDST *CAT &BIBDST)
                 CALLPRC    PRC(EXISTS) PARM((&OBJET) (&TYPOBJE)) +
                              RTNVAL(&EXISTS)
