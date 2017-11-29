@@ -37,6 +37,7 @@
                           ')
              DCL        VAR(&RTRSRCSTD) TYPE(*LGL)
              DCL        VAR(&FILEATTACH) TYPE(*CHAR) LEN(10000)
+             DCL        VAR(&QUOTE) TYPE(*CHAR) LEN(1) VALUE('''')
 
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Génération d''un objet avec +
                           STRPREPRC') BNDDIR(SERVICE)
@@ -53,7 +54,10 @@
                              &OPTIMIZE *TCAT ')''')
                 CHGVAR     VAR(&OPTIMIZE) VALUE(&OPTIMIZSQL)
              ENDDO
-
+             /* Si &OPTIMIZE contient *NONE, il faut ajouter des quotes         */
+             IF         COND(&OPTIMIZE *EQ '*NONE               ') +
+                          THEN(CHGVAR VAR(&OPTIMIZE) VALUE(&QUOTE *TCAT +
+                          &OPTIMIZE *TCAT &QUOTE))
              /* Récupération du type d'objet pour s'assurer que s'il existe il  */
              /* faut sauvegarder les données avant création de la table/fichier */
  RTVOBJD:    RTVOBJD    OBJ(&BIBDST/&OBJDST) OBJTYPE(&TYPOBJ) +

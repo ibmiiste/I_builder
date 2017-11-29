@@ -38,7 +38,6 @@
        Dcl-pi Test_Construct_RPGLE_MOD_NONE End-Pi;
 
 
-
          g_PreBibSrc='LOT_000124';
          g_PreFicSrc='QBLDSCTSRC';
          g_UseSrcMbr='STDRPGLMOD';
