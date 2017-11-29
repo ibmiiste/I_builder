@@ -56,9 +56,15 @@
 
              /* Récupération du type d'objet pour s'assurer que s'il existe il  */
              /* faut sauvegarder les données avant création de la table/fichier */
-             RTVOBJD    OBJ(&BIBDST/&OBJDST) OBJTYPE(&TYPOBJ) +
+ RTVOBJD:    RTVOBJD    OBJ(&BIBDST/&OBJDST) OBJTYPE(&TYPOBJ) +
                           OBJATR(&ATROBJ)
-             MONMSG     MSGID(CPF9812)
+             MONMSG     MSGID(CPF9812 CPF9801)
+             MONMSG     MSGID(CPF3203) EXEC(DO)
+                SNDPGMMSG  MSG('''Objet en cours d''utilisation, nouvel +
+                             essai dans 30 secondes''')
+                DLYJOB     DLY(30)
+                GOTO       CMDLBL(RTVOBJD)
+             ENDDO
              /* Si le type d'objet est TABLE ou FICHIER, les données sont conservées */
              /* dans un fichier temporaire pour être recopiées en fin de CONSTRUCT   */
              IF         COND(&ATROBJ *EQ 'PF') THEN(DO)
