@@ -38,7 +38,8 @@
        Dcl-Pr Test_Construct_RPGLE_PGM_FULL end-pr;
        Dcl-Pr Test_Construct_SQLRPGLE_PGM_NONE end-pr;
        Dcl-Pr Test_Construct_SQLRPGLE_PGM_FULL end-pr;
-
+       Dcl-Pr Test_Construct_CLLE_MOD_NONE end-pr;
+       Dcl-Pr Test_Construct_CLLE_PGM_NONE end-pr;
 
        Dcl-proc Test_Construct_RPG_PGM export;
        Dcl-pi Test_Construct_RPG_PGM End-Pi;
@@ -371,3 +372,72 @@
          nEqual( *on:g_Exists);
 
        End-proc Test_Construct_CLP_PGM;
+
+       Dcl-proc Test_Construct_CLLE_MOD_NONE export;
+       Dcl-pi Test_Construct_CLLE_MOD_NONE End-Pi;
+
+
+         g_PreBibSrc='LOT_000124';
+         g_PreFicSrc='QBLDSCTSRC';
+         g_UseSrcMbr='STDCLLEMOD';
+         g_BibDst='QTEMP';
+         g_ObjDst='MBRRPGLEM';
+         g_typobj='*MODULE';
+         g_BibSrc='LOT_000124';
+         g_FicSrc='QTESTUSRC';
+         g_MbrSrc='MBRCLLET';
+         g_Optimize='*NONE';
+
+         Construct( g_PreBibSrc
+                   :g_PreFicSrc
+                   :g_UseSrcMbr
+                   :g_BibDst
+                   :g_ObjDst
+                   :g_typobj
+                   :g_BibSrc
+                   :g_FicSrc
+                   :g_MbrSrc
+                   :g_Optimize
+                   :g_Failed
+                   :g_FileAttach);
+
+
+         g_Exists=exists( g_ObjDst + g_BibDst:'*MODULE');
+         nEqual( *on:g_Exists);
+
+       End-proc Test_Construct_CLLE_MOD_NONE;
+
+
+       Dcl-proc Test_Construct_CLLE_PGM_NONE export;
+       Dcl-pi Test_Construct_CLLE_PGM_NONE End-Pi;
+
+
+         g_PreBibSrc='LOT_000124';
+         g_PreFicSrc='QBLDSCTSRC';
+         g_UseSrcMbr='STDRPGLMOD';
+         g_BibDst='QTEMP';
+         g_ObjDst='MBRRPGLEM';
+         g_typobj='*MODULE';
+         g_BibSrc='LOT_000124';
+         g_FicSrc='QTESTUSRC';
+         g_MbrSrc='MBRRPGLET';
+         g_Optimize='*NONE';
+
+         Construct( g_PreBibSrc
+                   :g_PreFicSrc
+                   :g_UseSrcMbr
+                   :g_BibDst
+                   :g_ObjDst
+                   :g_typobj
+                   :g_BibSrc
+                   :g_FicSrc
+                   :g_MbrSrc
+                   :g_Optimize
+                   :g_Failed
+                   :g_FileAttach);
+
+
+         g_Exists=exists( g_ObjDst + g_BibDst:'*MODULE');
+         nEqual( *on:g_Exists);
+
+       End-proc Test_Construct_CLLE_PGM_NONE;
