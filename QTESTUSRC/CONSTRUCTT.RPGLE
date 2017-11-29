@@ -44,6 +44,7 @@
          g_UseSrcMbr='STDRPGLMOD';
          g_BibDst='QTEMP';
          g_ObjDst='MBRRPGLET';
+         g_typobj='*MODULE';
          g_BibSrc='LOT_000124';
          g_FicSrc='QTESTUSRC';
          g_MbrSrc='MBRRPGLET';
@@ -76,6 +77,7 @@
          g_UseSrcMbr='STDRPGLMOD';
          g_BibDst='QTEMP';
          g_ObjDst='MBRRPGLET';
+         g_typobj='*MODULE';
          g_BibSrc='LOT_000124';
          g_FicSrc='QTESTUSRC';
          g_MbrSrc='MBRRPGLET';
@@ -108,6 +110,7 @@
          g_UseSrcMbr='STDSQLRMOD';
          g_BibDst='QTEMP';
          g_ObjDst='MBRSQRPGLT';
+         g_typobj='*MODULE';
          g_BibSrc='LOT_000124';
          g_FicSrc='QTESTUSRC';
          g_MbrSrc='MBRSQRPGLT';
@@ -140,6 +143,7 @@
          g_UseSrcMbr='STDSQLRMOD';
          g_BibDst='QTEMP';
          g_ObjDst='MBRSQRPGLT';
+         g_typobj='*MODULE';
          g_BibSrc='LOT_000124';
          g_FicSrc='QTESTUSRC';
          g_MbrSrc='MBRSQRPGLT';
