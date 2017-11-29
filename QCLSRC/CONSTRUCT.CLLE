@@ -30,7 +30,7 @@
              DCL        VAR(&RAND) TYPE(*DEC) LEN(15 0) VALUE(999999999)
              DCL        VAR(&SAUV_TAB) TYPE(*CHAR) LEN(10)
              DCL        VAR(&ATROBJ) TYPE(*CHAR) LEN(10)
-             DCL        VAR(&QTEMP) TYPE(*CHAR) LEN(10) VALUE('QTEMP')
+             DCL        VAR(&QTEMP) TYPE(*CHAR) LEN(10) VALUE('QGPL')
              DCL        VAR(&EXISTS) TYPE(*LGL)
              DCL        VAR(&OBJET) TYPE(*CHAR) LEN(20)
              DCL        VAR(&TYPOBJE) TYPE(*CHAR) LEN(10) VALUE('*FILE     +
@@ -80,8 +80,9 @@
                 CHGVAR     VAR(&NUMALEC) VALUE(&NUMALEA)
                 CHGVAR     VAR(&SAUV_TAB) VALUE('A' *TCAT &NUMALEC)
                 CPYF       FROMFILE(&BIBDST/&OBJDST) +
-                             TOFILE(&QTEMP/&SAUV_TAB) MBROPT(*REPLACE) +
-                             CRTFILE(*YES)
+                             TOFILE(&QTEMP/&SAUV_TAB) FROMMBR(*ALL) +
+                             TOMBR(*FROMMBR) MBROPT(*REPLACE) +
+                             CRTFILE(*YES) ERRLVL(*NOMAX)
                 ENDDO
              ENDDO
 
@@ -107,8 +108,9 @@
              IF         COND(&ATROBJ *EQ 'PF' *AND &EXISTS *EQ '1') +
                           THEN(DO)
                 CPYF       FROMFILE(&QTEMP/&SAUV_TAB) +
-                             TOFILE(&BIBDST/&OBJDST) MBROPT(*ADD) +
-                             CRTFILE(*YES) FMTOPT(*MAP *DROP)
+                             TOFILE(&BIBDST/&OBJDST) FROMMBR(*ALL) +
+                             TOMBR(*FROMMBR) MBROPT(*ADD) CRTFILE(*YES) +
+                             FMTOPT(*MAP *DROP) ERRLVL(*NOMAX)
 
                 DLTF       FILE(&QTEMP/&SAUV_TAB)
              ENDDO
