@@ -41,6 +41,7 @@
        Dcl-Pr Test_Construct_CLLE_MOD_NONE end-pr;
        Dcl-Pr Test_Construct_CLLE_PGM_NONE end-pr;
        Dcl-Pr Test_Construct_TABLE End-Pr;
+       Dcl-Pr Test_Construct_INDEX End-Pr;
 
        Dcl-proc Test_Construct_RPG_PGM export;
        Dcl-pi Test_Construct_RPG_PGM End-Pi;
@@ -476,3 +477,37 @@
          nEqual( *on:g_Exists);
 
        End-proc Test_Construct_TABLE;
+
+       Dcl-proc Test_Construct_INDEX export;
+       Dcl-pi Test_Construct_INDEX End-Pi;
+
+
+         g_PreBibSrc='LOT_000124';
+         g_PreFicSrc='QBLDSCTSRC';
+         g_UseSrcMbr='STDINDEX';
+         g_BibDst='LOT_000124';
+         g_ObjDst='MBRTABL01';
+         g_typobj='*FILE';
+         g_BibSrc='LOT_000124';
+         g_FicSrc='QTESTUSRC';
+         g_MbrSrc='MBRTABL01';
+         g_Optimize='*NONE';
+
+         Construct( g_PreBibSrc
+                   :g_PreFicSrc
+                   :g_UseSrcMbr
+                   :g_BibDst
+                   :g_ObjDst
+                   :g_typobj
+                   :g_BibSrc
+                   :g_FicSrc
+                   :g_MbrSrc
+                   :g_Optimize
+                   :g_Failed
+                   :g_FileAttach);
+
+
+         g_Exists=exists( g_ObjDst + g_BibDst:'*FILE');
+         nEqual( *on:g_Exists);
+
+       End-proc Test_Construct_INDEX;
