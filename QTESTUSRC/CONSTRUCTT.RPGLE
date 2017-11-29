@@ -177,7 +177,7 @@
 
          g_PreBibSrc='LOT_000124';
          g_PreFicSrc='QBLDSCTSRC';
-         g_UseSrcMbr='STDRPGLMOD';
+         g_UseSrcMbr='STDRPGLPGM';
          g_BibDst='QTEMP';
          g_ObjDst='MBRRPGLET';
          g_typobj='*PGM';
@@ -210,7 +210,7 @@
 
          g_PreBibSrc='LOT_000124';
          g_PreFicSrc='QBLDSCTSRC';
-         g_UseSrcMbr='STDRPGLMOD';
+         g_UseSrcMbr='STDRPGLPGM';
          g_BibDst='QTEMP';
          g_ObjDst='MBRRPGLET';
          g_typobj='*PGM';
@@ -243,7 +243,7 @@
 
          g_PreBibSrc='LOT_000124';
          g_PreFicSrc='QBLDSCTSRC';
-         g_UseSrcMbr='STDSQLRMOD';
+         g_UseSrcMbr='STDSQLRPGM';
          g_BibDst='QTEMP';
          g_ObjDst='MBRSQRPGLT';
          g_typobj='*PGM';
@@ -276,7 +276,7 @@
 
          g_PreBibSrc='LOT_000124';
          g_PreFicSrc='QBLDSCTSRC';
-         g_UseSrcMbr='STDSQLRMOD';
+         g_UseSrcMbr='STDSQLRPGM';
          g_BibDst='QTEMP';
          g_ObjDst='MBRSQRPGLT';
          g_typobj='*PGM';
