@@ -3,7 +3,7 @@
          dsply 'Test RPGLE';
          EXEC SQL
            SELECT 1
-             INTO g_flag
+             INTO :g_flag
              FROM sysibm.sysdummy1;
 
          *inlr=*on;
