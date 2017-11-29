@@ -338,3 +338,36 @@
          nEqual( *on:g_Exists);
 
        End-proc Test_Construct_SQLRPGLE_PGM_FULL;
+
+       Dcl-proc Test_Construct_CLP_PGM export;
+       Dcl-pi Test_Construct_CLP_PGM End-Pi;
+
+         g_PreBibSrc='LOT_000124';
+         g_PreFicSrc='QBLDSCTSRC';
+         g_UseSrcMbr='STDCLPPGM';
+         g_BibDst='QTEMP';
+         g_ObjDst='MBRCLPP';
+         g_typobj='*PGM';
+         g_BibSrc='LOT_000124';
+         g_FicSrc='QTESTUSRC';
+         g_MbrSrc='MBRCLPT';
+         g_Optimize='*NONE';
+
+         Construct( g_PreBibSrc
+                   :g_PreFicSrc
+                   :g_UseSrcMbr
+                   :g_BibDst
+                   :g_ObjDst
+                   :g_typobj
+                   :g_BibSrc
+                   :g_FicSrc
+                   :g_MbrSrc
+                   :g_Optimize
+                   :g_Failed
+                   :g_FileAttach);
+
+
+         g_Exists=exists( g_ObjDst + g_BibDst:'*PGM');
+         nEqual( *on:g_Exists);
+
+       End-proc Test_Construct_CLP_PGM;
