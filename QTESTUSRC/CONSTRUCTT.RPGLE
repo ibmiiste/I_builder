@@ -46,7 +46,7 @@
          g_PreFicSrc='QBLDSCTSRC';
          g_UseSrcMbr='STDRPGLMOD';
          g_BibDst='QTEMP';
-         g_ObjDst='MBRRPGLET';
+         g_ObjDst='MBRRPGLEM';
          g_typobj='*MODULE';
          g_BibSrc='LOT_000124';
          g_FicSrc='QTESTUSRC';
@@ -79,7 +79,7 @@
          g_PreFicSrc='QBLDSCTSRC';
          g_UseSrcMbr='STDRPGLMOD';
          g_BibDst='QTEMP';
-         g_ObjDst='MBRRPGLET';
+         g_ObjDst='MBRRPGLEM';
          g_typobj='*MODULE';
          g_BibSrc='LOT_000124';
          g_FicSrc='QTESTUSRC';
@@ -112,7 +112,7 @@
          g_PreFicSrc='QBLDSCTSRC';
          g_UseSrcMbr='STDSQLRMOD';
          g_BibDst='QTEMP';
-         g_ObjDst='MBRSQRPGLT';
+         g_ObjDst='MBRSQRPGLM';
          g_typobj='*MODULE';
          g_BibSrc='LOT_000124';
          g_FicSrc='QTESTUSRC';
@@ -145,7 +145,7 @@
          g_PreFicSrc='QBLDSCTSRC';
          g_UseSrcMbr='STDSQLRMOD';
          g_BibDst='QTEMP';
-         g_ObjDst='MBRSQRPGLT';
+         g_ObjDst='MBRSQRPGLM';
          g_typobj='*MODULE';
          g_BibSrc='LOT_000124';
          g_FicSrc='QTESTUSRC';
@@ -179,7 +179,7 @@
          g_PreFicSrc='QBLDSCTSRC';
          g_UseSrcMbr='STDRPGLPGM';
          g_BibDst='QTEMP';
-         g_ObjDst='MBRRPGLET';
+         g_ObjDst='MBRRPGLEP';
          g_typobj='*PGM';
          g_BibSrc='LOT_000124';
          g_FicSrc='QTESTUSRC';
@@ -212,7 +212,7 @@
          g_PreFicSrc='QBLDSCTSRC';
          g_UseSrcMbr='STDRPGLPGM';
          g_BibDst='QTEMP';
-         g_ObjDst='MBRRPGLET';
+         g_ObjDst='MBRRPGLEP';
          g_typobj='*PGM';
          g_BibSrc='LOT_000124';
          g_FicSrc='QTESTUSRC';
@@ -245,7 +245,7 @@
          g_PreFicSrc='QBLDSCTSRC';
          g_UseSrcMbr='STDSQLRPGM';
          g_BibDst='QTEMP';
-         g_ObjDst='MBRSQRPGLT';
+         g_ObjDst='MBRSQRPGLP';
          g_typobj='*PGM';
          g_BibSrc='LOT_000124';
          g_FicSrc='QTESTUSRC';
@@ -278,7 +278,7 @@
          g_PreFicSrc='QBLDSCTSRC';
          g_UseSrcMbr='STDSQLRPGM';
          g_BibDst='QTEMP';
-         g_ObjDst='MBRSQRPGLT';
+         g_ObjDst='MBRSQRPGLP';
          g_typobj='*PGM';
          g_BibSrc='LOT_000124';
          g_FicSrc='QTESTUSRC';
