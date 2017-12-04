@@ -1499,3 +1499,16 @@
          P_Mot_De_Passe CHAR(10);
        End-Pr;
 
+       // --------------------------------------------------
+       // Prototype for procedure: builder
+       // --------------------------------------------------
+       DCL-PR builder EXTPGM('BUILDER');
+         P_Projet LIKE(R_NomObj);
+         P_Biblio_Lot LIKE(R_NomObj);
+         P_Env_Dest CHAR(1);
+         P_Optim_Compil CHAR(20);
+         P_Livr_Env_Dst IND;
+         P_Sys_Dst CHAR(32);
+         P_User LIKE(R_NomObj);
+         P_Mot_De_Passe CHAR(10);
+       END-PR ;
