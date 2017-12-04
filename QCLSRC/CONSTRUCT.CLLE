@@ -60,7 +60,7 @@
                           &OPTIMIZE *TCAT &QUOTE))
              /* Récupération du type d'objet pour s'assurer que s'il existe il  */
              /* faut sauvegarder les données avant création de la table/fichier */
- RTVOBJD:    RTVOBJD    OBJ(&BIBDST/&OBJDST) OBJTYPE(&TYPOBJ) +
+ RTVOBJD:    RTVOBJD    OBJ(&BIBDST/&OBJDST) OBJTYPE(&TYPOBJE) +
                           OBJATR(&ATROBJ)
              MONMSG     MSGID(CPF9812 CPF9801 CPF9811)
              MONMSG     MSGID(CPF3203) EXEC(DO)
