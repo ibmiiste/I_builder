@@ -1,0 +1,26 @@
+      /* >>PRE-COMPILER<<                                                 */
+      /*   >>CRTCMD<<  CRTBNDCL SRCFILE(&SL/&SF) SRCMBR(&SM);             */
+      /*   >>IMPORTANT<<                                                  */
+      /*     >>PARM<<  PGM(&LI/&OB);                                      */
+      /*     >>PARM<<  OPTION(*EVENTF);                                   */
+      /*     >>PARM<<  DBGVIEW(*ALL);                                     */
+      /*   >>END-IMPORTANT<<                                              */
+      /*   >>CMD<<  DSPOBJD OBJ(&LI/*ALL) OBJTYPE(*ALL) DETAIL(*FULL) +   */
+      /*                    ASPDEV(*) OUTPUT(*OUTFILE)                +   */
+      /*                    OUTFILE(QTEMP/I_REF_OBJ) OUTMBR(*FIRST *ADD); */
+      /*   >>EXECUTE<<                                                    */
+      /* >>END-PRE-COMPILER<<                                             */
+             PGM        PARM(&BIBLIO &OBJET &TYP_OBJ)
+
+             DCL        VAR(&BIBLIO) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&OBJET) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&TYP_OBJ) TYPE(*CHAR) LEN(10)
+             DCLF       FILE(*LIBL/I_REF_OBJ)
+
+             DSPOBJD    OBJ(&BIBLIO/&OBJET) OBJTYPE(&TYP_OBJ) +
+                          DETAIL(*FULL) ASPDEV(*) OUTPUT(*OUTFILE) +
+                          OUTFILE(*LIBL/I_REF_OBJ) OUTMBR(*FIRST *ADD)
+
+
+
+             ENDPGM
