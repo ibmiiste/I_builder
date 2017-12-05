@@ -22,16 +22,17 @@
        /copy qcpysrc,Inh32766
 
        DCL-PI builder;
-         P_Projet LIKE(R_NomObj);
-         P_Biblio_Lot LIKE(R_NomObj);
-         P_Env_Dest CHAR(1);
+         P_Projet LIKE(R_NomObj) const;
+         P_Biblio_Lot LIKE(R_NomObj) const;
+         P_Env_Dest CHAR(1) const;
          P_Optim_Compil CHAR(20);
-         P_Livr_Env_Dst IND;
-         P_Sys_Dst CHAR(32);
-         P_User LIKE(R_NomObj);
-         P_Mot_De_Passe CHAR(10);
+         P_Livr_Env_Dst IND const;
+         P_Sys_Dst CHAR(32) const;
+         P_User LIKE(R_NomObj) const;
+         P_Mot_De_Passe CHAR(10) const;
        END-PI ;
 
+       Dcl-S g_Projet LIKE(R_NomObj);
        Dcl-S g_BibSrc LIKE(R_NomObj);
        Dcl-S g_FicSrc LIKE(R_NomObj);
        Dcl-S g_MbrSrc LIKE(R_NomObj);
@@ -40,6 +41,7 @@
        Dcl-S g_Failed packed(10:0);
        Dcl-S g_TypObj like(R_TypObj);
        Dcl-S g_FileAttach char(10000);
+       Dcl-S g_optimize char(20);
 
          *InLr=*On;
 
@@ -62,12 +64,13 @@
 
          EXEC SQL
            FETCH list_obj
-             INTO :p_projet, :g_bibsrc, :g_ficsrc, :g_mbrsrc, :g_bibdst,
+             INTO :g_projet, :g_bibsrc, :g_ficsrc, :g_mbrsrc, :g_bibdst,
                :g_objdst, :g_typobj ;
 
 
          dow sqlcode = 0;
            If g_typobj<>'*MSGF';
+             g_optimize='*NONE';
              Construct( g_BIBSRC
                        :g_FicSrc
                        :g_MbrSrc
@@ -77,7 +80,7 @@
                        :g_BibSrc
                        :g_FicSrc
                        :g_MbrSrc
-                       :P_Optim_Compil
+                       :g_optimize
                        :g_Failed
                        :g_FileAttach);
            Else;
@@ -107,7 +110,7 @@
 
            EXEC SQL
              FETCH list_obj
-               INTO :p_projet, :g_bibsrc, :g_ficsrc, :g_mbrsrc, :g_bibdst,
+               INTO :g_projet, :g_bibsrc, :g_ficsrc, :g_mbrsrc, :g_bibdst,
                  :g_objdst, :g_typobj ;
          enddo;
 

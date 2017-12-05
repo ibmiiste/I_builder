@@ -42,15 +42,15 @@
        //copy qcpysrc,UtiProc
 
       // Gestion des messages
-       dcl-pr gst_message extpgm('ENVMSG01');
+       dcl-pr gst_message_CL extpgm('ENVMSG01');
          a_typ like(r_typmsg);
          a_fim like(r_nomobj);
          a_mid like(r_numero_msg);
          a_mdt like(r_msgdta);
        end-pr;
 
-        // Gestion des erreurs non prévues
-       dcl-pr gest_erreur end-pr;
+       // Prototype sous-procédures externe
+        /copy qcpysrc,prsmod000r
 
        // program status data structure
        // structure information programme
@@ -92,6 +92,15 @@
 
        dcl-s g_ROWID_BUILD char(40) dim(9999);
        dcl-s g_ROWID_BUILDW sqltype(rowid);
+
+       // Redéfinission des touches de fonction
+       Dcl-S Construction ind Based(P_INKJ);
+
+
+       // Appel à CONSTRUCT
+       Dcl-S g_Failed packed(10:0);
+       Dcl-S g_FileAttach char(10000);
+       Dcl-S g_optimize char(20);
 
        // Touches de fonction
        /copy qcpysrc,fonction
@@ -197,7 +206,7 @@
          a_typ='3';
          a_fim=*blank;
          a_mid=*blank;
-         gst_message(  a_typ
+         gst_message_CL(  a_typ
                      : a_fim
                      : a_mid
                      : a_mdt);
@@ -258,6 +267,18 @@
          //  g_trt_opt = *off;
          //endif;
          // on ne fait ceci que s'il n'y a eu rien d'autre
+         if Construction;
+            g_optimize='*NONE';
+            builder( zprojet
+                    :''
+                    :''
+                    :g_optimize
+                    :'0'
+                    :''
+                    :''
+                    :'');
+         EndIf;
+
          if g_trt_opt;
            exsr trtopt;
          endif;
@@ -358,7 +379,7 @@
              a_typ='1';
              a_fim='FICMSG   ';
              a_mid='MSG0002';
-             gst_message(  a_typ
+             gst_message_CL(  a_typ
                          : a_fim
                          : a_mid
                          : a_mdt);
@@ -421,6 +442,23 @@
               a_chx='AF';
             when (zopt = '6') or (zopt = ' 6');
               g_filtre = *off;
+            when (zopt = '7') or (zopt = ' 7');
+              g_optimize='*NONE';
+              Construct( ZBIBSRC
+                        :ZFICSRC
+                        :ZMBRSRC
+                        :ZBIBDST
+                        :ZOBJDST
+                        :ZTYPOBJ
+                        :ZBIBSRC
+                        :ZFICSRC
+                        :ZMBRSRC
+                        :g_optimize
+                        :g_Failed
+                        :g_FileAttach);
+              if g_Failed<>0;
+                EnvRapMel(g_FileAttach);
+              EndIf;
             when (zopt = '99');
               a_chx='PE';
             other;
@@ -430,7 +468,7 @@
               a_typ='1';
               a_fim='FICMSG   ';
               a_mid='MSG0002';
-              gst_message(  a_typ
+              gst_message_CL(  a_typ
                           : a_fim
                           : a_mid
                           : a_mdt);
