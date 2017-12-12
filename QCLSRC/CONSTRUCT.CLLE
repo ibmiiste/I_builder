@@ -103,6 +103,9 @@
              ENDDO
              MONMSG     MSGID(CPF0000) EXEC(CALLPRC PRC(GSTERRSTR) +
                           PARM((&FAILED) (&FILEATTACH) (&OBJET)))
+             RTVOBJD    OBJ(&BIBDST/&OBJDST) OBJTYPE(&TYPOBJE) +
+                          OBJATR(&ATROBJ)
+             MONMSG     MSGID(CPF9812 CPF9801 CPF9811)
              IF         COND(&ATROBJ *EQ 'LF') THEN(GRTOBJAUT +
                           OBJ(&BIBDST/&OBJDST) OBJTYPE(*FILE) +
                           USER(*PUBLIC) AUT(*USE))
