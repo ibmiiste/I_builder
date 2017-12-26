@@ -20,6 +20,12 @@
        /copy qcpysrc,UtiProc
 
        /copy qcpysrc,Inh32766
+       Dcl-pr Livraison;
+         p_Objet_qual char(20);
+         p_Sys_Dst char(
+                            :P_User
+                            :P_Mot_De_Passe
+       End-Pr;
 
        DCL-PI builder;
          P_Projet LIKE(R_NomObj) const;
@@ -32,6 +38,7 @@
          P_Mot_De_Passe CHAR(10) const;
        END-PI ;
 
+
        Dcl-S g_Projet LIKE(R_NomObj);
        Dcl-S g_BibSrc LIKE(R_NomObj);
        Dcl-S g_FicSrc LIKE(R_NomObj);
@@ -42,6 +49,7 @@
        Dcl-S g_TypObj like(R_TypObj);
        Dcl-S g_FileAttach char(10000);
        Dcl-S g_optimize char(20);
+       Dcl-s g_option_donnees Char(1);
 
          *InLr=*On;
 
@@ -94,17 +102,18 @@
 
            if P_Livr_Env_Dst=*on;
              If g_typobj='*MSGF';
-               callp i_MrgMsgf( g_ObjDst + g_BibDst
-                               :g_BibSrc
-                               :g_MbrSrc
-                               :P_Sys_Dst
-                               :P_User
-                               :P_Mot_De_Passe);
+               i_MrgMsgf( g_ObjDst + g_BibDst
+                         :g_BibSrc
+                         :g_MbrSrc
+                         :P_Sys_Dst
+                         :P_User
+                         :P_Mot_De_Passe);
              Else;
-               callp i_push( g_ObjDst + g_BibDst
-                            :P_Sys_Dst
-                            :P_User
-                            :P_Mot_De_Passe);
+               Livraison ( g_ObjDst + g_BibDst
+                          :g_option_donnees
+                          :P_Sys_Dst
+                          :P_User
+                          :P_Mot_De_Passe);
              ENDIF;
            EndIf;
 
