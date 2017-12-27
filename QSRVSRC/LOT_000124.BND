@@ -15,11 +15,7 @@
     /*   >>CRTCMD<<  CRTSRVPGM SRCFILE(&SL/&SF) SRCMBR(&SM);         */
     /*   >>LINK<<                                                    */
     /*     >>PARM<<  SRVPGM(&LI/&SM);                                */
-    /*     >>PARM<<  MODULE(&LI/CONSTRUCT +                          */
-    /*                      &LI/GSTERRSTR +                          */
-    /*                      &LI/RTVSRCSTD +                          */
-    /*                      &LI/ENVRAPMEL +                          */
-    /*                      &LI/LIVRAISON);                          */
+    /*     >>PARM<<  MODULE(&LI/LIVRAISON);                          */
     /*     >>PARM<<  BNDDIR(SERVICE);                                */
     /*     >>PARM<<  DETAIL(*FULL);                                  */
     /*     >>PARM<<  ALWLIBUPD(*YES);                                */

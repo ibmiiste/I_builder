@@ -60,8 +60,8 @@
                 RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) +
                              RMTUSER(&USER) RMTPWD(&MDP)
 
-                CHGVAR     VAR(&CMD) VALUE('DLTF QGPL' *TCAT &FICSV *TCAT +
-                             ')')
+                CHGVAR     VAR(&CMD) VALUE('DLTF FILE(QGPL/' *TCAT &FICSV +
+                             *TCAT ')')
 
                 RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) +
                              RMTUSER(&USER) RMTPWD(&MDP)
