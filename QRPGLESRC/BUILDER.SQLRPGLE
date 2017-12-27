@@ -20,12 +20,7 @@
        /copy qcpysrc,UtiProc
 
        /copy qcpysrc,Inh32766
-       Dcl-pr Livraison;
-         p_Objet_qual char(20);
-         p_Sys_Dst char(
-                            :P_User
-                            :P_Mot_De_Passe
-       End-Pr;
+
 
        DCL-PI builder;
          P_Projet LIKE(R_NomObj) const;
@@ -49,7 +44,7 @@
        Dcl-S g_TypObj like(R_TypObj);
        Dcl-S g_FileAttach char(10000);
        Dcl-S g_optimize char(20);
-       Dcl-s g_option_donnees Char(1);
+       Dcl-s g_option_donnees Char(1) inz('C');
 
          *InLr=*On;
 

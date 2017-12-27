@@ -1512,3 +1512,14 @@
          P_User LIKE(R_NomObj) const;
          P_Mot_De_Passe CHAR(10) const;
        END-PR ;
+
+       //---------------------------------------------------
+       // Préparation de la livraison
+       //---------------------------------------------------
+       Dcl-pr Livraison;
+         p_Objet_qual char(20) Const;
+         P_gestion_donnees Char(1) Const;
+         p_Sys_Dst char(32) Const;
+         P_User Char(10) Const;
+         P_Mot_De_Passe Char(10) Const;
+       End-Pr;

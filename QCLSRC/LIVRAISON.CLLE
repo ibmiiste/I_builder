@@ -1,0 +1,73 @@
+      /* >>PRE-COMPILER<<                                                 */
+      /*   >>CRTCMD<<  CRTCLMOD MODULE(&LI/&OB) SRCFILE(&SL/&SF) +        */
+      /*                 SRCMBR(&SM);                                     */
+      /*   >>IMPORTANT<<                                                  */
+      /*     >>PARM<<  OPTION(*EVENTF);                                   */
+      /*     >>PARM<<  DBGVIEW(*LIST);                                    */
+      /*   >>END-IMPORTANT<<                                              */
+      /*   >>EXECUTE<<                                                    */
+      /* >>END-PRE-COMPILER<<                                             */
+             PGM        PARM(&OBJETQ &GESTDATA &MACHINE &USER &MDP)
+
+             DCL        VAR(&OBJETQ) TYPE(*CHAR) LEN(20)
+             DCL        VAR(&OBJET) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&BIBLIO) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&MACHINE) TYPE(*CHAR) LEN(32)
+             DCL        VAR(&USER) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&MDP) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&GESTDATA) TYPE(*CHAR) LEN(1)
+             DCL        VAR(&NUMALEA) TYPE(*DEC) LEN(15 0)
+             DCL        VAR(&NUMALEC) TYPE(*CHAR) LEN(9)
+             DCL        VAR(&CMD) TYPE(*CHAR) LEN(2000)
+             DCL        VAR(&FICSV) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&RAND) TYPE(*DEC) LEN(15 0) VALUE(999999999)
+             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Préparation à la livraison +
+                          et appel livraison') BNDDIR(SERVICE)
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
+
+             CHGVAR     VAR(&OBJET) VALUE(%SST( &OBJETQ 1 10))
+             CHGVAR     VAR(&BIBLIO) VALUE(%SST( &OBJETQ 11 10))
+
+             /* Avant livraison du fichier, ses données sont copiés dans QGPL*/
+             IF         COND(&GESTDATA *EQ 'C') THEN(DO)
+
+                CALLPRC    PRC(ALEATOIRE) PARM((&RAND)) RTNVAL(&NUMALEA)
+
+                CHGVAR     VAR(&NUMALEC) VALUE(&NUMALEA)
+
+                CHGVAR     VAR(&FICSV) VALUE('S' *TCAT &NUMALEC)
+
+                CHGVAR     VAR(&CMD) VALUE('CPYF FROMFILE(' *TCAT &BIBLIO +
+                             *TCAT '/' *TCAT &OBJET *TCAT ') TOFILE(QGPL/' +
+                             *TCAT &FICSV *TCAT ') MBROPT(*REPLACE) +
+                             CRTFILE(*YES)')
+
+                RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) +
+                             RMTUSER(&USER) RMTPWD(&MDP)
+             ENDDO
+
+             /*Livraison de l'objet sur le système &MACHINE                   */
+             CALL       PGM(I_PUSH) PARM(&OBJETQ &MACHINE &USER &MDP)
+
+             /*Après la livraison restauration des données                    */
+             IF         COND(&GESTDATA *EQ 'C') THEN(DO)
+
+                CHGVAR     VAR(&CMD) VALUE('CPYF FROMFILE(QGPL/' *TCAT +
+                             &FICSV *TCAT ') TOFILE(' *TCAT &BIBLIO *TCAT +
+                             '/' *TCAT &OBJET *TCAT ') MBROPT(*REPLACE) +
+                             FMTOPT(*MAP *DROP)')
+
+                RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) +
+                             RMTUSER(&USER) RMTPWD(&MDP)
+
+                CHGVAR     VAR(&CMD) VALUE('DLTF QGPL' *TCAT &FICSV *TCAT +
+                             ')')
+
+                RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) +
+                             RMTUSER(&USER) RMTPWD(&MDP)
+             ENDDO
+
+ ERREUR:     DMPCLPGM
+             CALLPRC    PRC(gest_erreur)
+ FIN:
+             ENDPGM
