@@ -67,6 +67,8 @@
                              RMTUSER(&USER) RMTPWD(&MDP)
              ENDDO
 
+             GOTO       CMDLBL(FIN)
+
  ERREUR:     DMPCLPGM
              CALLPRC    PRC(gest_erreur)
  FIN:
