@@ -44,7 +44,7 @@
        Dcl-S g_TypObj like(R_TypObj);
        Dcl-S g_FileAttach char(10000);
        Dcl-S g_optimize char(20);
-       Dcl-s g_option_donnees Char(1) inz('C');
+       Dcl-s g_option_donnees Char(1);
 
          *InLr=*On;
 
@@ -104,6 +104,11 @@
                          :P_User
                          :P_Mot_De_Passe);
              Else;
+               IF g_typobj='PF';
+                 g_option_donnees ='C';
+               Else;
+                 g_option_donnees ='';
+               EndIf;
                Livraison ( g_ObjDst + g_BibDst
                           :g_option_donnees
                           :P_Sys_Dst
