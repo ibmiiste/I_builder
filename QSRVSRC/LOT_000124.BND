@@ -15,10 +15,7 @@
     /*   >>CRTCMD<<  CRTSRVPGM SRCFILE(&SL/&SF) SRCMBR(&SM);         */
     /*   >>LINK<<                                                    */
     /*     >>PARM<<  SRVPGM(&LI/&SM);                                */
-    /*     >>PARM<<  MODULE(&LI/CONSTRUCT +                          */
-    /*                      &LI/ENVRAPMEL +                          */
-    /*                      &LI/I_MRGMSGF +                          */
-    /*                      &LI/LIVRAISON);                          */
+    /*     >>PARM<<  MODULE(&LI/LIVRAISON);                          */
     /*     >>PARM<<  BNDDIR(SERVICE);                                */
     /*     >>PARM<<  DETAIL(*FULL);                                  */
     /*     >>PARM<<  ALWLIBUPD(*YES);                                */
@@ -27,8 +24,5 @@
     /*   >>EXECUTE<<                                                 */
     /* >>END-PRE-COMPILER<<                                          */
              STRPGMEXP
-                EXPORT     SYMBOL(CONSTRUCT)
-                EXPORT     SYMBOL(ENVRAPMEL)
-                EXPORT     SYMBOL(I_MRGMSGF)
                 EXPORT     SYMBOL(LIVRAISON)
              ENDPGMEXP
