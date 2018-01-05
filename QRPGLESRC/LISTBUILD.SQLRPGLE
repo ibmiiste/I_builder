@@ -218,7 +218,7 @@
 
          write forb1;
          // attente lecture
-        read fore1;
+         read fore1;
 
          // une touche a été actionnée
          // chargement de l'heure
