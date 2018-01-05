@@ -386,16 +386,24 @@
            Else;
 
              EXEC SQL
-               INSERT INTO list_objet_build
+               INSERT INTO List_Objet_Build(Rowid_Build,
+                                            Projet,
+                                            Ordre,
+                                            Bibliotheque_Source,
+                                            Fichier_Source,
+                                            Membre_Source,
+                                            Bibliotheque_Destination,
+                                            Objet_Destination,
+                                            Type_Objet)
                  VALUES (DEFAULT,
-                         :zprojet,
-                         :zordrec,
-                         :zbibsrcc,
-                         :zficsrcc,
-                         :zmbrsrcc,
-                         :zbibdstc,
-                         :zobjdstc,
-                         :ztypobjc);
+                         :Zprojet,
+                         :Zordrec,
+                         :Zbibsrcc,
+                         :Zficsrcc,
+                         :Zmbrsrcc,
+                         :Zbibdstc,
+                         :Zobjdstc,
+                         :Ztypobjc);
 
            EndIf;
 
