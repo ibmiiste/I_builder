@@ -16,7 +16,31 @@
     /*   >>LINK<<                                                    */
     /*     >>PARM<<  SRVPGM(&LI/&SM);                                */
     /*     >>PARM<<  MODULE(&LI/LIVRAISON +                          */
-    /*                      &LI/CONSTRUCT);                          */
+    /*                      &LI/CONSTRUCT +                          */
+    /*                      *LIBL/GESTERR +                          */
+    /*                      *LIBL/MAILERR +                          */
+    /*                      *LIBL/BBMOD000R +                        */
+    /*                      *LIBL/UTIQRY +                           */
+    /*                      *LIBL/UTIEXEC +                          */
+    /*                      *LIBL/BBMOD020R +                        */
+    /*                      *LIBL/BBMOD030R +                        */
+    /*                      *LIBL/UTISTACK +                         */
+    /*                      *LIBL/UTIMSG +                           */
+    /*                      *LIBL/UTIENV +                           */
+    /*                      *LIBL/EMS010C +                          */
+    /*                      *LIBL/UTIUUID +                          */
+    /*                      *LIBL/UTISQLUDF +                        */
+    /*                      *LIBL/UTISUI +                           */
+    /*                      *LIBL/UTISQL +                           */
+    /*                      *LIBL/UTIDSP +                           */
+    /*                      *LIBL/UTICHN +                           */
+    /*                      *LIBL/ALEATOIRE +                        */
+    /*                      *LIBL/SCRIPTFTP +                        */
+    /*                      *LIBL/WFTPSCRIPT +                       */
+    /*                      *LIBL/MSG_INCRMK +                       */
+    /*                      *LIBL/GSTERRSTR +                        */
+    /*                      *LIBL/RTVSRCSTD +                        */
+    /*                      *LIBL/ENVRAPMEL);                        */
     /*     >>PARM<<  BNDDIR(SERVICE);                                */
     /*     >>PARM<<  DETAIL(*FULL);                                  */
     /*     >>PARM<<  ALWLIBUPD(*YES);                                */
