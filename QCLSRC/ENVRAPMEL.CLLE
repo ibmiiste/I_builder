@@ -15,8 +15,8 @@
              DCL        VAR(&MAILUSERS) TYPE(*CHAR) LEN(1000)
              DCL        VAR(&LENCMD) TYPE(*DEC) LEN(15 5) VALUE(32000)
 
-             CHGVAR     VAR(&MAILUSERS) VALUE('(''odrubigny@ista.fr'' +
-                          *PRI)')
+             CHGVAR     VAR(&MAILUSERS) +
+                          VALUE('(''odrubigny.externe@ista.fr'' *PRI)')
 
              CHGVAR     VAR(&CMD) VALUE('SNDSMTPEMM RCP(' *TCAT &MAILUSERS +
                           *TCAT ') NOTE(''Le projet MIRUS a des erreurs de +
