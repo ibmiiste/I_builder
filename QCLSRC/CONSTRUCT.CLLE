@@ -8,16 +8,16 @@
       /*   >>EXECUTE<<                                                    */
       /* >>END-PRE-COMPILER<<                                             */
 
-             PGM        PARM(&PREBIBSRC &PREFICSRC &USESRCMBR &BIBDST +
+             PGM        PARM(&PREBIBSRC &PREFICSRC &PRESRCMBR &BIBDST +
                           &OBJDST &TYPOBJ &BIBSRC &FICSRC &MBRSRC +
                           &OPTIMIZE &FAILED &FILEATTACH)
 
              DCL        VAR(&PREBIBSRC) TYPE(*CHAR) LEN(10)
              DCL        VAR(&PREFICSRC) TYPE(*CHAR) LEN(10)
-             DCL        VAR(&USESRCMBR) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&PRESRCMBR) TYPE(*CHAR) LEN(10)
              DCL        VAR(&BIBDST) TYPE(*CHAR) LEN(10)
              DCL        VAR(&OBJDST) TYPE(*CHAR) LEN(10)
-             DCL        VAR(&TYPOBJ) TYPE(*CHAR) LEN(7)
+             DCL        VAR(&TYPOBJ) TYPE(*CHAR) LEN(10)
              DCL        VAR(&BIBSRC) TYPE(*CHAR) LEN(10)
              DCL        VAR(&FICSRC) TYPE(*CHAR) LEN(10)
              DCL        VAR(&MBRSRC) TYPE(*CHAR) LEN(10)
@@ -88,7 +88,7 @@
 
              /* Création de l'objet                                                */
  STANDARD:   STRPREPRC  USESRCFILE(&PREBIBSRC/&PREFICSRC) +
-                          USESRCMBR(&USESRCMBR) OPTION(*EVENTF) +
+                          USESRCMBR(&PRESRCMBR) OPTION(*EVENTF) +
                           CHGOBJD(*NO) LIB(&BIBDST) OBJ(&OBJDST) +
                           SRCLIB(&BIBSRC) SRCFILE(&FICSRC) SRCMBR(&MBRSRC) +
                           USER0(&OPTIMIZE)
@@ -96,7 +96,7 @@
              /* On va rechercher le script standard PRE de création         */
              MONMSG     MSGID(PRZ0028) EXEC(DO)
                 CALLPRC    PRC(SOURCE_STANDARD) PARM((&TYPOBJ) (&TYPSRC) +
-                             (&PREBIBSRC) (&PREFICSRC) (&USESRCMBR)) +
+                             (&PREBIBSRC) (&PREFICSRC) (&PRESRCMBR)) +
                              RTNVAL(&RTRSRCSTD)
                 IF         COND(&RTRSRCSTD *EQ '1') THEN(GOTO +
                              CMDLBL(STANDARD))
