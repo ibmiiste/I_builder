@@ -41,7 +41,7 @@
        Dcl-S g_BibDst LIKE(R_NomObj);
        Dcl-S g_ObjDst LIKE(R_NomObj);
        Dcl-S g_Failed packed(10:0);
-       Dcl-S g_TypObj like(R_TypObj);
+       Dcl-S g_TypObj like(R_NomObj);
        Dcl-S g_FileAttach char(10000);
        Dcl-S g_optimize char(20);
        Dcl-s g_option_donnees Char(1);
