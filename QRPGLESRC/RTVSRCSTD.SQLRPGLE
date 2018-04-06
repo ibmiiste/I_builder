@@ -32,8 +32,8 @@
 
        DCL-PROC source_standard export;
          DCL-PI *N IND;
+           P_Type_Objet LIKE(R_NomObj) CONST;
            P_Type_Source LIKE(R_NomObj) CONST;
-           P_Type_Objet LIKE(R_TypObj) CONST;
            P_Biblio_Src_PRE LIKE(R_NomObj);
            P_Fichier_Src_PRE LIKE(R_NomObj);
            P_Membre_Src_PRE LIKE(R_NomObj);
@@ -49,9 +49,9 @@
            SELECT biblio_src_pre,
                   fichier_src_pre,
                   membre_src_pre
-             INTO p_biblio_src_pre,
-                  p_fichier_src_pre,
-                  p_membre_src_pre
+             INTO :p_biblio_src_pre,
+                  :p_fichier_src_pre,
+                  :p_membre_src_pre
              FROM sources_pre_standard
              WHERE type_source = :p_type_source AND
                    type_objet = :p_type_objet;

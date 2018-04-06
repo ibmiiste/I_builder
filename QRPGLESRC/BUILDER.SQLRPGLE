@@ -21,6 +21,7 @@
 
        /copy qcpysrc,Inh32766
 
+
        DCL-PI builder;
          P_Projet LIKE(R_NomObj) const;
          P_Biblio_Lot LIKE(R_NomObj) const;
@@ -32,6 +33,7 @@
          P_Mot_De_Passe CHAR(10) const;
        END-PI ;
 
+
        Dcl-S g_Projet LIKE(R_NomObj);
        Dcl-S g_BibSrc LIKE(R_NomObj);
        Dcl-S g_FicSrc LIKE(R_NomObj);
@@ -39,9 +41,10 @@
        Dcl-S g_BibDst LIKE(R_NomObj);
        Dcl-S g_ObjDst LIKE(R_NomObj);
        Dcl-S g_Failed packed(10:0);
-       Dcl-S g_TypObj like(R_TypObj);
+       Dcl-S g_TypObj like(R_NomObj);
        Dcl-S g_FileAttach char(10000);
        Dcl-S g_optimize char(20);
+       Dcl-s g_option_donnees Char(1);
 
          *InLr=*On;
 
@@ -94,17 +97,23 @@
 
            if P_Livr_Env_Dst=*on;
              If g_typobj='*MSGF';
-               callp i_MrgMsgf( g_ObjDst + g_BibDst
-                               :g_BibSrc
-                               :g_MbrSrc
-                               :P_Sys_Dst
-                               :P_User
-                               :P_Mot_De_Passe);
+               i_MrgMsgf( g_ObjDst + g_BibDst
+                         :g_BibSrc
+                         :g_MbrSrc
+                         :P_Sys_Dst
+                         :P_User
+                         :P_Mot_De_Passe);
              Else;
-               callp i_push( g_ObjDst + g_BibDst
-                            :P_Sys_Dst
-                            :P_User
-                            :P_Mot_De_Passe);
+               IF g_typobj='PF';
+                 g_option_donnees ='C';
+               Else;
+                 g_option_donnees ='';
+               EndIf;
+               Livraison ( g_ObjDst + g_BibDst
+                          :g_option_donnees
+                          :P_Sys_Dst
+                          :P_User
+                          :P_Mot_De_Passe);
              ENDIF;
            EndIf;
 

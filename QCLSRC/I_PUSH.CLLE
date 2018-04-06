@@ -12,7 +12,7 @@
              DCL        VAR(&OBJETQ) TYPE(*CHAR) LEN(20)
              DCL        VAR(&OBJET) TYPE(*CHAR) LEN(10)
              DCL        VAR(&BIBLIO) TYPE(*CHAR) LEN(10)
-             DCL        VAR(&MACHINE) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&MACHINE) TYPE(*CHAR) LEN(32)
              DCL        VAR(&USER) TYPE(*CHAR) LEN(10)
              DCL        VAR(&MDP) TYPE(*CHAR) LEN(10)
              DCL        VAR(&SAVF) TYPE(*CHAR) LEN(10)
@@ -24,7 +24,7 @@
 
 
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Livraison sur une autre machine') BNDDIR(SERVICE)
-             MONMSG     MSGID(CPF0000)
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
 
 
              CHGVAR     VAR(&OBJET) VALUE(%SST( &OBJETQ 1 10))
@@ -43,19 +43,22 @@
 
              SAVOBJ     OBJ(&OBJET) LIB(&BIBLIO) DEV(*SAVF) SAVF(QTEMP/&SAVF)
 
-             CALLPRC    PRC(SCRIPTFTP) PARM((&MACHINE) (&USER) (&MDP) (&SAVF) (&SRCF))
+             CALLPRC    PRC(SCRIPTFTP) PARM((&USER) (&MDP) (&SAVF) (&SRCF))
 
              OVRDBF     FILE(INPUT) TOFILE(&SRCF) MBR(IN)
              OVRDBF     FILE(OUTPUT) TOFILE(&SRCF) MBR(OUT)
 
              FTP        RMTSYS(&MACHINE)
 
-             CHGVAR     VAR(&CMD) VALUE('RSTOBJ OBJ(*ALL) SAVLIB(' *TCAT &BIBLIO *TCAT ') +
-                          DEV(*SAVF) SAVF(QGPL/' *TCAT &SAVF *TCAT ')')
+             CHGVAR     VAR(&CMD) VALUE('SBMJOB CMD( RSTOBJ OBJ(*ALL) +
+                          SAVLIB(' *TCAT &BIBLIO *TCAT ') DEV(*SAVF) +
+                          SAVF(QGPL/' *TCAT &SAVF *TCAT ') MBROPT(*NEW) +
+                          ALWOBJDIF(*ALL)) JOB(RCP_I_PUSH) USER(RTSFLR)')
 
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) RMTPWD(&MDP)
 
-             CHGVAR     VAR(&CMD) VALUE('DLTF FILE(QGPL/' *TCAT &SAVF *TCAT ')')
+             CHGVAR     VAR(&CMD) VALUE('SBMJOB CMD(DLTF FILE(QGPL/' *TCAT +
+                          &SAVF *TCAT ')) JOB(DLT_I_PUSH) USER(RTSFLR)')
 
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) RMTPWD(&MDP)
 
@@ -63,4 +66,9 @@
 
              DLTOVR     FILE(*ALL)
 
+             GOTO       CMDLBL(FIN)
+
+ ERREUR:     DMPCLPGM
+             CALLPRC    PRC(gest_erreur)
+ FIN:
              ENDPGM

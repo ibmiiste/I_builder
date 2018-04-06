@@ -20,18 +20,18 @@
      A  08                                  SFLNXTCHG
      A            ZOPT           2   B  8  2
      A  20                                  DSPATR(PR)
-     A            ZOBJDST       10   B  8 13
+     A            ZOBJDST       10   B  8 12
      A  30                                  COLOR(RED)
      A            ZDESCOBJET    50   B  8 45
      A            HNREC         40   H
      A            HPROJET       10   H
-     A            ZBIBDST       10   B  8 24
+     A            ZBIBDST       10   B  8 23
      A            ZBIBSRC       10   B  8 97
      A            ZFICSRC       10   B  8110
      A            ZMBRSRC       10   B  8122
-     A            ZORDRE         6Y 0B  8  6
+     A            ZORDRE         6Y 0B  8  5
      A                                      EDTCDE(Z)
-     A            ZTYPOBJ        7   B  8 36
+     A            ZTYPOBJ       10   B  8 34
      A          R FORE1                     SFLCTL(SFL01)
      A                                      RTNCSRLOC(&WLICSR &WZOCSR &WPRCSR)
      A                                      OVERLAY
@@ -75,8 +75,8 @@
      A                                      CHECK(LC)
      A                                      COLOR(WHT)
      A                                      OVRDTA
-     A                                  6  2'Opt Ordre Nom objet   Bib.Dest.   -
-     A                                      Typ.obj. Description de l''objet   --
+     A                                  6  2'Op Ordre  Nom objet  Bib.Dest.  Ty-
+     A                                      p.obj.   Description de l''objet   --
      A                                                                 Bib.sour-
      A                                      .    Fic.Sourc.  Membre so.'
      A                                      COLOR(WHT)
@@ -87,15 +87,15 @@
      A            WCOLN          3S 0H
      A            ZPROJET       10   O  2 58COLOR(WHT)
      A            ZOPTC          2   B  7  2
-     A            ZORDREC        6  0B  7  6EDTCDE(Z)
-     A            ZOBJDSTC      10   B  7 13
-     A            ZBIBDSTC      10   B  7 24
+     A            ZORDREC        6  0B  7  5EDTCDE(Z)
+     A            ZOBJDSTC      10   B  7 12
+     A            ZBIBDSTC      10   B  7 23
      A            ZDESCOBJEC    50   B  7 45
      A  15                                  DSPATR(PC)
      A            ZBIBSRCC      10   B  7 97
      A            ZFICSRCC      10   B  7110
      A            ZMBRSRCC      10   B  7122
-     A            ZTYPOBJC       7   B  7 36CHECK(ER)
+     A            ZTYPOBJC      10   B  7 34CHECK(ER)
      A          R FORB1
      A                                      CF03
      A                                      CF05
