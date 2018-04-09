@@ -38,6 +38,9 @@
        Dcl-S g_BibSrc LIKE(R_NomObj);
        Dcl-S g_FicSrc LIKE(R_NomObj);
        Dcl-S g_MbrSrc LIKE(R_NomObj);
+       Dcl-S g_BibSrc_pre LIKE(R_NomObj);
+       Dcl-S g_FicSrc_pre LIKE(R_NomObj);
+       Dcl-S g_MbrSrc_pre LIKE(R_NomObj);
        Dcl-S g_BibDst LIKE(R_NomObj);
        Dcl-S g_ObjDst LIKE(R_NomObj);
        Dcl-S g_Failed packed(10:0);
@@ -74,9 +77,12 @@
          dow sqlcode = 0;
            If g_typobj<>'*MSGF';
              g_optimize='*NONE';
-             Construct( g_BIBSRC
-                       :g_FicSrc
-                       :g_MbrSrc
+             g_BIBSRC_pre=g_BIBSRC;
+             g_FicSrc_pre=g_FicSrc;
+             g_MbrSrc_pre=g_MbrSrc;
+             Construct( g_BIBSRC_pre
+                       :g_FicSrc_pre
+                       :g_MbrSrc_pre
                        :g_BibDst
                        :g_ObjDst
                        :g_typobj
