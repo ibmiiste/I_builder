@@ -1,0 +1,28 @@
+/*---- Liste des procédures exportables du programme de service BERGERSRV -----------*/
+/* Utilisé dans le script de compilation BERGER/QCLSRC.CBERGERSRV                    */
+/* CRTSRVPGM  SRVPGM(&LIB_LOT/BERGERSRV) MODULE(...) SRCFILE(&LIB_LOT/QSRVSRC)       */
+/*                                                                                   */
+/* Les fonctions définies ici sont appelables comme suit :                           */
+/* dans un CL : DCLPRCOPT  ALWRTVSRC(*YES) ACTGRP(*CALLER) BNDDIR(BERGERSRV)   */
+/*    ou via un répertoire de liage comme BERGER/SERVICE qui contient les procédures */
+/*                       de plusieurs pgm de service : ... BNDDIR(SERVICE)     */
+/*              CALLPRC    PRC(gest_erreur)                                          */
+/* Dans un RPG : h option(*nodebugio) bnddir('BERGERSRV')                            */
+/*                 dcl-pr  GEST_ERREUR;                                              */
+/*                 gest_erreur();                                                    */
+/*-----------------------------------------------------------------------------------*/
+    /* >>PRE-COMPILER<<                                              */
+    /*   >>CRTCMD<<  CRTSRVPGM SRCFILE(&SL/&SF) SRCMBR(&SM);         */
+    /*   >>LINK<<                                                    */
+    /*     >>PARM<<  SRVPGM(&LI/&SM);                                */
+    /*     >>PARM<<  MODULE(&LI/LIVRAISON);                          */
+    /*     >>PARM<<  BNDDIR(SERVICE);                                */
+    /*     >>PARM<<  DETAIL(*FULL);                                  */
+    /*     >>PARM<<  ALWLIBUPD(*YES);                                */
+    /*     >>PARM<<  OPTION(*DUPPROC);                               */
+    /*   >>END-LINK<<                                                */
+    /*   >>EXECUTE<<                                                 */
+    /* >>END-PRE-COMPILER<<                                          */
+             STRPGMEXP
+                EXPORT     SYMBOL(LIVRAISON)
+             ENDPGMEXP
