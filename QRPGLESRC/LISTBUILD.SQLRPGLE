@@ -101,6 +101,9 @@
        Dcl-S g_Failed packed(10:0);
        Dcl-S g_FileAttach char(10000);
        Dcl-S g_optimize char(20);
+       Dcl-S g_BibSrc_pre LIKE(R_NomObj);
+       Dcl-S g_FicSrc_pre LIKE(R_NomObj);
+       Dcl-S g_MbrSrc_pre LIKE(R_NomObj);
 
        // Touches de fonction
        /copy qcpysrc,fonction
@@ -451,10 +454,13 @@
             when (zopt = '6') or (zopt = ' 6');
               g_filtre = *off;
             when (zopt = '7') or (zopt = ' 7');
+              g_BIBSRC_pre=ZBIBSRC;
+              g_FicSrc_pre=ZFICSRC;
+              g_MbrSrc_pre=ZMBRSRC;
               g_optimize='*NONE';
-              Construct( ZBIBSRC
-                        :ZFICSRC
-                        :ZMBRSRC
+              Construct( g_BIBSRC_pre
+                        :g_FicSrc_pre
+                        :g_MbrSrc_pre
                         :ZBIBDST
                         :ZOBJDST
                         :ZTYPOBJ
