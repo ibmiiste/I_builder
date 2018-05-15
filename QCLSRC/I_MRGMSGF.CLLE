@@ -36,58 +36,70 @@
              CHGVAR     VAR(&BIBLIO) VALUE(%SST( &OBJETQ 11 10))
 
              IF         COND(&MACHINE *EQ '          ') THEN(DO)
+
                 CHGVAR     VAR(&CMD) VALUE('MRGMSGF FROMMSGF(' *TCAT +
                              &BIBORG *TCAT '/' *TCAT &OBJET *TCAT ') +
-                             TOMSGF(' *TCAT &BIBLIO *TCAT '/' *TCAT &OBJET +
-                             *TCAT ') SELECT(' *TCAT &MSGID *TCAT ')')
-                CALL       PGM(QCMDEXC) PARM(&CMD &LENCMD)
+                             TOMSGF(' *TCAT &BIBLIO *TCAT '/' *TCAT +
+                             &OBJET *TCAT ') SELECT(' *TCAT &MSGID +
+                             *TCAT ')')
+             CALL       PGM(QCMDEXC) PARM(&CMD &LENCMD)
              ENDDO
 
-                ELSE       (DO)
+             ELSE       CMD(DO)
              /* Si envoi sur une machine distante                                 */
-                CALLPRC    PRC(ALEATOIRE) PARM((&RAND)) RTNVAL(&NUMALEA)
+             CALLPRC    PRC(ALEATOIRE) PARM((&RAND)) +
+                          RTNVAL(&NUMALEA)
 
-                CHGVAR     VAR(&NUMALEC) VALUE(&NUMALEA)
+             CHGVAR     VAR(&NUMALEC) VALUE(&NUMALEA)
 
-                CHGVAR     VAR(&SAVF) VALUE('S' *TCAT &NUMALEC)
+             CHGVAR     VAR(&SAVF) VALUE('S' *TCAT &NUMALEC)
 
-                CRTSAVF    FILE(QTEMP/&SAVF)
+             CRTSAVF    FILE(QTEMP/&SAVF)
 
-                CHGVAR     VAR(&CMD) VALUE('CRTSAVF FILE(QGPL/' *TCAT +
-                             &SAVF *TCAT ')')
+             CHGVAR     VAR(&CMD) VALUE('CRTSAVF FILE(QGPL/' *TCAT &SAVF *TCAT ')')
 
-                RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) +
-                             RMTUSER(&USER) RMTPWD(&MDP)
+             RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) RMTPWD(&MDP)
 
-                SAVOBJ     OBJ(&OBJET) LIB(&BIBLIO) DEV(*SAVF) +
-                             SAVF(QTEMP/&SAVF)
+             SAVOBJ     OBJ(&OBJET) LIB(&BIBLIO) DEV(*SAVF) SAVF(QTEMP/&SAVF)
 
-                CALLPRC    PRC(SCRIPTFTP) PARM((&MACHINE) (&USER) (&MDP) +
-                             (&SAVF) (&SRCF))
+             CALLPRC    PRC(SCRIPTFTP) PARM((&USER) (&MDP) (&SAVF) (&SRCF))
 
-                OVRDBF     FILE(INPUT) TOFILE(&SRCF) MBR(IN)
+             OVRDBF     FILE(INPUT) TOFILE(&SRCF) MBR(IN)
+             OVRDBF     FILE(OUTPUT) TOFILE(&SRCF) MBR(OUT)
 
-                OVRDBF     FILE(OUTPUT) TOFILE(&SRCF) MBR(OUT)
+             FTP        RMTSYS(&MACHINE)
 
-                FTP        RMTSYS(&MACHINE)
+             CHGVAR     VAR(&CMD) VALUE('SBMJOB CMD( RSTOBJ +
+                          OBJ(*ALL) SAVLIB(' *TCAT &BIBLIO *TCAT ') +
+                          DEV(*SAVF) SAVF(QGPL/' *TCAT &SAVF *TCAT +
+                          ') MBROPT(*NEW) ALWOBJDIF(*ALL) +
+                          RSTLIB(QGPL)) JOB(RCP_I_PUSH) +
+                          USER(RTSFLR)')
 
-                CHGVAR     VAR(&CMD) VALUE('RSTOBJ OBJ(*ALL) SAVLIB(' +
-                             *TCAT &BIBLIO *TCAT ') DEV(*SAVF) SAVF(QGPL/' +
-                             *TCAT &SAVF *TCAT ' RSTLIB(QGPL)')
+             RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) RMTPWD(&MDP)
 
-                RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) +
-                             RMTUSER(&USER) RMTPWD(&MDP)
+             CHGVAR     VAR(&CMD) VALUE('SBMJOB CMD(DLTF FILE(QGPL/' *TCAT +
+                          &SAVF *TCAT ')) JOB(DLT_I_PUSH) USER(RTSFLR)')
 
-                CHGVAR     VAR(&CMD) VALUE('MRGMSGF FROMMSGF(QGPL/' *TCAT +
-                             &OBJET *TCAT ') TOMSGF(' *TCAT &BIBLIO *TCAT +
-                             '/' *TCAT &OBJET *TCAT ') SELECT(' *TCAT +
-                             &MSGID *TCAT ')')
+             RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) +
+                          RMTUSER(&USER) RMTPWD(&MDP)
+
+             CHGVAR     VAR(&CMD) VALUE('MRGMSGF FROMMSGF(QGPL/' +
+                          *TCAT &OBJET *TCAT ') TOMSGF(' *TCAT +
+                          &BIBLIO *TCAT '/' *TCAT &OBJET *TCAT ') +
+                          SELECT(' *TCAT &MSGID *TCAT ')')
 
                 RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) +
                              RMTUSER(&USER) RMTPWD(&MDP)
 
                 CHGVAR     VAR(&CMD) VALUE('DLTF FILE(QGPL/' *TCAT &SAVF +
                              *TCAT ')')
+
+                RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) +
+                             RMTUSER(&USER) RMTPWD(&MDP)
+
+                CHGVAR     VAR(&CMD) VALUE('DLTMSGF FILE(QGPL/' +
+                             *TCAT &OBJET *TCAT ')')
 
                 RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) +
                              RMTUSER(&USER) RMTPWD(&MDP)
