@@ -13,16 +13,20 @@
 /*-----------------------------------------------------------------------------------*/
     /* >>PRE-COMPILER<<                                              */
     /*   >>CRTCMD<<  CRTSRVPGM SRCFILE(&SL/&SF) SRCMBR(&SM);         */
-    /*   >>LINK<<                                                    */
+    /*   >>IMPORTANT<<                                               */
     /*     >>PARM<<  SRVPGM(&LI/&SM);                                */
-    /*     >>PARM<<  MODULE(&LI/LIVRAISON);                          */
+    /*     >>PARM<<  MODULE(&LI/I_MRGMSGF   +                        */
+    /*                      &LI/LIVRAISON);                          */
     /*     >>PARM<<  BNDDIR(SERVICE);                                */
+    /*     >>PARM<<  OPTION(*DUPPROC);                               */
     /*     >>PARM<<  DETAIL(*FULL);                                  */
     /*     >>PARM<<  ALWLIBUPD(*YES);                                */
-    /*     >>PARM<<  OPTION(*DUPPROC);                               */
-    /*   >>END-LINK<<                                                */
+    /*   >>END-IMPORTANT<<                                           */
+    /*   >>CMD<<  RMVBNDDIRE BNDDIR(SERVICE) OBJ((BUILDERSRV));      */
     /*   >>EXECUTE<<                                                 */
+    /*   >>CMD<<  ADDBNDDIRE BNDDIR(SERVICE) OBJ((BUILDERSRV));      */
     /* >>END-PRE-COMPILER<<                                          */
-             STRPGMEXP
+             STRPGMEXP    PGMLVL(*CURRENT) LVLCHK(*YES) SIGNATURE('20170428')
                 EXPORT     SYMBOL(LIVRAISON)
+                EXPORT     SYMBOL(I_MRGMSGF)
              ENDPGMEXP
