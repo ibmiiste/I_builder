@@ -12,7 +12,7 @@
      A  08                                  SFLNXTCHG
      A            ZOPT           2   B  8  2
      A  20                                  DSPATR(PR)
-     A            HNREC         10  0H
+     A            HROWIDLOTS    10  0H
      A            HTOUT          1   H
      A            HMATR         10  0H
      A            ZLOTS     R        O  8  6REFFLD(LOTSF/NUMLOT *LIBL/LOTS)
@@ -57,8 +57,8 @@
      A                                       5=Afficher  6=Imprimer  12=Gérer l-
      A                                      e lot'
      A                                      COLOR(BLU)
-     A                                  6  3'Selection par nom :'
-     A            ZSNOM         35   B  6 23
+     A                                  6  3'La description contient :'
+     A            ZSDESCLOT R        B  6 29REFFLD(LOTSF/DESCLOT *LIBL/LOTS)
      A                                      CHECK(LC)
      A                                      COLOR(WHT)
      A                                      OVRDTA
