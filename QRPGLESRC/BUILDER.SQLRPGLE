@@ -21,7 +21,6 @@
 
        /copy qcpysrc,Inh32766
 
-
        DCL-PI builder;
          P_Projet LIKE(R_NomObj) const;
          P_Biblio_Lot LIKE(R_NomObj) const;
