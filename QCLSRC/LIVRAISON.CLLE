@@ -3,7 +3,7 @@
       /*                 SRCMBR(&SM);                                     */
       /*   >>IMPORTANT<<                                                  */
       /*     >>PARM<<  OPTION(*EVENTF);                                   */
-      /*     >>PARM<<  DBGVIEW(*LIST);                                    */
+      /*     >>PARM<<  DBGVIEW(*ALL);                                     */
       /*   >>END-IMPORTANT<<                                              */
       /*   >>EXECUTE<<                                                    */
       /* >>END-PRE-COMPILER<<                                             */
