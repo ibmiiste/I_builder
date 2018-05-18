@@ -5,13 +5,13 @@
       //*********************************************************************
       // Déclaration des fichiers
        dcl-f LSTLOT10FM workstn sfile(sfl01 :wran01) infds(dssfl1) indds(IndDs);
-       dcl-f FIC02L keyed infds(fic);
+       dcl-f IDX_LOTS02 keyed infds(fic);
 
 
        // Prototypes d'appel
        Dcl-pr Gerer_Fiche Extpgm('LSTLOT20');
          PCHX char(2);
-         NREC char(10);
+         NREC Like(ROWIDLOTS);
        end-pr;
 
        Dcl-pr Imprimer Extpgm('LSTLOT2SCL');
@@ -26,7 +26,7 @@
        End-pr;
 
        // Déclaration des variables
-       Dcl-s WSNOM char(50);
+       Dcl-s WSLIBELLOT char(50);
        Dcl-s ZSLIBELLOTP char(50);
        Dcl-s I packed(3);
 
@@ -217,10 +217,9 @@
          Zoptpr = *OFF;
          // Initialisation de la variable de sélection
          ZSLIBELLOT =  ZSLIBELLOTP;
-         Clear WSNOM;
+         Clear WSLIBELLOT;
       // Initialisation de la clé pour positionnement
-         Clear FIFON;
-         Clear FINOM;
+         Clear NUMLOT;
          g_Selection = *OFF;
          g_Selection_generique = *OFF;
          IF ZSLIBELLOT <> *BLANK;
@@ -232,11 +231,11 @@
 
            IF I > 0;
              I=I-1;
-             WSNOM=%Subst(ZSLIBELLOT:1:I);
+             WSLIBELLOT=%Subst(ZSLIBELLOT:1:I);
              // On est dans le cas d'une sélection générique
              g_Selection_generique = *ON;
              // On se positionnera juste au bon endroit dans le fichier
-             FINOM = WSNOM;
+             LIBELLOT = WSLIBELLOT;
            ENDIF;
          ENDIF;
 
@@ -257,7 +256,7 @@
          Sfldsp = *ON;
          Sfldspctl = *ON;
          // Positionnement en début de fichier
-         SETLL KEY001 FICF;
+         SETLL NUMLOT IDX_LOTS02;
          *IN70 = %EQUAL;
          // Chargement de la première page
          EXSR CHGPAG;
@@ -345,40 +344,39 @@
          //                  SETON                                        04
          Wran1 = LSTLIG;
       // Lexture de l'enregistrement suivant
-         READ FICF;
+         READ IDX_LOTS02;
          // Remise à zéro du compteur de ligne, mais on pourrait faire autrement
          Clear NBRLIG;
       //
          DOW Not %eof = '0'
-         AND NBRLIG < 14;
+         AND NBRLIG < 17;
            // Remplissage des zones écran
            g_Selection_OK = *ON;
            // Test s'il y a selection
            IF g_Selection = '1' OR g_Selection_generique = '1';
              IF g_Selection = '1' AND g_Selection_generique = '0';
                // On recherche la stricte égalité de nom
-               IF FINOM <> ZSLIBELLOT;
+               IF LIBELLOT <> ZSLIBELLOT;
                  g_Selection_OK = *OFF;
                ENDIF;
              ELSE;
                // On recherche si le nom commence par la valeur avant le '*'
-               IF %Subst(FINOM:1:I) <> WSNOM;
+               IF %Subst(LIBELLOT:1:I) <> WSLIBELLOT;
                  g_Selection_OK = *OFF;
                ENDIF;
              ENDIF;
            ENDIF;
            // L'indicateur est à '1' si sélection OK ou pas de sélection
            IF g_Selection_OK;
-             ZNOM = FINOM;
-             ZPR1 = FIPR1;
-             ZFONC = FIFON;
-             ZMATR =  FIMAT;
-             ZCPO  = FICPO;
+             ZNUMLOT = NUMLOT;
+             ZLIBELLOT = LIBELLOT;
+             ZLISTBIBPRJ = LISTBIBPRJ;
+             ZBIBLOT =  BIBLOT;
+             ZSTATLOT  = STATLOT;
              WDSFIC = FIC;
              WNRCFIC = HROWIDLOTS;
-             FIMAT = MATR;
-             IF FIDAS = 0;
-               // Top salarié licencié
+             IF STATLOT = 0;
+               // Top statut Lot fermé
                HTOUT = '0';
                Znomred = *OFF;
              ELSE;
@@ -389,7 +387,7 @@
              NBRLIG+=1;
              LSTLIG+=1;
              WRAN01+=1;
-      // Ecriture de la ligne
+             // Ecriture de la ligne
              WRITE SFL01;
            ENDIF;
            // Lecture du suivant
@@ -414,14 +412,13 @@
            // Pas de saisie d'option
            Zoptpr = *ON;
            IF ZSLIBELLOT = *BLANK;
-             ZNOM = 'Sélection Vide';
+             ZLIBELLOT = 'Sélection Vide';
            ENDIF;
 
            // Ne pas oublier de remettre à blanc
-           Clear ZPR1;
-           Clear ZFONC;
-           Clear ZMATR;
-           Clear ZCPO;
+           Clear ZNUMLOT;
+           Clear ZLISTBIBPRJ;
+           Clear ZBIBLOT;
            Clear WDSFIC;
            Clear HROWIDLOTS;
 
