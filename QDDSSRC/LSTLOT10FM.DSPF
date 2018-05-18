@@ -1,5 +1,13 @@
-     A                                      DSPSIZ(24 80 *DS3)
-     A                                      MSGLOC(24)
+     /* >>PRE-COMPILER<<                                                 */
+     /*   >>CRTCMD<<  CRTDSPF FILE(&LI/&OB) SRCFILE(&SL/&SF) +           */
+     /*                 SRCMBR(&SM);                                     */
+     /*   >>IMPORTANT<<                                                  */
+     /*     >>PARM<<  OPTION(*EVENTF);                                   */
+     /*   >>END-IMPORTANT<<                                              */
+     /*   >>EXECUTE<<                                                    */
+     /* >>END-PRE-COMPILER<<                                             */
+     A                                      DSPSIZ(27 132 *DS4)
+     A                                      MSGLOC(27)
      A                                      PRINT
      A                                      HELP
      A                                      HLPPNLGRP('PGMF01' PGMF01)
@@ -16,9 +24,10 @@
      A            HTOUT          1   H
      A            HMATR         10  0H
      A            ZLOTS     R        O  8  6REFFLD(LOTSF/NUMLOT *LIBL/LOTS)
-     A            ZDESCLOT  R        O  9 14REFFLD(LOTSF/DESCLOT *LIBL/LOTS)
+     A            ZLIBELLOT R        O  8 39REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
      A            ZLISTBIBPRR        O  8 14REFFLD(LOTSF/LISTBIBPRJ *LIBL/LOTS)
-     A            ZBIBLOT   R        O  8 26REFFLD(LOTSF/BIBLOT *LIBL/LOTS)
+     A            ZBIBLOT   R        O  8 27REFFLD(LOTSF/BIBLOT *LIBL/LOTS)
+     A            ZSTATUT       10   O  8 91
      A          R FORE1                     SFLCTL(SFL01)
      A                                      RTNCSRLOC(&WLICSR &WZOCSR &WPRCSR)
      A                                      OVERLAY
@@ -31,24 +40,18 @@
      A  05                                  SFLDSPCTL
      A  06                                  SFLCLR
      A  07                                  SFLEND
-     A                                      SFLSIZ(15)
-     A                                      SFLPAG(14)
+     A                                      SFLSIZ(17)
+     A                                      SFLPAG(17)
      A                                      SFLCSRRRN(&WRACSR)
      A            WRACSR         5S 0H
      A            WRAN01         4S 0H      SFLRCDNBR
      A            ZPGM          10   O  1  2
      A                                      OVRDTA
-     A                                  1 31'Liste du personnel'
+     A                                  1 58'Gestion des lots'
      A                                      COLOR(WHT)
-     A            ZUSER         10   O  1 70
+     A            ZUSER         10   O  1122
      A                                      OVRDTA
-     A            ZDATE          8  0O  2  2
-     A                                      EDTWRD('  /  /    ')
-     A                                      OVRDTA
-     A            ZHEUR          6  0O  2 14
-     A                                      EDTWRD('  :  :  ')
-     A                                      OVRDTA
-     A            ZJOB          10   O  2 70
+     A            ZJOB          10   O  2122
      A                                      OVRDTA
      A                                  4  3'Indiquez vos options, puis appuyez-
      A                                       sur ENTREE.'
@@ -58,17 +61,21 @@
      A                                      e lot'
      A                                      COLOR(BLU)
      A                                  6  3'La description contient :'
-     A            ZSDESCLOT R        B  6 29REFFLD(LOTSF/DESCLOT *LIBL/LOTS)
+     A            ZSLIBELLOTR        B  6 29REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
      A                                      CHECK(LC)
      A                                      COLOR(WHT)
      A                                      OVRDTA
-     A                                  7  2'Opt Numéro  Liste bib   Bib. lot'
+     A                                  7  2'Opt Numéro  Liste bib    Bib. lot -
+     A                                         Sujet du lot                    -
+     A                                                          Statut'
      A                                      COLOR(WHT)
      A            WLICSR        10A  H
      A            WZOCSR        10A  H
      A            WPRCSR         4S 0H
      A            WLIGN          3S 0H
      A            WCOLN          3S 0H
+     A            ZDATE           L  O  2  2DATFMT(*EUR)
+     A            ZHEUR           T  B  2 13TIMFMT(*EUR)
      A          R FORB1
      A                                      CF03
      A                                      CF05
@@ -85,7 +92,7 @@
      A                                      HLPPNLGRP('ZSNOM' PGMF01)
      A          H                           HLPARA(8 2 22 3)
      A                                      HLPPNLGRP('ZOPT' PGMF01)
-     A                                 23  3'F3=Exit  F5=Réafficher  -
+     A                                 26  3'F3=Exit  F5=Réafficher  -
      A                                      F6=Créer  F8=Imprimer  -
      A                                      F12=Annuler'
      A                                      COLOR(BLU)
@@ -95,7 +102,7 @@
      A            WLIGN          3S 0H
      A            WCOLN          3S 0H
      A          R WSFMSG                    SFL
-     A                                      SFLMSGRCD(24)
+     A                                      SFLMSGRCD(27)
      A            WMGKEY                    SFLMSGKEY
      A            WPGMQ                     SFLPGMQ
      A          R WSFCTL                    SFLCTL(WSFMSG)
@@ -107,3 +114,23 @@
      A                                      SFLDSPCTL
      A  09                                  SFLEND
      A            WPGMQ                     SFLPGMQ
+     A*%%RS+<record-sequences>
+     A*%%RS+ <sequence name="Gestion des lots">
+     A*%%RS+  <device type="display" width="132" height="27" />
+     A*%%RS+  <record-write record-format="SFL01">
+     A*%%RS+   <field-data>
+     A*%%RS+    <field name="ZBIBLOT" value="LOT_000160" />
+     A*%%RS+    <field name="ZLOTS" value="1" />
+     A*%%RS+    <field name="ZLISTBIBPR" value="MIR_CICA95" />
+     A*%%RS+    <field name="ZOPT" value="2" />
+     A*%%RS+    <field name="ZLIBELLOT" value="Projet MIRUS" />
+     A*%%RS+    <field name="HROWIDLOTS" value="345654eazd4r654zd6541D684d65a4D6
+     A*%%RS+3SZDa4d65" />
+     A*%%RS+   </field-data>
+     A*%%RS+  </record-write>
+     A*%%RS+  <record-write record-format="FORE1" />
+     A*%%RS+  <record-write record-format="FORB1" />
+     A*%%RS+  <record-write record-format="WSFMSG" />
+     A*%%RS+  <record-write record-format="WSFCTL" />
+     A*%%RS+ </sequence>
+     A*%%RS </record-sequences>
