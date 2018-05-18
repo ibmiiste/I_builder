@@ -20,9 +20,9 @@
      A  08                                  SFLNXTCHG
      A            ZOPT           2   B  8  2
      A  20                                  DSPATR(PR)
-     A            HROWIDLOTSR        H      REFFLD(LOTSF/HROWIDLOTS *LIBL/LOTS)
+     A            HROWIDLOTS    45   H
      A            HTOUT          1   H
-     A            HMATR         10  0H
+     A            HNREC         10  0H
      A            ZNUMLOT   R        O  8  6REFFLD(LOTSF/NUMLOT *LIBL/LOTS)
      A            ZLIBELLOT R        O  8 39REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
      A            ZLISTBIBPRR        O  8 14REFFLD(LOTSF/LISTBIBPRJ *LIBL/LOTS)
@@ -121,11 +121,11 @@
      A*%%RS+   <field-data>
      A*%%RS+    <field name="ZBIBLOT" value="LOT_000160" />
      A*%%RS+    <field name="ZLISTBIBPR" value="MIR_CICA95" />
-     A*%%RS+    <field name="ZNUMLOT" value="1" />
      A*%%RS+    <field name="ZOPT" value="2" />
-     A*%%RS+    <field name="ZLIBELLOT" value="Projet MIRUS" />
+     A*%%RS+    <field name="ZNUMLOT" value="1" />
      A*%%RS+    <field name="HROWIDLOTS" value="345654eazd4r654zd6541D684d65a4D6
      A*%%RS+3SZDa4d65" />
+     A*%%RS+    <field name="ZLIBELLOT" value="Projet MIRUS" />
      A*%%RS+   </field-data>
      A*%%RS+  </record-write>
      A*%%RS+  <record-write record-format="FORE1" />

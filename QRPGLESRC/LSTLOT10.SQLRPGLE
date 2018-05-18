@@ -11,15 +11,15 @@
        // Prototypes d'appel
        Dcl-pr Gestion_Fiche Extpgm('LSTLOT20');
          PCHX char(2);
-         NREC Like(ROWIDLOTS);
+         NREC CHAR(10);
        end-pr;
 
        Dcl-pr Impression Extpgm('LSTLOT2SCL');
-         PMAT char(10);
+         PROWIDLOTS Like(ROWIDLOTS);
        End-pr;
 
        Dcl-pr Gestion_message Extpgm('PGM001CL');
-         PTYP Char(2);
+         PTYP Char(1);
          PFIM Char(10);
          PMID Char(7);
          PMDT Char(99);
@@ -29,7 +29,7 @@
        Dcl-s WSLIBELLOT char(50);
        Dcl-s ZSLIBELLOTP char(50);
        Dcl-s I packed(3);
-       Dcl-s NREC Like(ROWIDLOTS);
+       Dcl-s NREC Char(10);
 
        // Gestion sous-fichier
        Dcl-s LSTLIG Packed(4:0);
@@ -46,7 +46,7 @@
        Dcl-s PMDT Char(99);
 
       // Variables personnel
-       Dcl-s PMAT Char(10);
+       Dcl-s PROWIDLOTS like (ROWIDLOTS);
        Dcl-s PCHX Char(2);
 
       // Indicateurs
@@ -206,9 +206,10 @@
          ENDIF;
          IF Imprimer;
            // F8 impression du fichier
-           clear PMAT;
+           Clear PROWIDLOTS;
            // On appelle le CL de routage sans soumission, sinon PGMF20CL
-           Impression( PMAT);
+           Impression( PROWIDLOTS);
+           clear PROWIDLOTS;
            g_Fin_actions = *OFF;
          ENDIF;
          // On ne fait ceci que s'il n'y a eu rien d'autre
@@ -279,7 +280,7 @@
          EndIf;
          //
          DOW not %Eof;
-           NREC=HROWIDLOTS;
+           NREC=%Char(HNREC);
            IF HTOUT = '1';
              IF ZOPT='2' OR ZOPT='3' OR ZOPT='4' OR ZOPT='99';
                // Si l'employé à quitté on ne peut plus rien modifier
@@ -298,8 +299,8 @@
            WHEN (ZOPT = '5') OR (ZOPT = ' 5');
              PCHX = 'AF';
            WHEN (ZOPT = '6') OR (ZOPT = ' 6');
-             PMAT =  HMATR;
-             Impression( PMAT);
+             PROWIDLOTS =  HROWIDLOTS;
+             Impression( PROWIDLOTS);
              g_Traitement_option = *OFF;
            WHEN (ZOPT = '99');
              PCHX = 'PE';
@@ -380,8 +381,8 @@
              ZBIBLOT =  BIBLOT;
              ZSTATLOT  = STATLOT;
              WDSFIC = FIC;
-             WNRCFI = HROWIDLOTS;
-             IF STATLOT = 0;
+             WNRCFI = HNREC;
+             IF STATLOT = '0';
                // Top statut Lot fermé
                HTOUT = '0';
                Znomred = *OFF;
@@ -427,6 +428,7 @@
            Clear ZBIBLOT;
            Clear WDSFIC;
            Clear HROWIDLOTS;
+           Clear HNREC;
 
            // Ecriture du message sur la première ligne
            WRITE SFL01;
