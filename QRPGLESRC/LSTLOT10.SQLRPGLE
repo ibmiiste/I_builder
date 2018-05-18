@@ -9,12 +9,12 @@
 
 
        // Prototypes d'appel
-       Dcl-pr Gerer_Fiche Extpgm('LSTLOT20');
+       Dcl-pr Gestion_Fiche Extpgm('LSTLOT20');
          PCHX char(2);
          NREC Like(ROWIDLOTS);
        end-pr;
 
-       Dcl-pr Imprimer Extpgm('LSTLOT2SCL');
+       Dcl-pr Impression Extpgm('LSTLOT2SCL');
          PMAT char(10);
        End-pr;
 
@@ -29,6 +29,7 @@
        Dcl-s WSLIBELLOT char(50);
        Dcl-s ZSLIBELLOTP char(50);
        Dcl-s I packed(3);
+       Dcl-s NREC Like(ROWIDLOTS);
 
        // Gestion sous-fichier
        Dcl-s LSTLIG Packed(4:0);
@@ -47,6 +48,14 @@
       // Variables personnel
        Dcl-s PMAT Char(10);
        Dcl-s PCHX Char(2);
+
+      // Indicateurs
+       Dcl-s g_Sortie Ind;
+       Dcl-s g_Fin_actions Ind;
+       Dcl-s g_Selection Ind;
+       Dcl-s g_Selection_generique Ind;
+       Dcl-s g_Selection_OK Ind;
+       Dcl-s g_Traitement_option Ind;
 
       // La DS du programme, noter le S indispensable
        /copy qcpysrc,Psds
@@ -105,9 +114,6 @@
         WNBRCD int(10) pos(283);
         WNRCFI int(10) pos(397);
        end-ds;
-
-       // la clé d'accés au fichier
-       Dcl-ds Key likerec(FICF : *key);
 
        // le nombre de lignes afichables, déclaration a la volée
        g_Nblis1 = 14;
@@ -181,7 +187,7 @@
            g_Fin_actions = *OFF;
          ENDIF;
          //
-         IF Rachaichir;
+         IF Refresh;
            // F5 Rafraichissement de l'écran
            EXSR INITSF;
            g_Fin_actions = *OFF;
@@ -290,7 +296,7 @@
            WHEN (ZOPT = '4') OR (ZOPT = ' 4');
              PCHX = 'SU';
            WHEN (ZOPT = '5') OR (ZOPT = ' 5');
-             PCHX = 'AF;'
+             PCHX = 'AF';
            WHEN (ZOPT = '6') OR (ZOPT = ' 6');
              PMAT =  HMATR;
              Impression( PMAT);
@@ -342,7 +348,7 @@
          // Il faut positionner correctement les indicateurs et les variables
          Sflnxtchg = *OFF;
          //                  SETON                                        04
-         Wran1 = LSTLIG;
+         Wran01 = LSTLIG;
       // Lexture de l'enregistrement suivant
          READ IDX_LOTS02;
          // Remise à zéro du compteur de ligne, mais on pourrait faire autrement
@@ -370,11 +376,11 @@
            IF g_Selection_OK;
              ZNUMLOT = NUMLOT;
              ZLIBELLOT = LIBELLOT;
-             ZLISTBIBPRJ = LISTBIBPRJ;
+             ZLISTBIBPR = LISTBIBPRJ;
              ZBIBLOT =  BIBLOT;
              ZSTATLOT  = STATLOT;
              WDSFIC = FIC;
-             WNRCFIC = HROWIDLOTS;
+             WNRCFI = HROWIDLOTS;
              IF STATLOT = 0;
                // Top statut Lot fermé
                HTOUT = '0';
@@ -391,7 +397,7 @@
              WRITE SFL01;
            ENDIF;
            // Lecture du suivant
-           READ FICF;
+           READ LOTSF;
 
          ENDDO;
          // On quitte la boucle soit en fin de page
@@ -417,7 +423,7 @@
 
            // Ne pas oublier de remettre à blanc
            Clear ZNUMLOT;
-           Clear ZLISTBIBPRJ;
+           Clear ZLISTBIBPR;
            Clear ZBIBLOT;
            Clear WDSFIC;
            Clear HROWIDLOTS;
