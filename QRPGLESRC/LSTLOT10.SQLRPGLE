@@ -5,7 +5,6 @@
       //*********************************************************************
       // Déclaration des fichiers
        dcl-f LSTLOT10FM workstn sfile(sfl01 :wran01) infds(dssfl1) indds(IndDs);
-       dcl-f IDX_LOTS02 keyed infds(fic);
 
 
        // Prototypes d'appel
@@ -18,7 +17,7 @@
          PROWIDLOTS Like(ROWIDLOTS);
        End-pr;
 
-       Dcl-pr Gestion_message Extpgm('PGM001CL');
+       Dcl-pr Gestion_message Extpgm('ENVMSG01');
          PTYP Char(1);
          PFIM Char(10);
          PMID Char(7);
@@ -45,9 +44,12 @@
        Dcl-s PMID Char(7);
        Dcl-s PMDT Char(99);
 
-      // Variables personnel
+       // Variables Lots
        Dcl-s PROWIDLOTS like (ROWIDLOTS);
        Dcl-s PCHX Char(2);
+       // Numéro relatif d'enregistrement de la table LOTS
+       Dcl-s g_numero_relatif Packed(15:0);
+
 
       // Indicateurs
        Dcl-s g_Sortie Ind;
@@ -86,11 +88,8 @@
       // Renommage des touches de fonction
        /Copy Qcpysrc,Fonction
 
-      // La DS du fichier
-       dcl-ds FIC;
-        WNRC01 int(10) pos(397);
-       end-ds;
-
+      // La DS de la table LOTS
+       Dcl-ds Ds_Lots Extname('LOTS') End-ds;
 
        dcl-ds WDSFIC;
         WCDFIL char(8) pos(1);
@@ -263,8 +262,20 @@
          Sfldsp = *ON;
          Sfldspctl = *ON;
          // Positionnement en début de fichier
-         SETLL NUMLOT IDX_LOTS02;
-         *IN70 = %EQUAL;
+         EXEC SQL
+           DECLARE curs_lots02 CURSOR FOR
+             SELECT lot_number,
+                    libelle_lots,
+                    liste_biblio_projet,
+                    biblio_lot,
+                    statuts_lot,
+                    RRN( lots)
+              FROM lots
+              ORDER BY lot_number
+             ;
+         EXEC SQL OPEN curs_lots02;
+
+         *in70 = sqlcode < 0;
          // Chargement de la première page
          EXSR CHGPAG;
        ENDSR;
@@ -351,7 +362,13 @@
          //                  SETON                                        04
          Wran01 = LSTLIG;
       // Lexture de l'enregistrement suivant
-         READ IDX_LOTS02;
+         EXEC SQL
+           FETCH curs_lots02 INTO :numlot,
+                                  :libellot,
+                                  :listbibprj,
+                                  :biblot,
+                                  :statlot,
+                                  :g_numero_relatif;
          // Remise à zéro du compteur de ligne, mais on pourrait faire autrement
          Clear NBRLIG;
       //
@@ -380,8 +397,7 @@
              ZLISTBIBPR = LISTBIBPRJ;
              ZBIBLOT =  BIBLOT;
              ZSTATLOT  = STATLOT;
-             WDSFIC = FIC;
-             WNRCFI = HNREC;
+             HNREC=g_numero_relatif;
              IF STATLOT = '0';
                // Top statut Lot fermé
                HTOUT = '0';
@@ -398,9 +414,15 @@
              WRITE SFL01;
            ENDIF;
            // Lecture du suivant
-           READ LOTSF;
+            EXEC SQL
+           FETCH curs_lots02 INTO :numlot,
+                                  :libellot,
+                                  :listbibprj,
+                                  :biblot,
+                                  :statlot,
+                                  :g_numero_relatif;
 
-         ENDDO;
+          ENDDO;
          // On quitte la boucle soit en fin de page
          //                     soit en fin de fichier
          IF %Eof;
