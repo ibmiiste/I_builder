@@ -25,6 +25,7 @@
       *     >>PARM<<  CLOSQLCSR(*ENDACTGRP);                          */
       *     >>PARM<<  DATFMT(*ISO);                                   */
       *     >>PARM<<  TIMFMT(*ISO);                                   */
+      *     >>PARM<<  COMPILEOPT(&U0);                                */
       *   >>END-IMPORTANT<<                                           */
       *   >>EXECUTE<<                                                 */
       * >>END-PRE-COMPILER<<                                          */

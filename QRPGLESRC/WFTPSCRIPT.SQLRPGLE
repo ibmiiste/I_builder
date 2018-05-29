@@ -10,6 +10,7 @@
       //     >>PARM<<  CLOSQLCSR(*ENDACTGRP);                          */
       //     >>PARM<<  DATFMT(*ISO);                                   */
       //     >>PARM<<  TIMFMT(*ISO);                                   */
+      //     >>PARM<<  COMPILEOPT(&U0);                                */
       //   >>END-IMPORTANT<<                                           */
       //   >>CMD<<  CRTSRCPF FILE(QTEMP/FTPCMD) RCDLEN(112);           */
       //   >>EXECUTE<<                                                 */
@@ -46,42 +47,42 @@
 
        write ftpcmdf;
 
-       l_seq=+1;
+       l_seq+=1;
        srcseq=l_seq;
        srcdat=*zero;
        srcdta='NAMEFMT 1';
 
        write ftpcmdf;
 
-       l_seq=+1;
+       l_seq+=1;
        srcseq=l_seq;
        srcdat=*zero;
        srcdta='bin';
 
        write ftpcmdf;
 
-       l_seq=+1;
+       l_seq+=1;
        srcseq=l_seq;
        srcdat=*zero;
        srcdta='cd ' + %trim( l_CHEMIN_destination);
 
        write ftpcmdf;
 
-       l_seq=+1;
+       l_seq+=1;
        srcseq=l_seq;
        srcdat=*zero;
        srcdta='lcd ' + %trim( l_chemin_origine);
 
        write ftpcmdf;
 
-       l_seq=+1;
+       l_seq+=1;
        srcseq=l_seq;
        srcdat=*zero;
        srcdta='put ' + %trim( l_Nom_Objet) + '.FILE';
 
        write ftpcmdf;
 
-       l_seq=+1;
+       l_seq+=1;
        srcseq=l_seq;
        srcdat=*zero;
        srcdta='quit';
