@@ -11,7 +11,9 @@
       //     >>PARM<<  COMMIT(*NONE);                                  */
       //     >>PARM<<  COMPILEOPT(&U0);                                */
       //   >>END-IMPORTANT<<                                           */
-      //   >>EXECUTE<<                                                 */
+      // >>CMD<<  RMVBNDDIRE BNDDIR(SERVICE) OBJ((BERGERSRV));         */
+      // >>EXECUTE<<                                                   */
+      // >>CMD<<  ADDBNDDIRE BNDDIR(SERVICE) OBJ((BERGERSRV));         */
       // >>END-PRE-COMPILER<<                                          */
 
        //Option de contrôle du programme
@@ -20,6 +22,8 @@
        /copy qcpysrc,UtiProc
 
        /copy qcpysrc,Inh32766
+
+       /Copy Qcpysrc,Prtbuilder
 
        DCL-PI builder;
          P_Projet LIKE(R_NomObj) const;
