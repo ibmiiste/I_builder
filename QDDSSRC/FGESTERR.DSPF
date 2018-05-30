@@ -1,0 +1,48 @@
+     /* >>PRE-COMPILER<<                                                 */
+     /*   >>CRTCMD<<  CRTDSPF FILE(&LI/&OB) SRCFILE(&SL/&SF) +           */
+     /*                 SRCMBR(&SM);                                     */
+     /*   >>IMPORTANT<<                                                  */
+     /*     >>PARM<<  OPTION(*EVENTF);                                   */
+     /*   >>END-IMPORTANT<<                                              */
+     /*   >>EXECUTE<<                                                    */
+     /* >>END-PRE-COMPILER<<                                             */
+     A                                      DSPSIZ(24 80 *DS3)
+     A                                      PRINT
+     A                                      ERRSFL
+     A                                      CF05(05 'Suite')
+     A          R ERREUR
+     A                                      WINDOW(6 10 15 50)
+     A                                      WDWBORDER((*COLOR RED) (*DSPATR RI)-
+     A                                       (*CHAR '        '))
+     A                                      RMVWDW
+     A                                      USRRSTDSP
+     A                                  1 18'ERREUR SYSTEME'
+     A                                      DSPATR(RI)
+     A                                      COLOR(WHT)
+     A                                  2  1'Veuillez transmettre à l''informat-
+     A                                      ique'
+     A                                  3  1'les informations suivantes:'
+     A                                  5  1'Programme   :'
+     A            PROGRAM       10A  O  5 15
+     A                                  6  1'Module'
+     A                                  6 13':'
+     A            MODULE        10A  O  6 15
+     A                                  7  1'ProcÃ©dure'
+     A                                  7 13':'
+     A            PROCED1       30A  O  7 15
+     A            PROCED2       30A  O  8 15
+     A                                 10  1'Travail     :'
+     A            JOB_NUM        6A  O 10 15
+     A                                 10 22'/'
+     A            USER          10A  O 10 24
+     A                                 10 35'/'
+     A            JOB_NAME      10A  O 10 37
+     A                                  9  1'Instruction :'
+     A            ERROR         10A  O  9 15
+     A                                 11  1'Date        :'
+     A                                 11 15DATE
+     A                                      EDTCDE(Y)
+     A                                 12  1'Heure       :'
+     A                                 12 15TIME
+     A                                 14  1'F5=Valider'
+     A                                      COLOR(BLU)

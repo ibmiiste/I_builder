@@ -1,0 +1,11 @@
+     /* >>PRE-COMPILER<<                                                 */
+     /*   >>CRTCMD<<  CRTLF FILE(&LI/&OB) SRCFILE(&SL/&SF) +             */
+     /*                 SRCMBR(&SM);                                     */
+     /*   >>IMPORTANT<<                                                  */
+     /*     >>PARM<<  OPTION(*EVENTF);                                   */
+     /*   >>END-IMPORTANT<<                                              */
+     /*   >>EXECUTE<<                                                    */
+     /* >>END-PRE-COMPILER<<                                             */
+                                            UNIQUE
+                R MAILINFOF                 PFILE(MAILINFO)
+                K ID
