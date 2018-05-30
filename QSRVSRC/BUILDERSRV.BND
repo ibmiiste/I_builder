@@ -4,38 +4,23 @@
     /*     >>PARM<<  SRVPGM(&LI/&SM);                                */
     /*     >>PARM<<  MODULE(&LI/I_MRGMSGF   +                        */
     /*                      &LI/LIVRAISON +                          */
-    /*                      &LI/EMS010C +                            */
     /*                      &LI/ENVRAPMEL +                          */
-    /*                      &LI/SCRIPTFTP +                          */
     /*                      &LI/RTVSRCSTD +                          */
     /*                      &LI/WFTPSCRIPT +                         */
     /*                      &LI/CONSTRUCT +                          */
-    /*                      &LI/GESTERR +                            */
-    /*                      &LI/GSTERRSTR +                          */
-    /*                      &LI/MAILERR +                            */
-    /*                      &LI/BBMOD000R +                          */
-    /*                      &LI/ALEATOIRE);                          */
+    /*                      &LI/GSTERRSTR);                          */
     /*     >>PARM<<  BNDDIR(SERVICE);                                */
     /*     >>PARM<<  OPTION(*DUPPROC);                               */
     /*     >>PARM<<  DETAIL(*FULL);                                  */
     /*     >>PARM<<  ALWLIBUPD(*YES);                                */
     /*   >>END-IMPORTANT<<                                           */
-    /*   >>CMD<<  RMVBNDDIRE BNDDIR(SERVICE) OBJ((BERGERSRV));       */
     /*   >>EXECUTE<<                                                 */
-    /*   >>CMD<<  ADDBNDDIRE BNDDIR(SERVICE) OBJ((BERGERSRV));      */
     /* >>END-PRE-COMPILER<<                                          */
              STRPGMEXP    PGMLVL(*CURRENT) LVLCHK(*YES) SIGNATURE('20170428')
                 EXPORT     SYMBOL(LIVRAISON)
                 EXPORT     SYMBOL(I_MRGMSGF)
-                EXPORT     SYMBOL(ECRITURE_SCRIPT_FTP)
-                EXPORT     SYMBOL(SCRIPTFTP)
                 EXPORT     SYMBOL(CONSTRUCT)
                 EXPORT     SYMBOL(SOURCE_STANDARD)
                 EXPORT     SYMBOL(ENVRAPMEL)
-                EXPORT     SYMBOL(EMS010C)
-                EXPORT     SYMBOL(GEST_ERREUR)
-                EXPORT     SYMBOL(MAILERR)
-                EXPORT     SYMBOL(ALEATOIRE)
                 EXPORT     SYMBOL(GSTERRSTR)
-                EXPORT     SYMBOL(EXISTS)
              ENDPGMEXP

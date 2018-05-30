@@ -11,9 +11,7 @@
       //     >>PARM<<  COMMIT(*NONE);                                  */
       //     >>PARM<<  COMPILEOPT(&U0);                                */
       //   >>END-IMPORTANT<<                                           */
-      // >>CMD<<  RMVBNDDIRE BNDDIR(SERVICE) OBJ((BERGERSRV));         */
       // >>EXECUTE<<                                                   */
-      // >>CMD<<  ADDBNDDIRE BNDDIR(SERVICE) OBJ((BERGERSRV));         */
       // >>END-PRE-COMPILER<<                                          */
 
        /copy qcpysrc,cpyctlstm
