@@ -11,7 +11,9 @@
       //     >>PARM<<  COMMIT(*NONE);                                  */
       //     >>PARM<<  COMPILEOPT(&U0);                                */
       //   >>END-IMPORTANT<<                                           */
-      //   >>EXECUTE<<                                                 */
+      // >>CMD<<  RMVBNDDIRE BNDDIR(SERVICE) OBJ((BERGERSRV));         */
+      // >>EXECUTE<<                                                   */
+      // >>CMD<<  ADDBNDDIRE BNDDIR(SERVICE) OBJ((BERGERSRV));         */
       // >>END-PRE-COMPILER<<                                          */
 
        /copy qcpysrc,cpyctlstm
@@ -39,9 +41,9 @@
 
        // external functions prototypes
        // prototype fonctions externes
-       //copy qcpysrc,UtiProc
+       /copy qcpysrc,Prtbuilder
 
-      // Gestion des messages
+       // Gestion des messages
        dcl-pr gst_message_CL extpgm('ENVMSG01');
          a_typ like(r_typmsg);
          a_fim like(r_nomobj);
@@ -51,10 +53,6 @@
 
        // Prototype sous-procédures externe
         /copy qcpysrc,prsmod000r
-
-       // program status data structure
-       // structure information programme
-       /copy qcpysrc,psds
 
        // local functions prototypes
        // prototypes fonctions locales
@@ -105,11 +103,18 @@
        Dcl-S g_FicSrc_pre LIKE(R_NomObj);
        Dcl-S g_MbrSrc_pre LIKE(R_NomObj);
 
+
        // Touches de fonction
        /copy qcpysrc,fonction
 
        // data-structures
        // structures de données
+
+       // program status data structure
+       // structure information programme
+       /copy qcpysrc,psds
+
+
        // Indicateurs renommés avec Indara et INDDS
         Dcl-ds IndDS;
           ROLLUP ind pos(2);
