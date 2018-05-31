@@ -1,0 +1,210 @@
+     A                                      DSPSIZ(24 80 *DS3)
+     A                                      MSGLOC(24)
+     A                                      PRINT
+     A                                      HELP
+     A                                      HLPPNLGRP('PGMF02' PGMF02)
+     A                                      HLPTITLE('Détail personnel')
+     A                                      ALTHELP(CA01)
+     A          R FORE1
+     A                                      CF03
+     A                                      CF04
+     A                                      CF12
+     A                                      CF15
+     A                                      RTNCSRLOC(&WFMCUR &WZOCUR &WPRCUR)
+     A                                      PUTOVR
+     A                                      CSRLOC(WNMLGN WNMCOL)
+     A                                      CHANGE(91)
+     A                                      HLPCLR
+     A          H                           HLPARA(5 19 5 29)
+     A                                      HLPPNLGRP('ZMATR' PGMF02)
+     A          H                           HLPARA(5 44 5 47)
+     A                                      HLPPNLGRP('ZFCOD' PGMF02)
+     A          H                           HLPARA(6 19 6 54)
+     A                                      HLPPNLGRP('ZNOM' PGMF02)
+     A          H                           HLPARA(7 19 7 54)
+     A                                      HLPPNLGRP('ZPR1' PGMF02)
+     A          H                           HLPARA(8 19 8 54)
+     A                                      HLPPNLGRP('ZPR2' PGMF02)
+     A          H                           HLPARA(9 19 9 54)
+     A                                      HLPPNLGRP('ZAD1' PGMF02)
+     A          H                           HLPARA(10 19 10 54)
+     A                                      HLPPNLGRP('ZAD2' PGMF02)
+     A          H                           HLPARA(11 19 11 54)
+     A                                      HLPPNLGRP('ZAD3' PGMF02)
+     A          H                           HLPARA(12 19 12 29)
+     A                                      HLPPNLGRP('ZCPO' PGMF02)
+     A          H                           HLPARA(13 19 13 54)
+     A                                      HLPPNLGRP('ZVIL' PGMF02)
+     A          H                           HLPARA(14 19 14 39)
+     A                                      HLPPNLGRP('ZTEL' PGMF02)
+     A          H                           HLPARA(14 52 14 72)
+     A                                      HLPPNLGRP('ZPOR' PGMF02)
+     A          H                           HLPARA(16 19 16 29)
+     A                                      HLPPNLGRP('ZDAE' PGMF02)
+     A          H                           HLPARA(16 48 16 58)
+     A                                      HLPPNLGRP('ZDAS' PGMF02)
+     A            ZPGM          10   O  1  2
+     A                                      OVRDTA
+     A                                  1 31'Détail fiche personnel'
+     A                                      COLOR(WHT)
+     A            ZUSER         10   O  1 70
+     A                                      OVRDTA
+     A            ZDATE          8  0O  2  2
+     A                                      EDTWRD('  /  /    ')
+     A                                      OVRDTA
+     A            ZHEUR          6  0O  2 14
+     A                                      EDTWRD('  :  :  ')
+     A                                      OVRDTA
+     A            ZMODE         30   O  2 27
+     A                                      COLOR(WHT)
+     A                                      OVRDTA
+     A            ZJOB          10   O  2 70
+     A                                      OVRDTA
+     A                                  5  7'Matricule :'
+     A            ZMATR         10Y 0   5 19
+     A                                      EDTCDE(Z)
+     A                                      COLOR(WHT)
+     A                                      OVRDTA
+     A                                  5 33'Fonction :'
+     A            ZFCOD          3   B  5 44
+     A N14                                  DSPATR(UL)
+     A  14                                  DSPATR(PR)
+     A                                      COLOR(WHT)
+     A                                      OVRDTA
+     A                                      OVRATR
+     A            ZFLIB         20   O  5 49
+     A                                      OVRDTA
+     A                                  6 13'Nom :'
+     A            ZNOM          35   B  6 19
+     A N15                                  DSPATR(UL)
+     A  15                                  DSPATR(PR)
+     A                                      CHECK(LC)
+     A                                      COLOR(WHT)
+     A                                      OVRDTA
+     A                                      OVRATR
+     A                                  7 10'Prénom :'
+     A            ZPR1          35   B  7 19
+     A N16                                  DSPATR(UL)
+     A  16                                  DSPATR(PR)
+     A                                      CHECK(LC)
+     A                                      COLOR(WHT)
+     A                                      OVRDTA
+     A                                      OVRATR
+     A            ZPR2          35   B  8 19
+     A N16                                  DSPATR(UL)
+     A  16                                  DSPATR(PR)
+     A                                      CHECK(LC)
+     A                                      COLOR(WHT)
+     A                                      OVRDTA
+     A                                      OVRATR
+     A                                  9  9'Adresse :'
+     A            ZAD1          35   B  9 19
+     A N16                                  DSPATR(UL)
+     A  16                                  DSPATR(PR)
+     A                                      CHECK(LC)
+     A                                      COLOR(WHT)
+     A                                      OVRDTA
+     A                                      OVRATR
+     A            ZAD2          35   B 10 19
+     A N16                                  DSPATR(UL)
+     A  16                                  DSPATR(PR)
+     A                                      CHECK(LC)
+     A                                      COLOR(WHT)
+     A                                      OVRDTA
+     A                                      OVRATR
+     A            ZAD3          35   B 11 19
+     A N16                                  DSPATR(UL)
+     A  16                                  DSPATR(PR)
+     A                                      CHECK(LC)
+     A                                      COLOR(WHT)
+     A                                      OVRDTA
+     A                                      OVRATR
+     A                                 12  5'Code postal :'
+     A            ZCPO          10   B 12 19
+     A N16                                  DSPATR(UL)
+     A  16                                  DSPATR(PR)
+     A                                      COLOR(WHT)
+     A                                      OVRDTA
+     A                                      OVRATR
+     A                                 13 11'Ville :'
+     A            ZVIL          35   B 13 19
+     A N16                                  DSPATR(UL)
+     A  16                                  DSPATR(PR)
+     A                                      CHECK(LC)
+     A                                      COLOR(WHT)
+     A                                      OVRDTA
+     A                                      OVRATR
+     A                                 14  7'Téléphone :'
+     A            ZTEL          20   B 14 19
+     A N16                                  DSPATR(UL)
+     A  16                                  DSPATR(PR)
+     A                                      COLOR(WHT)
+     A                                      OVRDTA
+     A                                      OVRATR
+     A                                 14 41'Portable :'
+     A            ZPOR          20   B 14 52
+     A N16                                  DSPATR(UL)
+     A  16                                  DSPATR(PR)
+     A                                      COLOR(WHT)
+     A                                      OVRDTA
+     A                                      OVRATR
+     A                                 16  3'Date d''entrée :'
+     A            ZDAE           8Y 0B 16 19
+     A N17                                  DSPATR(UL)
+     A  17                                  DSPATR(PR)
+     A                                      EDTWRD('  /  /    ')
+     A                                      COLOR(WHT)
+     A                                      OVRDTA
+     A                                      OVRATR
+     A                                 16 31'Date de départ :'
+     A            ZDAS           8Y 0B 16 48
+     A N18                                  DSPATR(UL)
+     A  18                                  DSPATR(PR)
+     A                                      EDTWRD('  /  /    ')
+     A                                      COLOR(WHT)
+     A                                      OVRDTA
+     A                                      OVRATR
+     A                                 18 13'Crée le :'
+     A            ZDAC           8  0O 18 25
+     A                                      EDTWRD('  /  /    ')
+     A                                      COLOR(GRN)
+     A                                      OVRDTA
+     A                                 18 37'à :'
+     A            ZHEC           6  0O 18 41
+     A                                      EDTWRD('  :  :  ')
+     A                                      OVRDTA
+     A                                 18 51'par :'
+     A            ZUSC          10   O 18 57
+     A                                      OVRDTA
+     A                                 19 10'Modifié le :'
+     A            ZDAM           8  0O 19 25
+     A                                      EDTWRD('  /  /    ')
+     A                                      COLOR(GRN)
+     A                                      OVRDTA
+     A                                 19 37'à :'
+     A            ZHEM           6  0O 19 41
+     A                                      EDTWRD('  :  :  ')
+     A                                      OVRDTA
+     A                                 19 51'par :'
+     A            ZUSM          10   O 19 57
+     A                                      OVRDTA
+     A                                 23  3'F3=Exit   F4=Invite  F12=Annuler'
+     A                                      COLOR(BLU)
+     A            WFMCUR        10A  H
+     A            WZOCUR        10A  H
+     A            WPRCUR         4S 0H
+     A            WNMLGN         3S 0H
+     A            WNMCOL         3S 0H
+     A          R WMGSFL                    SFL
+     A                                      SFLMSGRCD(24)
+     A            WMGKEY                    SFLMSGKEY
+     A            WPGMQ                     SFLPGMQ
+     A          R WMGCTL                    SFLCTL(WMGSFL)
+     A                                      SFLSIZ(2)
+     A                                      SFLPAG(1)
+     A                                      OVERLAY
+     A  10                                  SFLINZ
+     A                                      SFLDSP
+     A                                      SFLDSPCTL
+     A  09                                  SFLEND
+     A            WPGMQ                     SFLPGMQ
