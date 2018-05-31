@@ -1,0 +1,24 @@
+      /* >>PRE-COMPILER<<                                                 */
+      /*   >>CRTCMD<<  CRTBNDCL SRCFILE(&SL/&SF) SRCMBR(&SM);             */
+      /*   >>IMPORTANT<<                                                  */
+      /*     >>PARM<<  PGM(&LI/&OB);                                      */
+      /*     >>PARM<<  OPTION(*EVENTF);                                   */
+      /*     >>PARM<<  DBGVIEW(*ALL);                                     */
+      /*   >>END-IMPORTANT<<                                              */
+      /*   >>CMD<<  DSPOBJD OBJ(&LI/*ALL) OBJTYPE(*ALL) DETAIL(*FULL) +   */
+      /*                    ASPDEV(*) OUTPUT(*OUTFILE)                +   */
+      /*                    OUTFILE(QTEMP/I_REF_OBJ) OUTMBR(*FIRST *ADD); */
+      /*   >>EXECUTE<<                                                    */
+      /* >>END-PRE-COMPILER<<                                             */
+             PGM        PARM(&BIBDEST &OPTIMIZE)
+
+             DCL        VAR(&OPTIMIZE) TYPE(*CHAR) LEN(6)
+             DCL        VAR(&BIBDEST) TYPE(*CHAR) LEN(10)
+
+ I_BUILDBND: CRTBNDDIR  BNDDIR(&BIBDEST/I_BUILDER) TEXT('Répertoire +
+             de liage du logiciel I_builder')
+             MONMSG     MSGID(CPF5D0B) EXEC(GOTO CMDLBL(I_BUILDBND))
+
+             ADDBNDDIRE BNDDIR(&BIBDEST/I_BUILDER) +
+                          OBJ((&BIBDEST/BUILDERSRV)) POSITION(*FIRST)
+             ENDPGM
