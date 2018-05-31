@@ -8,6 +8,7 @@
     /*                      &LI/RTVSRCSTD +                          */
     /*                      &LI/WFTPSCRIPT +                         */
     /*                      &LI/CONSTRUCT +                          */
+    /*                      &LI/GESTERR +                            */
     /*                      &LI/GSTERRSTR);                          */
     /*     >>PARM<<  BNDDIR(SERVICE);                                */
     /*     >>PARM<<  OPTION(*DUPPROC);                               */
@@ -23,4 +24,6 @@
                 EXPORT     SYMBOL(SOURCE_STANDARD)
                 EXPORT     SYMBOL(ENVRAPMEL)
                 EXPORT     SYMBOL(GSTERRSTR)
+                EXPORT     SYMBOL(GEST_ERREUR)
+
              ENDPGMEXP
