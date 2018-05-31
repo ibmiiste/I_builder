@@ -1,0 +1,14 @@
+             PGM        PARM(&NUMLOT &BIBOBJ &NOMOBJ &TYPOBJ)
+
+             dcl        &NUMLOT dec 6 0
+             dcl        &bibobj char 10
+             dcl        &nomobj char 10
+             dcl        &typobj char 10
+
+             /* Recherche et affichage de tous les objets de même nom et même */
+             /* type La procédure permet de reselectionner l'objet qui peut   */
+             /* nous intéresser et autres objets liés                         */
+
+
+
+

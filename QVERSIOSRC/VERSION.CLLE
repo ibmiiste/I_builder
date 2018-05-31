@@ -1,0 +1,11 @@
+             PGM        PARM(&CURLIB)
+
+             DCL        VAR(&CURLIB) TYPE(*CHAR) LEN(10)
+
+             CHGCURLIB  CURLIB(&CURLIB)
+             CRTDTAARA  DTAARA(NOUVLOT) TYPE(*DEC) LEN(6 0) VALUE(1) TEXT('Prochain numéro de +
+                          lot')
+
+             CRTBNDCL   PGM(CREABIBLOT)
+
+             ENDPGM

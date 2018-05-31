@@ -1,0 +1,25 @@
+             /* Création d'une bibliothèque de travail de lot                 */
+
+             PGM        PARM(&LIBELLE)
+
+             DCL        VAR(&NOUVLOT) TYPE(*DEC) LEN(6 0)
+             DCL        VAR(&BIBLOT) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&LIBELLE) TYPE(*CHAR) LEN(50)
+             dcl        &action *char 3 'CRT'
+             DCL        VAR(&CODE_RET) TYPE(*DEC) LEN(5) VALUE(0)
+
+             DCLPRCOPT  DFTACTGRP(*NO) ACTGRP(*NEW) BNDDIR(SERVICE)
+
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
+
+             CALLPRC    PRC(gestion_lot) PARM((&ACTION) (&NOUVLOT) +
+                          (&BIBLOT) (&LIBELLE))
+
+             CRTLIB     LIB(&BIBLOT) TYPE(*TEST) TEXT(&LIBELLE)
+
+             GOTO       CMDLBL(FIN)
+
+ ERREUR:     DMPCLPGM
+             CALLPRC    PRC(GEST_ERREUR)
+
+ FIN:        ENDPGM

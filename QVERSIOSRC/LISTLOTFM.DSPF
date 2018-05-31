@@ -1,0 +1,119 @@
+     A*%%TS  SD  20150713  134652  DEVOD       REL-V6R1M0  5761-WDS
+     A*%%EC
+     A                                      DSPSIZ(*DS4)
+     A                                      MSGLOC(24)
+     A                                      PRINT
+     A                                      HLPTITLE('Aide générale sur PGMF01')
+     A                                      HLPPNLGRP(PGMF01 PGMF01)
+     A                                      INDARA
+     A                                      ALTHELP(CA01)
+     A                                      HELP
+     A          R SFL01                     SFL
+     A  08                                  SFLNXTCHG
+     A            ZOPT           2   B  8  2
+     A  20                                  DSPATR(PR)
+     A            ZNUMLOT        6N 0O  8  6
+     A  30                                  COLOR(RED)
+     A            HNREC         10  0H
+     A            HTOUT          1   H
+     A            HMATR         10  0H
+     A            ZDESCLOT      80   B  8 14
+     A            ZETAPE        20   O  8 97
+     A          R FORE1                     SFLCTL(SFL01)
+     A                                      RTNCSRLOC(&WLICSR &WZOCSR &WPRCSR)
+     A                                      OVERLAY
+     A                                      PUTOVR
+     A N07                                  ROLLUP(02)
+     A                                      CSRLOC(WLIGN WCOLN)
+     A                                      CHANGE(91)
+     A N04                                  ERASE(SFL01)
+     A  04                                  SFLDSP
+
+     A  05                                  SFLDSPCTL
+     A  06                                  SFLCLR
+     A  07                                  SFLEND
+     A                                      SFLSIZ(15)
+     A                                      SFLPAG(14)
+     A                                      SFLCSRRRN(&WRACSR)
+     A            WRACSR         5S 0H
+     A            WRAN01         4S 0H      SFLRCDNBR
+     A            ZPGM          10   O  1  2
+     A                                      OVRDTA
+     A                                  1 57'Gestion des lots'
+     A                                      COLOR(WHT)
+     A            ZUSER         10   O  1122
+     A                                      OVRDTA
+     A            ZDATE          8  0O  2  2
+     A                                      EDTWRD('  /  /    ')
+     A                                      OVRDTA
+     A            ZHEUR          6  0O  2 14
+     A                                      EDTWRD('  :  :  ')
+     A                                      OVRDTA
+     A            ZJOB          10   O  2122
+     A                                      OVRDTA
+     A                                  4  3'Indiquez vos options, puis appuyez-
+     A                                       sur ENTREE.'
+     A                                      COLOR(BLU)
+     A                                  5  3'2=Modifier  3=Copier -
+     A                                      4=Supprimer   5=Afficher  -
+     A                                      6=Imprimer  99=Fin de contrat'
+     A                                      COLOR(BLU)
+     A                                  6  3'Selection par numéro :'
+     A            ZSNUMLOT       6N 0B  6 26
+     A                                      CHECK(LC)
+     A                                      COLOR(WHT)
+     A                                      OVRDTA
+     A                                  7  2'Opt N° Lot  Description           -
+     A                                                                         -
+     A                                                                Etape'
+     A                                      COLOR(WHT)
+     A            WLICSR        10A  H
+     A            WZOCSR        10A  H
+     A            WPRCSR         4S 0H
+     A            WLIGN          3S 0H
+     A            WCOLN          3S 0H
+     A                                  6 33'Par nom :'
+     A            ZSDESCLOT     80   B  6 43COLOR(WHT)
+     A          R FORB1
+     A                                      CF03
+     A                                      CF05
+     A                                      CF06
+     A                                      CF08
+     A                                      CF12
+     A                                      RTNCSRLOC(&WLICSR &WZOCSR &WPRCSR)
+     A                                      OVERLAY
+     A                                      PUTOVR
+     A                                      CSRLOC(WLIGN WCOLN)
+     A                                      CHANGE(91)
+     A                                      HLPCLR
+     A          H                           HLPARA(6 23 6 58)
+     A                                      HLPPNLGRP('ZSNOM' PGMF01)
+     A          H                           HLPARA(8 2 22 3)
+     A                                      HLPPNLGRP('ZOPT' PGMF01)
+     A                                 23  3'F3=Exit  F5=Réafficher  -
+     A                                      F6=Créer  F8=Imprimer  -
+     A                                      F12=Annuler'
+     A                                      COLOR(BLU)
+     A            WLICSR        10A  H
+     A            WZOCSR        10A  H
+     A            WPRCSR         4S 0H
+     A            WLIGN          3S 0H
+     A            WCOLN          3S 0H
+     A          R WSFMSG                    SFL
+     A                                      SFLMSGRCD(24)
+     A            WMGKEY                    SFLMSGKEY
+     A            WPGMQ                     SFLPGMQ
+     A          R WSFCTL                    SFLCTL(WSFMSG)
+     A                                      SFLSIZ(2)
+     A                                      SFLPAG(1)
+     A                                      OVERLAY
+     A  10                                  SFLINZ
+     A                                      SFLDSP
+     A                                      SFLDSPCTL
+     A  09                                  SFLEND
+     A            WPGMQ                     SFLPGMQ
+     A*%%RS+<record-sequences>
+     A*%%RS+ <sequence name="Sans titre">
+     A*%%RS+  <device type="display" width="132" height="27" />
+     A*%%RS+ </sequence>
+     A*%%RS </record-sequences>
