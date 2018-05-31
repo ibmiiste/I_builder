@@ -1,0 +1,94 @@
+:PNLGRP.
+:HELP NAME = 'PGMF02' .Aide étendue.
+:XH1.Ecran PGMF02.
+:P.
+Cet écran permet d'éditer les données d'un employé.
+:P.
+En mode création, le numéro de matricule sera calculé.
+:P.
+Les seules zones obligaroires sont le nom et la fonction.
+La date d'entrée sera, par défaut, la date du jour de saisie.
+:P.
+Les touches de fonction.
+:UL.
+:LI. F3 et F12 pour quitter le programme.
+:LI. F4 invite sur la fonction.
+:LI. F15 valide la suppression d'un enregistrement.
+:EUL.
+:EHELP.
+:HELP NAME = 'ZMATR' .PGMF02.
+:H1.Matricule.
+:P.
+Le numéro de matricule est calculé automatiquement lors de la création.
+Aucune modification n'est admise.
+:EHELP.
+:HELP NAME = 'ZFCOD'.PGMF02.
+:H1.Code fonction.
+:P.
+Ce code est obligatoire et doit correspondre à un code existant.
+:EHELP.
+:HELP NAME = 'ZNOM'.PGMF02.
+:H1.Nom de l'employé.
+:P.
+Cette zone est obligatoire.
+:EHELP.
+:HELP NAME = 'ZPR1'.PGMF02.
+:H1.Prénom.
+:P.
+Zone facultative. Ne saisir qu'un seul prénom.
+:EHELP.
+:HELP NAME = 'ZPR2'.PGMF02.
+:H1.Autres prénoms.
+:P.
+Zone facultative. On peut saisir plusieurs prénoms,
+séparés par une virgule.
+:EHELP.
+:HELP NAME = 'ZAD1'.PGMF02.
+:H1.Adresse 1.
+:P.
+Zone obligatoire. Modification autorisée.
+:EHELP.
+:HELP NAME = 'ZAD2'.PGMF02.
+:H1.Adresse 2.
+:P.
+Zone facultative.
+:EHELP.
+:HELP NAME = 'ZAD3'.PGMF02.
+:H1.Adresse 3.
+:P.
+Zone facultative.
+:EHELP.
+:HELP NAME = 'ZCPO'.PGMF02.
+:H1.Code postal.
+:P.
+Zone recommandée. Il n'y a pas de contrôle.
+:EHELP.
+:HELP NAME = 'ZVIL'.PGMF02.
+:H1.Ville.
+:P.
+Zone recommandée. Il n'y a pas de contrôle.
+:EHELP.
+:HELP NAME = 'ZTEL'.PGMF02.
+:H1.Téléphone.
+:P.
+Zone recommandée. Il n'y a pas de contrôle.
+:EHELP.
+:HELP NAME = 'ZPOR'.PGMF02.
+:H1.Portable.
+:P.
+Zone recommandée. Il n'y a pas de contrôle.
+Mais il vaut mieux saisir en cas d'urgence.
+:EHELP.
+:HELP NAME = 'ZDAE'.PGMF02.
+:H1.Date d'entrée dans la société.
+:P.
+Zone obligatoire. Il n'y a pas de contrôle en cas de saisie
+par défaut c'est la date du jour.
+:EHELP.
+:HELP NAME = 'ZDAS'.PGMF02.
+:H1.Date de sortie de la société.
+:P.
+Zone obligatoire lors du licenciement.
+Ou de fin de contrat.
+:EHELP.
+:EPNLGRP.

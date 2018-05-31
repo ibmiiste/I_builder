@@ -1,0 +1,47 @@
+:PNLGRP.
+:HELP NAME = 'PGMF01' .Aide étendue.
+:XH1.Ecran PGMF01.
+:P.
+Cet écran donne la liste des employés.
+:P.
+Les options
+:OL.
+:LI. Le choix 2 permet de modifier la fiche employé.
+:LI. Le choix 3 permet de créer une copie.
+:LI. Le choix 4 permet de supprimer une fiche, opération irrémédiable.
+:LI. Le choix 5 permet de visualiser une fiche.
+:LI. Le choix 6 lance l'édition d'une fiche. Routage sur imprimante.
+:LI. Le choix 99 est utilisé lorsqu'un employé quitte l'entreprise.
+:EOL.
+:P.
+Les touches de fonction.
+:UL.
+:LI. F3 et F12 pour quitter le programme.
+:LI. F5 fait un réaffichage de la liste.
+:LI. F6 permet de créer une fiche employé.
+:LI. F8 lance l'édition de toute la liste.
+:EUL.
+:P.
+Selection par nom.
+:P.
+Saisir un nom complet, ou une partie en terminant par *.
+Les majuscules et minuscules sont prises en compte.
+:EHELP.
+:HELP NAME = 'ZSNOM' .PGMF01.
+:H1.Sélection.
+:P.
+Saisir le nom de l'employé recherché, ou le début d'un nom en terminant
+par '*'.
+:XMP. Si la recherche n'a pas abouti, Sélection vide sera affiché.
+:EXMP.
+:EHELP.
+:HELP NAME = 'ZOPT' .PGMF01.
+:H1.Options.
+:P.
+Saisir une option devant la ligne choisie.
+Il est possible de saisir des options sur plusieurs ligne.
+Elles seront exécutées succesivement.
+:P.
+Si l'option n'existe pas, un message s'affichera.
+:EHELP.
+:EPNLGRP.
