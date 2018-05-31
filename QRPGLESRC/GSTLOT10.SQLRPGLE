@@ -1,14 +1,30 @@
-       ctl-opt debug decedit('0,') datedit(*dmy.);
-      //*********************************************************************
-      // CC 01/01/2009
-      // Liste du personnel
+      // >>PRE-COMPILER<<                                              */
+      //   >>CRTCMD<<  CRTSQLRPGI SRCFILE(&SL/&SF) SRCMBR(&SM);        */
+      //   >>IMPORTANT<<                                               */
+      //     >>PARM<<  OBJ(&LI/&OB);                                   */
+      //     >>PARM<<  OBJTYPE(*PGM);                                  */
+      //     >>PARM<<  OPTION(*EVENTF);                                */
+      //     >>PARM<<  RPGPPOPT(*LVL2);                                */
+      //     >>PARM<<  CLOSQLCSR(*ENDACTGRP);                          */
+      //     >>PARM<<  DATFMT(*ISO);                                   */
+      //     >>PARM<<  TIMFMT(*ISO);                                   */
+      //     >>PARM<<  COMMIT(*NONE);                                  */
+      //     >>PARM<<  COMPILEOPT(&U0);                                */
+      //   >>END-IMPORTANT<<                                           */
+      // >>EXECUTE<<                                                   */
+      // >>END-PRE-COMPILER<<                                          */
+       /copy qcpysrc,cpyctlstm
+       Ctl-opt bnddir('I_BUILDER');
+       //*********************************************************************
+      // ODR 31/05/2018
+      // Liste ddes lots
       //*********************************************************************
       // Déclaration des fichiers
-       dcl-f LSTLOT10FM workstn sfile(sfl01 :wran01) infds(dssfl1) indds(IndDs);
+       dcl-f GSTLOT10FM workstn sfile(sfl01 :wran01) infds(dssfl1) indds(IndDs);
 
 
        // Prototypes d'appel
-       Dcl-pr Gestion_Fiche Extpgm('LSTLOT20');
+       Dcl-pr Gestion_Fiche Extpgm('GSTLOT20');
          PCHX char(2);
          NREC CHAR(10);
        end-pr;
