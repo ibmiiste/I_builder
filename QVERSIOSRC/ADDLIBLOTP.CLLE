@@ -1,0 +1,19 @@
+             PGM        PARM(&NUMLOT)
+
+             DCL        VAR(&NUMLOT) TYPE(*DEC) LEN(6 0)
+             DCL        VAR(&BIBLOT) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&NUMLOTC) TYPE(*CHAR) LEN(6)
+             DCL        &INT *INT 2
+
+             CHGVAR     VAR(&NUMLOTC) VALUE(&NUMLOT)
+             DOFOR      VAR(&INT) FROM(1) TO(6) BY(1)
+                IF         COND(%SST(&NUMLOTC &INT 1) *EQ ' ') THEN(DO)
+                   CHGVAR     VAR(%SST(&NUMLOTC &INT 1)) VALUE('0')
+                ENDDO
+             ENDDO
+             CHGVAR     VAR(&BIBLOT) VALUE('LOT_' *TCAT &NUMLOTC)
+
+             CHGSYSLIBL LIB(&BIBLOT)
+             MONMSG     MSGID(CPF2103) EXEC(SNDPGMMSG MSGID(CPF2103) MSGF(QSYS/QCPFMSG))
+
+             ENDPGM
