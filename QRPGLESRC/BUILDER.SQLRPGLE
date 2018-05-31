@@ -18,6 +18,7 @@
 
        //Option de contrôle du programme
        /copy qcpysrc,cpyctlstm
+       Ctl-opt bnddir('I_BUILDER');
 
        /copy qcpysrc,UtiProc
 

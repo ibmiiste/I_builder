@@ -15,6 +15,8 @@
       // >>END-PRE-COMPILER<<                                          */
 
        /copy qcpysrc,cpyctlstm
+       Ctl-opt Bnddir('I_BUILDER');
+
        //*********************************************************************
        // OD 21/07/2015
        // Liste des objets à construire
