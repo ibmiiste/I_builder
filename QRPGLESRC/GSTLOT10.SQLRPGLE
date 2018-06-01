@@ -24,7 +24,7 @@
 
 
        // Prototypes d'appel
-       Dcl-pr Gestion_Fiche Extpgm('GSTLOT20');
+       Dcl-pr Gestion_Projet Extpgm('GSTLOT20');
          PCHX char(2);
          NREC CHAR(10);
        end-pr;
@@ -213,7 +213,7 @@
            PCHX = 'CR';
            Clear NREC;
 
-           Gestion_Fiche( PCHX
+           Gestion_Projet( PCHX
                          :NREC);
 
            EXSR INITSF;
@@ -356,7 +356,7 @@
            UPDATE(E) SFL01;
            // On aurait pu aussi faire IF..., en tout cas le choix est bon
            If g_Traitement_option;
-             Gestion_fiche( PCHX
+             Gestion_Projet( PCHX
                            :NREC);
              g_Selection_OK=*on;
            EndIf;
