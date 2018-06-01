@@ -1,0 +1,36 @@
+      /* >>PRE-COMPILER<<                                                 */
+      /*   >>CRTCMD<<  CRTCLMOD MODULE(&LI/&OB) SRCFILE(&SL/&SF) +        */
+      /*                 SRCMBR(&SM);                                     */
+      /*   >>IMPORTANT<<                                                  */
+      /*     >>PARM<<  OPTION(*EVENTF);                                   */
+      /*     >>PARM<<  DBGVIEW(*LIST);                                    */
+      /*   >>END-IMPORTANT<<                                              */
+      /*   >>EXECUTE<<                                                    */
+      /* >>END-PRE-COMPILER<<                                             */
+PGM
+
+DCL        VAR(&ODSRCL) TYPE(*CHAR) LEN(10)
+DCL        VAR(&ODSRCF) TYPE(*CHAR) LEN(10)
+DCL        VAR(&ODSRCM) TYPE(*CHAR) LEN(10)
+DCL        VAR(&RTNLIB) TYPE(*CHAR) LEN(10)
+DCL        VAR(&SRCTYP) TYPE(*CHAR) LEN(10)
+
+DCLF       FILE(LOT_000124/LSTOBJAPP)
+
+ LOOP: RCVF
+       MONMSG     MSGID(CPF0864) CMPDTA(*NONE) EXEC(GOTO +
+                    CMDLBL(FIN))
+       IF         COND(&ODSRCF *NE '           ') THEN(DO)
+          RTVMBRD +
+                    FILE(&ODSRCL/&ODSRCF) MBR(&ODSRCM) +
+                    RTNLIB(&RTNLIB) SRCTYPE(&SRCTYP)
+          MONMSG     MSGID(CPF3018 CPF3019 CPF3051 CPF327B CPF9803 +
+                       CPF9810 CPF9812 CPF9815 CPF9820 CPF9822) +
+                       EXEC(GOTO CMDLBL(LOOP))
+       ENDDO
+
+
+CALLPRC    PRC(INSERTION) PARM((&ODSRCL) (&ODSRCF) (&ODSRCM) +
+             (&SRCTYP) (&ODLBNM) (&ODOBNM) (&ODOBTP) (&ODOBAT))
+GOTO       CMDLBL(LOOP)
+ FIN: ENDPGM
