@@ -95,6 +95,9 @@
      A                                      COLOR(WHT)
      A N14                                  DSPATR(UL)
      A  14                                  DSPATR(PR)
+     A                                  4103'Statut'
+     A            ZSTATLOT      20   O  4111
+     A                                      COLOR(WHT)
      A          R WMGSFL                    SFL
      A                                      SFLMSGRCD(24)
      A            WMGKEY                    SFLMSGKEY
