@@ -13,14 +13,14 @@
       //   >>END-IMPORTANT<<                                           */
       // >>EXECUTE<<                                                   */
       // >>END-PRE-COMPILER<<                                          */
-       ctl-opt debug decedit('0,') datedit(*dmy.);
+       /copy qcpysrc,cpyctlstm
+       Ctl-opt bnddir('I_BUILDER');
       //****************************************************
       //                                                   *
       // Détail personnel                                  *
       //                                                   *
       //****************************************************
        dcl-f GSTLOT20FM workstn infds(wdsecr) indds(IndDs);
-       dcl-f Lots usage(*update);
        dcl-c WTXT1 '         Modification         ';
        dcl-c WTXT2 '             Copie            ';
        dcl-c WTXT3 '         Suppression          ';
@@ -37,6 +37,8 @@
        Dcl-s l_Donnees_a_controler Ind;
        Dcl-s l_traitenement_ecran Ind;
        Dcl-s l_MAJ_Lots Ind;
+       // Indicateur de valeur null en SQL
+       Dcl-s l_null Int(5);
 
        // Gestion des messages
        Dcl-s P_TYP Char(1);
@@ -316,7 +318,7 @@
            IF PCHX = 'CR' OR PCHX = 'CO';
              // On ne crée le matricule qu'en copie ou création
              EXEC SQL SELECT MAX( numlot)
-                        INTO :numlot
+                        INTO :numlot :l_null
                         FROM lots;
              If Sqlcode = c_Trouve;
                zNumlot+=1;
@@ -331,8 +333,8 @@
            IF l_MAJ_Lots;
              // on met à jour directement
              EXEC SQL UPDATE lots
-                         SET libelle_lots=:libellot,
-                             liste_biblio_projet=:listbibprj,
+                         SET libelle_lots=:zlibellot,
+                             liste_biblio_projet=:zlistbibpr,
                              description_lots=:zdescripl
                        WHERE lot_number=:numlot
                    ;
@@ -343,11 +345,11 @@
                                         liste_biblio_projet,
                                         description_lots,
                                         statuts_lot)
-                                VALUES( :numlot,
-                                        :libellot,
-                                        :listbibprj,
-                                        :descriplot,
-                                        :statlot)
+                                VALUES( :znumlot,
+                                        :zlibellot,
+                                        :zlistbibpr,
+                                        :zdescripl,
+                                        :zstatlot)
                     ;
            endif;
          ENDIF;
