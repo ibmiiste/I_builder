@@ -131,7 +131,7 @@
        end-ds;
 
        // le nombre de lignes afichables, déclaration a la volée
-       g_Nblis1 = 14;
+       g_Nblis1 = 17;
        // initialisation des variables système affichées à l'écran
        Zpgm = Procedure;
        Zdate=%Date;
@@ -149,7 +149,7 @@
        // Debut du traitement,
        EXSR INITSF;
        // Boucle d'attente de sortie
-       DOW g_Sortie = '1';
+       DOW g_Sortie;
          EXSR TRTSFL;
        ENDDO;
        // Indicateur de fin de programme
@@ -214,7 +214,7 @@
            Clear NREC;
 
            Gestion_Projet( PCHX
-                         :NREC);
+                          :NREC);
 
            EXSR INITSF;
            g_Fin_actions = *OFF;
@@ -278,6 +278,7 @@
          Sfldsp = *ON;
          Sfldspctl = *ON;
          // Positionnement en début de fichier
+         EXEC SQL CLOSE curs_lots02;
          EXEC SQL
            DECLARE curs_lots02 CURSOR FOR
              SELECT lot_number,
@@ -302,9 +303,9 @@
          // Top pour rafraichir l'écran, si besoin
          g_Selection_OK = *OFF;
 
-         If %Found;
-           READC SFL01;
-         EndIf;
+
+         READC SFL01;
+
          //
          DOW not %Eof;
            NREC=%Char(HNREC);
@@ -388,7 +389,7 @@
          // Remise à zéro du compteur de ligne, mais on pourrait faire autrement
          Clear NBRLIG;
       //
-         DOW Not %eof = '0'
+         DOW Sqlcode = 0
          AND NBRLIG < 17;
            // Remplissage des zones écran
            g_Selection_OK = *ON;
