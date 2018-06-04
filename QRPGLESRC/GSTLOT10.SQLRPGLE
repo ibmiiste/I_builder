@@ -30,7 +30,7 @@
        end-pr;
 
        Dcl-pr Impression Extpgm('LSTLOT2SCL');
-         PROWIDLOTS Like(ROWIDLOTS);
+         PROWIDLOTS SQLTYPE(ROWID);
        End-pr;
 
        Dcl-pr Gestion_message Extpgm('ENVMSG01');
@@ -39,6 +39,12 @@
          PMID Char(7);
          PMDT Char(99);
        End-pr;
+
+       // Gestion des objets du projet
+       // --------------------------------------------------
+       DCL-PR liste_objet_construction EXTPGM('LISTBUILD');
+         p_Rowid_projet Sqltype(Rowid) CONST;
+       END-PR ;
 
        // Déclaration des variables
        Dcl-s WSLIBELLOT char(50);
@@ -330,6 +336,8 @@
              PROWIDLOTS =  HROWIDLOTS;
              Impression( PROWIDLOTS);
              g_Traitement_option = *OFF;
+           WHEN (ZOPT = '12');
+             liste_objet_construction(Rowid);
            WHEN (ZOPT = '99');
              PCHX = 'PE';
            OTHER;
