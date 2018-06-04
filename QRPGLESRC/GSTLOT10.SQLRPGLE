@@ -238,7 +238,7 @@
          //    l'indicateur 20 conditionne la zone OPT (protection)
          Zoptpr = *OFF;
          // Initialisation de la variable de sélection
-         ZSLIBELLOT =  ZSLIBELLOTP;
+         ZSLIBELLOTP =  ZSLIBELLOT;
          Clear WSLIBELLOT;
       // Initialisation de la clé pour positionnement
          Clear NUMLOT;
@@ -248,9 +248,9 @@
            // Si différent de blank il y a selection
            g_Selection = *ON;
            Reset I;
-           g_Selection_generique = I = %Scan( '*'
-                                             :ZSLIBELLOT);
+           I = %Scan('*':ZSLIBELLOT);
 
+           //g_Selection_generique =
            IF I > 0;
              I=I-1;
              WSLIBELLOT=%Subst(ZSLIBELLOT:1:I);

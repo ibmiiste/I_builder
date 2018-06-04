@@ -3,6 +3,7 @@
      /*                 SRCMBR(&SM);                                     */
      /*   >>IMPORTANT<<                                                  */
      /*     >>PARM<<  OPTION(*EVENTF);                                   */
+     /*     >>PARM<<  RSTDSP(*YES);                                      */
      /*   >>END-IMPORTANT<<                                              */
      /*   >>EXECUTE<<                                                    */
      /* >>END-PRE-COMPILER<<                                             */
