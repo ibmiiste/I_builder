@@ -31,11 +31,11 @@
        // Prototype for procedure: liste_objet_construction
        // --------------------------------------------------
        DCL-PR liste_objet_construction EXTPGM('LISTBUILD');
-         projet CHAR(10) CONST;
+         ROWIDLOTS SQLTYPE(ROWID) CONST;
        END-PR ;
 
        DCL-PI liste_objet_construction;
-         projet CHAR(10) CONST;
+         ROWIDLOTS SQLTYPE(ROWID) CONST;
        END-PI ;
 
 

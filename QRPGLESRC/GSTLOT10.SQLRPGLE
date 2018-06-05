@@ -337,7 +337,11 @@
              Impression( PROWIDLOTS);
              g_Traitement_option = *OFF;
            WHEN (ZOPT = '12');
-             liste_objet_construction(Rowid);
+             EXEC SQL SELECT rowid_lots
+                        INTO :rowidlots
+                        FROM lots
+                       WHERE RRN( lots)=hnrec;
+             liste_objet_construction(rowidlots);
            WHEN (ZOPT = '99');
              PCHX = 'PE';
            OTHER;
