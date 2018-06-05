@@ -98,6 +98,8 @@
      A                                  4103'Statut'
      A            ZSTATLOT      20   O  4111
      A                                      COLOR(WHT)
+     A            ZROWIDLOTS    84   O 24  4COLOR(WHT)
+     A                                      NOCCSID
      A          R WMGSFL                    SFL
      A                                      SFLMSGRCD(24)
      A            WMGKEY                    SFLMSGKEY
