@@ -24,13 +24,13 @@
 
 
        // Prototypes d'appel
-       Dcl-pr Gestion_Fiche Extpgm('GSTLOT20');
+       Dcl-pr Gestion_Projet Extpgm('GSTLOT20');
          PCHX char(2);
          NREC CHAR(10);
        end-pr;
 
        Dcl-pr Impression Extpgm('LSTLOT2SCL');
-         PROWIDLOTS Like(ROWIDLOTS);
+         PROWIDLOTS SQLTYPE(ROWID);
        End-pr;
 
        Dcl-pr Gestion_message Extpgm('ENVMSG01');
@@ -39,6 +39,12 @@
          PMID Char(7);
          PMDT Char(99);
        End-pr;
+
+       // Gestion des objets du projet
+       // --------------------------------------------------
+       DCL-PR liste_objet_construction EXTPGM('LISTBUILD');
+         p_Rowid_projet Sqltype(Rowid) CONST;
+       END-PR ;
 
        // Déclaration des variables
        Dcl-s WSLIBELLOT char(50);
@@ -131,7 +137,7 @@
        end-ds;
 
        // le nombre de lignes afichables, déclaration a la volée
-       g_Nblis1 = 14;
+       g_Nblis1 = 17;
        // initialisation des variables système affichées à l'écran
        Zpgm = Procedure;
        Zdate=%Date;
@@ -149,7 +155,7 @@
        // Debut du traitement,
        EXSR INITSF;
        // Boucle d'attente de sortie
-       DOW g_Sortie = '1';
+       DOW g_Sortie;
          EXSR TRTSFL;
        ENDDO;
        // Indicateur de fin de programme
@@ -213,8 +219,8 @@
            PCHX = 'CR';
            Clear NREC;
 
-           Gestion_Fiche( PCHX
-                         :NREC);
+           Gestion_Projet( PCHX
+                          :NREC);
 
            EXSR INITSF;
            g_Fin_actions = *OFF;
@@ -238,7 +244,7 @@
          //    l'indicateur 20 conditionne la zone OPT (protection)
          Zoptpr = *OFF;
          // Initialisation de la variable de sélection
-         ZSLIBELLOT =  ZSLIBELLOTP;
+         ZSLIBELLOTP =  ZSLIBELLOT;
          Clear WSLIBELLOT;
       // Initialisation de la clé pour positionnement
          Clear NUMLOT;
@@ -248,9 +254,9 @@
            // Si différent de blank il y a selection
            g_Selection = *ON;
            Reset I;
-           g_Selection_generique = I = %Scan( '*'
-                                             :ZSLIBELLOT);
+           I = %Scan('*':ZSLIBELLOT);
 
+           //g_Selection_generique =
            IF I > 0;
              I=I-1;
              WSLIBELLOT=%Subst(ZSLIBELLOT:1:I);
@@ -278,6 +284,7 @@
          Sfldsp = *ON;
          Sfldspctl = *ON;
          // Positionnement en début de fichier
+         EXEC SQL CLOSE curs_lots02;
          EXEC SQL
            DECLARE curs_lots02 CURSOR FOR
              SELECT lot_number,
@@ -302,9 +309,9 @@
          // Top pour rafraichir l'écran, si besoin
          g_Selection_OK = *OFF;
 
-         If %Found;
-           READC SFL01;
-         EndIf;
+
+         READC SFL01;
+
          //
          DOW not %Eof;
            NREC=%Char(HNREC);
@@ -329,6 +336,8 @@
              PROWIDLOTS =  HROWIDLOTS;
              Impression( PROWIDLOTS);
              g_Traitement_option = *OFF;
+           WHEN (ZOPT = '12');
+             liste_objet_construction(Rowid);
            WHEN (ZOPT = '99');
              PCHX = 'PE';
            OTHER;
@@ -356,7 +365,7 @@
            UPDATE(E) SFL01;
            // On aurait pu aussi faire IF..., en tout cas le choix est bon
            If g_Traitement_option;
-             Gestion_fiche( PCHX
+             Gestion_Projet( PCHX
                            :NREC);
              g_Selection_OK=*on;
            EndIf;
@@ -388,7 +397,7 @@
          // Remise à zéro du compteur de ligne, mais on pourrait faire autrement
          Clear NBRLIG;
       //
-         DOW Not %eof = '0'
+         DOW Sqlcode = 0
          AND NBRLIG < 17;
            // Remplissage des zones écran
            g_Selection_OK = *ON;

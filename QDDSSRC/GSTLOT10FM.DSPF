@@ -3,6 +3,7 @@
      /*                 SRCMBR(&SM);                                     */
      /*   >>IMPORTANT<<                                                  */
      /*     >>PARM<<  OPTION(*EVENTF);                                   */
+     /*     >>PARM<<  RSTDSP(*YES);                                      */
      /*   >>END-IMPORTANT<<                                              */
      /*   >>EXECUTE<<                                                    */
      /* >>END-PRE-COMPILER<<                                             */
@@ -24,6 +25,7 @@
      A            HTOUT          1   H
      A            HNREC         10  0H
      A            ZNUMLOT   R        O  8  6REFFLD(LOTSF/NUMLOT *LIBL/LOTS)
+     A                                      EDTCDE(Z)
      A            ZLIBELLOT R        O  8 39REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
      A            ZLISTBIBPRR        O  8 14REFFLD(LOTSF/LISTBIBPRJ *LIBL/LOTS)
      A            ZBIBLOT   R        O  8 27REFFLD(LOTSF/BIBLOT *LIBL/LOTS)
@@ -75,7 +77,7 @@
      A            WLIGN          3S 0H
      A            WCOLN          3S 0H
      A            ZDATE           L  O  2  2DATFMT(*EUR)
-     A            ZHEUR           T  B  2 13TIMFMT(*EUR)
+     A            ZHEUR           T  O  2 13TIMFMT(*EUR)
      A          R FORB1
      A                                      CF03
      A                                      CF05

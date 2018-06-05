@@ -1,10 +1,19 @@
-     A                                      DSPSIZ(24 80 *DS3)
+     /* >>PRE-COMPILER<<                                                 */
+     /*   >>CRTCMD<<  CRTDSPF FILE(&LI/&OB) SRCFILE(&SL/&SF) +           */
+     /*                 SRCMBR(&SM);                                     */
+     /*   >>IMPORTANT<<                                                  */
+     /*     >>PARM<<  OPTION(*EVENTF);                                   */
+     /*   >>END-IMPORTANT<<                                              */
+     /*   >>EXECUTE<<                                                    */
+     /* >>END-PRE-COMPILER<<                                             */
+     A                                      DSPSIZ(*DS4)
      A                                      MSGLOC(24)
      A                                      PRINT
      A                                      HELP
      A                                      HLPPNLGRP('PGMF02' PGMF02)
      A                                      HLPTITLE('Détail personnel')
      A                                      ALTHELP(CA01)
+     A                                      INDARA
      A          R FORE1
      A                                      CF03
      A                                      CF04
@@ -15,186 +24,80 @@
      A                                      CSRLOC(WNMLGN WNMCOL)
      A                                      CHANGE(91)
      A                                      HLPCLR
-     A          H                           HLPARA(5 19 5 29)
-     A                                      HLPPNLGRP('ZMATR' PGMF02)
-     A          H                           HLPARA(5 44 5 47)
-     A                                      HLPPNLGRP('ZFCOD' PGMF02)
-     A          H                           HLPARA(6 19 6 54)
-     A                                      HLPPNLGRP('ZNOM' PGMF02)
-     A          H                           HLPARA(7 19 7 54)
-     A                                      HLPPNLGRP('ZPR1' PGMF02)
-     A          H                           HLPARA(8 19 8 54)
-     A                                      HLPPNLGRP('ZPR2' PGMF02)
-     A          H                           HLPARA(9 19 9 54)
-     A                                      HLPPNLGRP('ZAD1' PGMF02)
-     A          H                           HLPARA(10 19 10 54)
-     A                                      HLPPNLGRP('ZAD2' PGMF02)
-     A          H                           HLPARA(11 19 11 54)
-     A                                      HLPPNLGRP('ZAD3' PGMF02)
-     A          H                           HLPARA(12 19 12 29)
-     A                                      HLPPNLGRP('ZCPO' PGMF02)
-     A          H                           HLPARA(13 19 13 54)
-     A                                      HLPPNLGRP('ZVIL' PGMF02)
-     A          H                           HLPARA(14 19 14 39)
-     A                                      HLPPNLGRP('ZTEL' PGMF02)
-     A          H                           HLPARA(14 52 14 72)
-     A                                      HLPPNLGRP('ZPOR' PGMF02)
-     A          H                           HLPARA(16 19 16 29)
-     A                                      HLPPNLGRP('ZDAE' PGMF02)
-     A          H                           HLPARA(16 48 16 58)
-     A                                      HLPPNLGRP('ZDAS' PGMF02)
+     A          H
+     A                                      HLPARA(4 11 4 16)
+     A                                      HLPPNLGRP(FORE1 GSTPRJ20)
+     A          H
+     A                                      HLPARA(5 11 5 60)
+     A                                      HLPPNLGRP(FORE1 GSTPRJ20)
+     A          H
+     A                                      HLPARA(4 88 4 98)
+     A                                      HLPPNLGRP(FORE1 GSTPRJ20)
+     A          H
+     A                                      HLPARA(5 88 5 98)
+     A                                      HLPPNLGRP(FORE1 GSTPRJ20)
+     A          H
+     A                                      HLPARA(7 3 22 130)
+     A                                      HLPPNLGRP(FORE1 GSTPRJ20)
      A            ZPGM          10   O  1  2
      A                                      OVRDTA
-     A                                  1 31'Détail fiche personnel'
+     A                                  1 61'Détail Projet'
      A                                      COLOR(WHT)
-     A            ZUSER         10   O  1 70
-     A                                      OVRDTA
-     A            ZDATE          8  0O  2  2
-     A                                      EDTWRD('  /  /    ')
-     A                                      OVRDTA
-     A            ZHEUR          6  0O  2 14
-     A                                      EDTWRD('  :  :  ')
-     A                                      OVRDTA
-     A            ZMODE         30   O  2 27
+     A            ZDATE           L  O  2  2DATFMT(*EUR) OVRDTA
+     A            ZHEUR           T  B  2 13TIMFMT(*EUR) OVRDTA
+     A            ZMODE         30   O  2 53
      A                                      COLOR(WHT)
      A                                      OVRDTA
-     A            ZJOB          10   O  2 70
+     A            ZJOB          10   O  2122
      A                                      OVRDTA
-     A                                  5  7'Matricule :'
-     A            ZMATR         10Y 0   5 19
-     A                                      EDTCDE(Z)
-     A                                      COLOR(WHT)
-     A                                      OVRDTA
-     A                                  5 33'Fonction :'
-     A            ZFCOD          3   B  5 44
-     A N14                                  DSPATR(UL)
-     A  14                                  DSPATR(PR)
-     A                                      COLOR(WHT)
-     A                                      OVRDTA
-     A                                      OVRATR
-     A            ZFLIB         20   O  5 49
-     A                                      OVRDTA
-     A                                  6 13'Nom :'
-     A            ZNOM          35   B  6 19
-     A N15                                  DSPATR(UL)
-     A  15                                  DSPATR(PR)
-     A                                      CHECK(LC)
-     A                                      COLOR(WHT)
-     A                                      OVRDTA
-     A                                      OVRATR
-     A                                  7 10'Prénom :'
-     A            ZPR1          35   B  7 19
-     A N16                                  DSPATR(UL)
-     A  16                                  DSPATR(PR)
-     A                                      CHECK(LC)
-     A                                      COLOR(WHT)
-     A                                      OVRDTA
-     A                                      OVRATR
-     A            ZPR2          35   B  8 19
-     A N16                                  DSPATR(UL)
-     A  16                                  DSPATR(PR)
-     A                                      CHECK(LC)
-     A                                      COLOR(WHT)
-     A                                      OVRDTA
-     A                                      OVRATR
-     A                                  9  9'Adresse :'
-     A            ZAD1          35   B  9 19
-     A N16                                  DSPATR(UL)
-     A  16                                  DSPATR(PR)
-     A                                      CHECK(LC)
-     A                                      COLOR(WHT)
-     A                                      OVRDTA
-     A                                      OVRATR
-     A            ZAD2          35   B 10 19
-     A N16                                  DSPATR(UL)
-     A  16                                  DSPATR(PR)
-     A                                      CHECK(LC)
-     A                                      COLOR(WHT)
-     A                                      OVRDTA
-     A                                      OVRATR
-     A            ZAD3          35   B 11 19
-     A N16                                  DSPATR(UL)
-     A  16                                  DSPATR(PR)
-     A                                      CHECK(LC)
-     A                                      COLOR(WHT)
-     A                                      OVRDTA
-     A                                      OVRATR
-     A                                 12  5'Code postal :'
-     A            ZCPO          10   B 12 19
-     A N16                                  DSPATR(UL)
-     A  16                                  DSPATR(PR)
-     A                                      COLOR(WHT)
-     A                                      OVRDTA
-     A                                      OVRATR
-     A                                 13 11'Ville :'
-     A            ZVIL          35   B 13 19
-     A N16                                  DSPATR(UL)
-     A  16                                  DSPATR(PR)
-     A                                      CHECK(LC)
-     A                                      COLOR(WHT)
-     A                                      OVRDTA
-     A                                      OVRATR
-     A                                 14  7'Téléphone :'
-     A            ZTEL          20   B 14 19
-     A N16                                  DSPATR(UL)
-     A  16                                  DSPATR(PR)
-     A                                      COLOR(WHT)
-     A                                      OVRDTA
-     A                                      OVRATR
-     A                                 14 41'Portable :'
-     A            ZPOR          20   B 14 52
-     A N16                                  DSPATR(UL)
-     A  16                                  DSPATR(PR)
-     A                                      COLOR(WHT)
-     A                                      OVRDTA
-     A                                      OVRATR
-     A                                 16  3'Date d''entrée :'
-     A            ZDAE           8Y 0B 16 19
-     A N17                                  DSPATR(UL)
-     A  17                                  DSPATR(PR)
-     A                                      EDTWRD('  /  /    ')
-     A                                      COLOR(WHT)
-     A                                      OVRDTA
-     A                                      OVRATR
-     A                                 16 31'Date de départ :'
-     A            ZDAS           8Y 0B 16 48
-     A N18                                  DSPATR(UL)
-     A  18                                  DSPATR(PR)
-     A                                      EDTWRD('  /  /    ')
-     A                                      COLOR(WHT)
-     A                                      OVRDTA
-     A                                      OVRATR
-     A                                 18 13'Crée le :'
-     A            ZDAC           8  0O 18 25
-     A                                      EDTWRD('  /  /    ')
+     A                                 25  6'Crée le :'
+     A            ZDAC            L  O 25 18DATFMT(*EUR) OVRDTA
      A                                      COLOR(GRN)
+     A                                 25 30'à :'
+     A            ZHEC            T  O 25 34TIMFMT(*EUR) OVRDTA
+     A                                 25 44'par :'
+     A            ZUSC          10   O 25 50
      A                                      OVRDTA
-     A                                 18 37'à :'
-     A            ZHEC           6  0O 18 41
-     A                                      EDTWRD('  :  :  ')
-     A                                      OVRDTA
-     A                                 18 51'par :'
-     A            ZUSC          10   O 18 57
-     A                                      OVRDTA
-     A                                 19 10'Modifié le :'
-     A            ZDAM           8  0O 19 25
-     A                                      EDTWRD('  /  /    ')
+     A                                 26  3'Modifié le :'
+     A            ZDAM            L  O 26 18DATFMT(*EUR) OVRDTA
      A                                      COLOR(GRN)
+     A                                 26 30'à :'
+     A            ZHEM            T  O 26 34TIMFMT(*EUR) OVRDTA
+     A                                 26 44'par :'
+     A            ZUSM          10   O 26 50
      A                                      OVRDTA
-     A                                 19 37'à :'
-     A            ZHEM           6  0O 19 41
-     A                                      EDTWRD('  :  :  ')
-     A                                      OVRDTA
-     A                                 19 51'par :'
-     A            ZUSM          10   O 19 57
-     A                                      OVRDTA
-     A                                 23  3'F3=Exit   F4=Invite  F12=Annuler'
+     A                                 27  2'F3=Exit   F4=Invite  F12=Annuler'
      A                                      COLOR(BLU)
      A            WFMCUR        10A  H
      A            WZOCUR        10A  H
      A            WPRCUR         4S 0H
      A            WNMLGN         3S 0H
      A            WNMCOL         3S 0H
+     A                                  4  3'Numéro'
+     A                                  5  3'Titre'
+     A                                  6  3'Description du projet'
+     A            ZNUMLOT   R        O  4 11REFFLD(LOTSF/NUMLOT *LIBL/LOTS)
+     A                                      COLOR(WHT)
+     A            ZLIBELLOT R        B  5 11REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
+     A                                      COLOR(WHT)
+     A N14                                  DSPATR(UL)
+     A  14                                  DSPATR(PR)
+     A            ZDESCRIPL R        B  7  3REFFLD(LOTSF/DESCRIPLOT *LIBL/LOTS)
+     A                                      CNTFLD(128)
+     A                                      COLOR(WHT)
+     A N14                                  DSPATR(UL)
+     A  14                                  DSPATR(PR)
+     A                                  4 67'Bibliothèque dédiée'
+     A            ZBIBLOT   R        O  4 89REFFLD(LOTSF/BIBLOT *LIBL/LOTS)
+     A                                      COLOR(WHT)
+     A                                  5 67'Liste de biblothèques'
+     A            ZLISTBIBPRR        B  5 89REFFLD(LOTSF/LISTBIBPRJ *LIBL/LOTS)
+     A                                      COLOR(WHT)
+     A N14                                  DSPATR(UL)
+     A  14                                  DSPATR(PR)
+     A                                  4103'Statut'
+     A            ZSTATLOT      20   O  4111
+     A                                      COLOR(WHT)
      A          R WMGSFL                    SFL
      A                                      SFLMSGRCD(24)
      A            WMGKEY                    SFLMSGKEY
