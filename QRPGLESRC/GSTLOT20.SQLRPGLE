@@ -47,11 +47,19 @@
        Dcl-s P_MGDT Char(99);
 
 
+       // Gestion du ROWID
+       Dcl-s g_Rowidlots SQLTYPE(ROWID);
+
        // Constantes
 
-       // Valeur Sqlcode
+       // Constantes Sqlcode
        Dcl-c c_Trouve 0;
        Dcl-c c_Non_trouve 100;
+
+       // Prototype de sous-procédure externe
+       // Copy des procédures de l'outils i_Builder
+       /Copy Qcpysrc,Prtbuilder
+
 
        Dcl-pr Gestion_message Extpgm('ENVMSG01');
          P_TYP Char(1);
@@ -167,7 +175,7 @@
                          biblio_lot,
                          description_lots,
                          statuts_lot
-                    INTO :rowidlots,
+                    INTO :g_rowidlots,
                          :numlot,
                          :libellot,
                          :listbibprj,
@@ -189,6 +197,7 @@
          Zlistbibpr=Listbibprj;
          Zdescripl=Descriplot;
          Zstatlot=Statlot;
+         cvthc(%addr(zrowidlots): %addr(g_rowidlots): %Len(g_rowidlots)*2);  //make hex
        ENDIF;
        // Boucle d'attente de fin
        l_traitenement_ecran = *ON;
@@ -234,7 +243,7 @@
                                biblio_lot,
                                description_lots,
                                statuts_lot
-                          INTO :rowidlots,
+                          INTO :g_rowidlots,
                                :numlot,
                                :libellot,
                                :listbibprj,
@@ -301,7 +310,7 @@
                            biblio_lot,
                            description_lots,
                            statuts_lot
-                      INTO :rowidlots,
+                      INTO :g_rowidlots,
                            :numlot,
                            :libellot,
                            :biblot,
