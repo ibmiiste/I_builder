@@ -19,7 +19,19 @@
        //  INDICATEURS :
        //  xx -> xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
        //****************************************************************
-       // Option de compilation et de programme
+      * >>PRE-COMPILER<<                                              */
+      *   >>CRTCMD<<  CRTSQLRPGI SRCFILE(&SL/&SF) SRCMBR(&SM);        */
+      *   >>IMPORTANT<<                                               */
+      *     >>PARM<<  OBJ(&LI/&OB);                                   */
+      *     >>PARM<<  OBJTYPE(*MODULE);                               */
+      *     >>PARM<<  OPTION(*EVENTF);                                */
+      *     >>PARM<<  RPGPPOPT(*LVL2);                                */
+      *     >>PARM<<  CLOSQLCSR(*ENDACTGRP);                          */
+      *     >>PARM<<  DATFMT(*ISO);                                   */
+      *     >>PARM<<  TIMFMT(*ISO);                                   */
+      *   >>END-IMPORTANT<<                                           */
+      *   >>EXECUTE<<                                                 */
+      * >>END-PRE-COMPILER<<                                          */
        ctl-opt nomain;
 
       // dclaration des fichiers
