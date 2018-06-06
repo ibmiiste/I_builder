@@ -3,12 +3,16 @@
     /*   >>IMPORTANT<<                                               */
     /*     >>PARM<<  SRVPGM(&LI/&SM);                                */
     /*     >>PARM<<  MODULE(&LI/I_MRGMSGF   +                        */
+    /*                      &LI/BBMOD000R +                          */
+    /*                      &LI/ALEATOIRE +                          */
     /*                      &LI/LIVRAISON +                          */
     /*                      &LI/ENVRAPMEL +                          */
     /*                      &LI/RTVSRCSTD +                          */
     /*                      &LI/WFTPSCRIPT +                         */
+    /*                      &LI/SCRIPTFTP +                          */
     /*                      &LI/CONSTRUCT +                          */
     /*                      &LI/GESTERR +                            */
+    /*                      &LI/MAILERR +                            */
     /*                      &LI/GSTERRSTR);                          */
     /*     >>PARM<<  BNDDIR(SERVICE);                                */
     /*     >>PARM<<  OPTION(*DUPPROC);                               */
@@ -18,6 +22,8 @@
     /*   >>EXECUTE<<                                                 */
     /* >>END-PRE-COMPILER<<                                          */
              STRPGMEXP    PGMLVL(*CURRENT) LVLCHK(*YES) SIGNATURE('20170428')
+                EXPORT     SYMBOL(EXISTS)
+                EXPORT     SYMBOL(ALEATOIRE)
                 EXPORT     SYMBOL(LIVRAISON)
                 EXPORT     SYMBOL(I_MRGMSGF)
                 EXPORT     SYMBOL(CONSTRUCT)
@@ -25,5 +31,6 @@
                 EXPORT     SYMBOL(ENVRAPMEL)
                 EXPORT     SYMBOL(GSTERRSTR)
                 EXPORT     SYMBOL(GEST_ERREUR)
-
+                EXPORT     SYMBOL(MAILERR)
+                EXPORT     SYMBOL(SCRIPTFTP)
              ENDPGMEXP

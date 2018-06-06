@@ -1,9 +1,9 @@
-       /If defined(builder)
+       /If not defined(builder)
        // --------------------------------------------------
        // Prototype for procedure: builder
        // --------------------------------------------------
        DCL-PR builder EXTPGM('BUILDER');
-         P_Projet LIKE(R_NomObj) const;
+         p_rowid_char VARCHAR(100) const;
          P_Biblio_Lot LIKE(R_NomObj) const;
          P_Env_Dest CHAR(1) const;
          P_Optim_Compil CHAR(20);
