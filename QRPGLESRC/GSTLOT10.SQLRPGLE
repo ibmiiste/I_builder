@@ -30,7 +30,7 @@
        end-pr;
 
        Dcl-pr Impression Extpgm('LSTLOT2SCL');
-         PROWIDLOTS SQLTYPE(ROWID);
+         p_Rowid_projet  SQLTYPE(ROWID);
        End-pr;
 
        Dcl-pr Gestion_message Extpgm('ENVMSG01');
@@ -67,10 +67,13 @@
        Dcl-s PMDT Char(99);
 
        // Variables Lots
-       Dcl-s PROWIDLOTS like (ROWIDLOTS);
+       Dcl-s p_Rowid_projet SQLTYPE(ROWID);
        Dcl-s PCHX Char(2);
        // Numéro relatif d'enregistrement de la table LOTS
        Dcl-s g_numero_relatif Packed(15:0);
+
+       //ROWID en CHAR
+       Dcl-s g_rowidlots_char Varchar(100);
 
 
       // Indicateurs
@@ -227,10 +230,9 @@
          ENDIF;
          IF Imprimer;
            // F8 impression du fichier
-           Clear PROWIDLOTS;
            // On appelle le CL de routage sans soumission, sinon PGMF20CL
-           Impression( PROWIDLOTS);
-           clear PROWIDLOTS;
+           Impression(p_Rowid_projet);
+           clear p_Rowid_projet;
            g_Fin_actions = *OFF;
          ENDIF;
          // On ne fait ceci que s'il n'y a eu rien d'autre
@@ -315,7 +317,15 @@
          //
          DOW not %Eof;
            NREC=%Char(HNREC);
-           IF HTOUT = '1';
+           EXEC SQL SELECT rowid_lots
+                     INTO :p_rowid_projet
+                    FROM lots
+                    WHERE RRN( lots) = :nrec;
+           cvthc( %addr(g_rowidlots_char)
+                 :%addr(p_rowid_projet )
+                 :%Len(p_rowid_projet )*2);  //make hex
+
+           IF htout = '1';
              IF ZOPT='2' OR ZOPT='3' OR ZOPT='4' OR ZOPT='99';
                // Si l'employé à quitté on ne peut plus rien modifier
                ZOPT = '5 ';
@@ -333,15 +343,10 @@
            WHEN (ZOPT = '5') OR (ZOPT = ' 5');
              PCHX = 'AF';
            WHEN (ZOPT = '6') OR (ZOPT = ' 6');
-             PROWIDLOTS =  HROWIDLOTS;
-             Impression( PROWIDLOTS);
+             impression(g_rowidlots_char);
              g_Traitement_option = *OFF;
            WHEN (ZOPT = '12');
-             EXEC SQL SELECT rowid_lots
-                        INTO :rowidlots
-                        FROM lots
-                       WHERE RRN( lots)=hnrec;
-             liste_objet_construction(rowidlots);
+             liste_objet_construction(g_rowidlots_char);
            WHEN (ZOPT = '99');
              PCHX = 'PE';
            OTHER;
@@ -478,7 +483,6 @@
            Clear ZLISTBIBPR;
            Clear ZBIBLOT;
            Clear WDSFIC;
-           Clear HROWIDLOTS;
            Clear HNREC;
 
            // Ecriture du message sur la première ligne
