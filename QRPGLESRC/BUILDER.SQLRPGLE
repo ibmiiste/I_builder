@@ -11,9 +11,7 @@
       //     >>PARM<<  COMMIT(*NONE);                                  */
       //     >>PARM<<  COMPILEOPT(&U0);                                */
       //   >>END-IMPORTANT<<                                           */
-      // >>CMD<<  RMVBNDDIRE BNDDIR(SERVICE) OBJ((BERGERSRV));         */
       // >>EXECUTE<<                                                   */
-      // >>CMD<<  ADDBNDDIRE BNDDIR(SERVICE) OBJ((BERGERSRV));         */
       // >>END-PRE-COMPILER<<                                          */
 
        //Option de contrôle du programme
@@ -27,7 +25,7 @@
        /Copy Qcpysrc,Prtbuilder
 
        DCL-PI builder;
-         P_Projet LIKE(R_NomObj) const;
+         p_rowid_char VARCHAR(100) const;
          P_Biblio_Lot LIKE(R_NomObj) const;
          P_Env_Dest CHAR(1) const;
          P_Optim_Compil CHAR(20);
@@ -38,7 +36,7 @@
        END-PI ;
 
 
-       Dcl-S g_Projet LIKE(R_NomObj);
+       Dcl-S g_rowid_char LIKE(p_rowid_char);
        Dcl-S g_BibSrc LIKE(R_NomObj);
        Dcl-S g_FicSrc LIKE(R_NomObj);
        Dcl-S g_MbrSrc LIKE(R_NomObj);
@@ -55,11 +53,12 @@
 
          *InLr=*On;
 
+
          exec sql close list_obj;
          // positionnement en début de fichier
          EXEC SQL
            DECLARE list_obj CURSOR FOR
-             SELECT projet,
+             SELECT lots_uuid,
                     bibliotheque_source,
                     fichier_source,
                     membre_source,
@@ -67,14 +66,14 @@
                     objet_destination,
                     type_objet
                FROM list_objet_build
-               WHERE projet = :p_projet
+               WHERE lots_uuid = :g_rowid_char
                ORDER BY ordre;
 
          exec sql open list_obj;
 
          EXEC SQL
            FETCH list_obj
-             INTO :g_projet, :g_bibsrc, :g_ficsrc, :g_mbrsrc, :g_bibdst,
+             INTO :g_rowid_char, :g_bibsrc, :g_ficsrc, :g_mbrsrc, :g_bibdst,
                :g_objdst, :g_typobj ;
 
 
@@ -97,12 +96,12 @@
                        :g_Failed
                        :g_FileAttach);
            Else;
-             callp i_MrgMsgf( g_ObjDst + g_BibDst
-                             :g_BibSrc
-                             :g_MbrSrc
-                             :P_Sys_Dst
-                             :P_User
-                             :P_Mot_De_Passe);
+             i_MrgMsgf( g_ObjDst + g_BibDst
+                       :g_BibSrc
+                       :g_MbrSrc
+                       :P_Sys_Dst
+                       :P_User
+                       :P_Mot_De_Passe);
            EndIf;
 
            if P_Livr_Env_Dst=*on;
@@ -129,7 +128,7 @@
 
            EXEC SQL
              FETCH list_obj
-               INTO :g_projet, :g_bibsrc, :g_ficsrc, :g_mbrsrc, :g_bibdst,
+               INTO :g_rowid_char, :g_bibsrc, :g_ficsrc, :g_mbrsrc, :g_bibdst,
                  :g_objdst, :g_typobj ;
          enddo;
 

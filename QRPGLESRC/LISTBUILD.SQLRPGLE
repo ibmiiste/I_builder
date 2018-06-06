@@ -31,11 +31,11 @@
        // Prototype for procedure: liste_objet_construction
        // --------------------------------------------------
        DCL-PR liste_objet_construction EXTPGM('LISTBUILD');
-         projet CHAR(10) CONST;
+         P_Rowidlots Varchar(100) Const;
        END-PR ;
 
        DCL-PI liste_objet_construction;
-         projet CHAR(10) CONST;
+         P_Rowidlots Varchar(100) CONST;
        END-PI ;
 
 
@@ -57,7 +57,7 @@
        // local functions prototypes
        // prototypes fonctions locales
          Dcl-pr reincrement_liste_objet;
-           P_Projet like(R_NomObj);
+           P_Projet like(P_Rowidlots);
          End-Pr;
 
        // global variables
@@ -102,6 +102,7 @@
        Dcl-S g_BibSrc_pre LIKE(R_NomObj);
        Dcl-S g_FicSrc_pre LIKE(R_NomObj);
        Dcl-S g_MbrSrc_pre LIKE(R_NomObj);
+       Dcl-s p_rowid_char Varchar(100);
 
 
        // Touches de fonction
@@ -173,9 +174,8 @@
        // constantes
 
 
-
-      // main function
-      // fonction principale
+       // main function
+       // fonction principale
       /free
        monitor;
          // le nombre de lignes affichables, déclaration Ã  la volée
@@ -277,7 +277,7 @@
          // on ne fait ceci que s'il n'y a eu rien d'autre
          if Construction;
             g_optimize='*NONE';
-            builder( zprojet
+            builder( p_rowid_char
                     :''
                     :''
                     :g_optimize
@@ -335,28 +335,28 @@
          sflclr = *off;
          sfldsp = *on;
          sfldspctl = *on;
-         exec sql close list_obj;
+         EXEC SQL CLOSE list_obj;
          // positionnement en début de fichier
-         exec sql declare list_obj cursor for
-                    select rowid_build,
-                           Projet,
-                           Ordre,
-                           Bibliotheque_Source,
-                           Fichier_Source,
-                           Membre_Source,
-                           Bibliotheque_Destination,
-                           Objet_Destination,
-                           Type_objet
-                      from LIST_OBJET_BUILD
-                     where Projet=:zprojet
-                  order by ordre desc;
+         EXEC SQL DECLARE list_obj CURSOR FOR
+                    SELECT rowid_build,
+                           lots_uuid,
+                           ordre,
+                           bibliotheque_source,
+                           fichier_source,
+                           membre_source,
+                           bibliotheque_destination,
+                           objet_destination,
+                           type_objet
+                      FROM list_objet_build
+                     WHERE lots_uuid=:p_rowid_char
+                  ORDER BY ordre DESC;
 
          exec sql open list_obj;
          // chargement de la première page
          // lecture de l'enregistrement suivant
          EXEC SQL
            FETCH list_obj
-             INTO :g_rowid_buildw, :hprojet, :zordre, :zbibsrc, :zficsrc,
+             INTO :g_rowid_buildw, :hlots_uuid, :zordre, :zbibsrc, :zficsrc,
                :zmbrsrc, :zbibdst, :zobjdst, :ztypobj;
          exsr chgpag;
        endsr;
@@ -380,7 +380,7 @@
              SELECT 1
                INTO :g_verif
                FROM list_objet_build
-               WHERE projet = :zprojet AND
+               WHERE lots_uuid = :p_rowid_char AND
                      ordre = :zordrec;
            if sqlcode = 0;
              // envoyer un message pour dire que l'option n'existe pas
@@ -394,24 +394,24 @@
            Else;
 
              EXEC SQL
-               INSERT INTO List_Objet_Build(Rowid_Build,
-                                            Projet,
-                                            Ordre,
-                                            Bibliotheque_Source,
-                                            Fichier_Source,
-                                            Membre_Source,
-                                            Bibliotheque_Destination,
-                                            Objet_Destination,
-                                            Type_Objet)
+               INSERT INTO list_objet_build(rowid_build,
+                                            lots_uuid,
+                                            ordre,
+                                            bibliotheque_source,
+                                            fichier_source,
+                                            membre_source,
+                                            bibliotheque_destination,
+                                            objet_destination,
+                                            type_objet)
                  VALUES (DEFAULT,
-                         :Zprojet,
-                         :Zordrec,
-                         :Zbibsrcc,
-                         :Zficsrcc,
-                         :Zmbrsrcc,
-                         :Zbibdstc,
-                         :Zobjdstc,
-                         :Ztypobjc);
+                         :p_rowid_char,
+                         :zordrec,
+                         :zbibsrcc,
+                         :zficsrcc,
+                         :zmbrsrcc,
+                         :zbibdstc,
+                         :zobjdstc,
+                         :ztypobjc);
 
            EndIf;
 
@@ -438,7 +438,7 @@
               g_ROWID_BUILDW=g_ROWID_BUILD(wran01);
               EXEC SQL
                 UPDATE list_objet_build
-                  SET projet = :hprojet,
+                  SET lots_uuid = :p_rowid_char,
                       ordre = :zordre,
                       bibliotheque_source = :zbibsrc,
                       fichier_source = :zficsrc,
@@ -504,7 +504,7 @@
          enddo;
          // potentiellement il y a eu mise  jour, on pourrait affiner
          if g_alimsfl;
-           reincrement_liste_objet( hprojet);
+           reincrement_liste_objet(p_rowid_char);
            exsr initsf;
          ENDIF;
        endsr;
@@ -550,15 +550,15 @@
              write sfl01;
            endif;
            // lecture du suivant
-           exec sql fetch list_obj
-                   into :g_ROWID_BUILDW,
-                        :hprojet,
-                        :ZORDRE,
-                        :ZBIBSRC,
-                        :ZFICSRC,
-                        :ZMBRSRC,
-                        :ZBIBDST,
-                        :ZOBJDST,
+           EXEC SQL FETCH list_obj
+                   INTO :g_rowid_buildw,
+                        :hlots_uuid,
+                        :zordre,
+                        :zbibsrc,
+                        :zficsrc,
+                        :zmbrsrc,
+                        :zbibdst,
+                        :zobjdst,
                         :ztypobj;
          enddo;
          // on quitte la boucle soit en fin de page
@@ -598,7 +598,7 @@
 
        Dcl-Proc reincrement_liste_objet;
          Dcl-pi reincrement_liste_objet;
-           P_Projet like(R_NomObj);
+           P_Projet like(p_rowid_char);
          End-Pi;
 
          Dcl-S l_Projet like(R_NomObj);
@@ -621,10 +621,10 @@
            // positionnement en début de fichier
            EXEC SQL
              DECLARE list_obj_projet CURSOR FOR
-               SELECT projet,
+               SELECT lots_uuid,
                       ordre
                  FROM list_objet_build
-                 WHERE projet = :p_projet
+                 WHERE lots_uuid = :p_rowid_char
                  ORDER BY ordre,
                           RRN(list_objet_build) ;
 
