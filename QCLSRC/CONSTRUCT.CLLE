@@ -10,7 +10,7 @@
 
              PGM        PARM(&PREBIBSRC &PREFICSRC &PRESRCMBR &BIBDST +
                           &OBJDST &TYPOBJ &BIBSRC &FICSRC &MBRSRC +
-                          &OPTIMIZE &FAILED &FILEATTACH)
+                          &OPTIMIZE &FAILED &FILEATTACH &LISTBIB)
 
              DCL        VAR(&PREBIBSRC) TYPE(*CHAR) LEN(10)
              DCL        VAR(&PREFICSRC) TYPE(*CHAR) LEN(10)
@@ -37,10 +37,16 @@
                           ')
              DCL        VAR(&RTRSRCSTD) TYPE(*LGL)
              DCL        VAR(&FILEATTACH) TYPE(*CHAR) LEN(10000)
+             DCL        VAR(&LISTBIB) TYPE(*CHAR) LEN(10) /* Liste +
+                          de bibliothèque à utiliser avec la +
+                          commande POSLIB */
              DCL        VAR(&QUOTE) TYPE(*CHAR) LEN(1) VALUE('''')
 
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Génération d''un objet avec +
                           STRPREPRC') BNDDIR(SERVICE)
+
+             /* Mise en ligne des bibliothèque de l'application           */
+             POSLIB     LISTE(&LISTBIB) LIB(*NONE)
 
              /* Récupération du type de source                             */
              RTVMBRD    FILE(&BIBSRC/&FICSRC) MBR(&MBRSRC *SAME) +

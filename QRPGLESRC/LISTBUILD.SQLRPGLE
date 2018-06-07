@@ -31,17 +31,12 @@
        // Prototype for procedure: liste_objet_construction
        // --------------------------------------------------
        DCL-PR liste_objet_construction EXTPGM('LISTBUILD');
-         P_Rowidlots Varchar(100) Const;
+         p_Num_lot Packed(6:0) Const;
        END-PR ;
 
        DCL-PI liste_objet_construction;
-         P_Rowidlots Varchar(100) CONST;
+         p_Num_lot Packed(6:0) Const;
        END-PI ;
-
-
-       // external functions prototypes
-       // prototype fonctions externes
-       /copy qcpysrc,Prtbuilder
 
        // Gestion des messages
        dcl-pr gst_message_CL extpgm('ENVMSG01');
@@ -51,13 +46,14 @@
          a_mdt like(r_msgdta);
        end-pr;
 
-       // Prototype sous-procédures externe
-        /copy qcpysrc,prsmod000r
+       // external functions prototypes
+       // prototype fonctions externes
+       /copy qcpysrc,Prtbuilder
 
        // local functions prototypes
        // prototypes fonctions locales
          Dcl-pr reincrement_liste_objet;
-           P_Projet like(P_Rowidlots);
+           p_Lot Char(100) const Options(*Varsize);
          End-Pr;
 
        // global variables
@@ -74,6 +70,9 @@
        dcl-s a_fim like(r_nomobj);
        dcl-s a_mid like(r_numero_msg);
        dcl-s a_mdt like(r_msgdta);
+
+       Dcl-S g_rowid_char char(100);
+       Dcl-s g_Rowid_lots SQLTYPE(ROWID);
 
        dcl-s a_chx char(2);
        //dcl-s a_nrec like(r_uuid_db2);
@@ -102,8 +101,7 @@
        Dcl-S g_BibSrc_pre LIKE(R_NomObj);
        Dcl-S g_FicSrc_pre LIKE(R_NomObj);
        Dcl-S g_MbrSrc_pre LIKE(R_NomObj);
-       Dcl-s p_rowid_char Varchar(100);
-
+       Dcl-s g_list_biblio LIKE(R_NomObj);
 
        // Touches de fonction
        /copy qcpysrc,fonction
@@ -277,7 +275,7 @@
          // on ne fait ceci que s'il n'y a eu rien d'autre
          if Construction;
             g_optimize='*NONE';
-            builder( p_rowid_char
+            builder( g_rowid_char
                     :''
                     :''
                     :g_optimize
@@ -300,7 +298,18 @@
          g_wsobp=ZSOBJET;
          g_sobjet=*blank;
          // initialisation de la clé pour positionnement
-         zprojet=projet;
+
+         //Récupération de la list de bibliothèque
+         EXEC SQL SELECT libelle_lots,
+                         liste_biblio_projet,
+                         rowid_lots
+                    INTO :zprojet,
+                         :g_list_biblio,
+                         :g_rowid_lots
+                    FROM lots
+                   WHERE lot_number=:p_num_lot;
+
+         cvthc(%addr(g_rowid_char ): %addr(g_Rowid_lots): %Len(g_Rowid_lots)*2);  //make hex
          ZOBJDST=*blank;
          g_selection = *off;
          g_filtre = *off;
@@ -348,7 +357,7 @@
                            objet_destination,
                            type_objet
                       FROM list_objet_build
-                     WHERE lots_uuid=:p_rowid_char
+                     WHERE lots_uuid=:g_rowid_char
                   ORDER BY ordre DESC;
 
          exec sql open list_obj;
@@ -380,7 +389,7 @@
              SELECT 1
                INTO :g_verif
                FROM list_objet_build
-               WHERE lots_uuid = :p_rowid_char AND
+               WHERE lots_uuid = :g_rowid_char AND
                      ordre = :zordrec;
            if sqlcode = 0;
              // envoyer un message pour dire que l'option n'existe pas
@@ -404,7 +413,7 @@
                                             objet_destination,
                                             type_objet)
                  VALUES (DEFAULT,
-                         :p_rowid_char,
+                         :g_rowid_char,
                          :zordrec,
                          :zbibsrcc,
                          :zficsrcc,
@@ -438,7 +447,7 @@
               g_ROWID_BUILDW=g_ROWID_BUILD(wran01);
               EXEC SQL
                 UPDATE list_objet_build
-                  SET lots_uuid = :p_rowid_char,
+                  SET lots_uuid = :g_rowid_char,
                       ordre = :zordre,
                       bibliotheque_source = :zbibsrc,
                       fichier_source = :zficsrc,
@@ -474,7 +483,8 @@
                         :ZMBRSRC
                         :g_optimize
                         :g_Failed
-                        :g_FileAttach);
+                        :g_FileAttach
+                        :g_list_biblio);
               if g_Failed<>0;
                 EnvRapMel(g_FileAttach);
               EndIf;
@@ -504,7 +514,7 @@
          enddo;
          // potentiellement il y a eu mise  jour, on pourrait affiner
          if g_alimsfl;
-           reincrement_liste_objet(p_rowid_char);
+           reincrement_liste_objet(g_rowid_char);
            exsr initsf;
          ENDIF;
        endsr;
@@ -598,10 +608,10 @@
 
        Dcl-Proc reincrement_liste_objet;
          Dcl-pi reincrement_liste_objet;
-           P_Projet like(p_rowid_char);
+           p_Lot char(100) const Options(*Varsize);
          End-Pi;
 
-         Dcl-S l_Projet like(R_NomObj);
+         Dcl-S l_Lot like(p_Lot);
          Dcl-S l_Ordre packed(6:0);
 
          EXEC SQL
@@ -624,7 +634,7 @@
                SELECT lots_uuid,
                       ordre
                  FROM list_objet_build
-                 WHERE lots_uuid = :p_rowid_char
+                 WHERE lots_uuid = :p_lot
                  ORDER BY ordre,
                           RRN(list_objet_build) ;
 
@@ -632,7 +642,7 @@
              OPEN list_obj_projet;
 
            EXEC SQL
-             FETCH list_obj_projet INTO :l_projet, :l_ordre;
+             FETCH list_obj_projet INTO :l_lot, :l_ordre;
 
            Dow sqlcode=0;
              EXEC SQL
@@ -641,7 +651,7 @@
                  WHERE CURRENT OF list_obj_projet;
 
              EXEC SQL
-               FETCH list_obj_projet INTO :l_projet, :l_ordre;
+               FETCH list_obj_projet INTO :l_lot, :l_ordre;
            EndDo;
 
          End-proc;

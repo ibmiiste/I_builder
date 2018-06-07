@@ -18,25 +18,25 @@
        /copy qcpysrc,cpyctlstm
        Ctl-opt bnddir('I_BUILDER');
 
-       /copy qcpysrc,UtiProc
-
        /copy qcpysrc,Inh32766
 
        /Copy Qcpysrc,Prtbuilder
 
        DCL-PI builder;
-         p_rowid_char VARCHAR(100) const;
+         p_rowid_char CHAR(100) const options(*varsize);
          P_Biblio_Lot LIKE(R_NomObj) const;
          P_Env_Dest CHAR(1) const;
          P_Optim_Compil CHAR(20);
          P_Livr_Env_Dst IND const;
          P_Sys_Dst CHAR(32) const;
-         P_User LIKE(R_NomObj) const;
+         P_User LIKE(R_nomobj) const;
          P_Mot_De_Passe CHAR(10) const;
        END-PI ;
 
 
        Dcl-S g_rowid_char LIKE(p_rowid_char);
+       Dcl-s g_Rowid_lots SQLTYPE(ROWID);
+
        Dcl-S g_BibSrc LIKE(R_NomObj);
        Dcl-S g_FicSrc LIKE(R_NomObj);
        Dcl-S g_MbrSrc LIKE(R_NomObj);
@@ -50,11 +50,20 @@
        Dcl-S g_FileAttach char(10000);
        Dcl-S g_optimize char(20);
        Dcl-s g_option_donnees Char(1);
+       Dcl-s g_list_biblio Char(10);
 
          *InLr=*On;
 
 
-         exec sql close list_obj;
+         cvtch(%addr(g_Rowid_lots):%addr(g_rowid_char):%Len(g_rowid_char)/2);
+         //Récupération de la list de bibliothèque
+         EXEC SQL SELECT liste_biblio_projet
+                    INTO :g_list_biblio
+                    FROM lots
+                   WHERE rowid_lots=:g_rowid_lots
+                   ;
+
+         EXEC SQL CLOSE list_obj;
          // positionnement en début de fichier
          EXEC SQL
            DECLARE list_obj CURSOR FOR
@@ -94,7 +103,8 @@
                        :g_MbrSrc
                        :g_optimize
                        :g_Failed
-                       :g_FileAttach);
+                       :g_FileAttach
+                       :g_list_biblio);
            Else;
              i_MrgMsgf( g_ObjDst + g_BibDst
                        :g_BibSrc

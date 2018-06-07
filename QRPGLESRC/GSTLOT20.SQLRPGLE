@@ -31,6 +31,9 @@
        dcl-s PACT char(2);
        dcl-s PGFCT char(3);
 
+       // Modèles de variables
+       /copy qcpysrc,Inh32766
+
        // Indicateur Programme
        Dcl-s l_Confirmation_suppression Ind;
        Dcl-s l_Anomalie Ind;
