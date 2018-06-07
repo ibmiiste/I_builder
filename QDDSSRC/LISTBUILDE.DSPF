@@ -24,7 +24,7 @@
      A  30                                  COLOR(RED)
      A            ZDESCOBJET    50   B  8 45
      A            HNREC         40   H
-     A            HPROJET       10   H
+     A            HLOTS_UUID   100   H
      A            ZBIBDST       10   B  8 23
      A            ZBIBSRC       10   B  8 97
      A            ZFICSRC       10   B  8110

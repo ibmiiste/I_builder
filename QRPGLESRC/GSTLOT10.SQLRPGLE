@@ -30,7 +30,7 @@
        end-pr;
 
        Dcl-pr Impression Extpgm('LSTLOT2SCL');
-         PROWIDLOTS SQLTYPE(ROWID);
+         p_Num_lot Packed(6:0) Const;
        End-pr;
 
        Dcl-pr Gestion_message Extpgm('ENVMSG01');
@@ -40,11 +40,16 @@
          PMDT Char(99);
        End-pr;
 
+       /Copy Qcpysrc,Prtbuilder
+
        // Gestion des objets du projet
        // --------------------------------------------------
        DCL-PR liste_objet_construction EXTPGM('LISTBUILD');
-         p_Rowid_projet Sqltype(Rowid) CONST;
+         p_Num_lots Packed(6:0) Const;
        END-PR ;
+
+       // Modèles de variables
+       /copy qcpysrc,inh32766
 
        // Déclaration des variables
        Dcl-s WSLIBELLOT char(50);
@@ -67,10 +72,12 @@
        Dcl-s PMDT Char(99);
 
        // Variables Lots
-       Dcl-s PROWIDLOTS like (ROWIDLOTS);
+       Dcl-s p_Num_lot packed(6:0);
+       // Action transmise à gestion lot
        Dcl-s PCHX Char(2);
        // Numéro relatif d'enregistrement de la table LOTS
        Dcl-s g_numero_relatif Packed(15:0);
+
 
 
       // Indicateurs
@@ -227,10 +234,9 @@
          ENDIF;
          IF Imprimer;
            // F8 impression du fichier
-           Clear PROWIDLOTS;
            // On appelle le CL de routage sans soumission, sinon PGMF20CL
-           Impression( PROWIDLOTS);
-           clear PROWIDLOTS;
+           Impression(Numlot);
+           clear p_Num_lot;
            g_Fin_actions = *OFF;
          ENDIF;
          // On ne fait ceci que s'il n'y a eu rien d'autre
@@ -315,7 +321,7 @@
          //
          DOW not %Eof;
            NREC=%Char(HNREC);
-           IF HTOUT = '1';
+           IF htout = '1';
              IF ZOPT='2' OR ZOPT='3' OR ZOPT='4' OR ZOPT='99';
                // Si l'employé à quitté on ne peut plus rien modifier
                ZOPT = '5 ';
@@ -333,11 +339,10 @@
            WHEN (ZOPT = '5') OR (ZOPT = ' 5');
              PCHX = 'AF';
            WHEN (ZOPT = '6') OR (ZOPT = ' 6');
-             PROWIDLOTS =  HROWIDLOTS;
-             Impression( PROWIDLOTS);
+             impression(Numlot);
              g_Traitement_option = *OFF;
            WHEN (ZOPT = '12');
-             liste_objet_construction(Rowid);
+             liste_objet_construction(numlot);
            WHEN (ZOPT = '99');
              PCHX = 'PE';
            OTHER;
@@ -474,7 +479,6 @@
            Clear ZLISTBIBPR;
            Clear ZBIBLOT;
            Clear WDSFIC;
-           Clear HROWIDLOTS;
            Clear HNREC;
 
            // Ecriture du message sur la première ligne

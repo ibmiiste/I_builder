@@ -1,9 +1,9 @@
-       /If defined(builder)
+       /If not defined(builder)
        // --------------------------------------------------
        // Prototype for procedure: builder
        // --------------------------------------------------
        DCL-PR builder EXTPGM('BUILDER');
-         P_Projet LIKE(R_NomObj) const;
+         p_rowid_char Char(100) const Options(*Varsize);
          P_Biblio_Lot LIKE(R_NomObj) const;
          P_Env_Dest CHAR(1) const;
          P_Optim_Compil CHAR(20);
@@ -14,7 +14,7 @@
        END-PR ;
        /endif
 
-       /If defined(Livraison)
+       /If not defined(Livraison)
        //---------------------------------------------------
        // Préparation de la livraison
        //---------------------------------------------------
@@ -27,7 +27,7 @@
        End-Pr;
        /endif
 
-       /If defined(i_MrgMsgf)
+       /If not defined(i_MrgMsgf)
        // --------------------------------------------------
        // Prototype for Programme:Envoi de message vers système distant
        // --------------------------------------------------
@@ -41,7 +41,7 @@
        End-Pr;
        /endif
 
-       /If defined(Cvthc)
+       /If not defined(Cvthc)
        //---------------------------------------------------------
        // Convert Hex to Character
        dcl-pr cvthc extproc(*dclcase);
@@ -50,3 +50,49 @@
         *n int(10) value; // receiver length
        end-pr;
        /endif
+
+       /If not defined(CVTCH)
+       //---------------------------------------------------------
+       // Convert Character to HEX
+       dcl-pr cvtch extproc(*dclcase);
+        *n pointer value; // receiver pointer
+        *n pointer value; // source pointer
+        *n int(10) value; // HexLen
+       end-pr;
+       /endif
+
+       /If not defined(Construct)
+       // --------------------------------------------------
+       // Prototype for procedure: Construct
+       // --------------------------------------------------
+       DCL-PR Construct;
+         P_PreBibSrc CHAR(10) CONST;
+         P_PreFicSrc CHAR(10) CONST;
+         P_UseSrcMbr CHAR(10) CONST;
+         P_BibDst CHAR(10) CONST;
+         P_ObjDst CHAR(10) CONST;
+         P_TypObj char(7) CONST;
+         P_BibSrc CHAR(10)  CONST;
+         P_FicSrc CHAR(10)  CONST;
+         P_MbrSrc CHAR(10) CONST;
+         P_Optimize CHAR(20);
+         P_Failed PACKED(10:0);
+         P_FileAttach char(10000);
+         P_liste_biblio Like(R_Nomobj);
+       END-PR ;
+       /Endif
+
+       /If not defined(EnvRapMel)
+       // --------------------------------------------------
+       // Prototype for procedure: Envoi d'un mail avec des pièces attachées au
+       //                          user du job
+       // --------------------------------------------------
+       DCL-PR EnvRapMel;
+         P_FileAttach char(10000);
+       END-PR ;
+       /Endif
+
+       /If not defined(gest_erreur)
+       // Prototype de la gestion d'erreur
+       dcl-pr gest_erreur end-pr;
+       /Endif

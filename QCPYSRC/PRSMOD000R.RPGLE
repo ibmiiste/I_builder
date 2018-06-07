@@ -266,7 +266,8 @@
        dcl-pr adresse_valide ind;
          p_adresse_mail like(r_adress_email) const;
        END-Pr;
-              // Manipulation de date
+
+       // Manipulation de date
        // Traiement des date EURO
        dcl-pr Format_date like(r_datechar);
          p_date date const;
