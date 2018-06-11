@@ -23,7 +23,7 @@
        /Copy Qcpysrc,Prtbuilder
 
        DCL-PI builder;
-         p_rowid_char CHAR(100) const options(*varsize);
+         p_num_lot Packed(6:0);
          P_Biblio_Lot LIKE(R_NomObj) const;
          P_Env_Dest CHAR(1) const;
          P_Optim_Compil CHAR(20);
@@ -34,7 +34,7 @@
        END-PI ;
 
 
-       Dcl-S g_rowid_char LIKE(p_rowid_char);
+       Dcl-S g_rowid_char Char(100);
        Dcl-s g_Rowid_lots SQLTYPE(ROWID);
 
        Dcl-S g_BibSrc LIKE(R_NomObj);
@@ -51,17 +51,20 @@
        Dcl-S g_optimize char(20);
        Dcl-s g_option_donnees Char(1);
        Dcl-s g_list_biblio Char(10);
+       Dcl-s g_num_lot Packed(6:0);
 
          *InLr=*On;
+         g_Num_lot=p_Num_lot;
 
-
-         cvtch(%addr(g_Rowid_lots):%addr(g_rowid_char):%Len(g_rowid_char)/2);
          //Récupération de la list de bibliothèque
-         EXEC SQL SELECT liste_biblio_projet
-                    INTO :g_list_biblio
+         EXEC SQL SELECT liste_biblio_projet,
+                         rowid_lots
+                    INTO :g_list_biblio,
+                         :g_rowid_lots
                     FROM lots
-                   WHERE rowid_lots=:g_rowid_lots
+                   WHERE lot_number=:g_num_lot
                    ;
+         Cvthc(%Addr(g_Rowid_char):%addr(g_Rowid_lots):%Len(g_Rowid_lots)*2);
 
          EXEC SQL CLOSE list_obj;
          // positionnement en début de fichier
@@ -75,7 +78,7 @@
                     objet_destination,
                     type_objet
                FROM list_objet_build
-               WHERE lots_uuid = :g_rowid_char
+               WHERE lots_uuid=:g_rowid_char
                ORDER BY ordre;
 
          exec sql open list_obj;

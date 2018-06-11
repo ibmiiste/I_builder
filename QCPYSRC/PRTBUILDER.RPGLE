@@ -3,7 +3,7 @@
        // Prototype for procedure: builder
        // --------------------------------------------------
        DCL-PR builder EXTPGM('BUILDER');
-         p_rowid_char Char(100) const Options(*Varsize);
+         p_num_lot packed(6:0);
          P_Biblio_Lot LIKE(R_NomObj) const;
          P_Env_Dest CHAR(1) const;
          P_Optim_Compil CHAR(20);

@@ -108,6 +108,7 @@
      A                                      CSRLOC(WLIGN WCOLN)
      A                                      CHANGE(91)
      A                                      HLPCLR
+     A                                      CF10
      A          H                           HLPARA(6 23 6 58)
      A                                      HLPPNLGRP('ZSNOM' PGMF01)
      A          H                           HLPARA(8 2 26 3)

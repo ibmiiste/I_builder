@@ -74,6 +74,8 @@
        Dcl-S g_rowid_char char(100);
        Dcl-s g_Rowid_lots SQLTYPE(ROWID);
 
+       Dcl-s g_Num_lot Packed(6:0);
+
        dcl-s a_chx char(2);
        //dcl-s a_nrec like(r_uuid_db2);
        //dcl-s a_uuid like(r_uuid_db2);
@@ -275,7 +277,7 @@
          // on ne fait ceci que s'il n'y a eu rien d'autre
          if Construction;
             g_optimize='*NONE';
-            builder( g_rowid_char
+            builder( g_Num_lot
                     :''
                     :''
                     :g_optimize
@@ -297,7 +299,7 @@
          // initialisation de la variable de sélection
          g_wsobp=ZSOBJET;
          g_sobjet=*blank;
-         // initialisation de la clé pour positionnement
+         g_Num_lot=p_num_lot;
 
          //Récupération de la list de bibliothèque
          EXEC SQL SELECT libelle_lots,
