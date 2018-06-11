@@ -43,7 +43,7 @@
              DCL        VAR(&QUOTE) TYPE(*CHAR) LEN(1) VALUE('''')
 
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Génération d''un objet avec +
-                          STRPREPRC') BNDDIR(SERVICE)
+                          STRPREPRC') BNDDIR(I_BUILDER)
 
              /* Mise en ligne des bibliothèque de l'application           */
              POSLIB     LISTE(&LISTBIB) LIB(*NONE)
