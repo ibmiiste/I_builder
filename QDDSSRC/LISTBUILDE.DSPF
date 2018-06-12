@@ -109,13 +109,16 @@
      A                                      CHANGE(91)
      A                                      HLPCLR
      A                                      CF10
+     A                                      CF09
+     A                                      CF11
      A          H                           HLPARA(6 23 6 58)
      A                                      HLPPNLGRP('ZSNOM' PGMF01)
      A          H                           HLPARA(8 2 26 3)
      A                                      HLPPNLGRP('ZOPT' PGMF01)
      A                                 26  3'F3=Exit  F5=Réafficher  F6=Créer  -
-     A                                      F8=Imprimer  F10=Construction  F12=-
-     A                                      Annuler'
+     A                                      F8=Imprimer  F09=Construction  F10=-
+     A                                      Livraison recette  F11=Livraison pr-
+     A                                      oduction  F12=Annuler'
      A                                      COLOR(BLU)
      A            WLICSR        10A  H
      A            WZOCSR        10A  H

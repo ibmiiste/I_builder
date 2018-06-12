@@ -93,7 +93,9 @@
        dcl-s g_ROWID_BUILDW sqltype(rowid);
 
        // Redéfinission des touches de fonction
-       Dcl-S Construction ind Based(P_INKJ);
+       Dcl-S Construction ind Based(P_INKI);
+       Dcl-S Livraison_recette ind Based(P_INKJ);
+       Dcl-S Livraison_production ind Based(P_INKK);
 
 
        // Appel à CONSTRUCT
@@ -285,6 +287,30 @@
                     :''
                     :''
                     :'');
+         EndIf;
+
+         if Livraison_recette;
+            g_optimize='*NONE';
+            builder( g_Num_lot
+                    :''
+                    :''
+                    :g_optimize
+                    :'1'
+                    :'CICA95'
+                    :'DRUBIGNY'
+                    :'DANIEL1E01');
+         EndIf;
+
+         if Livraison_production;
+            g_optimize='*NONE';
+            builder( g_Num_lot
+                    :''
+                    :''
+                    :g_optimize
+                    :'1'
+                    :'CICA98'
+                    :'DRUBIGNY'
+                    :'DANIEL1E01');
          EndIf;
 
          if g_trt_opt;
