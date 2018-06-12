@@ -1,18 +1,3 @@
-      // >>PRE-COMPILER<<                                              */
-      //   >>CRTCMD<<  CRTSQLRPGI SRCFILE(&SL/&SF) SRCMBR(&SM);        */
-      //   >>IMPORTANT<<                                               */
-      //     >>PARM<<  OBJ(&LI/&OB);                                   */
-      //     >>PARM<<  OBJTYPE(*PGM);                                  */
-      //     >>PARM<<  OPTION(*EVENTF);                                */
-      //     >>PARM<<  RPGPPOPT(*LVL2);                                */
-      //     >>PARM<<  CLOSQLCSR(*ENDACTGRP);                          */
-      //     >>PARM<<  DATFMT(*ISO);                                   */
-      //     >>PARM<<  TIMFMT(*ISO);                                   */
-      //     >>PARM<<  COMMIT(*NONE);                                  */
-      //     >>PARM<<  COMPILEOPT(&U0);                                */
-      //   >>END-IMPORTANT<<                                           */
-      // >>EXECUTE<<                                                   */
-      // >>END-PRE-COMPILER<<                                          */
        ctl-opt debug decedit('0,') datedit(*dmy.);
       //*********************************************************************
       // OD 12/06/2018
@@ -23,7 +8,7 @@
 
 
        // Prototypes d'appel
-       Dcl-pr Gestion_Projet Extpgm('GSTPRJ20');
+       Dcl-pr Gestion_Projet Extpgm('GSTPRJ02');
          PCHX char(2);
          NREC char(10);
        end-pr;
@@ -32,7 +17,7 @@
          PMAT char(10);
        End-pr;
 
-       Dcl-pr Gestion_message Extpgm('ENVMSG01');
+       Dcl-pr Gestion_message Extpgm('PGM001CL');
          PTYP Char(1);
          PFIM Char(10);
          PMID Char(7);
@@ -40,11 +25,11 @@
        End-pr;
 
        // Déclaration des variables
-       Dcl-s WSNOM char(50);
-       Dcl-s WSNOP char(50);
+       Dcl-s WSPROJETS char(35);
+       Dcl-s WSNOP char(35);
        Dcl-s I packed(3);
 
-       // Numéro relatif d"enregistrement de projets
+       // Numéro relatif d"enregistrement de FIC00P
        Dcl-s g_Num_rel Like(r_Numero_relatif);
 
        // Gestion sous-fichier
@@ -62,7 +47,7 @@
        Dcl-s PMDT Char(99);
 
        // Variables personnel
-       Dcl-s PPRJNBR Char(10);
+       Dcl-s PMAT Char(10);
        Dcl-s PCHX Char(2);
        Dcl-s NREC Char(10);
 
@@ -110,7 +95,7 @@
        //Héritage des templates
        /copy qcpysrc,Inhtemplat
 
-       // la ds de la table projets
+       // la ds de la table FIC00P
        Dcl-ds PROJETS Extname('PROJETS') End-ds;
 
        // le nombre de lignes afichables, déclaration a la volée
@@ -132,7 +117,7 @@
        // Debut du traitement,
        EXSR INITSF;
        // Boucle d'attente de sortie
-       DOW g_Sortie;
+       DOW g_Sortie = '1';
          EXSR TRTSFL;
        ENDDO;
        // Indicateur de fin de programme
@@ -165,7 +150,7 @@
 
       // Indicateur pour ne pas tester d'autres actions
          g_Fin_actions = *ON;
-         IF Rollup;
+         IF Rollup = '1';
            // page suivante
            EXSR CHGPAG;
            g_Fin_actions = *OFF;
@@ -178,25 +163,25 @@
          ENDIF;
 
          // touches F3 et F12
-         IF Sortie OR
-            Annuler;
+         IF Sortie = '1' OR
+               Annuler = '1';
            // on met l'indicateur à Off = fin du programme
            g_Sortie = *OFF;
            g_Fin_actions = *OFF;
          ENDIF;
          //
-         IF Rafraichir;
+         IF Rachaichir = '1';
            // F5 Rafraichissement de l'écran
            EXSR INITSF;
            g_Fin_actions = *OFF;
          ENDIF;
          //
-         IF Creer;
+         IF Creer = '1';
            // F6 création d'un nouveau matricule
            PCHX = 'CR';
            Clear NREC;
 
-           Gestion_projet( PCHX
+           Gestion_Fiche( PCHX
                          :NREC);
 
            EXSR INITSF;
@@ -204,13 +189,13 @@
          ENDIF;
          IF Imprimer;
            // F8 impression du fichier
-           clear PPRJNBR;
+           clear PMAT;
            // On appelle le CL de routage sans soumission, sinon PGMF20CL
-           Impression( PPRJNBR);
+           Impression( PMAT);
            g_Fin_actions = *OFF;
          ENDIF;
          // On ne fait ceci que s'il n'y a eu rien d'autre
-         IF g_Fin_actions;
+         IF g_Fin_actions = '1';
            EXSR TRTOPT;
          ENDIF;
          // On recommence la boucle d'attente
@@ -221,8 +206,9 @@
          Zoptpr = *OFF;
          // Initialisation de la variable de sélection
          WSNOP=ZSNOM;
-         Clear WSNOM;
+         Clear WSPROJETS;
       // Initialisation de la clé pour positionnement
+         Clear FIFON;
          Clear PROJETS;
          g_Selection = *OFF;
          g_Selection_generique = *OFF;
@@ -235,11 +221,11 @@
 
            IF I > 0;
              I=I-1;
-             WSNOM=%Subst(ZSNOM:1:I);
+             WSPROJETS=%Subst(ZSNOM:1:I);
              // On est dans le cas d'une sélection générique
              g_Selection_generique = *ON;
              // On se positionnera juste au bon endroit dans le fichier
-             PROJETS = WSNOM;
+             PROJETS = WSPROJETS;
            ENDIF;
          ENDIF;
 
@@ -260,24 +246,22 @@
          Sfldsp = *ON;
          Sfldspctl = *ON;
          // Positionnement en début de fichier
-         EXEC SQL CLOSE projets_s1;
+         EXEC SQL CLOSE fic00p_s1;
 
-         EXEC SQL DECLARE projets_s1
+         EXEC SQL DECLARE fic00p_s1
                CURSOR FOR
-                   SELECT project_number,
-                          project_name,
-                          project_description,
-                          timestamp_creation,
-                          user_creation,
-                          timestamp_maj,
-                          user_modification,
-                          RRN( projets)
-                     FROM projets
-                    WHERE prjnbr>=:prjnbr
-                      AND prjnam>=:prjnam
-                      ORDER BY prjnbr DESC,
-                               prjnam;
-         EXEC SQL OPEN projets_s1;
+                   SELECT finom,
+                          fipr1,
+                          fifon,
+                          fimat,
+                          ficpo,
+                          fidas,
+                          RRN( fic00p)
+                     FROM fic00p
+                    WHERE fifon>=:fifon
+                      AND finom>=:projets;
+         EXEC SQL OPEN fic00p_s1;
+         *in70 = %equal;
          // Chargement de la première page
          EXSR CHGPAG;
        ENDSR;
@@ -312,8 +296,8 @@
            WHEN (ZOPT = '5') OR (ZOPT = ' 5');
              PCHX = 'AF';
            WHEN (ZOPT = '6') OR (ZOPT = ' 6');
-             PPRJNBR = %char(ZPRJNBR);
-             Impression( PPRJNBR);
+             PMAT = %char(HMATR);
+             Impression( PMAT);
              g_Traitement_option = *OFF;
            WHEN (ZOPT = '99');
              PCHX = 'PE';
@@ -342,7 +326,7 @@
            UPDATE(E) SFL01;
            // On aurait pu aussi faire IF..., en tout cas le choix est bon
            If g_Traitement_option;
-             Gestion_projet( PCHX
+             Gestion_fiche( PCHX
                            :NREC);
              g_Selection_OK=*on;
            EndIf;
@@ -364,13 +348,12 @@
          //                  SETON                                        04
          Wran01 = LSTLIG;
       // Lexture de l'enregistrement suivant
-         EXEC SQL FETCH projets_s1 INTO :prjnbr,
-                                        :prjnam,
-                                        :prjdsc,
-                                        :timecrt,
-                                        :usrcrt,
-                                        :timemaj,
-                                        :usrmaj,
+         EXEC SQL FETCH fic00p_s1 INTO  :projets,
+                                        :fipr1,
+                                        :fifon,
+                                        :fimat,
+                                        :ficpo,
+                                        :fidas,
                                         :g_num_rel;
 
          // Remise à zéro du compteur de ligne, mais on pourrait faire autrement
@@ -381,23 +364,36 @@
            // Remplissage des zones écran
            g_Selection_OK = *ON;
            // Test s'il y a selection
-           IF g_Selection OR g_Selection_generique;
-             IF g_Selection AND g_Selection_generique = '0';
+           IF g_Selection = '1' OR g_Selection_generique = '1';
+             IF g_Selection = '1' AND g_Selection_generique = '0';
                // On recherche la stricte égalité de nom
                IF PROJETS <> ZSNOM;
                  g_Selection_OK = *OFF;
                ENDIF;
              ELSE;
                // On recherche si le nom commence par la valeur avant le '*'
-               IF %Subst(PROJETS:1:I) <> WSNOM;
+               IF %Subst(PROJETS:1:I) <> WSPROJETS;
                  g_Selection_OK = *OFF;
                ENDIF;
              ENDIF;
            ENDIF;
            // L'indicateur est à '1' si sélection OK ou pas de sélection
            IF g_Selection_OK;
-             ZPRJNBR = PRJNBR;
+             ZNOM = PROJETS;
+             ZPR1 = FIPR1;
+             ZFONC = FIFON;
+             ZMATR =  FIMAT;
+             ZCPO  = FICPO;
              HNREC=g_Num_rel;
+             FIMAT = HMATR;
+             IF FIDAS = 0;
+               // Top salarié licencié
+               HTOUT = '0';
+               Znomred = *OFF;
+             ELSE;
+               HTOUT = '1';
+               Znomred = *ON;
+             ENDIF;
              // Les compteurs, attention au WRAN01
              NBRLIG+=1;
              LSTLIG+=1;
@@ -406,14 +402,13 @@
              WRITE SFL01;
            ENDIF;
            // Lecture du suivant
-           EXEC SQL FETCH projets_s1 INTO :prjnbr,
-                                          :prjnam,
-                                          :prjdsc,
-                                          :timecrt,
-                                          :usrcrt,
-                                          :timemaj,
-                                          :usrmaj,
-                                          :g_num_rel;
+           EXEC SQL FETCH fic00p_s1 INTO :projets,
+                                         :fipr1,
+                                         :fifon,
+                                         :fimat,
+                                         :ficpo,
+                                         :fidas,
+                                         :g_num_rel;
 
          enddo;
          // On quitte la boucle soit en fin de page
@@ -433,16 +428,15 @@
            WRAN01=1;
            // Pas de saisie d'option
            Zoptpr = *ON;
-
            IF ZSNOM = *BLANK;
-             ZPRJNAM = 'Sélection Vide';
+             ZNOM = 'Sélection Vide';
            ENDIF;
 
            // Ne pas oublier de remettre à blanc
-           Clear ZPRJNAM;
-
-           Clear ZPRJNBR;
-
+           Clear ZPR1;
+           Clear ZFONC;
+           Clear ZMATR;
+           Clear ZCPO;
            Clear HNREC;
 
            // Ecriture du message sur la première ligne
