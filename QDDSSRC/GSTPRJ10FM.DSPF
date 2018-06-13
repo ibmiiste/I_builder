@@ -1,0 +1,112 @@
+     /* >>PRE-COMPILER<<                                                 */
+     /*   >>CRTCMD<<  CRTDSPF FILE(&LI/&OB) SRCFILE(&SL/&SF) +           */
+     /*                 SRCMBR(&SM);                                     */
+     /*   >>IMPORTANT<<                                                  */
+     /*     >>PARM<<  OPTION(*EVENTF);                                   */
+     /*   >>END-IMPORTANT<<                                              */
+     /*   >>EXECUTE<<                                                    */
+     /* >>END-PRE-COMPILER<<                                             */
+     A                                      DSPSIZ(24 80 *DS3)
+     A                                      MSGLOC(24)
+     A                                      PRINT
+     A                                      HELP
+     A                                      HLPPNLGRP('PGMF01' PGMF01)
+     A                                      HLPTITLE('Aide générale -
+     A                                      sur PGMF01')
+     A                                      ALTHELP(CA01)
+     A                                      INDARA
+     A          R SFL01                     SFL
+     A  08                                  SFLNXTCHG
+     A            ZOPT           2   B  8  2
+     A  20                                  DSPATR(PR)
+     A            ZPRJNAM   R        O  8 21REFFLD(PROJETSF/PRJNAM *LIBL/PROJET-
+     A                                      S)
+     A  30                                  COLOR(RED)
+     A            HNREC         10  0H
+     A            HTOUT          1   H
+     A            HMATR         10  0H
+     A            ZPRJNBR        6  0O  8  9EDTCDE(Z)
+     A          R FORE1                     SFLCTL(SFL01)
+     A                                      RTNCSRLOC(&WLICSR &WZOCSR &WPRCSR)
+     A                                      OVERLAY
+     A                                      PUTOVR
+     A N07                                  ROLLUP(02)
+     A                                      CSRLOC(WLIGN WCOLN)
+     A                                      CHANGE(91)
+     A N04                                  ERASE(SFL01)
+     A  04                                  SFLDSP
+     A  05                                  SFLDSPCTL
+     A  06                                  SFLCLR
+     A  07                                  SFLEND
+     A                                      SFLSIZ(15)
+     A                                      SFLPAG(14)
+     A                                      SFLCSRRRN(&WRACSR)
+     A            WRACSR         5S 0H
+     A            WRAN01         4S 0H      SFLRCDNBR
+     A            ZPGM          10   O  1  2
+     A                                      OVRDTA
+     A                                  1 31'Liste des projets'
+     A                                      COLOR(WHT)
+     A            ZUSER         10   O  1 70
+     A                                      OVRDTA
+     A            ZJOB          10   O  2 70
+     A                                      OVRDTA
+     A                                  4  3'Indiquez vos options, puis appuyez-
+     A                                       sur ENTREE.'
+     A                                      COLOR(BLU)
+     A                                  5  3'2=Modifier  3=Copier 4=Supprimer  -
+     A                                       5=Afficher  6=Imprimer  12=Référen-
+     A                                      tiel'
+     A                                      COLOR(BLU)
+     A                                  6  3'Selection par nom :'
+     A            ZSNOM         35   B  6 23
+     A                                      CHECK(LC)
+     A                                      COLOR(WHT)
+     A                                      OVRDTA
+     A                                  7  2'Opt    Numéro      Projet'
+     A                                      COLOR(WHT)
+     A            WLICSR        10A  H
+     A            WZOCSR        10A  H
+     A            WPRCSR         4S 0H
+     A            WLIGN          3S 0H
+     A            WCOLN          3S 0H
+     A            ZDATE           L  O  2  2DATFMT(*EUR)
+     A            ZHEUR           T  O  2 13TIMFMT(*EUR)
+     A          R FORB1
+     A                                      CF03
+     A                                      CF05
+     A                                      CF06
+     A                                      CF08
+     A                                      CF12
+     A                                      RTNCSRLOC(&WLICSR &WZOCSR &WPRCSR)
+     A                                      OVERLAY
+     A                                      PUTOVR
+     A                                      CSRLOC(WLIGN WCOLN)
+     A                                      CHANGE(91)
+     A                                      HLPCLR
+     A          H                           HLPARA(6 23 6 58)
+     A                                      HLPPNLGRP('ZSNOM' PGMF01)
+     A          H                           HLPARA(8 2 22 3)
+     A                                      HLPPNLGRP('ZOPT' PGMF01)
+     A                                 23  3'F3=Exit  F5=Réafficher  -
+     A                                      F6=Créer  F8=Imprimer  -
+     A                                      F12=Annuler'
+     A                                      COLOR(BLU)
+     A            WLICSR        10A  H
+     A            WZOCSR        10A  H
+     A            WPRCSR         4S 0H
+     A            WLIGN          3S 0H
+     A            WCOLN          3S 0H
+     A          R WSFMSG                    SFL
+     A                                      SFLMSGRCD(24)
+     A            WMGKEY                    SFLMSGKEY
+     A            WPGMQ                     SFLPGMQ
+     A          R WSFCTL                    SFLCTL(WSFMSG)
+     A                                      SFLSIZ(2)
+     A                                      SFLPAG(1)
+     A                                      OVERLAY
+     A  10                                  SFLINZ
+     A                                      SFLDSP
+     A                                      SFLDSPCTL
+     A  09                                  SFLEND
+     A            WPGMQ                     SFLPGMQ
