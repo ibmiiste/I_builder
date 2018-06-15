@@ -67,9 +67,9 @@
      A                                      CHECK(LC)
      A                                      COLOR(WHT)
      A                                      OVRDTA
-     A                                  7  2
+     A                                  7  2'Opt Numéro  Sujet du lot          -
      A                                                                    Liste-
-     A                                       bib    Bib. lot   Statut'
+     A                                       bib   Bib. lot    Statut'
      A                                      COLOR(WHT)
      A            WLICSR        10A  H
      A            WZOCSR        10A  H
