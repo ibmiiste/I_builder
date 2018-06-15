@@ -26,10 +26,10 @@
      A            HNREC         10  0H
      A            ZNUMLOT   R        O  8  6REFFLD(LOTSF/NUMLOT *LIBL/LOTS)
      A                                      EDTCDE(Z)
-     A            ZLIBELLOT R        O  8 39REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
-     A            ZLISTBIBPRR        O  8 14REFFLD(LOTSF/LISTBIBPRJ *LIBL/LOTS)
-     A            ZBIBLOT   R        O  8 27REFFLD(LOTSF/BIBLOT *LIBL/LOTS)
-     A            ZSTATLOT      10   O  8 91
+     A            ZLIBELLOT R        O  8 14REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
+     A            ZLISTBIBPRR        O  8 66REFFLD(LOTSF/LISTBIBPRJ *LIBL/LOTS)
+     A            ZBIBLOT   R        O  8 78REFFLD(LOTSF/BIBLOT *LIBL/LOTS)
+     A            ZSTATLOT      10   O  8 90
      A          R FORE1                     SFLCTL(SFL01)
      A                                      RTNCSRLOC(&WLICSR &WZOCSR &WPRCSR)
      A                                      OVERLAY
@@ -67,9 +67,9 @@
      A                                      CHECK(LC)
      A                                      COLOR(WHT)
      A                                      OVRDTA
-     A                                  7  2'Opt Numéro  Liste bib    Bib. lot -
-     A                                         Sujet du lot                    -
-     A                                                          Statut'
+     A                                  7  2
+     A                                                                    Liste-
+     A                                       bib    Bib. lot   Statut'
      A                                      COLOR(WHT)
      A            WLICSR        10A  H
      A            WZOCSR        10A  H

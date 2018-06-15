@@ -321,12 +321,12 @@
          //
          DOW not %Eof;
            NREC=%Char(HNREC);
-           IF htout = '1';
-             IF ZOPT='2' OR ZOPT='3' OR ZOPT='4' OR ZOPT='99';
-               // Si l'employé à quitté on ne peut plus rien modifier
-               ZOPT = '5 ';
-             ENDIF;
-           ENDIF;
+        // IF htout = '1';
+        //   IF ZOPT='2' OR ZOPT='3' OR ZOPT='4' OR ZOPT='99';
+        //     // Si l'employé à quitté on ne peut plus rien modifier
+        //     ZOPT = '5 ';
+        //   ENDIF;
+        // ENDIF;
            g_Traitement_option = *ON;
            // Selection en fonction du choix saisi
            SELECT;
@@ -358,12 +358,12 @@
                              :PMDT);
            ENDSL;
 
-           IF HTOUT = '0';
-             // Pour ne pas perdre l'attribut couleur
-             Znomred = *OFF;
-           ELSE;
-             Znomred = *ON;
-           ENDIF;
+        // IF HTOUT = '0';
+        //   // Pour ne pas perdre l'attribut couleur
+        //   Znomred = *OFF;
+        // ELSE;
+        //   Znomred = *ON;
+        // ENDIF;
 
            // Nettoyage
            Clear ZOPT;

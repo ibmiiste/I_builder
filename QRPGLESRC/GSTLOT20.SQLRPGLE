@@ -27,7 +27,6 @@
        dcl-c WTXT4 '           Affichage          ';
        dcl-c WTXT5 '           Création           ';
        dcl-c WTXT6 '        Fin de contrat        ';
-       dcl-s WNREC packed(10);
        dcl-s PACT char(2);
        dcl-s PGFCT char(3);
 
@@ -254,16 +253,16 @@
                                :descriplot,
                                :statlot
                           FROM lots
-                         WHERE RRN( lots) = :wnrec
+                         WHERE CHAR( RRN( lots)) = :pnrec
                          ;
 
                *IN70 = NOT %ERROR AND NOT %FOUND;
                *IN90 = %ERROR;
 
-               If %found;
+               If SQLcode=c_Trouve;
                  EXEC SQL DELETE
                             FROM lots
-                           WHERE RRN( lots) = :wnrec
+                           WHERE CHAR( RRN( lots)) = :pnrec
                          ;
                endif;
 
@@ -333,11 +332,11 @@
                         INTO :numlot :l_null
                         FROM lots;
              If Sqlcode = c_Trouve;
-               zNumlot+=1;
+               Numlot+=1;
              EndIf;
 
              If Sqlcode = c_Non_trouve;
-               zNumlot = 1;
+               Numlot = 1;
              EndIf;
              l_MAJ_Lots = *OFF;
            ENDIF;
@@ -357,7 +356,7 @@
                                         liste_biblio_projet,
                                         description_lots,
                                         statuts_lot)
-                                VALUES( :znumlot,
+                                VALUES( :numlot,
                                         :zlibellot,
                                         :zlistbibpr,
                                         :zdescripl,
