@@ -342,7 +342,7 @@
              impression(Numlot);
              g_Traitement_option = *OFF;
            WHEN (ZOPT = '12');
-             liste_objet_construction(numlot);
+             liste_objet_construction(znumlot);
            WHEN (ZOPT = '99');
              PCHX = 'PE';
            OTHER;
