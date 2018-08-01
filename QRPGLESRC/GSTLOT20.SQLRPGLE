@@ -32,6 +32,7 @@
 
        // Modèles de variables
        /copy qcpysrc,Inh32766
+       /Copy Qcpysrc,Inhbuilder
 
        // Indicateur Programme
        Dcl-s l_Confirmation_suppression Ind;
@@ -352,7 +353,7 @@
              EXEC SQL SELECT MAX( numlot)
                         INTO :numlot :l_null
                         FROM lots;
-             Creabiblot(Numlot:zLibellot:biblot);
+             gestion_bib_lot(numlot);
            endif;
          ENDIF;
          l_traitenement_ecran = *OFF;
