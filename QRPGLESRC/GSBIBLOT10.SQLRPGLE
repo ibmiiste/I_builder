@@ -37,7 +37,7 @@
        DCL-PROC gestion_bib_lot EXPORT;
 
          DCL-PI *N IND;
-           p_Num_lot Like(r_Num_lot);
+           p_Num_lot Like(r_Num_lot) value;
          END-PI ;
 
          Dcl-s l_libel_lot Like(r_Lib_lot);
