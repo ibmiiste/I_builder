@@ -101,7 +101,7 @@
        // Prototype for procedure: gestion_bib_lot
        // --------------------------------------------------
        DCL-PR gestion_bib_lot IND;
-         p_Num_lot Like(r_Num_lot);
+         p_Num_lot Like(r_Num_lot) value;
        END-PR ;
 
        //---------------------------------------------------
