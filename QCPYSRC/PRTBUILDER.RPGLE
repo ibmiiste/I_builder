@@ -4,12 +4,12 @@
        // --------------------------------------------------
        DCL-PR builder EXTPGM('BUILDER');
          p_num_lot packed(6:0);
-         P_Biblio_Lot LIKE(R_NomObj) const;
+         P_Biblio_Lot LIKE(r_Nom_obj_IBMi) const;
          P_Env_Dest CHAR(1) const;
          P_Optim_Compil CHAR(20);
          P_Livr_Env_Dst IND const;
          P_Sys_Dst CHAR(32) const;
-         P_User LIKE(R_NomObj) const;
+         P_User LIKE(r_Nom_obj_IBMi) const;
          P_Mot_De_Passe CHAR(10) const;
        END-PR ;
        /endif
@@ -33,10 +33,10 @@
        // --------------------------------------------------
        Dcl-Pr i_MrgMsgf;
          P_Objet char(20) Const;
-         P_BibSrc like(R_NomObj) Const;
-         P_MbrSrc like(R_NomObj) Const;
+         P_BibSrc like(r_Nom_obj_IBMi) Const;
+         P_MbrSrc like(r_Nom_obj_IBMi) Const;
          P_Sys_Dst CHAR(32) Const;
-         P_User LIKE(R_NomObj) Const;
+         P_User LIKE(r_Nom_obj_IBMi) Const;
          P_Mot_De_Passe CHAR(10) Const;
        End-Pr;
        /endif
@@ -78,7 +78,7 @@
          P_Optimize CHAR(20);
          P_Failed PACKED(10:0);
          P_FileAttach char(10000);
-         P_liste_biblio Like(R_Nomobj);
+         P_liste_biblio Like(r_Nom_obj_IBMi);
        END-PR ;
        /Endif
 
@@ -96,3 +96,19 @@
        // Prototype de la gestion d'erreur
        dcl-pr gest_erreur end-pr;
        /Endif
+
+       // --------------------------------------------------
+       // Prototype for procedure: gestion_bib_lot
+       // --------------------------------------------------
+       DCL-PR gestion_bib_lot IND;
+         p_Num_lot Like(r_Num_lot);
+       END-PR ;
+
+       //---------------------------------------------------
+       // Prototype for procédure:Creation_Bib_lot
+       //---------------------------------------------------
+       DCL-PR Creabiblot;
+         P_NOUVLOTC like(r_Num_lot_carac);
+         p_LIBEL_lot Like(r_Lib_lot);
+         p_BIB_LOT like(r_Nom_obj_IBMi);
+       END-PR ;
