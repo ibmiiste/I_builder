@@ -171,6 +171,7 @@
        // inherited variables
        // héritage des types
        /copy QCPYSRC,INH32766
+       /copy Qcpysrc,inhbuilder
 
        // constants
        // constantes
