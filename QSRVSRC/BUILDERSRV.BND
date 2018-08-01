@@ -13,6 +13,8 @@
     /*                      &LI/CONSTRUCT +                          */
     /*                      &LI/GESTERR +                            */
     /*                      &LI/MAILERR +                            */
+    /*                      &LI/CREABIBLOT +                         */
+    /*                      &LI/GSBIBLOT10 +                         */
     /*                      &LI/GSTERRSTR);                          */
     /*     >>PARM<<  BNDDIR(SERVICE);                                */
     /*     >>PARM<<  OPTION(*DUPPROC);                               */
@@ -33,4 +35,6 @@
                 EXPORT     SYMBOL(GEST_ERREUR)
                 EXPORT     SYMBOL(MAILERR)
                 EXPORT     SYMBOL(SCRIPTFTP)
+                EXPORT     SYMBOL(CREABIBLOT)
+                EXPORT     SYMBOL(GESTION_BIB_LOT)
              ENDPGMEXP

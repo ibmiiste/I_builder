@@ -32,6 +32,7 @@
 
        // Modèles de variables
        /copy qcpysrc,Inh32766
+       /Copy Qcpysrc,Inhbuilder
 
        // Indicateur Programme
        Dcl-s l_Confirmation_suppression Ind;
@@ -256,8 +257,6 @@
                          WHERE CHAR( RRN( lots)) = :pnrec
                          ;
 
-               *IN70 = NOT %ERROR AND NOT %FOUND;
-               *IN90 = %ERROR;
 
                If SQLcode=c_Trouve;
                  EXEC SQL DELETE
@@ -327,17 +326,6 @@
            EndIf;
 
            IF PCHX = 'CR' OR PCHX = 'CO';
-             // On ne crée le matricule qu'en copie ou création
-             EXEC SQL SELECT MAX( numlot)
-                        INTO :numlot :l_null
-                        FROM lots;
-             If Sqlcode = c_Trouve;
-               Numlot+=1;
-             EndIf;
-
-             If Sqlcode = c_Non_trouve;
-               Numlot = 1;
-             EndIf;
              l_MAJ_Lots = *OFF;
            ENDIF;
 
@@ -351,17 +339,21 @@
                    ;
            ELSE;
              // création
-             EXEC SQL INSERT INTO lots( lot_number,
-                                        libelle_lots,
+             EXEC SQL INSERT INTO lots( libelle_lots,
                                         liste_biblio_projet,
                                         description_lots,
                                         statuts_lot)
-                                VALUES( :numlot,
-                                        :zlibellot,
+                                VALUES( :zlibellot,
                                         :zlistbibpr,
                                         :zdescripl,
                                         :zstatlot)
                     ;
+
+             // On récupère le numéro du lot créé
+             EXEC SQL SELECT MAX( numlot)
+                        INTO :numlot :l_null
+                        FROM lots;
+             gestion_bib_lot(numlot);
            endif;
          ENDIF;
          l_traitenement_ecran = *OFF;
