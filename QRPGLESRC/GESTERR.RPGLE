@@ -209,11 +209,11 @@
                       : proced
                       : statement
                       : mail);
-         return;
-
        On-error *all;
          dsply 'Arrrrgghhhh!!!!';
        endmon;
+
+       return;
       /end-free
      p gest_erreur     e
 
