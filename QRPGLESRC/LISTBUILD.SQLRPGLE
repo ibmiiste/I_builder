@@ -18,7 +18,7 @@
        Ctl-opt Bnddir('I_BUILDER');
 
        //*********************************************************************
-       // OD 21/07/2015
+       // OD 17/11/2017
        // Liste des objets à construire
        //*********************************************************************
        // déclaration des fichiers
@@ -31,11 +31,11 @@
        // Prototype for procedure: liste_objet_construction
        // --------------------------------------------------
        DCL-PR liste_objet_construction EXTPGM('LISTBUILD');
-         p_Num_lot Packed(6:0) Const;
+         p_Num_lot Like(r_Num_lot) Const;
        END-PR ;
 
        DCL-PI liste_objet_construction;
-         p_Num_lot Packed(6:0) Const;
+         p_Num_lot Like(r_Num_lot) Const;
        END-PI ;
 
        // Gestion des messages
