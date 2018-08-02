@@ -25,7 +25,7 @@
      A                                      CHANGE(91)
      A                                      HLPCLR
      A          H
-     A                                      HLPARA(4 11 4 16)
+     A                                      HLPARA(4 11 4 19)
      A                                      HLPPNLGRP(FORE1 GSTPRJ20)
      A          H
      A                                      HLPARA(5 11 5 60)
@@ -39,6 +39,8 @@
      A          H
      A                                      HLPARA(7 3 22 130)
      A                                      HLPPNLGRP(FORE1 GSTPRJ20)
+     A          H                           HLPRCD(FORE1)
+     A                                      HLPARA(4 111 4 130)
      A            ZPGM          10   O  1  2
      A                                      OVRDTA
      A                                  1 61'Détail Projet'
