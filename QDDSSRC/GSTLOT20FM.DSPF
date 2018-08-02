@@ -44,7 +44,7 @@
      A                                  1 61'Détail Projet'
      A                                      COLOR(WHT)
      A            ZDATE           L  O  2  2DATFMT(*EUR) OVRDTA
-     A            ZHEUR           T  B  2 13TIMFMT(*EUR) OVRDTA
+     A            ZHEUR           T  O  2 13TIMFMT(*EUR) OVRDTA
      A            ZMODE         30   O  2 53
      A                                      COLOR(WHT)
      A                                      OVRDTA
