@@ -18,12 +18,14 @@
        /copy qcpysrc,cpyctlstm
        Ctl-opt bnddir('I_BUILDER');
 
+       //Héritage des classes de données
        /copy qcpysrc,Inh32766
+       /copy Qcpysrc,Inhbuilder
 
        /Copy Qcpysrc,Prtbuilder
 
        DCL-PI builder;
-         p_num_lot Packed(6:0);
+         p_num_lot Like(r_Num_lot);
          P_Biblio_Lot LIKE(R_NomObj) const;
          P_Env_Dest CHAR(1) const;
          P_Optim_Compil CHAR(20);
@@ -51,7 +53,7 @@
        Dcl-S g_optimize char(20);
        Dcl-s g_option_donnees Char(1);
        Dcl-s g_list_biblio Char(10);
-       Dcl-s g_num_lot Packed(6:0);
+       Dcl-s g_num_lot Like(r_Num_lot);
 
          *InLr=*On;
          g_Num_lot=p_Num_lot;

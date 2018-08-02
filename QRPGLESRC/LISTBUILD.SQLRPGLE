@@ -74,7 +74,7 @@
        Dcl-S g_rowid_char char(100);
        Dcl-s g_Rowid_lots SQLTYPE(ROWID);
 
-       Dcl-s g_Num_lot Packed(6:0);
+       Dcl-s g_Num_lot Like(r_Num_lot);
 
        dcl-s a_chx char(2);
        //dcl-s a_nrec like(r_uuid_db2);
