@@ -30,7 +30,7 @@
        end-pr;
 
        Dcl-pr Impression Extpgm('LSTLOT2SCL');
-         p_Num_lot Like(r_Num_lot) Const;
+         p_Num_lot Packed(6:0) Const;
        End-pr;
 
        Dcl-pr Gestion_message Extpgm('ENVMSG01');
@@ -45,7 +45,7 @@
        // Gestion des objets du projet
        // --------------------------------------------------
        DCL-PR liste_objet_construction EXTPGM('LISTBUILD');
-         p_Num_lots Like(r_Num_lot) Const;
+         p_Num_lots Packed(6:0) Const;
        END-PR ;
 
        // Modèles de variables
@@ -72,7 +72,7 @@
        Dcl-s PMDT Char(99);
 
        // Variables Lots
-       Dcl-s p_Num_lot Like(r_Num_lot);
+       Dcl-s p_Num_lot packed(6:0);
        // Action transmise à gestion lot
        Dcl-s PCHX Char(2);
        // Numéro relatif d'enregistrement de la table LOTS
