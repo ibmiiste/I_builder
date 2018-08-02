@@ -259,8 +259,6 @@
          ErrData char(32767);           //  Exception data
        end-ds;
 
-       // Prototype de la gestion d'erreur
-       dcl-pr gest_erreur end-pr;
 
        // Contrôle de la syntaxe d'un adresse email
        dcl-pr adresse_valide ind;
@@ -1434,24 +1432,6 @@
        END-PR ;
 
        // --------------------------------------------------
-       // Prototype for procedure: Construct
-       // --------------------------------------------------
-       DCL-PR Construct;
-         P_PreBibSrc CHAR(10) CONST;
-         P_PreFicSrc CHAR(10) CONST;
-         P_UseSrcMbr CHAR(10) CONST;
-         P_BibDst CHAR(10) CONST;
-         P_ObjDst CHAR(10) CONST;
-         P_TypObj char(7) CONST;
-         P_BibSrc CHAR(10)  CONST;
-         P_FicSrc CHAR(10)  CONST;
-         P_MbrSrc CHAR(10) CONST;
-         P_Optimize CHAR(20);
-         P_Failed PACKED(10:0);
-         P_FileAttach char(10000);
-       END-PR ;
-
-       // --------------------------------------------------
        // Prototype for procedure: Elaboration du rapport de construction
        // --------------------------------------------------
        DCL-PR GstErrStr;
@@ -1479,13 +1459,3 @@
          P_Fichier_Src_PRE LIKE(R_NomObj);
          P_Membre_Src_PRE LIKE(R_NomObj);
        END-PR ;
-
-       // --------------------------------------------------
-       // Prototype for procedure: Envoi d'un mail avec des pièces attachées au
-       //                          user du job
-       // --------------------------------------------------
-       DCL-PR EnvRapMel;
-         P_FileAttach char(10000);
-       END-PR ;
-
-
