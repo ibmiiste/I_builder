@@ -26,10 +26,10 @@
      A            HNREC         10  0H
      A            ZNUMLOT   R        O  8  6REFFLD(LOTSF/NUMLOT *LIBL/LOTS)
      A                                      EDTCDE(Z)
-     A            ZLIBELLOT R        O  8 14REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
-     A            ZLISTBIBPRR        O  8 66REFFLD(LOTSF/LISTBIBPRJ *LIBL/LOTS)
-     A            ZBIBLOT   R        O  8 78REFFLD(LOTSF/BIBLOT *LIBL/LOTS)
-     A            ZSTATLOT      10   O  8 90
+     A            ZLIBELLOT R        O  8 17REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
+     A            ZLISTBIBPRR        O  8 70REFFLD(LOTSF/LISTBIBPRJ *LIBL/LOTS)
+     A            ZBIBLOT   R        O  8 83REFFLD(LOTSF/BIBLOT *LIBL/LOTS)
+     A            ZSTATLOT      10   O  8 96
      A          R FORE1                     SFLCTL(SFL01)
      A                                      RTNCSRLOC(&WLICSR &WZOCSR &WPRCSR)
      A                                      OVERLAY
@@ -67,9 +67,7 @@
      A                                      CHECK(LC)
      A                                      COLOR(WHT)
      A                                      OVRDTA
-     A                                  7  2'Opt Numéro  Sujet du lot          -
-     A                                                                    Liste-
-     A                                       bib   Bib. lot    Statut'
+     A                                  7  2'Opt'
      A                                      COLOR(WHT)
      A            WLICSR        10A  H
      A            WZOCSR        10A  H
@@ -78,6 +76,16 @@
      A            WCOLN          3S 0H
      A            ZDATE           L  O  2  2DATFMT(*EUR)
      A            ZHEUR           T  O  2 13TIMFMT(*EUR)
+     A                                  7  6'Numéro'
+     A                                      COLOR(WHT)
+     A                                  7 17'Sujet du lot'
+     A                                      COLOR(WHT)
+     A                                  7 70'Liste bib'
+     A                                      COLOR(WHT)
+     A                                  7 83'Bib. lot'
+     A                                      COLOR(WHT)
+     A                                  7 96'Statut'
+     A                                      COLOR(WHT)
      A          R FORB1
      A                                      CF03
      A                                      CF05
