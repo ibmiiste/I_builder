@@ -112,3 +112,12 @@
          p_LIBEL_lot Like(r_Lib_lot);
          p_BIB_LOT like(r_Nom_obj_IBMi);
        END-PR ;
+
+       // --------------------------------------------------
+       // Prototype for procedure: infos_objet
+       // --------------------------------------------------
+       DCL-PR infos_objet IND;
+         p_Object_name LIKE(r_qualified_name) CONST;
+         p_Object_type LIKE(r_Nom_obj_IBMi) CONST;
+         p_Base_infos_obj_light likeDS(OBJD0200_t);
+       END-PR ;

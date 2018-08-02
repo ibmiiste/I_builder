@@ -22,7 +22,7 @@
      A  20                                  DSPATR(PR)
      A            ZOBJDST       10   B  8 12
      A  30                                  COLOR(RED)
-     A            ZDESCOBJET    50   B  8 45
+     A            ZDESCOBJET    50   O  8 45
      A            HNREC         40   H
      A            HLOT_NUMBE     9S 0H
      A            ZBIBDST       10   B  8 23

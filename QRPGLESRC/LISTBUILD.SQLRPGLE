@@ -49,6 +49,7 @@
        // external functions prototypes
        // prototype fonctions externes
        /copy qcpysrc,Prtbuilder
+       /Copy qcpysrc,prsmod000r
 
        // local functions prototypes
        // prototypes fonctions locales
@@ -104,11 +105,14 @@
        Dcl-S g_MbrSrc_pre LIKE(R_NomObj);
        Dcl-s g_list_biblio LIKE(R_NomObj);
 
+
        // Touches de fonction
        /copy qcpysrc,fonction
 
        // data-structures
        // structures de données
+       // Informations objets IBM i
+       Dcl-ds l_Base_infos_obj_light likeDS(OBJD0200_t);
 
        // program status data structure
        // structure information programme
@@ -576,6 +580,11 @@
              g_lstlig+=1;
              wran01+=1;
              g_ROWID_BUILD(wran01)=g_ROWID_BUILDW;
+             IF infos_objet( zobjdst + zbibdst
+                            :ztypobj
+                            :l_Base_infos_obj_light);
+               zDescobjet=l_Base_infos_obj_light.Txt;
+             Endif;
              if PROTECT=*on;
                PROTECT=*off;
              EndIf;

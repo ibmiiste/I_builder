@@ -60,9 +60,10 @@
       // inherited variables
       // hritage des types
       /copy qcpysrc,INH32766
-
+      /copy Qcpysrc,Inhbuilder
       // constants
       // constantes
+
 
       //====================================================================
       // Test existence objet
@@ -93,3 +94,48 @@
          return *off;
        endmon;
        end-proc Exists;
+
+
+
+       // --------------------------------------------------
+       // Procedure name: infos_objet
+       // Purpose:        Récupérer les informations relatives à un objet comme pdm
+       // Returns:
+       // Parameter:      p_Object_name => Object name + Library name
+       // Parameter:      p_Object_type => Object type
+       // --------------------------------------------------
+       DCL-PROC infos_objet Export;
+         DCL-PI *N IND;
+           Obj LIKE(r_qualified_name) CONST;
+           ObjType LIKE(r_Nom_obj_IBMi) CONST;
+           p_Base_infos_obj_light likeDS(OBJD0200_t);
+         END-PI ;
+         // Your local fields go here
+
+         DCL-S retField IND;
+         // Your calculation code goes here
+         Dcl-s ObjL char(20);
+         Dcl-ds Objd likeDS(OBJD0200_t);
+         Dcl-ds ErrDS likeDS(ERRAPI);
+
+         monitor;
+
+         ObjL = Obj;
+           if %Subst( ObjL : 11 : 10) = *BLANK;
+             %Subst( ObjL : 11 : 10) = '*LIBL';
+           endif;
+           RtvObj( Objd : %len(ObjD) : 'OBJD0200' : Objl : ObjType : ErrDS);
+           if ErrDS.ErrRtn > 0;
+              retField=*OFF;
+           endif;
+           retField=*ON;
+         on-error;
+           dump(a);
+           gest_erreur();
+           retField=*off;
+         endmon;
+
+         p_Base_infos_obj_light=Objd;
+         return retField ;
+       END-PROC ;
+

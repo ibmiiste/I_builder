@@ -37,4 +37,5 @@
                 EXPORT     SYMBOL(SCRIPTFTP)
                 EXPORT     SYMBOL(CREABIBLOT)
                 EXPORT     SYMBOL(GESTION_BIB_LOT)
+                EXPORT     SYMBOL(INFOS_OBJET)
              ENDPGMEXP
