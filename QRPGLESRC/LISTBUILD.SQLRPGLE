@@ -53,7 +53,7 @@
        // local functions prototypes
        // prototypes fonctions locales
          Dcl-pr reincrement_liste_objet;
-           p_Lot Char(100) const Options(*Varsize);
+           p_num_Lot like(r_Num_lot) const;
          End-Pr;
 
        // global variables
@@ -70,9 +70,6 @@
        dcl-s a_fim like(r_nomobj);
        dcl-s a_mid like(r_numero_msg);
        dcl-s a_mdt like(r_msgdta);
-
-       Dcl-S g_rowid_char char(100);
-       Dcl-s g_Rowid_lots SQLTYPE(ROWID);
 
        Dcl-s g_Num_lot Like(r_Num_lot);
 
@@ -330,15 +327,12 @@
 
          //Récupération de la list de bibliothèque
          EXEC SQL SELECT libelle_lots,
-                         liste_biblio_projet,
-                         rowid_lots
+                         liste_biblio_projet
                     INTO :zprojet,
-                         :g_list_biblio,
-                         :g_rowid_lots
+                         :g_list_biblio
                     FROM lots
                    WHERE lot_number=:p_num_lot;
 
-         cvthc(%addr(g_rowid_char ): %addr(g_Rowid_lots): %Len(g_Rowid_lots)*2);  //make hex
          ZOBJDST=*blank;
          g_selection = *off;
          g_filtre = *off;
@@ -377,7 +371,7 @@
          // positionnement en début de fichier
          EXEC SQL DECLARE list_obj CURSOR FOR
                     SELECT rowid_build,
-                           lots_uuid,
+                           lot_number,
                            ordre,
                            bibliotheque_source,
                            fichier_source,
@@ -386,7 +380,7 @@
                            objet_destination,
                            type_objet
                       FROM list_objet_build
-                     WHERE lots_uuid=:g_rowid_char
+                     WHERE lot_number=:p_num_lot
                   ORDER BY ordre DESC;
 
          exec sql open list_obj;
@@ -394,7 +388,7 @@
          // lecture de l'enregistrement suivant
          EXEC SQL
            FETCH list_obj
-             INTO :g_rowid_buildw, :hlots_uuid, :zordre, :zbibsrc, :zficsrc,
+             INTO :g_rowid_buildw, :hlot_numbe, :zordre, :zbibsrc, :zficsrc,
                :zmbrsrc, :zbibdst, :zobjdst, :ztypobj;
          exsr chgpag;
        endsr;
@@ -418,7 +412,7 @@
              SELECT 1
                INTO :g_verif
                FROM list_objet_build
-               WHERE lots_uuid = :g_rowid_char AND
+               WHERE lot_number = :p_num_lot AND
                      ordre = :zordrec;
            if sqlcode = 0;
              // envoyer un message pour dire que l'option n'existe pas
@@ -433,7 +427,7 @@
 
              EXEC SQL
                INSERT INTO list_objet_build(rowid_build,
-                                            lots_uuid,
+                                            lot_number,
                                             ordre,
                                             bibliotheque_source,
                                             fichier_source,
@@ -442,7 +436,7 @@
                                             objet_destination,
                                             type_objet)
                  VALUES (DEFAULT,
-                         :g_rowid_char,
+                         :p_num_lot,
                          :zordrec,
                          :zbibsrcc,
                          :zficsrcc,
@@ -476,7 +470,7 @@
               g_ROWID_BUILDW=g_ROWID_BUILD(wran01);
               EXEC SQL
                 UPDATE list_objet_build
-                  SET lots_uuid = :g_rowid_char,
+                  SET lot_number = :g_num_lot,
                       ordre = :zordre,
                       bibliotheque_source = :zbibsrc,
                       fichier_source = :zficsrc,
@@ -543,7 +537,7 @@
          enddo;
          // potentiellement il y a eu mise  jour, on pourrait affiner
          if g_alimsfl;
-           reincrement_liste_objet(g_rowid_char);
+           reincrement_liste_objet(g_Num_lot);
            exsr initsf;
          ENDIF;
        endsr;
@@ -591,7 +585,7 @@
            // lecture du suivant
            EXEC SQL FETCH list_obj
                    INTO :g_rowid_buildw,
-                        :hlots_uuid,
+                        :hlot_numbe,
                         :zordre,
                         :zbibsrc,
                         :zficsrc,
@@ -637,10 +631,10 @@
 
        Dcl-Proc reincrement_liste_objet;
          Dcl-pi reincrement_liste_objet;
-           p_Lot char(100) const Options(*Varsize);
+           p_num_lot like(r_Num_lot) const;
          End-Pi;
 
-         Dcl-S l_Lot like(p_Lot);
+         Dcl-S l_num_Lot like(r_num_Lot);
          Dcl-S l_Ordre packed(6:0);
 
          EXEC SQL
@@ -660,10 +654,10 @@
            // positionnement en début de fichier
            EXEC SQL
              DECLARE list_obj_projet CURSOR FOR
-               SELECT lots_uuid,
+               SELECT lot_number,
                       ordre
                  FROM list_objet_build
-                 WHERE lots_uuid = :p_lot
+                 WHERE lot_number = :p_num_lot
                  ORDER BY ordre,
                           RRN(list_objet_build) ;
 
@@ -671,7 +665,7 @@
              OPEN list_obj_projet;
 
            EXEC SQL
-             FETCH list_obj_projet INTO :l_lot, :l_ordre;
+             FETCH list_obj_projet INTO :l_num_lot, :l_ordre;
 
            Dow sqlcode=0;
              EXEC SQL
@@ -680,7 +674,7 @@
                  WHERE CURRENT OF list_obj_projet;
 
              EXEC SQL
-               FETCH list_obj_projet INTO :l_lot, :l_ordre;
+               FETCH list_obj_projet INTO :l_num_lot, :l_ordre;
            EndDo;
 
          End-proc;
