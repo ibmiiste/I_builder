@@ -59,20 +59,18 @@
          g_Num_lot=p_Num_lot;
 
          //Récupération de la list de bibliothèque
-         EXEC SQL SELECT liste_biblio_projet,
-                         rowid_lots
-                    INTO :g_list_biblio,
-                         :g_rowid_lots
-                    FROM lots
-                   WHERE lot_number=:g_num_lot
-                   ;
-         Cvthc(%Addr(g_Rowid_char):%addr(g_Rowid_lots):%Len(g_Rowid_lots)*2);
+         EXEC SQL
+           SELECT liste_biblio_projet
+             INTO :g_list_biblio
+             FROM lots
+             WHERE lot_number = :g_num_lot ;
+
 
          EXEC SQL CLOSE list_obj;
          // positionnement en début de fichier
          EXEC SQL
            DECLARE list_obj CURSOR FOR
-             SELECT lots_uuid,
+             SELECT lot_number,
                     bibliotheque_source,
                     fichier_source,
                     membre_source,
@@ -80,14 +78,14 @@
                     objet_destination,
                     type_objet
                FROM list_objet_build
-               WHERE lots_uuid=:g_rowid_char
+               WHERE lot_number = :g_num_lot
                ORDER BY ordre;
 
          exec sql open list_obj;
 
          EXEC SQL
            FETCH list_obj
-             INTO :g_rowid_char, :g_bibsrc, :g_ficsrc, :g_mbrsrc, :g_bibdst,
+             INTO :g_num_lot , :g_bibsrc, :g_ficsrc, :g_mbrsrc, :g_bibdst,
                :g_objdst, :g_typobj ;
 
 
@@ -143,7 +141,7 @@
 
            EXEC SQL
              FETCH list_obj
-               INTO :g_rowid_char, :g_bibsrc, :g_ficsrc, :g_mbrsrc, :g_bibdst,
+               INTO :g_num_lot , :g_bibsrc, :g_ficsrc, :g_mbrsrc, :g_bibdst,
                  :g_objdst, :g_typobj ;
          enddo;
 
