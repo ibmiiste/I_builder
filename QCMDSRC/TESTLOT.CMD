@@ -11,7 +11,7 @@
       /* >>END-PRE-COMPILER<<                                             */
         CMD        PROMPT('Test du lot')
 
-        PARM       KWD(LOT) TYPE(*DEC) LEN(6 0) MIN(1) PROMPT('Numéro de lot')
+        PARM       KWD(LOT) TYPE(*DEC) LEN(9 0) MIN(1) PROMPT('Numéro de lot')
 
 
 /******************************************************************************/
