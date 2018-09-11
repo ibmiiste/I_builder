@@ -55,6 +55,20 @@
        Dcl-s g_list_biblio Char(10);
        Dcl-s g_num_lot Like(r_Num_lot);
 
+       // --------------------------------------------------
+       // Prototype for procedure: Ouvrir_curseur
+       // --------------------------------------------------
+       DCL-PR Ouvrir_curseur_list_obj LIKE(sqlcode);
+       END-PR ;
+
+
+       // --------------------------------------------------
+       // Prototype for procedure: Lecture_curseur_list_obj
+       // --------------------------------------------------
+       DCL-PR Lecture_curseur_list_obj LIKE(sqlcode);
+       END-PR ;
+
+
          *InLr=*On;
          g_Num_lot=p_Num_lot;
 
@@ -65,29 +79,9 @@
              FROM lots
              WHERE lot_number = :g_num_lot ;
 
+         Ouvrir_curseur_list_obj();
 
-         EXEC SQL CLOSE list_obj;
-         // positionnement en début de fichier
-         EXEC SQL
-           DECLARE list_obj CURSOR FOR
-             SELECT lot_number,
-                    bibliotheque_source,
-                    fichier_source,
-                    membre_source,
-                    bibliotheque_destination,
-                    objet_destination,
-                    type_objet
-               FROM list_objet_build
-               WHERE lot_number = :g_num_lot
-               ORDER BY ordre;
-
-         exec sql open list_obj;
-
-         EXEC SQL
-           FETCH list_obj
-             INTO :g_num_lot , :g_bibsrc, :g_ficsrc, :g_mbrsrc, :g_bibdst,
-               :g_objdst, :g_typobj ;
-
+         Lecture_curseur_list_obj();
 
          dow sqlcode = 0;
            If g_typobj<>'*MSGF';
@@ -117,7 +111,21 @@
                        :P_Mot_De_Passe);
            EndIf;
 
-           if P_Livr_Env_Dst=*on;
+
+
+           Lecture_curseur_list_obj();
+
+         enddo;
+
+         if P_Livr_Env_Dst=*on;
+
+           Ouvrir_curseur_list_obj();
+
+           Lecture_curseur_list_obj();
+
+
+           dow sqlcode = 0;
+
              If g_typobj='*MSGF';
                i_MrgMsgf( g_ObjDst + g_BibDst
                          :g_BibSrc
@@ -139,14 +147,61 @@
              ENDIF;
            EndIf;
 
-           EXEC SQL
-             FETCH list_obj
-               INTO :g_num_lot , :g_bibsrc, :g_ficsrc, :g_mbrsrc, :g_bibdst,
-                 :g_objdst, :g_typobj ;
-         enddo;
+           Lecture_curseur_list_obj();
+         Enddo;
 
          if g_Failed<>0;
            EnvRapMel(g_FileAttach);
          EndIf;
 
          Return;
+
+
+
+       // --------------------------------------------------
+       // Procedure name: Ouvrir_curseur
+       // Purpose:        Ouvrir le curseur de lecture de LSTOBJBLD
+       // Returns:
+       // --------------------------------------------------
+       DCL-PROC Ouvrir_curseur_list_obj;
+         DCL-PI *N LIKE(sqlcode);
+         END-PI ;
+
+         EXEC SQL CLOSE list_obj;
+         // positionnement en début de fichier
+         EXEC SQL
+           DECLARE list_obj CURSOR FOR
+             SELECT lot_number,
+                    bibliotheque_source,
+                    fichier_source,
+                    membre_source,
+                    bibliotheque_destination,
+                    objet_destination,
+                    type_objet
+               FROM list_objet_build
+               WHERE lot_number = :g_num_lot
+               ORDER BY ordre;
+
+         exec sql open list_obj;
+
+         return Sqlcode;
+       END-PROC ;
+
+       // --------------------------------------------------
+       // Procedure name: Lecture_curseur_list_obj
+       // Purpose:        Lecture du curseur d'un enregistrement de LSTOBJBLD
+       // Returns:
+       // --------------------------------------------------
+       DCL-PROC Lecture_curseur_list_obj ;
+         DCL-PI *N LIKE(sqlcode);
+         END-PI ;
+
+
+         EXEC SQL
+           FETCH list_obj
+             INTO :g_num_lot , :g_bibsrc, :g_ficsrc, :g_mbrsrc, :g_bibdst,
+               :g_objdst, :g_typobj ;
+
+         return Sqlcode ;
+       END-PROC ;
+
