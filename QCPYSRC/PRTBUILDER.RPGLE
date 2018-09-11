@@ -105,12 +105,13 @@
        END-PR ;
 
        //---------------------------------------------------
-       // Prototype for procédure:Creation_Bib_lot
+       // Prototype for procédure:crtbibbld
        //---------------------------------------------------
-       DCL-PR Creabiblot;
+       DCL-PR crtbibbld;
          P_NOUVLOTC like(r_Num_lot_carac);
          p_LIBEL_lot Like(r_Lib_lot);
          p_BIB_LOT like(r_Nom_obj_IBMi);
+         p_prefix like(r_Prefix);
        END-PR ;
 
        // --------------------------------------------------
