@@ -44,7 +44,7 @@
          Dcl-s l_Num_lot_carac Like(r_Num_lot_carac);
          Dcl-s l_nom_bib_lot like(r_Nom_obj_IBMi);
          DCL-S retField IND Inz(*On);
-         Dcl-s l_Lettre_prefix Char(1) Inz('L');
+         Dcl-s l_Lettre_prefix like(r_Prefix) Inz('L');
 
          Monitor;
            EXEC SQL SELECT libelle_lots
