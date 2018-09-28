@@ -1,0 +1,30 @@
+      /* >>PRE-COMPILER<<                                                 */
+      /*   >>CRTCMD<<  CRTCLMOD MODULE(&LI/&OB) SRCFILE(&SL/&SF) +        */
+      /*                 SRCMBR(&SM);                                     */
+      /*   >>IMPORTANT<<                                                  */
+      /*     >>PARM<<  OPTION(*EVENTF);                                   */
+      /*     >>PARM<<  DBGVIEW(*LIST);                                    */
+      /*   >>END-IMPORTANT<<                                              */
+      /*   >>EXECUTE<<                                                    */
+      /* >>END-PRE-COMPILER<<                                             */
+
+             PGM        PARM(&NOUVLOTC &LIBELLE &BIBLOT &PREFIX)
+
+             DCL        VAR(&NOUVLOTC) TYPE(*CHAR) LEN(9)
+             DCL        VAR(&BIBLOT) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&LIBELLE) TYPE(*CHAR) LEN(50)
+             DCL        VAR(&PREFIX) TYPE(*CHAR) LEN(1)
+             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Création de la +
+                          bibliothèque lot') BNDDIR(I_BUILDER)
+
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
+
+             CHGVAR     VAR(&BIBLOT) VALUE(&PREFIX *TCAT &NOUVLOTC)
+             CRTLIB     LIB(&BIBLOT) TYPE(*TEST) TEXT(&LIBELLE)
+             GOTO       CMDLBL(FIN)
+
+ERREUR:      DMPCLPGM
+             CALLPRC    PRC(GEST_ERREUR)
+
+
+FIN:         ENDPGM

@@ -33,15 +33,15 @@
 
        DCL-PROC source_standard export;
          DCL-PI *N IND;
-           P_Type_Objet LIKE(R_NomObj) CONST;
-           P_Type_Source LIKE(R_NomObj) CONST;
-           P_Biblio_Src_PRE LIKE(R_NomObj);
-           P_Fichier_Src_PRE LIKE(R_NomObj);
-           P_Membre_Src_PRE LIKE(R_NomObj);
+           P_Type_Objet LIKE(r_Nom_obj_IBMi) CONST;
+           P_Type_Source LIKE(r_Nom_obj_IBMi) CONST;
+           P_Biblio_Src_PRE LIKE(r_Nom_obj_IBMi);
+           P_Fichier_Src_PRE LIKE(r_Nom_obj_IBMi);
+           P_Membre_Src_PRE LIKE(r_Nom_obj_IBMi);
          END-PI ;
 
        // Héritage des variables
-       /copy Qcpysrc,INH32766
+       /copy Qcpysrc,Inhbuilder
 
          // Variables Standalone locales
          DCL-S Retour IND;

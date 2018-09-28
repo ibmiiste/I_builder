@@ -44,6 +44,7 @@
          Dcl-s l_Num_lot_carac Like(r_Num_lot_carac);
          Dcl-s l_nom_bib_lot like(r_Nom_obj_IBMi);
          DCL-S retField IND Inz(*On);
+         Dcl-s l_Lettre_prefix like(r_Prefix) Inz('L');
 
          Monitor;
            EXEC SQL SELECT libelle_lots
@@ -58,7 +59,7 @@
 
            l_Num_lot_carac=%Editc(p_num_lot:'X');
 
-           Creabiblot(l_Num_lot_carac:l_libel_lot:l_Nom_bib_lot);
+           Crtbibbld(l_Num_lot_carac:l_libel_lot:l_Nom_bib_lot:l_Lettre_prefix);
 
            If Retfield=*Off;
              Return Retfield;

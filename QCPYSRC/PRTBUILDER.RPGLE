@@ -105,12 +105,13 @@
        END-PR ;
 
        //---------------------------------------------------
-       // Prototype for procédure:Creation_Bib_lot
+       // Prototype for procédure:crtbibbld
        //---------------------------------------------------
-       DCL-PR Creabiblot;
+       DCL-PR crtbibbld;
          P_NOUVLOTC like(r_Num_lot_carac);
          p_LIBEL_lot Like(r_Lib_lot);
          p_BIB_LOT like(r_Nom_obj_IBMi);
+         p_prefix like(r_Prefix);
        END-PR ;
 
        // --------------------------------------------------
@@ -279,3 +280,11 @@
          dgtMost char(1);               //
        end-ds;
 
+       // Prototype retour erreur API
+       Dcl-ds ErrApi qualified;
+         ErrLen int(10) inz(%len(ErrApi));  // Bytes provided
+         ErrRtn int(10);                // Bytes available
+         ErrId char(7);                 // Exception ID
+         Filler char(1);                // Reserved  data
+         ErrData char(32767);           //  Exception data
+       end-ds;

@@ -49,7 +49,7 @@
        // external functions prototypes
        // prototype fonctions externes
        /copy qcpysrc,Prtbuilder
-       /Copy qcpysrc,prsmod000r
+
 
        // local functions prototypes
        // prototypes fonctions locales
@@ -171,7 +171,6 @@
 
        // inherited variables
        // héritage des types
-       /copy QCPYSRC,INH32766
        /copy Qcpysrc,inhbuilder
 
        // constants
