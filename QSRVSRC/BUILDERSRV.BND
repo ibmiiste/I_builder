@@ -13,7 +13,7 @@
     /*                      &LI/CONSTRUCT +                          */
     /*                      &LI/GESTERR +                            */
     /*                      &LI/MAILERR +                            */
-    /*                      &LI/CRTBIBBLD                            */
+    /*                      &LI/CRTBIBBLD +                          */
     /*                      &LI/GSBIBLOT10 +                         */
     /*                      &LI/GSTERRSTR);                          */
     /*     >>PARM<<  BNDDIR(SERVICE);                                */
