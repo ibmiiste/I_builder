@@ -92,10 +92,10 @@
 
       * Prototypage fonction externe
      d mail_erreur     pr                  extproc(*cl : 'MAILERR')
-     d a_program                           like(r_nomobj)
-     d a_module                            like(r_nomobj)
+     d a_program                           like(r_Nom_obj_IBMi)
+     d a_module                            like(r_Nom_obj_IBMi)
      d a_procedure                   60
-     d a_statement                         like(r_nomobj)
+     d a_statement                         like(r_Nom_obj_IBMi)
      d a_mail                       320
 
       * Prototypage fonctions locales
@@ -106,7 +106,7 @@
 
      d mail            s            320
       * Héritages des types
-     d/copy QCPYSRC,INH32766
+     d/copy QCPYSRC,Inhbuilder
 
       * Constantes
 
