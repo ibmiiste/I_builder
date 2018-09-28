@@ -20,6 +20,8 @@
     /*     >>PARM<<  OPTION(*DUPPROC);                               */
     /*     >>PARM<<  DETAIL(*FULL);                                  */
     /*     >>PARM<<  ALWLIBUPD(*YES);                                */
+    /*     >>PARM<<  TEXT('Programme de service +                    */
+    /*                       de l''outils i_builder');               */
     /*   >>END-IMPORTANT<<                                           */
     /*   >>EXECUTE<<                                                 */
     /* >>END-PRE-COMPILER<<                                          */

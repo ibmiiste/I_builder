@@ -22,7 +22,7 @@
              DCL        VAR(&FICSV) TYPE(*CHAR) LEN(10)
              DCL        VAR(&RAND) TYPE(*DEC) LEN(15 0) VALUE(999999999)
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Préparation à la livraison +
-                          et appel livraison') BNDDIR(SERVICE)
+                          et appel livraison') BNDDIR(I_BUILDER)
              MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
 
              CHGVAR     VAR(&OBJET) VALUE(%SST( &OBJETQ 1 10))

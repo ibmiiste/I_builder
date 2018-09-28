@@ -41,7 +41,7 @@
        // Gestion des messages
        dcl-pr gst_message_CL extpgm('ENVMSG01');
          a_typ like(r_typmsg);
-         a_fim like(r_nomobj);
+         a_fim like(r_Nom_obj_IBMi);
          a_mid like(r_numero_msg);
          a_mdt like(r_msgdta);
        end-pr;
@@ -59,16 +59,16 @@
 
        // global variables
        // variables globales
-       dcl-s g_sobjet like(r_nomobj);
-       dcl-s g_wsobp like(r_nomobj);
+       dcl-s g_sobjet like(r_Nom_obj_IBMi);
+       dcl-s g_wsobp like(r_Nom_obj_IBMi);
 
        dcl-s g_nblis1 like(r_nblign);
        dcl-s g_lstlig like(r_nblign);
        dcl-s g_nbrlig like(r_nblign);
        dcl-s g_i packed(3:0);
-       dcl-s g_xobjet like(r_nomobj);
+       dcl-s g_xobjet like(r_Nom_obj_IBMi);
        dcl-s a_typ like(r_typmsg);
-       dcl-s a_fim like(r_nomobj);
+       dcl-s a_fim like(r_Nom_obj_IBMi);
        dcl-s a_mid like(r_numero_msg);
        dcl-s a_mdt like(r_msgdta);
 
@@ -100,10 +100,10 @@
        Dcl-S g_Failed packed(10:0);
        Dcl-S g_FileAttach char(10000);
        Dcl-S g_optimize char(20);
-       Dcl-S g_BibSrc_pre LIKE(R_NomObj);
-       Dcl-S g_FicSrc_pre LIKE(R_NomObj);
-       Dcl-S g_MbrSrc_pre LIKE(R_NomObj);
-       Dcl-s g_list_biblio LIKE(R_NomObj);
+       Dcl-S g_BibSrc_pre LIKE(r_Nom_obj_IBMi);
+       Dcl-S g_FicSrc_pre LIKE(r_Nom_obj_IBMi);
+       Dcl-S g_MbrSrc_pre LIKE(r_Nom_obj_IBMi);
+       Dcl-s g_list_biblio LIKE(r_Nom_obj_IBMi);
 
 
        // Touches de fonction
