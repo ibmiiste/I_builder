@@ -280,3 +280,11 @@
          dgtMost char(1);               //
        end-ds;
 
+       // Prototype retour erreur API
+       Dcl-ds ErrApi qualified;
+         ErrLen int(10) inz(%len(ErrApi));  // Bytes provided
+         ErrRtn int(10);                // Bytes available
+         ErrId char(7);                 // Exception ID
+         Filler char(1);                // Reserved  data
+         ErrData char(32767);           //  Exception data
+       end-ds;
