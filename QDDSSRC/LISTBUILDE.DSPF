@@ -84,7 +84,7 @@
      A            WPRCSR         4S 0H
      A            WLIGN          3S 0H
      A            WCOLN          3S 0H
-     A            ZPROJET       10   O  2 58COLOR(WHT)
+     A            ZPROJET       50   O  2 42COLOR(WHT)
      A            ZOPTC          2   B  7  2
      A            ZORDREC        6  0B  7  5EDTCDE(Z)
      A            ZOBJDSTC      10   B  7 12
