@@ -82,11 +82,13 @@
      A                                      COLOR(WHT)
      A N14                                  DSPATR(UL)
      A  14                                  DSPATR(PR)
+     A                                      CHECK(LC)
      A            ZDESCRIPL R        B  7  3REFFLD(LOTSF/DESCRIPLOT *LIBL/LOTS)
      A                                      CNTFLD(128)
      A                                      COLOR(WHT)
      A N14                                  DSPATR(UL)
      A  14                                  DSPATR(PR)
+     A                                      CHECK(LC)
      A                                  4 67'Bibliothèque dédiée'
      A            ZBIBLOT   R        O  4 89REFFLD(LOTSF/BIBLOT *LIBL/LOTS)
      A                                      COLOR(WHT)
