@@ -1374,7 +1374,7 @@
        // --------------------------------------------------
        // Prototype for procedure: aleatoire
        // --------------------------------------------------
-       DCL-PR aleatoire ;
+       DCL-PR aleatoire packed(15:0);
          mult PACKED(15:0) CONST;
        END-PR ;
 
