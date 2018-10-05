@@ -31,7 +31,6 @@
        dcl-s PGFCT char(3);
 
        // Modèles de variables
-       /copy qcpysrc,Inh32766
        /Copy Qcpysrc,Inhbuilder
 
        // Indicateur Programme
