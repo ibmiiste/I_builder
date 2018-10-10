@@ -54,6 +54,7 @@
        Dcl-s g_option_donnees Char(1);
        Dcl-s g_list_biblio Char(10);
        Dcl-s g_num_lot Like(r_Num_lot);
+       Dcl-s g_cmd like(r_commande_CLLE);
 
        // --------------------------------------------------
        // Prototype for procedure: Ouvrir_curseur
@@ -85,6 +86,11 @@
 
          dow sqlcode = 0;
            If g_typobj<>'*MSGF';
+             If g_typobj='PF';
+               g_option_donnees ='C';
+             Else;
+               g_option_donnees ='';
+             EndIf;
              g_optimize='*NONE';
              g_BIBSRC_pre=g_BIBSRC;
              g_FicSrc_pre=g_FicSrc;
@@ -101,7 +107,12 @@
                        :g_optimize
                        :g_Failed
                        :g_FileAttach
-                       :g_list_biblio);
+                       :g_list_biblio
+                       :g_option_donnees
+                       :P_Sys_Dst
+                       :P_User
+                       :P_Mot_De_Passe
+                       :P_Livr_Env_Dst);
            Else;
              i_MrgMsgf( g_ObjDst + g_BibDst
                        :g_BibSrc
@@ -111,44 +122,9 @@
                        :P_Mot_De_Passe);
            EndIf;
 
-
-
            Lecture_curseur_list_obj();
 
          enddo;
-
-         if P_Livr_Env_Dst=*on;
-
-           Ouvrir_curseur_list_obj();
-
-           Lecture_curseur_list_obj();
-
-
-           dow sqlcode = 0;
-
-             If g_typobj='*MSGF';
-               i_MrgMsgf( g_ObjDst + g_BibDst
-                         :g_BibSrc
-                         :g_MbrSrc
-                         :P_Sys_Dst
-                         :P_User
-                         :P_Mot_De_Passe);
-             Else;
-               IF g_typobj='PF';
-                 g_option_donnees ='C';
-               Else;
-                 g_option_donnees ='';
-               EndIf;
-               Livraison ( g_ObjDst + g_BibDst
-                          :g_option_donnees
-                          :P_Sys_Dst
-                          :P_User
-                          :P_Mot_De_Passe);
-             ENDIF;
-           EndIf;
-
-           Lecture_curseur_list_obj();
-         Enddo;
 
          if g_Failed<>0;
            EnvRapMel(g_FileAttach);

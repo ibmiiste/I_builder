@@ -12,6 +12,8 @@
              DCL        VAR(&LISTBIB) TYPE(*CHAR) LEN(10) /* Liste +
                           de bibliothèque à utiliser avec la +
                           commande POSLIB */
+             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Génération d''un objet avec +
+                          STRPREPRC') BNDDIR(I_BUILDER)
 
              POSLIB     LISTE(&LISTBIB) LIB(*NONE)
 

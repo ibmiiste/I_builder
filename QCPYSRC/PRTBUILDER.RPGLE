@@ -339,3 +339,15 @@
           command char(1024) const options(*varsize);
           length  packed(15:5) const;
        END-PR;
+
+      *---------------------------------------------------------------*
+      *                                                               *
+      * Programme Edtliblot Mise en ligne d'une liste de bibliothèques*
+      *                                                               *
+      * paramètres en entrée : le nom de la liste paramétré dans      *
+      *                        WRKLSTLIB                              *
+      *                                                               *
+      *---------------------------------------------------------------*
+       DCL-PR edtliblot;
+          p_List_bibliotheques char(10) const;
+       END-PR;

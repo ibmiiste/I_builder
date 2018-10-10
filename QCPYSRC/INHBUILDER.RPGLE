@@ -1,5 +1,5 @@
        Dcl-s r_ccsid char(10) Template;
-       Dcl-s r_commande_CLLE char(5000) Template;
+       Dcl-s r_commande_CLLE char(1024) Template;
        Dcl-s r_data_message char(20) Template;
        Dcl-s r_Lib_lot char( 50) Template;
        Dcl-s r_longueur_CMD_CLLE packed(15:5) Template;

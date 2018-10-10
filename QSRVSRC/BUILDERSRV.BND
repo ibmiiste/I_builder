@@ -16,6 +16,7 @@
     /*                      &LI/CRTBIBBLD +                          */
     /*                      &LI/GSBIBLOT10 +                         */
     /*                      &LI/EXECUTION +                          */
+    /*                      &LI/EDTLIBLOT +                          */
     /*                      &LI/GSTERRSTR);                          */
     /*     >>PARM<<  BNDDIR(SERVICE);                                */
     /*     >>PARM<<  OPTION(*DUPPROC);                               */
@@ -43,4 +44,5 @@
                 EXPORT     SYMBOL(INFOS_OBJET)
                 EXPORT SYMBOL(CMD_EXEC)
                 EXPORT SYMBOL(CMD_CHK)
+                EXPORT SYMBOL(EDTLIBLOT)
               ENDPGMEXP

@@ -8,9 +8,12 @@
       /*   >>EXECUTE<<                                                    */
       /* >>END-PRE-COMPILER<<                                             */
 
-             PGM        PARM(&PREBIBSRC &PREFICSRC &PRESRCMBR &BIBDST +
-                          &OBJDST &TYPOBJ &BIBSRC &FICSRC &MBRSRC +
-                          &OPTIMIZE &FAILED &FILEATTACH &LISTBIB)
+             PGM        PARM(&PREBIBSRC &PREFICSRC &PRESRCMBR &BIBDST &OBJDST +
+                          &TYPOBJ &BIBSRC &FICSRC &MBRSRC &OPTIMIZE &FAILED +
+                          &FILEATTACH &LISTBIB &GESTDATA &MACHINE &USER &MDP +
+                          &LIVRAISON)
+
+
 
              DCL        VAR(&PREBIBSRC) TYPE(*CHAR) LEN(10)
              DCL        VAR(&PREFICSRC) TYPE(*CHAR) LEN(10)
@@ -41,17 +44,17 @@
                           de bibliothèque à utiliser avec la +
                           commande POSLIB */
              DCL        VAR(&QUOTE) TYPE(*CHAR) LEN(1) VALUE('''')
+             DCL        VAR(&GESTDATA) TYPE(*CHAR) LEN(1)
+             DCL        VAR(&LIVRAISON) TYPE(*LGL)
 
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Génération d''un objet avec +
                           STRPREPRC') BNDDIR(I_BUILDER)
-
-             /* Mise en ligne des bibliothèque de l'application           */
-             POSLIB     LISTE(&LISTBIB) LIB(*NONE)
 
              /* Récupération du type de source                             */
              RTVMBRD    FILE(&BIBSRC/&FICSRC) MBR(&MBRSRC *SAME) +
                           SRCTYPE(&TYPSRC)
 
+             POSLIB     LISTE(&LISTBIB) LIB(*NONE)
 
              /* En cas de précompilation SQL l'OPTIMIZE doit être mis dans COMPILOPT*/
              /* de la commande de compilation                                       */
@@ -115,13 +118,18 @@
              IF         COND(&ATROBJ *EQ 'LF') THEN(GRTOBJAUT +
                           OBJ(&BIBDST/&OBJDST) OBJTYPE(*FILE) +
                           USER(*PUBLIC) AUT(*ALL))
+             CHGVAR     VAR(&OBJETQ) VALUE(&BIBDST *TCAT &OBJDST)
+             IF         COND(&LIVRAISON *EQ '1') THEN(CALLPRC  PRC(LIVRAISON) +
+                          PARM((&OBJETQ) (&GESTDATA) (&MACHINE) (&USER) (&MDP)) +
+                          RTNVAL(*NONE))
+
 
              IF         COND(&ATROBJ *EQ 'PF' *AND &EXISTS *EQ '1') +
                           THEN(DO)
-                CPYF       FROMFILE(&QTEMP/&SAUV_TAB) +
-                             TOFILE(&BIBDST/&OBJDST) FROMMBR(*ALL) +
-                             TOMBR(*FROMMBR) MBROPT(*ADD) CRTFILE(*YES) +
-                             FMTOPT(*MAP *DROP) ERRLVL(*NOMAX)
+             SBMJOB     CMD(CPYF FROMFILE(&QTEMP/&SAUV_TAB) +
+                          TOFILE(&BIBDST/&OBJDST) FROMMBR(*ALL) TOMBR(*FROMMBR) +
+                          MBROPT(*ADD) CRTFILE(*YES) FMTOPT(*MAP *DROP) +
+                          ERRLVL(*NOMAX))
 
                 DLTF       FILE(&QTEMP/&SAUV_TAB)
              ENDDO
