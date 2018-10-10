@@ -15,6 +15,7 @@
     /*                      &LI/MAILERR +                            */
     /*                      &LI/CRTBIBBLD +                          */
     /*                      &LI/GSBIBLOT10 +                         */
+    /*                      &LI/EXECUTION +                          */
     /*                      &LI/GSTERRSTR);                          */
     /*     >>PARM<<  BNDDIR(SERVICE);                                */
     /*     >>PARM<<  OPTION(*DUPPROC);                               */
@@ -40,4 +41,6 @@
                 EXPORT     SYMBOL(CRTBIBBLD)
                 EXPORT     SYMBOL(GESTION_BIB_LOT)
                 EXPORT     SYMBOL(INFOS_OBJET)
-             ENDPGMEXP
+                EXPORT SYMBOL(CMD_EXEC)
+                EXPORT SYMBOL(CMD_CHK)
+              ENDPGMEXP

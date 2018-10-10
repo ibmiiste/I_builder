@@ -326,57 +326,6 @@
 
       *---------------------------------------------------------------*
       *                                                               *
-      * Procedure cmd_exec  : lance une commande (alias de exec)      *
-      *                                                               *
-      * paramètre en entrée : la commande                             *
-      *                                                               *
-      *---------------------------------------------------------------*
-       DCL-PR cmd_exec;
-          cmd varchar(1024) const;
-       END-PR;
-
-      *---------------------------------------------------------------*
-      *                                                               *
-      * Procedure cmd_chk   : teste une commande                      *
-      *                                                               *
-      * paramètre en entrée : la commande                             *
-      *                                                               *
-      *---------------------------------------------------------------*
-       DCL-PR cmd_chk;
-          cmd varchar(1024) const;
-       END-PR;
-
-      *---------------------------------------------------------------*
-      *                                                               *
-      * Programme qcmdexc   : permet de lancer l'API                  *
-      *                                                               *
-      * paramètres en entrée : la chaine contenant la commande        *
-      *                        la longueur de la chaine de commande   *
-      *                                                               *
-      * REMARQUE            : sera appelé par la procédure exec
-      *                       ou cmd_exec                             *
-      *---------------------------------------------------------------*
-       DCL-PR qcmdexc extpgm('QCMDEXC');
-          command char(1024) const options(*varsize);
-          length  packed(15:5) const;
-       END-PR;
-
-      *---------------------------------------------------------------*
-      *                                                               *
-      * Programme qcmdchk   : teste une commande                      *
-      *                                                               *
-      * paramètres en entrée : la chaine contenant la commande        *
-      *                        la longueur de la chaine de commande   *
-      *                                                               *
-      * REMARQUE            : sera appelé par la procédure exec       *
-      *---------------------------------------------------------------*
-       DCL-PR qcmdchk extpgm('QCMDCHK');
-          command char(1024) const options(*varsize);
-          length  packed(15:5) const;
-       END-PR;
-
-      *---------------------------------------------------------------*
-      *                                                               *
       * Procedure qry_init   : initilise un nouvel OPNQRYF            *
       *                                                               *
       *---------------------------------------------------------------*
