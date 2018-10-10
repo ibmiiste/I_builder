@@ -46,7 +46,11 @@
              DCL        VAR(&QUOTE) TYPE(*CHAR) LEN(1) VALUE('''')
              DCL        VAR(&GESTDATA) TYPE(*CHAR) LEN(1)
              DCL        VAR(&LIVRAISON) TYPE(*LGL)
-
+             DCL        VAR(&OBJETQ) TYPE(*CHAR) LEN(20)
+             DCL        VAR(&MACHINE) TYPE(*CHAR) LEN(32)
+             DCL        VAR(&USER) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&MDP) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&NOM_TRAV) TYPE(*CHAR) LEN(10)
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Génération d''un objet avec +
                           STRPREPRC') BNDDIR(I_BUILDER)
 
@@ -87,12 +91,13 @@
                 IF         COND(&EXISTS *EQ '1') THEN(DO)
                 CALLPRC    PRC(ALEATOIRE) PARM((&RAND)) RTNVAL(&NUMALEA)
                 CHGVAR     VAR(&NUMALEC) VALUE(&NUMALEA)
-                CHGVAR     VAR(&SAUV_TAB) VALUE('A' *TCAT &NUMALEC)
-                CPYF       FROMFILE(&BIBDST/&OBJDST) +
-                             TOFILE(&QTEMP/&SAUV_TAB) FROMMBR(*ALL) +
-                             TOMBR(*FROMMBR) MBROPT(*REPLACE) +
-                             CRTFILE(*YES) ERRLVL(*NOMAX)
-                ENDDO
+             CHGVAR     VAR(&SAUV_TAB) VALUE('A' *TCAT &NUMALEC)
+             CHGVAR     VAR(&NOM_TRAV) VALUE('SAV' *TCAT &OBJDST)
+             SBMJOB     CMD(CPYF FROMFILE(&BIBDST/&OBJDST) +
+                          TOFILE(&QTEMP/&SAUV_TAB) FROMMBR(*ALL) TOMBR(*FROMMBR) +
+                          MBROPT(*REPLACE) CRTFILE(*YES) ERRLVL(*NOMAX)) +
+                          JOB(&NOM_TRAV)
+             ENDDO
              ENDDO
 
              /* Création de l'objet                                                */
@@ -118,19 +123,15 @@
              IF         COND(&ATROBJ *EQ 'LF') THEN(GRTOBJAUT +
                           OBJ(&BIBDST/&OBJDST) OBJTYPE(*FILE) +
                           USER(*PUBLIC) AUT(*ALL))
-             CHGVAR     VAR(&OBJETQ) VALUE(&BIBDST *TCAT &OBJDST)
+             CHGVAR     VAR(&OBJETQ) VALUE(&OBJDST *CAT &BIBDST)
              IF         COND(&LIVRAISON *EQ '1') THEN(CALLPRC  PRC(LIVRAISON) +
                           PARM((&OBJETQ) (&GESTDATA) (&MACHINE) (&USER) (&MDP)) +
                           RTNVAL(*NONE))
 
 
-             IF         COND(&ATROBJ *EQ 'PF' *AND &EXISTS *EQ '1') +
-                          THEN(DO)
-             SBMJOB     CMD(CPYF FROMFILE(&QTEMP/&SAUV_TAB) +
-                          TOFILE(&BIBDST/&OBJDST) FROMMBR(*ALL) TOMBR(*FROMMBR) +
-                          MBROPT(*ADD) CRTFILE(*YES) FMTOPT(*MAP *DROP) +
-                          ERRLVL(*NOMAX))
-
-                DLTF       FILE(&QTEMP/&SAUV_TAB)
+             IF         COND(&ATROBJ *EQ 'PF' *AND &EXISTS *EQ '1') THEN(DO)
+             CHGVAR     VAR(&NOM_TRAV) VALUE('RST' *TCAT &OBJDST)
+             CALLPRC    PRC(RST_DATA) PARM((&NOM_TRAV) (&QTEMP) (&SAUV_TAB) +
+                          (&BIBDST) (&OBJDST))
              ENDDO
              ENDPGM

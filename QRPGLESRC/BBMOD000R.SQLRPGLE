@@ -59,8 +59,8 @@
 
        // inherited variables
        // héritage des types
-       /copy qcpysrc,INH32766
-       /copy Qcpysrc,Inhbuilder
+        /copy Qcpysrc,Inhbuilder
+
        // constants
        // constantes
 

@@ -79,6 +79,11 @@
          P_Failed PACKED(10:0);
          P_FileAttach char(10000);
          P_liste_biblio Like(r_Nom_obj_IBMi);
+         P_gestion_donnees Char(1) Const;
+         p_Sys_Dst char(32) Const;
+         P_User Char(10) Const;
+         P_Mot_De_Passe Char(10) Const;
+         P_Livr_Env_Dst IND const;
        END-PR ;
        /Endif
 
@@ -342,7 +347,7 @@
 
       *---------------------------------------------------------------*
       *                                                               *
-      * Programme Edtliblot Mise en ligne d'une liste de bibliothèques*
+      * Procédure Edtliblot Mise en ligne d'une liste de bibliothèques*
       *                                                               *
       * paramètres en entrée : le nom de la liste paramétré dans      *
       *                        WRKLSTLIB                              *
@@ -350,4 +355,21 @@
       *---------------------------------------------------------------*
        DCL-PR edtliblot;
           p_List_bibliotheques char(10) const;
+       END-PR;
+
+      *---------------------------------------------------------------*
+      *                                                               *
+      * Procédure Rst_data copie les données d'un fichier et le       *
+      * supprime ensuite
+      *                                                               *
+      * paramètres en entrée : le nom de la liste paramétré dans      *
+      *                        WRKLSTLIB                              *
+      *                                                               *
+      *---------------------------------------------------------------*
+       DCL-PR rst_data;
+         p_Nom_travail like(r_Nom_travail) Const;
+         p_bib_temporaire like(r_Nom_obj_IBMi) Const;
+         p_bib_origine like(r_Nom_obj_IBMi) Const;
+         p_bib_destination like(r_Nom_obj_IBMi) Const;
+         p_objet_destination like(r_Nom_obj_IBMi) Const;
        END-PR;

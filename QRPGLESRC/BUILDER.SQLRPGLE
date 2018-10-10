@@ -19,19 +19,19 @@
        Ctl-opt bnddir('I_BUILDER');
 
        //Héritage des classes de données
-       /copy qcpysrc,Inh32766
+
        /copy Qcpysrc,Inhbuilder
 
        /Copy Qcpysrc,Prtbuilder
 
        DCL-PI builder;
          p_num_lot Like(r_Num_lot);
-         P_Biblio_Lot LIKE(R_NomObj) const;
+         P_Biblio_Lot LIKE(r_Nom_obj_IBMi) const;
          P_Env_Dest CHAR(1) const;
          P_Optim_Compil CHAR(20);
          P_Livr_Env_Dst IND const;
          P_Sys_Dst CHAR(32) const;
-         P_User LIKE(R_nomobj) const;
+         P_User LIKE(r_Nom_obj_IBMi) const;
          P_Mot_De_Passe CHAR(10) const;
        END-PI ;
 
@@ -39,16 +39,16 @@
        Dcl-S g_rowid_char Char(100);
        Dcl-s g_Rowid_lots SQLTYPE(ROWID);
 
-       Dcl-S g_BibSrc LIKE(R_NomObj);
-       Dcl-S g_FicSrc LIKE(R_NomObj);
-       Dcl-S g_MbrSrc LIKE(R_NomObj);
-       Dcl-S g_BibSrc_pre LIKE(R_NomObj);
-       Dcl-S g_FicSrc_pre LIKE(R_NomObj);
-       Dcl-S g_MbrSrc_pre LIKE(R_NomObj);
-       Dcl-S g_BibDst LIKE(R_NomObj);
-       Dcl-S g_ObjDst LIKE(R_NomObj);
+       Dcl-S g_BibSrc LIKE(r_Nom_obj_IBMi);
+       Dcl-S g_FicSrc LIKE(r_Nom_obj_IBMi);
+       Dcl-S g_MbrSrc LIKE(r_Nom_obj_IBMi);
+       Dcl-S g_BibSrc_pre LIKE(r_Nom_obj_IBMi);
+       Dcl-S g_FicSrc_pre LIKE(r_Nom_obj_IBMi);
+       Dcl-S g_MbrSrc_pre LIKE(r_Nom_obj_IBMi);
+       Dcl-S g_BibDst LIKE(r_Nom_obj_IBMi);
+       Dcl-S g_ObjDst LIKE(r_Nom_obj_IBMi);
        Dcl-S g_Failed packed(10:0);
-       Dcl-S g_TypObj like(R_NomObj);
+       Dcl-S g_TypObj like(r_Nom_obj_IBMi);
        Dcl-S g_FileAttach char(10000);
        Dcl-S g_optimize char(20);
        Dcl-s g_option_donnees Char(1);

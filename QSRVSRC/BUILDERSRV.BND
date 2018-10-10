@@ -17,6 +17,7 @@
     /*                      &LI/GSBIBLOT10 +                         */
     /*                      &LI/EXECUTION +                          */
     /*                      &LI/EDTLIBLOT +                          */
+    /*                      &LI/RST_DATA  +                          */
     /*                      &LI/GSTERRSTR);                          */
     /*     >>PARM<<  BNDDIR(SERVICE);                                */
     /*     >>PARM<<  OPTION(*DUPPROC);                               */
@@ -27,22 +28,23 @@
     /*   >>END-IMPORTANT<<                                           */
     /*   >>EXECUTE<<                                                 */
     /* >>END-PRE-COMPILER<<                                          */
-             STRPGMEXP    PGMLVL(*CURRENT) LVLCHK(*YES) SIGNATURE('20170428')
-                EXPORT     SYMBOL(EXISTS)
-                EXPORT     SYMBOL(ALEATOIRE)
-                EXPORT     SYMBOL(LIVRAISON)
-                EXPORT     SYMBOL(I_MRGMSGF)
-                EXPORT     SYMBOL(CONSTRUCT)
-                EXPORT     SYMBOL(SOURCE_STANDARD)
-                EXPORT     SYMBOL(ENVRAPMEL)
-                EXPORT     SYMBOL(GSTERRSTR)
-                EXPORT     SYMBOL(GEST_ERREUR)
-                EXPORT     SYMBOL(MAILERR)
-                EXPORT     SYMBOL(SCRIPTFTP)
-                EXPORT     SYMBOL(CRTBIBBLD)
-                EXPORT     SYMBOL(GESTION_BIB_LOT)
-                EXPORT     SYMBOL(INFOS_OBJET)
-                EXPORT SYMBOL(CMD_EXEC)
-                EXPORT SYMBOL(CMD_CHK)
-                EXPORT SYMBOL(EDTLIBLOT)
-              ENDPGMEXP
+             STRPGMEXP  PGMLVL(*CURRENT) LVLCHK(*YES) SIGNATURE('20170428')
+             EXPORT     SYMBOL(EXISTS)
+             EXPORT     SYMBOL(ALEATOIRE)
+             EXPORT     SYMBOL(LIVRAISON)
+             EXPORT     SYMBOL(I_MRGMSGF)
+             EXPORT     SYMBOL(CONSTRUCT)
+             EXPORT     SYMBOL(SOURCE_STANDARD)
+             EXPORT     SYMBOL(ENVRAPMEL)
+             EXPORT     SYMBOL(GSTERRSTR)
+             EXPORT     SYMBOL(GEST_ERREUR)
+             EXPORT     SYMBOL(MAILERR)
+             EXPORT     SYMBOL(SCRIPTFTP)
+             EXPORT     SYMBOL(CRTBIBBLD)
+             EXPORT     SYMBOL(GESTION_BIB_LOT)
+             EXPORT     SYMBOL(INFOS_OBJET)
+             EXPORT     SYMBOL(CMD_EXEC)
+             EXPORT     SYMBOL(CMD_CHK)
+             EXPORT     SYMBOL(EDTLIBLOT)
+             EXPORT     SYMBOL(RST_DATA)
+             ENDPGMEXP
