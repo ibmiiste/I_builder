@@ -93,10 +93,9 @@
                 CHGVAR     VAR(&NUMALEC) VALUE(&NUMALEA)
              CHGVAR     VAR(&SAUV_TAB) VALUE('A' *TCAT &NUMALEC)
              CHGVAR     VAR(&NOM_TRAV) VALUE('SAV' *TCAT &OBJDST)
-             SBMJOB     CMD(CPYF FROMFILE(&BIBDST/&OBJDST) +
-                          TOFILE(&QTEMP/&SAUV_TAB) FROMMBR(*ALL) TOMBR(*FROMMBR) +
-                          MBROPT(*REPLACE) CRTFILE(*YES) ERRLVL(*NOMAX)) +
-                          JOB(&NOM_TRAV)
+             CPYF       FROMFILE(&BIBDST/&OBJDST) TOFILE(&QTEMP/&SAUV_TAB) +
+                          FROMMBR(*ALL) TOMBR(*FROMMBR) MBROPT(*REPLACE) +
+                          CRTFILE(*YES) ERRLVL(*NOMAX)
              ENDDO
              ENDDO
 
@@ -131,7 +130,8 @@
 
              IF         COND(&ATROBJ *EQ 'PF' *AND &EXISTS *EQ '1') THEN(DO)
              CHGVAR     VAR(&NOM_TRAV) VALUE('RST' *TCAT &OBJDST)
-             CALLPRC    PRC(RST_DATA) PARM((&NOM_TRAV) (&QTEMP) (&SAUV_TAB) +
-                          (&BIBDST) (&OBJDST))
+             SBMJOB     CMD(CALL PGM(RST_DATA) PARM(&NOM_TRAV &QTEMP &SAUV_TAB +
+                          &BIBDST &OBJDST)) JOB(&NOM_TRAV)
+
              ENDDO
              ENDPGM

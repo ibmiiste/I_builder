@@ -1,13 +1,6 @@
-      /* >>PRE-COMPILER<<                                                 */
-      /*   >>CRTCMD<<  CRTCLMOD MODULE(&LI/&OB) SRCFILE(&SL/&SF) +        */
-      /*                 SRCMBR(&SM);                                     */
-      /*   >>IMPORTANT<<                                                  */
-      /*     >>PARM<<  OPTION(*EVENTF);                                   */
-      /*     >>PARM<<  DBGVIEW(*ALL);                                     */
-      /*   >>END-IMPORTANT<<                                              */
-      /*   >>EXECUTE<<                                                    */
-      /* >>END-PRE-COMPILER<<                                             */
-
+             /*------------------------------------------------------------------------*/
+             /*  Copie un fichier dans un autre puis supprime le fichier d'origine     */
+             /*------------------------------------------------------------------------*/
              PGM        PARM(&NOM_TRAV &QTEMP &SAUV_TAB &BIBDST &OBJDST)
 
              DCL        VAR(&NOM_TRAV) TYPE(*CHAR) LEN(10)
@@ -16,10 +9,9 @@
              DCL        VAR(&BIBDST) TYPE(*CHAR) LEN(10)
              DCL        VAR(&OBJDST) TYPE(*CHAR) LEN(10)
 
-             SBMJOB     CMD(CPYF FROMFILE(&QTEMP/&SAUV_TAB) +
-                          TOFILE(&BIBDST/&OBJDST) FROMMBR(*ALL) TOMBR(*FROMMBR) +
-                          MBROPT(*ADD) CRTFILE(*YES) FMTOPT(*MAP *DROP) +
-                          ERRLVL(*NOMAX)) JOB(&NOM_TRAV)
+             CPYF       FROMFILE(&QTEMP/&SAUV_TAB) TOFILE(&BIBDST/&OBJDST) +
+                          FROMMBR(*ALL) TOMBR(*FROMMBR) MBROPT(*ADD) CRTFILE(*YES) +
+                          FMTOPT(*MAP *DROP) ERRLVL(*NOMAX)
 
              DLTF       FILE(&QTEMP/&SAUV_TAB)
 
