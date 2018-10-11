@@ -45,11 +45,10 @@
        // Gestion des objets du projet
        // --------------------------------------------------
        DCL-PR liste_objet_construction EXTPGM('LISTBUILD');
-         p_Num_lots Like(r_Num_lot);
+         p_Num_lots Like(r_Num_lot) Const;
        END-PR ;
 
        // Modèles de variables
-       /copy qcpysrc,inh32766
        /Copy Qcpysrc,Inhbuilder
 
        // Déclaration des variables

@@ -510,7 +510,12 @@
                         :g_optimize
                         :g_Failed
                         :g_FileAttach
-                        :g_list_biblio);
+                        :g_list_biblio
+                        :''
+                        :''
+                        :''
+                        :''
+                        :'');
               if g_Failed<>0;
                 EnvRapMel(g_FileAttach);
               EndIf;
