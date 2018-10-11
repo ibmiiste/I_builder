@@ -2,8 +2,7 @@
     /*   >>CRTCMD<<  CRTSRVPGM SRCFILE(&SL/&SF) SRCMBR(&SM);         */
     /*   >>IMPORTANT<<                                               */
     /*     >>PARM<<  SRVPGM(&LI/&SM);                                */
-    /*     >>PARM<<  MODULE(&LI/I_MRGMSGF   +                        */
-    /*                      &LI/BBMOD000R +                          */
+    /*     >>PARM<<  MODULE(&LI/BBMOD000R +                          */
     /*                      &LI/ALEATOIRE +                          */
     /*                      &LI/LIVRAISON +                          */
     /*                      &LI/ENVRAPMEL +                          */
@@ -32,7 +31,6 @@
              EXPORT     SYMBOL(EXISTS)
              EXPORT     SYMBOL(ALEATOIRE)
              EXPORT     SYMBOL(LIVRAISON)
-             EXPORT     SYMBOL(I_MRGMSGF)
              EXPORT     SYMBOL(CONSTRUCT)
              EXPORT     SYMBOL(SOURCE_STANDARD)
              EXPORT     SYMBOL(ENVRAPMEL)

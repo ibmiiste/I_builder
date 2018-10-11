@@ -22,7 +22,20 @@
 
        /copy Qcpysrc,Inhbuilder
 
+       // Procédure externe
        /Copy Qcpysrc,Prtbuilder
+
+       // --------------------------------------------------
+       // Prototype for Programme:Envoi de message vers système distant
+       // --------------------------------------------------
+       Dcl-Pr i_MrgMsgf Extpgm('I_MRGMSGF');
+         P_Objet char(20) Const;
+         P_BibSrc like(r_Nom_obj_IBMi) Const;
+         P_MbrSrc like(r_Nom_obj_IBMi) Const;
+         P_Sys_Dst CHAR(32) Const;
+         P_User LIKE(r_Nom_obj_IBMi) Const;
+         P_Mot_De_Passe CHAR(10) Const;
+       End-Pr;
 
        DCL-PI builder;
          p_num_lot Like(r_Num_lot);
