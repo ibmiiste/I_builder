@@ -82,8 +82,17 @@
        DCL-PR Lecture_curseur_list_obj LIKE(sqlcode);
        END-PR ;
 
-
          *InLr=*On;
+
+         EXEC SQL
+           SET OPTION COMMIT = *NONE;
+
+         EXEC SQL
+           DELETE FROM pieces_attachees;
+
+         EXEC SQL
+           DELETE FROM liste_diffusion;
+
          g_Num_lot=p_Num_lot;
 
          //Récupération de la list de bibliothèque

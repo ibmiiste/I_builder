@@ -50,10 +50,11 @@
 
              FTP        RMTSYS(&MACHINE)
 
-             CHGVAR     VAR(&CMD) VALUE('SBMJOB CMD( RSTOBJ OBJ(*ALL) +
-                          SAVLIB(' *TCAT &BIBLIO *TCAT ') DEV(*SAVF) +
-                          SAVF(QGPL/' *TCAT &SAVF *TCAT ') MBROPT(*NEW) +
-                          ALWOBJDIF(*ALL)) JOB(RCP_I_PUSH) USER(RTSFLR)')
+             CHGVAR     VAR(&CMD) VALUE('SBMJOB CMD( RSTOBJ OBJ(' *TCAT +
+                          &OBJET *TCAT ') SAVLIB(' *TCAT &BIBLIO *TCAT ') +
+                          DEV(*SAVF) SAVF(QGPL/' *TCAT &SAVF *TCAT ') +
+                          MBROPT(*NEW) ALWOBJDIF(*ALL)) JOB(RCP_I_PUSH) +
+                          USER(RTSFLR)')
 
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) RMTPWD(&MDP)
 

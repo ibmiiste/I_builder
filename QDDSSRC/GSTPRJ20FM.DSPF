@@ -39,7 +39,7 @@
      A            ZJOB          10   O  2122
      A                                      OVRDTA
      A                                  5 11'Numéro:'
-     A            ZPRJNBR        6Y 0   5 19
+     A            ZPRJNBR   R           5 19REFFLD(PROJETSF/PRJNBR PROJETS)
      A                                      EDTCDE(Z)
      A                                      COLOR(WHT)
      A                                      OVRDTA

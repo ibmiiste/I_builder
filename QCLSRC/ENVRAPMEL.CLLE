@@ -14,9 +14,38 @@
              DCL        VAR(&CMD) TYPE(*CHAR) LEN(32000)
              DCL        VAR(&MAILUSERS) TYPE(*CHAR) LEN(1000)
              DCL        VAR(&LENCMD) TYPE(*DEC) LEN(15 5) VALUE(32000)
+             DCL        VAR(&MAILUSERS) TYPE(*CHAR) LEN(20) +
+                          VALUE('odrubigny.externe@ista.fr')
+             DCL        VAR(&SUJET) TYPE(*CHAR) LEN(265) VALUE('Erreur de +
+                          construction')
+             DCL        VAR(&PRIORITE) TYPE(*DEC) LEN(1 0) VALUE(3)
+             DCL        VAR(&CODEDIT) TYPE(*CHAR) LEN(20) VALUE('ERR_CONSTRUCT')
+             DCL        VAR(&SQL) TYPE(*CHAR) LEN(256) VALUE('INSERT INTO +
+                          LISTE_DIFFUSION VALUES (''' *TCAT &CODEDIT *TCAT ''', +
+                          ''' *TCAT &MAILUSERS *TCAT ''', ''*TO'')')
 
-             CHGVAR     VAR(&MAILUSERS) +
-                          VALUE('(''odrubigny.externe@ista.fr'' *PRI)')
+             RUNSQL     SQL(&SQL) COMMIT(*NONE)
+
+             CALLPRC    PRC(PREPARATION_EMAIL) PARM((&MAILUSERS) (&SUJET) +
+                          (&PRIORITE) (*OMIT) ('Erreur de construction') +
+                          ('') ('') ('Il y a des erreurs de construction, +
+                          veuillez trouver ci-joint les spool en erreur') +
+                          (*OMIT) (*OMIT) (''))
+             //         LANCEMENT DES COMMANDES LAUNCHER D'envoi de mail
+             //         ECRITURE DANS LE FICHIER EXCEL CELLULE PAR CELLULE
+             //         USAGE DE LNCCMD CF SOURCE DU MODULE BLAUN000R (PGM +
+                          DE SERVICE BPPGM/LAUNCHSRV)
+             ECRITURE_LAUNCHER( L_HANDLE
+ :           L_CODE_ENVOI_MAIL
+ :           *OMIT);
+
+             //         FERMETURE COMMUNICATION AVEC LE SERVEUR LAUNCHER
+             LNCCLOSE   ('*ONLY');
+
+             EXEC       SQL
+             DELETE     BEXTLAUNC;
+             EXEC       SQL
+             DELETE     LNCTOXLS;
 
              CHGVAR     VAR(&CMD) VALUE('SNDSMTPEMM RCP(' *TCAT &MAILUSERS +
                           *TCAT ') NOTE(''Le projet MIRUS a des erreurs de +
