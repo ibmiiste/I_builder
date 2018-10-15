@@ -3,11 +3,12 @@
      /*                 SRCMBR(&SM);                                     */
      /*   >>IMPORTANT<<                                                  */
      /*     >>PARM<<  OPTION(*EVENTF);                                   */
+     /*     >>PARM<<  RSTDSP(*YES);                                      */
      /*   >>END-IMPORTANT<<                                              */
      /*   >>EXECUTE<<                                                    */
      /* >>END-PRE-COMPILER<<                                             */
      A                                      DSPSIZ(*DS4)
-     A                                      MSGLOC(24)
+     A                                      MSGLOC(27)
      A                                      PRINT
      A                                      HELP
      A                                      HLPPNLGRP('PGMF02' PGMF02)
@@ -50,23 +51,23 @@
      A                                      OVRDTA
      A            ZJOB          10   O  2122
      A                                      OVRDTA
-     A                                 25  6'Crée le :'
-     A            ZDAC            L  O 25 18DATFMT(*EUR) OVRDTA
+     A                                 24  6'Crée le :'
+     A            ZDAC            L  O 24 18DATFMT(*EUR) OVRDTA
+     A                                      COLOR(GRN)
+     A                                 24 30'à :'
+     A            ZHEC            T  O 24 34TIMFMT(*EUR) OVRDTA
+     A                                 24 44'par :'
+     A            ZUSC          10   O 24 50
+     A                                      OVRDTA
+     A                                 25  3'Modifié le :'
+     A            ZDAM            L  O 25 18DATFMT(*EUR) OVRDTA
      A                                      COLOR(GRN)
      A                                 25 30'à :'
-     A            ZHEC            T  O 25 34TIMFMT(*EUR) OVRDTA
+     A            ZHEM            T  O 25 34TIMFMT(*EUR) OVRDTA
      A                                 25 44'par :'
-     A            ZUSC          10   O 25 50
+     A            ZUSM          10   O 25 50
      A                                      OVRDTA
-     A                                 26  3'Modifié le :'
-     A            ZDAM            L  O 26 18DATFMT(*EUR) OVRDTA
-     A                                      COLOR(GRN)
-     A                                 26 30'à :'
-     A            ZHEM            T  O 26 34TIMFMT(*EUR) OVRDTA
-     A                                 26 44'par :'
-     A            ZUSM          10   O 26 50
-     A                                      OVRDTA
-     A                                 27  2'F3=Exit   F4=Invite  F12=Annuler'
+     A                                 26  2'F3=Exit   F4=Invite  F12=Annuler'
      A                                      COLOR(BLU)
      A            WFMCUR        10A  H
      A            WZOCUR        10A  H
@@ -100,10 +101,8 @@
      A                                  4103'Statut'
      A            ZSTATLOT      20   O  4111
      A                                      COLOR(WHT)
-     A            ZROWIDLOTS    84   O 24  4COLOR(WHT)
-     A                                      NOCCSID
      A          R WMGSFL                    SFL
-     A                                      SFLMSGRCD(24)
+     A                                      SFLMSGRCD(27)
      A            WMGKEY                    SFLMSGKEY
      A            WPGMQ                     SFLPGMQ
      A          R WMGCTL                    SFLCTL(WMGSFL)
