@@ -3,6 +3,7 @@
       /*   >>IMPORTANT<<                                                  */
       /*     >>PARM<<  PGM(&LI/&OB);                                      */
       /*     >>PARM<<  OPTION(*EVENTF);                                   */
+      /*     >>PARM<<  OPTIMIZE(&U0);                                     */
       /*     >>PARM<<  DBGVIEW(*ALL);                                     */
       /*   >>END-IMPORTANT<<                                              */
       /*   >>EXECUTE<<                                                    */
