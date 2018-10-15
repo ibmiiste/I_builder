@@ -359,3 +359,15 @@
          p_bib_destination like(r_Nom_obj_IBMi) Const;
          p_objet_destination like(r_Nom_obj_IBMi) Const;
        END-PR;
+
+      *---------------------------------------------------------------*
+      *                                                               *
+      * Procédure Savliblot sauvegarde une bibliothèque lot           *
+      * identifiée par son numéro passé en paramète dans une SAVF     *
+      * Placée dans la bibliothèque ARCHIVELOT                        *
+      *                                                               *
+      * paramètres en entrée : le numéro de lot                       *
+      *---------------------------------------------------------------*
+       DCL-PR Savliblot;
+         p_Lot_number like(r_Num_lot_carac) Const;
+       END-PR;
