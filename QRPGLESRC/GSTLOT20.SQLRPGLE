@@ -20,7 +20,7 @@
       // Détail personnel                                  *
       //                                                   *
       //****************************************************
-       dcl-f GSTLOT20FM workstn infds(wdsecr) indds(IndDs);
+       dcl-f GSTLOT20FM workstn indds(IndDs);
        dcl-c WTXT1 '         Modification         ';
        dcl-c WTXT2 '             Copie            ';
        dcl-c WTXT3 '         Suppression          ';
@@ -50,6 +50,9 @@
 
        // Gestion du ROWID
        Dcl-s g_Rowidlots SQLTYPE(ROWID);
+
+       // Variable de travail de numéro de lot alphanumérique
+       Dcl-s l_Num_lot_carac Like(r_Num_lot_carac);
 
        // Constantes
 
@@ -86,6 +89,10 @@
          NREC CHAR(10);
        end-pr;
 
+       // Ds de la table LOTS
+       Dcl-DS DS_Lots Extname('LOTS') End-ds;
+
+
        // Prototypes d'appel
        Dcl-pi Gestion_Projet;
          PCHX char(2);
@@ -94,9 +101,9 @@
 
 
          // début du programme
-         Monitor;
-           Zpgm = Procedure;
-           Zdate=%Date;
+       Monitor;
+         Zpgm = Procedure;
+         Zdate=%Date;
          Zheur=%Time;
          Zjob=Job_name;
 
@@ -104,8 +111,10 @@
          WPGMQ='*  ';
          WMGKEY='CC01';
 
+         // Initialisation du sous-fichier de messages
          Sflend_Msgf = *ON;
          Sflinz_Msgf = *ON;
+
          Protection = *ON;
 
          l_Confirmation_suppression = *OFF;
@@ -179,11 +188,11 @@
            Zlistbibpr=Listbibprj;
            Zdescripl=Descriplot;
            Zstatlot=Statlot;
-           cvthc(%addr(zrowidlots): %addr(g_rowidlots): %Len(g_rowidlots)*2);  //make hex
+           Zbiblot=biblot;
          ENDIF;
          // Boucle d'attente de fin
          l_traitenement_ecran = *ON;
-         DOW l_traitenement_ecran = '1';
+         DOW l_traitenement_ecran;
            EXSR TRTSCR;
          ENDDO;
        On-error;
@@ -249,7 +258,8 @@
 
                If SQLcode=c_Trouve;
                  //Archivage de la biliothèque du lot
-                 Savliblot(%Char(numlot));
+                 l_Num_lot_carac=%Editc(numlot:'X');
+                 Savliblot(l_Num_lot_carac);
 
                  EXEC SQL
                    DELETE FROM lots WHERE CHAR(RRN(lots)) = :pnrec ;

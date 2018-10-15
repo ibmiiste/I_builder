@@ -1,29 +1,22 @@
       /* >>PRE-COMPILER<<                                                 */
-      /*   >>CRTCMD<<  CRTBNDCL SRCFILE(&SL/&SF) SRCMBR(&SM);             */
+      /*   >>CRTCMD<<  CRTCLMOD MODULE(&LI/&OB) SRCFILE(&SL/&SF) +        */
+      /*                 SRCMBR(&SM);                                     */
       /*   >>IMPORTANT<<                                                  */
-      /*     >>PARM<<  PGM(&LI/&OB);                                      */
       /*     >>PARM<<  OPTION(*EVENTF);                                   */
       /*     >>PARM<<  DBGVIEW(*ALL);                                     */
+      /*     >>PARM<<  OPTIMIZE(&U0);                                     */
       /*   >>END-IMPORTANT<<                                              */
       /*   >>EXECUTE<<                                                    */
       /* >>END-PRE-COMPILER<<                                             */
-             PGM        PARM(&NUMLOT) /* +
-                          >>END-PRE-COMPILER<<                              +
-                                         */
+             PGM        PARM(&NUMLOTC)
 
-             DCL        VAR(&NUMLOT) TYPE(*DEC) LEN(9 0)
              DCL        VAR(&BIBLOT) TYPE(*CHAR) LEN(10)
              DCL        VAR(&NUMLOTC) TYPE(*CHAR) LEN(9)
-             DCL        VAR(&INT) TYPE(*INT) LEN(2)
              DCL        VAR(&SAVLOT) TYPE(*CHAR) LEN(10)
              DCL        VAR(&DESC_LOT) TYPE(*CHAR) LEN(50)
+             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Archivage des lots') +
+                          BNDDIR(I_BUILDER)
 
-             CHGVAR     VAR(&NUMLOTC) VALUE(&NUMLOT)
-             DOFOR      VAR(&INT) FROM(1) TO(9) BY(1)
-                IF         COND(%SST(&NUMLOTC &INT 1) *EQ ' ') THEN(DO)
-                   CHGVAR     VAR(%SST(&NUMLOTC &INT 1)) VALUE('0')
-                ENDDO
-             ENDDO
              CHGVAR     VAR(&BIBLOT) VALUE('L' *TCAT &NUMLOTC)
 
              RTVOBJD    OBJ(QSYS/&BIBLOT) OBJTYPE(*LIB) TEXT(&DESC_LOT)
