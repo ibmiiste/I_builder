@@ -18,7 +18,7 @@
       // >>END-PRE-COMPILER<<                                          */
 
        dcl-f ftpcmd usage(*output) rename(ftpcmd:ftpcmdf) usropn;
-       /copy qcpysrc,inh32766
+       /copy qcpysrc,inhbuilder
 
        dcl-pr ECRITURE_SCRIPT_FTP;
          USER like(r_profil);
