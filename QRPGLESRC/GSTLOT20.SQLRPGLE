@@ -27,8 +27,7 @@
        dcl-c WTXT4 '           Affichage          ';
        dcl-c WTXT5 '           Création           ';
        dcl-c WTXT6 '        Fin de contrat        ';
-       dcl-s PACT char(2);
-       dcl-s PGFCT char(3);
+
 
        // Modèles de variables
        /Copy Qcpysrc,Inhbuilder
@@ -56,7 +55,7 @@
 
        // Constantes Sqlcode
        Dcl-c c_Trouve 0;
-       Dcl-c c_Non_trouve 100;
+
 
        // Prototype de sous-procédure externe
        // Copy des procédures de l'outils i_Builder
@@ -73,37 +72,13 @@
        // La DS du programme
        /copy qcpysrc,Psds
 
-       Dcl-ds WDI;
-        WSSAI zoned(4) pos(1);
-        WMI zoned(2) pos(5);
-        WJI zoned(2) pos(7);
-        WDATI zoned(8) pos(1);
-       end-ds;
-
-       dcl-ds WDE;
-        WJE zoned(2) pos(1);
-        WME zoned(2) pos(3);
-        WSSAE zoned(4) pos(5);
-        WDATE zoned(8) pos(1);
-       end-ds;
-
-       dcl-ds WDSECR;
-        WNLIG int(5) pos(370);
-        WRANP int(5) pos(378);
-        WNBRS int(5) pos(380);
-        WNULC int(5) pos(382);
-        WRECMI int(5) pos(403);
-       end-ds;
-
-      // Le DS des indicateurs de l'écran
+       // Le DS des indicateurs de l'écran
        Dcl-ds IndDs;
         Protection Ind Pos(14);
         Sflinz_Msgf Ind Pos(10);
         Sflend_Msgf Ind Pos(09);
        End-ds;
 
-       // Ds de la table LOTS
-       Dcl-DS DS_Lots Extname('LOTS') End-ds;
 
        // Prototypes d'appel
        Dcl-pr Gestion_Projet Extpgm('GSTLOT20');
@@ -118,95 +93,105 @@
        end-pi;
 
 
-      // début du programme
-       Zpgm = Procedure;
-       Zdate=%Date;
-       Zheur=%Time;
-       Zjob=Job_name;
+         // début du programme
+         Monitor;
+           Zpgm = Procedure;
+           Zdate=%Date;
+         Zheur=%Time;
+         Zjob=Job_name;
 
-       // Initialisation du sous=fichier des messages
-       WPGMQ='*  ';
-       WMGKEY='CC01';
+         // Initialisation du sous=fichier des messages
+         WPGMQ='*  ';
+         WMGKEY='CC01';
 
-       Sflend_Msgf = *ON;
-       Sflinz_Msgf = *ON;
-       Protection = *ON;
+         Sflend_Msgf = *ON;
+         Sflinz_Msgf = *ON;
+         Protection = *ON;
 
-       l_Confirmation_suppression = *OFF;
-       l_anomalie = *OFF;
+         l_Confirmation_suppression = *OFF;
+         l_anomalie = *OFF;
 
-       // constantes pour ce programme
-       P_TYP = '1';
-       P_FICM = 'FICMSG   ';
+         // constantes pour ce programme
+         P_TYP = '1';
+         P_FICM = 'FICMSG   ';
 
-       SELECT;
-       WHEN (PCHX = 'MO');
-         // modification
-         ZMODE=WTXT1;
-         // on ne peut modifier que ces zones
-         Protection = *OFF;
-       WHEN (PCHX = 'CO');
-         // copie
-         ZMODE=WTXT2;
-      // toutes les zones sont autorisées
-         Protection = *OFF;
-       WHEN (PCHX = 'SU');
-         // suppression
-         ZMODE=WTXT3;
-      // aucune zone n'est saisisable
-       WHEN (PCHX = 'AF');
-         // affichage
-         ZMODE=WTXT4;
-      // aucune zone n'est saisisable
-       WHEN (PCHX = 'CR');
-         // création
-         ZMODE=WTXT5;
-      // tout est saisisable sauf date de sortie
-         Protection = *OFF;
-       WHEN (PCHX = 'PE');
-         // direction Ple Emploi
-         ZMODE=WTXT6;
-      // on saisit simplement la date de fin
-       ENDSL;
-       // Initialisation de l'écran si on un numéro d'enregistrement
-       IF PNREC <> *BLANK;
-         EXEC SQL SELECT rowid_lots,
-                         lot_number,
-                         libelle_lots,
-                         liste_biblio_projet,
-                         biblio_lot,
-                         description_lots,
-                         statuts_lot
-                    INTO :g_rowidlots,
-                         :numlot,
-                         :libellot,
-                         :listbibprj,
-                         :biblot,
-                         :descriplot,
-                         :statlot
-                    FROM lots
-                    WHERE CHAR( RRN( lots)) = :pnrec
-                    ;
+         // Effacer le sous-fichier de message
+         Sflend_Msgf = *ON;
+         Sflinz_Msgf = *ON;
 
-         IF PCHX = 'CR' OR PCHX = 'CO';
-           // en création ou copie zone non renseignée
-           Znumlot=0;
-         ELSE;
+         SELECT;
+         WHEN (PCHX = 'MO');
+           // modification
+           ZMODE=WTXT1;
+           // on ne peut modifier que ces zones
+           Protection = *OFF;
+         WHEN (PCHX = 'CO');
+           // copie
+           ZMODE=WTXT2;
+         // toutes les zones sont autorisées
+           Protection = *OFF;
+         WHEN (PCHX = 'SU');
+           // suppression
+           ZMODE=WTXT3;
+         // aucune zone n'est saisisable
+         WHEN (PCHX = 'AF');
+           // affichage
+           ZMODE=WTXT4;
+         // aucune zone n'est saisisable
+         WHEN (PCHX = 'CR');
+           // création
+           ZMODE=WTXT5;
+         // tout est saisisable sauf date de sortie
+           Protection = *OFF;
+         WHEN (PCHX = 'PE');
+           // direction Ple Emploi
+           ZMODE=WTXT6;
+         // on saisit simplement la date de fin
+         ENDSL;
+         // Initialisation de l'écran si on un numéro d'enregistrement
+         IF PNREC <> *BLANK;
+           EXEC SQL
+             SELECT rowid_lots,
+                    lot_number,
+                    libelle_lots,
+                    liste_biblio_projet,
+                    biblio_lot,
+                    description_lots,
+                    statuts_lot
+               INTO :g_rowidlots,
+                    :numlot,
+                    :libellot,
+                    :listbibprj,
+                    :biblot,
+                    :descriplot,
+                    :statlot
+               FROM lots
+               WHERE CHAR(RRN(lots)) = :pnrec ;
+
+           IF PCHX = 'CR' OR PCHX = 'CO';
+             // en création ou copie zone non renseignée
+             Znumlot=0;
+           ELSE;
+             Znumlot=Numlot;
+           ENDIF;
            Znumlot=Numlot;
+           Zlibellot=Libellot;
+           Zlistbibpr=Listbibprj;
+           Zdescripl=Descriplot;
+           Zstatlot=Statlot;
+           cvthc(%addr(zrowidlots): %addr(g_rowidlots): %Len(g_rowidlots)*2);  //make hex
          ENDIF;
-         Znumlot=Numlot;
-         Zlibellot=Libellot;
-         Zlistbibpr=Listbibprj;
-         Zdescripl=Descriplot;
-         Zstatlot=Statlot;
-         cvthc(%addr(zrowidlots): %addr(g_rowidlots): %Len(g_rowidlots)*2);  //make hex
-       ENDIF;
-       // Boucle d'attente de fin
-       l_traitenement_ecran = *ON;
-       DOW l_traitenement_ecran = '1';
-         EXSR TRTSCR;
-       ENDDO;
-       //
+         // Boucle d'attente de fin
+         l_traitenement_ecran = *ON;
+         DOW l_traitenement_ecran = '1';
+           EXSR TRTSCR;
+         ENDDO;
+       On-error;
+         Dump(a);
+         Gest_erreur();
+       Endmon;
+
+         //
        *INLR = *ON;
        // Les procédures
        BEGSR TRTSCR;
@@ -215,7 +200,12 @@
          WRITE FORE1;
          // On attend l'appui sur une touche
          READ FORE1;
-         *IN70 = %EOF;
+
+         // Effacement des sous-fichiers de messages
+         P_TYP = '3';
+         EXSR ENVMSG;
+         P_TYP = '1';
+
          l_Donnees_a_controler = *ON;
          // F3 ou F12 on termine
          IF *INKC = '1' OR
@@ -258,10 +248,11 @@
 
 
                If SQLcode=c_Trouve;
-                 EXEC SQL DELETE
-                            FROM lots
-                           WHERE CHAR( RRN( lots)) = :pnrec
-                         ;
+                 //Archivage de la biliothèque du lot
+                 Savliblot(%Char(numlot));
+
+                 EXEC SQL
+                   DELETE FROM lots WHERE CHAR(RRN(lots)) = :pnrec ;
                endif;
 
                l_traitenement_ecran = *OFF;
