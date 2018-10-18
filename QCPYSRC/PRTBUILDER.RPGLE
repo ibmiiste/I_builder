@@ -1479,7 +1479,6 @@
        //                          user du job
        // --------------------------------------------------
        DCL-PR EnvRapMel;
-         P_FileAttach char(10000);
        END-PR ;
        /Endif
 
