@@ -115,7 +115,7 @@
                              CMDLBL(STANDARD))
              ENDDO
              MONMSG     MSGID(PRZ0002) EXEC(CALLPRC PRC(GSTERRSTR) +
-                          PARM((&FAILED) (&FILEATTACH) (&OBJET)))
+                          PARM((&BIBDST) (&OBJDST)))
              RTVOBJD    OBJ(&BIBDST/&OBJDST) OBJTYPE(&TYPOBJE) +
                           OBJATR(&ATROBJ)
              MONMSG     MSGID(CPF9812 CPF9801 CPF9811)
