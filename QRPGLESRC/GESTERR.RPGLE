@@ -199,7 +199,7 @@
        mail=adress_mail();
        Close ErrorLst;
        Close MailInfol2;
-         mail_erreur(   program
+         Mailerr(   program
                       : module
                       : proced
                       : statement
