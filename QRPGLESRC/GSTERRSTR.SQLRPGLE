@@ -1,57 +1,69 @@
-      /* >>PRE-COMPILER<<                                                 */
-      /*   >>CRTCMD<<  CRTCLMOD MODULE(&LI/&OB) SRCFILE(&SL/&SF) +        */
-      /*                 SRCMBR(&SM);                                     */
-      /*   >>IMPORTANT<<                                                  */
-      /*     >>PARM<<  OPTION(*EVENTF);                                   */
-      /*     >>PARM<<  DBGVIEW(*ALL);                                    */
-      /*   >>END-IMPORTANT<<                                              */
-      /*   >>EXECUTE<<                                                    */
-      /* >>END-PRE-COMPILER<<                                             */
+      //Option de contrôle du programme
+       /copy qcpysrc,cpyctlstm
+       Ctl-opt bnddir('I_BUILDER');
 
-             PGM        PARM(&FAILED &FILEATTACH &OBJET)
-             DCL        VAR(&FAILED) TYPE(*DEC) LEN(10 0)
-             DCL        VAR(&FILEATTACH) TYPE(*CHAR) LEN(10000)
-             DCL        VAR(&INSPLNA) TYPE(*CHAR) LEN(4)
-             DCL        VAR(&OBJET) TYPE(*CHAR) LEN(10)
-             DCL        VAR(&USER) TYPE(*CHAR) LEN(10)
+       //Héritage des classes de données
 
-  /* Composition du mail                                                    */
-             DCL        VAR(&FOLDER) TYPE(*CHAR) LEN(256)
+       /copy Qcpysrc,Inhbuilder
 
+       // Procédure externe
+       /Copy Qcpysrc,Prtbuilder
 
-  /* Appel au programme SPOOLFIND.CLLE                          */
-             DCL        VAR(&INSPLF) TYPE(*CHAR) LEN(10)
-             DCL        VAR(&INJOB) TYPE(*CHAR) LEN(10)
-             DCL        VAR(&INUSER) TYPE(*CHAR) LEN(10)
-             DCL        VAR(&INJOBN) TYPE(*CHAR) LEN(6)
-             DCL        VAR(&INSPLN) TYPE(*INT) LEN(4)
-             DCL        VAR(&EXISTS) TYPE(*LGL)
+       // --------------------------------------------------
+       // Procedure name: Recup_erreur
+       // Purpose:        Lire le fichier des évènement et les cumuler dans u...
+       //                          ne table
+       // Returns:
+       // Parameter:      p_biblio_dest => Bibliothèque du fichier EVFEVENT
+       // Parameter:      p_Objet_destination => Membre du fichier EVFEVENT à...
+       //                           traiter
+       // --------------------------------------------------
+       DCL-PROC Recup_erreur ;
+         DCL-PI *N;
+           p_biblio_dest LIKE(r_Nom_obj_IBMi);
+           p_Objet_destination LIKE(r_Nom_obj_IBMi);
+         END-PI ;
 
-             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Génération de l''email +
-                          rapport de construction') BNDDIR(SERVICE)
+         Dcl-s l_Instruction_SQL Char(1024);
 
-             RTVJOBA    USER(&USER)
-             CHGVAR     VAR(&FAILED) VALUE(&FAILED + 1)
+         EXEC SQL
+           SET OPTION COMMIT = *NONE;
 
+         l_instruction_SQL='CREATE ALIAS QTEMP/' + Trim(p_Objet_destination) +
+                           ' FOR ' + Trim(p_biblio_dest) + '/EVFEVENT (' +
+                           Trim(p_Objet_destination) + ')';
 
-             CALL       PGM(SPOOLFIND) PARM(&INSPLF &INJOB &INUSER &INJOBN +
-                          &INSPLN &EXISTS)
-             CHGVAR     VAR(&INSPLN) VALUE(&INSPLN-1)
+         EXEC SQL
+           EXECUTE IMMEDIATE :l_instruction_sql;
 
- CONST_SPLF: CHGVAR     VAR(&INSPLN) VALUE(&INSPLN-1)
-             CHGVAR     VAR(&INSPLNA) VALUE(&INSPLN)
-             CHGVAR     VAR(&FOLDER) VALUE('''/home/' *TCAT &USER *TCAT +
-                          '/' *TCAT &OBJET *TCAT &INSPLNA *TCAT '.pdf''')
-             CPYSPLF    FILE(&OBJET) TOFILE(*TOSTMF) SPLNBR(&INSPLN) +
-                          JOBSYSNAME(*ONLY) CRTDATE(*ONLY) TOSTMF(&FOLDER) +
-                          WSCST(*PDF) STMFOPT(*REPLACE)
+         IF  Not Exists( 'ERRORLIST QTEMP     '
+                        :'*FILE');
+           l_instruction_SQL='CREATE TABLE QTEMP.ERRORLIST AS ' +
+                              'SELECT EVFEVENT ' +
+                                'FROM QTEMP/' + Trim(p_Objet_destination) +
+                               'WHERE %SUBST( EVFEVENT, 1 , 10) = ''FILEID''' +
+                                ' WITH NO DATA';
 
+           EXEC SQL
+             EXECUTE IMMEDIATE :l_instruction_sql;
+         Endif;
 
-             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(FIN_EMAIL))
+         l_instruction_SQL='INSERT INTO QTEMP.ERRORLIST ' +
+                              'SELECT EVFEVENT ' +
+                                'FROM QTEMP/' + Trim(p_Objet_destination) +
+                               'WHERE %SUBST( EVFEVENT, 1 , 10) = ''FILEID''';
 
-             CHGVAR     VAR(&FILEATTACH) VALUE( &FILEATTACH *TCAT ' (' +
-                          *TCAT &FOLDER *BCAT '*PDF)')
+         EXEC SQL
+           EXECUTE IMMEDIATE :l_instruction_sql;
 
-             GOTO       CMDLBL(CONST_SPLF)
+         l_instruction_SQL='INSERT INTO QTEMP.ERRORLIST ' +
+                              'SELECT EVFEVENT ' +
+                                'FROM QTEMP/' + Trim(p_Objet_destination) +
+                               'WHERE %SUBST( EVFEVENT, 1 , 10) = ''ERROR''';
 
- FIN_EMAIL:  ENDPGM
+         EXEC SQL
+           EXECUTE IMMEDIATE :l_instruction_sql;
+
+         RETURN ;
+       END-PROC ;
+
