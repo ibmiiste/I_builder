@@ -8,23 +8,18 @@
       /*   >>EXECUTE<<                                                    */
       /* >>END-PRE-COMPILER<<                                             */
 
-             PGM        PARM(&FILEATTACH)
+             PGM
 
-             DCL        VAR(&FILEATTACH) TYPE(*CHAR) LEN(10000)
-             DCL        VAR(&CMD) TYPE(*CHAR) LEN(32000)
-             DCL        VAR(&MAILUSERS) TYPE(*CHAR) LEN(1000)
-             DCL        VAR(&LENCMD) TYPE(*DEC) LEN(15 5) VALUE(32000)
+
 
              CHGVAR     VAR(&MAILUSERS) +
                           VALUE('(''odrubigny.externe@ista.fr'' *PRI)')
 
-             CHGVAR     VAR(&CMD) VALUE('SNDSMTPEMM RCP(' *TCAT &MAILUSERS +
-                          *TCAT ') NOTE(''Le projet MIRUS a des erreurs de +
-                          construction, Trouver ci-joint les éditions des +
-                          objets en erreur'') SUBJECT(''Erreur de +
-                          construction de MIRUS'') ATTACH(' *TCAT +
-                          &FILEATTACH *TCAT ')')
+             ADDLIBLE LAUNCHER
 
-             CALL       PGM(QCMDEXC) PARM(&CMD &LENCMD)
+             LNCTOXLS   TOXLS(*NEW) FROMFILE(QTEMP/ERROLIST) +
+                          OUTPUT(*) SHOWDOC(*YES)
+
+             DLTF QTEMP/ERROLIST
 
              ENDPGM
