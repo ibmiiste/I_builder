@@ -16,6 +16,9 @@
      F                                     USROPN
      F                                     OFlInd(OverFlow)
 
+      // Prototypes fonctions externes
+      /Copy Qcpysrc,Prtbuilder
+
       *?Déclaration de le PSDS
      d*copy qcpysrc,CPY_PSDS
       *
@@ -90,21 +93,13 @@
      D  Row13226                           OverLay(ScreenIn:*Next)
      D  Row13227                           OverLay(ScreenIn:*Next)
 
-      * Prototypage fonction externe
-     d mail_erreur     pr                  extproc(*cl : 'MAILERR')
-     d a_program                           like(r_Nom_obj_IBMi)
-     d a_module                            like(r_Nom_obj_IBMi)
-     d a_procedure                   60
-     d a_statement                         like(r_Nom_obj_IBMi)
-     d a_mail                       320
-
       * Prototypage fonctions locales
-     d gest_erreur     pr
      d adress_mail     pr           320
      d Comp_Adr        pr           320
      d reference                     10
 
      d mail            s            320
+
       * Héritages des types
      d/copy QCPYSRC,Inhbuilder
 
