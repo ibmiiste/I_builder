@@ -140,7 +140,7 @@
          enddo;
 
          if g_Failed<>0;
-           EnvRapMel(g_FileAttach);
+           EnvRapMel();
          EndIf;
 
          Return;
