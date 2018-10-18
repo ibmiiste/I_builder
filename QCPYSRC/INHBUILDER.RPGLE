@@ -15,3 +15,4 @@
        Dcl-s r_profil char(10) Template;
        Dcl-s r_qualified_name Char(20) Template;
        Dcl-s r_typmsg char(1) Template;
+       Dcl-s R_TypObj Char(10) Template;
