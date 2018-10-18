@@ -114,7 +114,7 @@
                 IF         COND(&RTRSRCSTD *EQ '1') THEN(GOTO +
                              CMDLBL(STANDARD))
              ENDDO
-             MONMSG     MSGID(PRZ0002) EXEC(CALLPRC PRC(GSTERRSTR) +
+             MONMSG     MSGID(PRZ0002) EXEC(CALLPRC PRC(RECUP_ERREUR) +
                           PARM((&BIBDST) (&OBJDST)))
              RTVOBJD    OBJ(&BIBDST/&OBJDST) OBJTYPE(&TYPOBJE) +
                           OBJATR(&ATROBJ)

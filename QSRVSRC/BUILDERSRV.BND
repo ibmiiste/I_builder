@@ -34,7 +34,7 @@
              EXPORT     SYMBOL(CONSTRUCT)
              EXPORT     SYMBOL(SOURCE_STANDARD)
              EXPORT     SYMBOL(ENVRAPMEL)
-             EXPORT     SYMBOL(GSTERRSTR)
+             EXPORT     SYMBOL(RECUP_ERREUR)
              EXPORT     SYMBOL(GEST_ERREUR)
              EXPORT     SYMBOL(MAILERR)
              EXPORT     SYMBOL(SCRIPTFTP)
