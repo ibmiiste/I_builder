@@ -40,6 +40,17 @@
          END-PI ;
 
          Dcl-s l_Instruction_SQL Char(1024);
+         Dcl-s l_emplacement Char(50);
+
+         Dcl-ds ds_event qualified;
+           Type_event Char(10) Pos(1);
+           Source Char(271) Pos(29);
+           MSGID Char(7) Pos(49);
+           gravite Char(2) Pos(59);
+           Ligne char(3) Pos(62);
+           Texte_message Char(234) Pos(66);
+         End-ds;
+
 
          EXEC SQL
            SET OPTION COMMIT = *NONE;
@@ -51,33 +62,50 @@
          EXEC SQL
            EXECUTE IMMEDIATE :l_instruction_sql;
 
-         IF  Not Exists( 'ERRORLIST QTEMP     '
-                        :'*FILE');
-           l_instruction_SQL='CREATE TABLE QTEMP.ERRORLIST AS ' +
-                        '(SELECT EVFEVENT ' +
-                           'FROM QTEMP/' + %Trim(p_Objet_destination) +
-                         ' WHERE SUBSTR( EVFEVENT, 1 , 10) = ''FILEID'')' +
-                          ' WITH NO DATA';
+         l_instruction_SQL='SELECT EVFEVENT ' +
+                           'FROM QTEMP/' + %Trim(p_Objet_destination);
 
-           EXEC SQL
-             EXECUTE IMMEDIATE :l_instruction_sql;
+         IF NOT exists('ERRORLIST QTEMP     ' :'*FILE');
+               EXEC SQL
+                 DECLARE GLOBAL TEMPORARY TABLE errorlist
+                   (gravite CHAR(2),
+                                                      id_message CHAR(7),
+                                                      ligne CHAR(3),
+                                                      text_message CHAR(234),
+                                                      emplacement CHAR(50))
+                   WITH REPLACE;
          Endif;
 
-         l_instruction_SQL='INSERT INTO QTEMP.ERRORLIST ' +
-                              'SELECT EVFEVENT ' +
-                                'FROM QTEMP/' + %Trim(p_Objet_destination) +
-                               ' WHERE SUBSTR( EVFEVENT, 1 , 10) = ''FILEID''';
+         EXEC SQL
+           PREPARE statment_event FROM :l_instruction_sql;
 
          EXEC SQL
-           EXECUTE IMMEDIATE :l_instruction_sql;
-
-         l_instruction_SQL='INSERT INTO QTEMP.ERRORLIST ' +
-                              'SELECT EVFEVENT ' +
-                                'FROM QTEMP/' + %Trim(p_Objet_destination) +
-                               ' WHERE SUBSTR( EVFEVENT, 1 , 10) = ''ERROR''';
+           DECLARE curseur_event CURSOR FOR statment_event;
 
          EXEC SQL
-           EXECUTE IMMEDIATE :l_instruction_sql;
+           OPEN curseur_event;
+
+         EXEC SQL
+           FETCH FROM curseur_event INTO ds_event;
+
+         Dow sqlcode=0;
+           If ds_event.type_event='FILEID';
+             l_emplacement=%subst(ds_event.source:1:%scan(')':ds_event.source));
+           Endif;
+
+           If ds_event.type_event='ERROR';
+             EXEC SQL
+               INSERT INTO qtemp.errorlist
+                 VALUES (:ds_event.gravite,
+                         :ds_event.msgid,
+                         :ds_event.ligne,
+                         :ds_event.texte_message,
+                         :l_emplacement);
+               endif;
+           EXEC SQL
+             FETCH FROM curseur_event INTO ds_event;
+         Enddo;
+
 
          l_instruction_SQL='DROP ALIAS QTEMP/' + %Trim(p_Objet_destination);
 
