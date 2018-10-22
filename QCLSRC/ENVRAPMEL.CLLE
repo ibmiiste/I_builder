@@ -9,13 +9,18 @@
       /* >>END-PRE-COMPILER<<                                             */
 
              PGM
+             DCL &IPSRV   *CHAR LEN(30)
 
              ADDLIBLE LAUNCHER
              MONMSG CPF0000
 
-             LNCTOXLS   TOXLS(*NEW) FROMFILE(QTEMP/ERROLIST) +
-                          OUTPUT(*) SHOWDOC(*YES)
 
-             DLTF QTEMP/ERROLIST
+             RTVLNCDFT KEYWRD('LNCSRV' ) RTNVAR(&IPSRV)
+
+             LNCTOXLS   TOXLS(*NEW) FROMFILE(QTEMP/ERRORLIST) +
+                          OUTPUT(*) SHOWDOC(*YES) EXESRV(&IPSRV) +
+                          ENDOPT(*CON)
+
+             DLTF QTEMP/ERRORLIST
 
              ENDPGM

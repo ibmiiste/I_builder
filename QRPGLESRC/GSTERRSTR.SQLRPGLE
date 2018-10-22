@@ -56,7 +56,7 @@
            l_instruction_SQL='CREATE TABLE QTEMP.ERRORLIST AS ' +
                         '(SELECT EVFEVENT ' +
                            'FROM QTEMP/' + %Trim(p_Objet_destination) +
-                         ' WHERE SUBST( EVFEVENT, 1 , 10) = ''FILEID'')' +
+                         ' WHERE SUBSTR( EVFEVENT, 1 , 10) = ''FILEID'')' +
                           ' WITH NO DATA';
 
            EXEC SQL
@@ -66,7 +66,7 @@
          l_instruction_SQL='INSERT INTO QTEMP.ERRORLIST ' +
                               'SELECT EVFEVENT ' +
                                 'FROM QTEMP/' + %Trim(p_Objet_destination) +
-                               ' WHERE SUBST( EVFEVENT, 1 , 10) = ''FILEID''';
+                               ' WHERE SUBSTR( EVFEVENT, 1 , 10) = ''FILEID''';
 
          EXEC SQL
            EXECUTE IMMEDIATE :l_instruction_sql;
@@ -74,7 +74,7 @@
          l_instruction_SQL='INSERT INTO QTEMP.ERRORLIST ' +
                               'SELECT EVFEVENT ' +
                                 'FROM QTEMP/' + %Trim(p_Objet_destination) +
-                               ' WHERE SUBST( EVFEVENT, 1 , 10) = ''ERROR''';
+                               ' WHERE SUBSTR( EVFEVENT, 1 , 10) = ''ERROR''';
 
          EXEC SQL
            EXECUTE IMMEDIATE :l_instruction_sql;
