@@ -166,20 +166,28 @@
                     liste_biblio_projet,
                     biblio_lot,
                     description_lots,
-                    statuts_lot
+                    statuts_lot,
+                    timecrt,
+                    usrcrt,
+                    timemaj,
+                    usrmaj
                INTO :g_rowidlots,
                     :numlot,
                     :libellot,
                     :listbibprj,
                     :biblot,
                     :descriplot,
-                    :statlot
+                    :statlot,
+                    :timecrt,
+                    :usrcrt,
+                    :timemaj,
+                    :usrmaj
                FROM lots
                WHERE CHAR(RRN(lots)) = :pnrec ;
-
-           IF PCHX = 'CR' OR PCHX = 'CO';
+             IF pchx = 'CR'
+                OR pchx = 'CO';
              // en création ou copie zone non renseignée
-             Znumlot=0;
+             znumlot = 0;
            ELSE;
              Znumlot=Numlot;
            ENDIF;
@@ -188,7 +196,13 @@
            Zlistbibpr=Listbibprj;
            Zdescripl=Descriplot;
            Zstatlot=Statlot;
-           Zbiblot=biblot;
+           zbiblot = biblot;
+           ZDAC=%date(timecrt);
+           Zhec=%Time(timecrt);
+           ZUSC=usrcrt;
+           ZDAM=%date(timemaj);
+           ZHEM=%Time(timemaj);
+           ZUSM=usrcrt;
          ENDIF;
          // Boucle d'attente de fin
          l_traitenement_ecran = *ON;
@@ -331,23 +345,28 @@
 
            IF l_MAJ_Lots;
              // on met à jour directement
-             EXEC SQL UPDATE lots
-                         SET libelle_lots=:zlibellot,
-                             liste_biblio_projet=:zlistbibpr,
-                             description_lots=:zdescripl
-                       WHERE lot_number=:numlot
-                   ;
+             EXEC SQL
+               UPDATE lots
+                 SET libelle_lots = :zlibellot,
+                     liste_biblio_projet = :zlistbibpr,
+                     description_lots = :zdescripl,
+                     usrcrt = :user
+                 WHERE lot_number = :numlot ;
            ELSE;
              // création
-             EXEC SQL INSERT INTO lots( libelle_lots,
-                                        liste_biblio_projet,
-                                        description_lots,
-                                        statuts_lot)
-                                VALUES( :zlibellot,
-                                        :zlistbibpr,
-                                        :zdescripl,
-                                        :zstatlot)
-                    ;
+             EXEC SQL
+               INSERT INTO lots(libelle_lots,
+                                liste_biblio_projet,
+                                description_lots,
+                                statuts_lot,
+                                timecrt,
+                                usrcrt)
+                 VALUES (:zlibellot,
+                         :zlistbibpr,
+                         :zdescripl,
+                         :zstatlot,
+                         CURRENT_TIMESTAMP,
+                         :user) ;
 
              // On récupère le numéro du lot créé
              EXEC SQL SELECT MAX( numlot)
