@@ -519,6 +519,58 @@
               if  g_Failed<>0;
                 EnvRapMel();
               EndIf;
+            when (zopt = '8') or (zopt = ' 8');
+              g_BIBSRC_pre=ZBIBSRC;
+              g_FicSrc_pre=ZFICSRC;
+              g_MbrSrc_pre=ZMBRSRC;
+              g_optimize='*NONE';
+              Construct( g_BIBSRC_pre
+                        :g_FicSrc_pre
+                        :g_MbrSrc_pre
+                        :ZBIBDST
+                        :ZOBJDST
+                        :ZTYPOBJ
+                        :ZBIBSRC
+                        :ZFICSRC
+                        :ZMBRSRC
+                        :g_optimize
+                        :g_Failed
+                        :g_FileAttach
+                        :g_list_biblio
+                        :''
+                        :'CICA95'
+                        :'DRUBIGNY'
+                        :'DANIEL1E01'
+                        :'1');
+              if  g_Failed<>0;
+                EnvRapMel();
+              EndIf;
+            when (zopt = '9') or (zopt = ' 9');
+              g_BIBSRC_pre=ZBIBSRC;
+              g_FicSrc_pre=ZFICSRC;
+              g_MbrSrc_pre=ZMBRSRC;
+              g_optimize='*FULL';
+              Construct( g_BIBSRC_pre
+                        :g_FicSrc_pre
+                        :g_MbrSrc_pre
+                        :ZBIBDST
+                        :ZOBJDST
+                        :ZTYPOBJ
+                        :ZBIBSRC
+                        :ZFICSRC
+                        :ZMBRSRC
+                        :g_optimize
+                        :g_Failed
+                        :g_FileAttach
+                        :g_list_biblio
+                        :''
+                        :'CICA98'
+                        :'DRUBIGNY'
+                        :'DANIEL1E01'
+                        :'1');
+              if  g_Failed<>0;
+                EnvRapMel();
+              EndIf;
             when (zopt = '99');
               a_chx='PE';
             other;
