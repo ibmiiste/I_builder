@@ -18,7 +18,7 @@
              MONMSG CPF0000
 
              STRPCO PCTA(*NO)
-             MONMSG     MSGID(CPF0000)
+             MONMSG     MSGID(CPF0000 IWS4010)
 
              STRPCCMD   PCCMD('rundll32 Shell32,ShellExec_RunDLL +
                           "C:\Program Files +
