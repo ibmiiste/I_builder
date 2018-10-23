@@ -113,6 +113,8 @@
              FETCH FROM curseur_event INTO :ds_event;
          Enddo;
 
+         EXEC SQL
+           CLOSE curseur_event;
 
          l_instruction_SQL='DROP ALIAS QTEMP/' + %Trim(p_Objet_destination);
 
