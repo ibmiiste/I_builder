@@ -42,15 +42,19 @@
          Dcl-s l_Instruction_SQL Char(1024);
          Dcl-s l_emplacement Char(50);
 
-         Dcl-ds ds_event qualified;
+         Dcl-ds ds_event_fileid qualified;
            Type_event Char(10) Pos(1);
            Source Char(271) Pos(29);
+         End-ds;
+
+         Dcl-ds ds_event_error qualified;
            MSGID Char(7) Pos(49);
            gravite Char(2) Pos(59);
            Ligne char(3) Pos(62);
            Texte_message Char(234) Pos(66);
          End-ds;
 
+         Dcl-ds ds_event Extname('EVFEVENT') Qualified End-ds;
 
          EXEC SQL
            SET OPTION COMMIT = *NONE;
@@ -86,24 +90,27 @@
            OPEN curseur_event;
 
          EXEC SQL
-           FETCH FROM curseur_event INTO ds_event;
+           FETCH FROM curseur_event INTO :ds_event;
 
-         Dow sqlcode=0;
-           If ds_event.type_event='FILEID';
-             l_emplacement=%subst(ds_event.source:1:%scan(')':ds_event.source));
+         Dow sqlcode<>100 and sqlcode>=0 ;
+           If %subst(ds_event:1:10)='FILEID';
+             ds_event_fileid=Ds_Event;
+             l_emplacement=%subst(ds_event_fileid.source:1:%scan(')':
+                                           ds_event_fileid.source));
            Endif;
 
-           If ds_event.type_event='ERROR';
+           If %subst(ds_event:1:10)='ERROR';
+             ds_event_error=Ds_Event;
              EXEC SQL
                INSERT INTO qtemp.errorlist
-                 VALUES (:ds_event.gravite,
-                         :ds_event.msgid,
-                         :ds_event.ligne,
-                         :ds_event.texte_message,
+                 VALUES (:ds_event_error.gravite,
+                         :ds_event_error.msgid,
+                         :ds_event_error.ligne,
+                         :ds_event_error.texte_message,
                          :l_emplacement);
                endif;
            EXEC SQL
-             FETCH FROM curseur_event INTO ds_event;
+             FETCH FROM curseur_event INTO :ds_event;
          Enddo;
 
 
