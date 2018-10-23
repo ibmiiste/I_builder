@@ -303,7 +303,7 @@
          EndIf;
 
          if Livraison_production;
-            g_optimize='*NONE';
+            g_optimize='*FULL';
             builder( g_Num_lot
                     :''
                     :''
@@ -516,8 +516,8 @@
                         :''
                         :''
                         :'');
-              if g_Failed<>0;
-                EnvRapMel(g_FileAttach);
+              if  g_Failed<>0;
+                EnvRapMel();
               EndIf;
             when (zopt = '99');
               a_chx='PE';
