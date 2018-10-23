@@ -9,17 +9,28 @@
       /* >>END-PRE-COMPILER<<                                             */
 
              PGM
-             DCL &IPSRV   *CHAR LEN(30)
+             DCL        VAR(&HANDLE) TYPE(*CHAR) LEN(50)
+             DCL        VAR(&SVRADDR) TYPE(*CHAR) LEN(255)
+             DCL        VAR(&CCSID) TYPE(*CHAR) LEN(10)
+             DCLPRCOPT  ALWRTVSRC(*YES) BNDDIR(SERVICE I_BUILDER)
 
              ADDLIBLE LAUNCHER
              MONMSG CPF0000
 
+             STRPCO PCTA(*NO)
+             MONMSG     MSGID(CPF0000)
 
-             RTVLNCDFT KEYWRD('LNCSRV' ) RTNVAR(&IPSRV)
+             STRPCCMD   PCCMD('rundll32 Shell32,ShellExec_RunDLL +
+                          "C:\Program Files +
+                          (x86)\LAUNCHER400\LNCsrv.exe" /runadm')
+             MONMSG     MSGID(CPF0000)
 
-             LNCTOXLS   TOXLS(*NEW) FROMFILE(QTEMP/ERRORLIST) +
-                          OUTPUT(*) SHOWDOC(*YES) EXESRV(&IPSRV) +
-                          ENDOPT(*CON)
+             CALLPRC    PRC(BLAUN001C) PARM((&HANDLE) +
+                          (&SVRADDR) (&CCSID))
+
+             LNCTOXLS   TOXLS(*NEW) CPYSRC(*SQL) FROMSQL('Select * +
+                          from qtemp/errorlist') OUTPUT(*) +
+                          SHOWDOC(*YES) EXESRV(&SVRADDR) ENDOPT(*CON)
 
              DLTF QTEMP/ERRORLIST
 
