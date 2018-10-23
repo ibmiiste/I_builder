@@ -143,6 +143,11 @@
         WNRCFI int(10) pos(397);
        end-ds;
 
+       // Constantes
+       // Constantes pour SQLCODE
+       Dcl-c Non_trouve 100;
+       Dcl-c Trouve 0;
+
        // le nombre de lignes afichables, déclaration a la volée
        g_Nblis1 = 17;
        // initialisation des variables système affichées à l'écran
@@ -304,7 +309,7 @@
              ;
          EXEC SQL OPEN curs_lots02;
 
-         *in70 = sqlcode < 0;
+         *in70 = sqlcode < Trouve;
          // Chargement de la première page
          EXSR CHGPAG;
        ENDSR;
@@ -402,7 +407,7 @@
          // Remise à zéro du compteur de ligne, mais on pourrait faire autrement
          Clear NBRLIG;
       //
-         DOW Sqlcode = 0
+         DOW Sqlcode = Trouve
          AND NBRLIG < 17;
            // Remplissage des zones écran
            g_Selection_OK = *ON;
@@ -455,7 +460,7 @@
           ENDDO;
          // On quitte la boucle soit en fin de page
          //                     soit en fin de fichier
-         IF %Eof;
+         IF Sqlcode=Non_trouve;
            // Le caractère de suite, on est en fin de fichier
            Sflend_no_rollup = *ON;
          ELSE;
