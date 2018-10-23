@@ -348,6 +348,7 @@
              g_Traitement_option = *OFF;
            WHEN (ZOPT = '12');
              liste_objet_construction(znumlot);
+              g_Traitement_option = *Off;
            WHEN (ZOPT = '99');
              PCHX = 'PE';
            OTHER;
