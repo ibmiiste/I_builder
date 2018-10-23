@@ -104,7 +104,7 @@
              Else;
                g_option_donnees ='';
              EndIf;
-             g_optimize='*NONE';
+             g_optimize=P_Optim_Compil;
              g_BIBSRC_pre=g_BIBSRC;
              g_FicSrc_pre=g_FicSrc;
              g_MbrSrc_pre=g_MbrSrc;
