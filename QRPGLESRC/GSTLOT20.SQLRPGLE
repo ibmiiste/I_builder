@@ -114,19 +114,13 @@
          // Initialisation du sous-fichier de messages
          Sflend_Msgf = *ON;
          Sflinz_Msgf = *ON;
+         P_TYP = '1';
+         P_FICM = 'FICMSG   ';
 
          Protection = *ON;
 
          l_Confirmation_suppression = *OFF;
          l_anomalie = *OFF;
-
-         // constantes pour ce programme
-         P_TYP = '1';
-         P_FICM = 'FICMSG   ';
-
-         // Effacer le sous-fichier de message
-         Sflend_Msgf = *ON;
-         Sflinz_Msgf = *ON;
 
          SELECT;
          WHEN (PCHX = 'MO');
