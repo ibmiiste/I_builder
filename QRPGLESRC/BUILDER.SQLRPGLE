@@ -107,6 +107,7 @@
              g_optimize=P_Optim_Compil;
              If P_Biblio_Lot<>*Blank;
                g_BIBSRC_pre=P_Biblio_Lot;
+               g_BibSrc=P_Biblio_Lot;
                g_BibDst =P_Biblio_Lot;
              Else;
                g_BIBSRC_pre=g_BIBSRC;
