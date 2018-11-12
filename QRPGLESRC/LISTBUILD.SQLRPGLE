@@ -50,6 +50,15 @@
        // prototype fonctions externes
        /copy qcpysrc,Prtbuilder
 
+       // Mise en ligne de la bibliothèque du lot
+       Dcl-pr Testlot Extpgm('TESTLOT');
+         p_Num_lot Like(r_Num_lot);
+       End-pr;
+
+       // Suppression de la bibliothèque du lot de la liste de bibliothèques système
+       Dcl-pr Rmvlot Extpgm('RMVLOT');
+         p_Num_lot Like(r_Num_lot);
+       End-pr;
 
        // local functions prototypes
        // prototypes fonctions locales
@@ -59,7 +68,7 @@
 
        // global variables
        // variables globales
-       dcl-s g_sobjet like(r_Nom_obj_IBMi);
+       dcl-s l_sobjet like(r_Nom_obj_IBMi);
        dcl-s g_wsobp like(r_Nom_obj_IBMi);
 
        dcl-s g_nblis1 like(r_nblign);
@@ -86,7 +95,6 @@
        dcl-s g_alimsfl ind;
        dcl-s g_filtre ind;
 
-
        dcl-s g_ROWID_BUILD char(40) dim(9999);
        dcl-s g_ROWID_BUILDW sqltype(rowid);
 
@@ -104,7 +112,7 @@
        Dcl-S g_FicSrc_pre LIKE(r_Nom_obj_IBMi);
        Dcl-S g_MbrSrc_pre LIKE(r_Nom_obj_IBMi);
        Dcl-s g_list_biblio LIKE(r_Nom_obj_IBMi);
-
+       Dcl-s g_lib_lot Like(r_Nom_obj_IBMi);
 
        // Touches de fonction
        /copy qcpysrc,fonction
@@ -280,14 +288,20 @@
          // on ne fait ceci que s'il n'y a eu rien d'autre
          if Construction;
             g_optimize='*NONE';
+            Testlot(g_Num_lot);
             builder( g_Num_lot
-                    :''
+                    :g_lib_lot
                     :''
                     :g_optimize
                     :'0'
                     :''
                     :''
                     :'');
+            RMVlot(g_Num_lot);
+          EXEC SQL
+            UPDATE lots
+              SET statlot = 'Developpement'
+              WHERE lot_number = :p_num_lot;
          EndIf;
 
          if Livraison_recette;
@@ -300,6 +314,8 @@
                     :'CICA95'
                     :'DRUBIGNY'
                     :'DANIEL1E01');
+            EXEC SQL
+              UPDATE lots SET statlot = 'Recette' WHERE lot_number = :p_num_lot;
          EndIf;
 
          if Livraison_production;
@@ -312,6 +328,10 @@
                     :'CICA98'
                     :'DRUBIGNY'
                     :'DANIEL1E01');
+            EXEC SQL
+              UPDATE lots
+                SET statlot = 'Production'
+                WHERE lot_number = :p_num_lot;
          EndIf;
 
          if g_trt_opt;
@@ -325,16 +345,19 @@
          PROTECT = *on;
          // initialisation de la variable de sélection
          g_wsobp=ZSOBJET;
-         g_sobjet=*blank;
+         l_sobjet=*blank;
          g_Num_lot=p_num_lot;
 
          //Récupération de la list de bibliothèque
-         EXEC SQL SELECT libelle_lots,
-                         liste_biblio_projet
-                    INTO :zprojet,
-                         :g_list_biblio
-                    FROM lots
-                   WHERE lot_number=:p_num_lot;
+         EXEC SQL
+           SELECT libelle_lots,
+                  liste_biblio_projet,
+                  biblot
+             INTO :zprojet,
+                  :g_list_biblio,
+                  :g_lib_lot
+             FROM lots
+             WHERE lot_number = :p_num_lot;
 
          ZOBJDST=*blank;
          g_selection = *off;
@@ -348,10 +371,10 @@
            if g_i > 0;
              g_filtre=*on;
              g_i=g_i-1;
-             g_sobjet=%subst(ZSOBJET:1:g_i);
+             l_sobjet=%subst(ZSOBJET:1:g_i);
              // on est dans le cas d'une sélection générique
              // on se positionnera juste au bon endroit dans le fichier
-             ZOBJDST=g_sobjet;
+             ZOBJDST=l_sobjet;
            endif;
          endif;
          // la dernière ligne écrite
@@ -406,6 +429,7 @@
            //  rtvObj( OBJD0400_T
            //         :%len(OBJD0400_T
            //         :'OBJD0400'
+           //         :obj:%trim(p_type)
            //         :obj:%trim(p_type)
            //         :w_errApi);
            //  if w_errApi.ErrRtn > 0;
@@ -498,10 +522,11 @@
               g_FicSrc_pre=ZFICSRC;
               g_MbrSrc_pre=ZMBRSRC;
               g_optimize='*NONE';
-              Construct( g_BIBSRC_pre
+              Testlot(g_Num_lot);
+              Construct( g_Lib_lot
                         :g_FicSrc_pre
                         :g_MbrSrc_pre
-                        :ZBIBDST
+                        :g_Lib_lot
                         :ZOBJDST
                         :ZTYPOBJ
                         :ZBIBSRC
@@ -516,6 +541,7 @@
                         :''
                         :''
                         :'');
+              Rmvlot(g_Num_lot);
               if  g_Failed<>0;
                 EnvRapMel();
               EndIf;
@@ -624,7 +650,7 @@
              else;
                // on recherche si le nom commence par la valeur avant le '*'
                g_xobjet=%subst( ZOBJDST:1:g_i);
-               if g_xobjet <> g_sobjet;
+               if g_xobjet <> l_sobjet;
                  g_alimsfl = *off;
                endif;
              endif;
