@@ -21,6 +21,6 @@
              ENDDO
              CHGVAR     VAR(&BIBLOT) VALUE('L' *TCAT &NUMLOTC)
 
-             CHGSYSLIBL LIB(&BIBLOT)
+             CHGSYSLIBL LIB(&BIBLOT) OPTION(*REMOVE)
 
              ENDPGM
