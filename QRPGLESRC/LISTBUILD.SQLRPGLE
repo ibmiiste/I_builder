@@ -302,9 +302,7 @@
                     :'');
             RMVlot(l_Num_lot_Dec);
           EXEC SQL
-            UPDATE lots
-              SET statlot = 'Developpement'
-              WHERE lot_number = :p_num_lot;
+            UPDATE lots SET statlot = 'D' WHERE lot_number = :p_num_lot;
          EndIf;
 
          if Livraison_recette;
@@ -318,7 +316,7 @@
                     :'DRUBIGNY'
                     :'DANIEL1E01');
             EXEC SQL
-              UPDATE lots SET statlot = 'Recette' WHERE lot_number = :p_num_lot;
+              UPDATE lots SET statlot = 'R' WHERE lot_number = :p_num_lot;
          EndIf;
 
          if Livraison_production;
@@ -332,9 +330,7 @@
                     :'DRUBIGNY'
                     :'DANIEL1E01');
             EXEC SQL
-              UPDATE lots
-                SET statlot = 'Production'
-                WHERE lot_number = :p_num_lot;
+              UPDATE lots SET statlot = 'P' WHERE lot_number = :p_num_lot;
          EndIf;
 
          if g_trt_opt;
