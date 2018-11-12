@@ -72,7 +72,9 @@
          IF NOT exists('ERRORLIST QTEMP     ' :'*FILE');
                EXEC SQL
                  DECLARE GLOBAL TEMPORARY TABLE errorlist
-                   (gravite CHAR(2),
+                   (bibliotheque CHAR(10),
+                                                      objet CHAR(10),
+                                                      gravite CHAR(2),
                                                       id_message CHAR(7),
                                                       ligne CHAR(3),
                                                       text_message CHAR(234),
@@ -103,7 +105,9 @@
              ds_event_error=Ds_Event;
              EXEC SQL
                INSERT INTO qtemp.errorlist
-                 VALUES (:ds_event_error.gravite,
+                 VALUES (:p_biblio_dest,
+                         :p_objet_destination,
+                         :ds_event_error.gravite,
                          :ds_event_error.msgid,
                          :ds_event_error.ligne,
                          :ds_event_error.texte_message,
