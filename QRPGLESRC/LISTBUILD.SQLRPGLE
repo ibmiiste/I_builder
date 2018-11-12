@@ -52,12 +52,12 @@
 
        // Mise en ligne de la bibliothèque du lot
        Dcl-pr Testlot Extpgm('TESTLOT');
-         p_Num_lot Like(r_Num_lot);
+         p_Num_lot Packed(9:0);
        End-pr;
 
        // Suppression de la bibliothèque du lot de la liste de bibliothèques système
        Dcl-pr Rmvlot Extpgm('RMVLOT');
-         p_Num_lot Like(r_Num_lot);
+         p_Num_lot Packed(9:0);
        End-pr;
 
        // local functions prototypes
@@ -82,6 +82,8 @@
        dcl-s a_mdt like(r_msgdta);
 
        Dcl-s g_Num_lot Like(r_Num_lot);
+       // Numéro de lot en packé
+       Dcl-s l_Num_lot_Dec Packed(9:0);
 
        dcl-s a_chx char(2);
        //dcl-s a_nrec like(r_uuid_db2);
@@ -288,7 +290,8 @@
          // on ne fait ceci que s'il n'y a eu rien d'autre
          if Construction;
             g_optimize='*NONE';
-            Testlot(g_Num_lot);
+            l_Num_lot_Dec=g_Num_lot;
+            Testlot(l_Num_lot_Dec);
             builder( g_Num_lot
                     :g_lib_lot
                     :''
@@ -297,7 +300,7 @@
                     :''
                     :''
                     :'');
-            RMVlot(g_Num_lot);
+            RMVlot(l_Num_lot_Dec);
           EXEC SQL
             UPDATE lots
               SET statlot = 'Developpement'
@@ -522,7 +525,8 @@
               g_FicSrc_pre=ZFICSRC;
               g_MbrSrc_pre=ZMBRSRC;
               g_optimize='*NONE';
-              Testlot(g_Num_lot);
+              l_Num_lot_Dec=g_Num_lot;
+              Testlot(l_Num_lot_Dec);
               Construct( g_Lib_lot
                         :g_FicSrc_pre
                         :g_MbrSrc_pre
@@ -541,7 +545,7 @@
                         :''
                         :''
                         :'');
-              Rmvlot(g_Num_lot);
+              Rmvlot(l_Num_lot_Dec);
               if  g_Failed<>0;
                 EnvRapMel();
               EndIf;
