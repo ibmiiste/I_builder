@@ -105,7 +105,12 @@
                g_option_donnees ='';
              EndIf;
              g_optimize=P_Optim_Compil;
-             g_BIBSRC_pre=g_BIBSRC;
+             If P_Biblio_Lot<>*Blank;
+               g_BIBSRC_pre=P_Biblio_Lot;
+               g_BibDst =P_Biblio_Lot;
+             Else;
+               g_BIBSRC_pre=g_BIBSRC;
+             Endif;
              g_FicSrc_pre=g_FicSrc;
              g_MbrSrc_pre=g_MbrSrc;
              Construct( g_BIBSRC_pre
