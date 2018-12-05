@@ -13,6 +13,8 @@
              CHGVAR     VAR(&BIBLOT) VALUE('L' *TCAT &NUMLOTC)
 
              CHGSYSLIBL LIB(&BIBLOT) OPTION(*REMOVE)
-             MONMSG     MSGID(CPF2128) EXEC(SNDUSRMSG MSG('Ce test +
+             MONMSG     MSGID(CPF2128) EXEC(SNDPGMMSG MSG('Ce test +
                          n''est pas en cours'))
+             MONMSG     MSGID(CPF2110) EXEC(SNDPGMMSG MSG('Ce lot +
+                         n''existe pas'))
              ENDPGM

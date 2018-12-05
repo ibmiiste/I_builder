@@ -11,7 +11,7 @@
              DCL        VAR(&NUMLOT) TYPE(*DEC) LEN(9 0)
              DCL        VAR(&BIBLOT) TYPE(*CHAR) LEN(10)
              DCL        VAR(&NUMLOTC) TYPE(*CHAR) LEN(9)
-             DCL        &INT *INT 2
+             DCL        VAR(&INT) TYPE(*INT) LEN(2)
 
              CHGVAR     VAR(&NUMLOTC) VALUE(&NUMLOT)
              DOFOR      VAR(&INT) FROM(1) TO(6) BY(1)
