@@ -22,5 +22,8 @@
              CHGVAR     VAR(&BIBLOT) VALUE('L' *TCAT &NUMLOTC)
 
              CHGSYSLIBL LIB(&BIBLOT)
-
+             MONMSG     MSGID(CPF2103) EXEC(SNDPGMMSG MSG('Ce test +
+                          est déjà en cours'))
+             MONMSG     MSGID(CPF2110) EXEC(SNDPGMMSG MSG('Ce lot +
+                          n''est plus disponible ou n''existe pas'))
              ENDPGM
