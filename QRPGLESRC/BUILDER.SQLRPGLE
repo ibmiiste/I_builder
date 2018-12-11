@@ -62,6 +62,7 @@
        Dcl-S g_ObjDst LIKE(r_Nom_obj_IBMi);
        Dcl-S g_Failed packed(10:0);
        Dcl-S g_TypObj like(r_Nom_obj_IBMi);
+       Dcl-S g_attribut_objet like(r_Nom_obj_IBMi);
        Dcl-S g_FileAttach char(10000);
        Dcl-S g_optimize char(20);
        Dcl-s g_option_donnees Char(1);
@@ -99,7 +100,7 @@
 
          dow sqlcode = 0;
            If g_typobj<>'*MSGF';
-             If g_typobj='PF';
+             If g_attribut_objet='PF';
                g_option_donnees ='C';
              Else;
                g_option_donnees ='';
@@ -172,7 +173,8 @@
                     membre_source,
                     bibliotheque_destination,
                     objet_destination,
-                    type_objet
+                    type_objet,
+                    attribut_objet
                FROM list_objet_build
                WHERE lot_number = :g_num_lot
                ORDER BY ordre;
@@ -195,7 +197,7 @@
          EXEC SQL
            FETCH list_obj
              INTO :g_num_lot , :g_bibsrc, :g_ficsrc, :g_mbrsrc, :g_bibdst,
-               :g_objdst, :g_typobj ;
+               :g_objdst, :g_typobj, :g_attribut_objet;
 
          return Sqlcode ;
        END-PROC ;
