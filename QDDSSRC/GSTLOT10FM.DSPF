@@ -42,11 +42,13 @@
      A  05                                  SFLDSPCTL
      A  06                                  SFLCLR
      A  07                                  SFLEND
-     A                                      SFLSIZ(17)
-     A                                      SFLPAG(17)
+     A                                      SFLSIZ(&SFLSIZE)
+     A                                      SFLPAG(&SFLPAGE)
      A                                      SFLCSRRRN(&WRACSR)
      A            WRACSR         5S 0H
      A            WRAN01         4S 0H      SFLRCDNBR
+     A            SFLSIZE        5S 0P
+     A            SFLPAGE        5S 0P
      A            ZPGM          10   O  1  2
      A                                      OVRDTA
      A                                  1 58'Gestion des lots'

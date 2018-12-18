@@ -91,14 +91,6 @@
       // La DS du programme, noter le S indispensable
        /copy qcpysrc,Psds
 
-      // La DS du sous=fichier
-       Dcl-ds DSSFL1;
-        WPOSC int(5) pos(370);
-        WRRNG int(5) pos(376);
-        WRNGP int(5) pos(378);
-        WNBRSF int(5) pos(380);
-       end-ds;
-
       // Le DS des indicateurs de l'écran
        Dcl-ds IndDs;
         Rollup Ind Pos(2);
@@ -148,13 +140,18 @@
        Dcl-c Non_trouve 100;
        Dcl-c Trouve 0;
 
-       // le nombre de lignes afichables, déclaration a la volée
-       g_Nblis1 = 17;
+       // Initialisation de la taille du sous-fichier et de la page
+       SFLPAGE=17;
+       Sflsize=17;
+
        // initialisation des variables système affichées à l'écran
        Zpgm = Procedure;
        Zdate=%Date;
        Zheur=%Time;
        Zjob=Job_name;
+
+       // le nombre de lignes afichables, déclaration a la volée
+       g_Nblis1 = SFLPAGE;
 
        // Initialisation du sous=fichier des messages
        WPGMQ='*  ';
@@ -165,16 +162,16 @@
        // Indicateur fin
        g_Sortie = *ON;
        // Debut du traitement,
-       EXSR INITSF;
+       INITSF();
        // Boucle d'attente de sortie
        DOW g_Sortie;
-         EXSR TRTSFL;
+         TRTSFL();
        ENDDO;
        // Indicateur de fin de programme
        *INLR = *ON;
        // Les procédures
        // Traitement de l'écran
-       BEGSR TRTSFL;
+       Dcl-proc TRTSFL;
          // Effacement du sous=fichier de messages
          PTYP = '3';
          PFIM = *Blank;
@@ -202,13 +199,13 @@
          g_Fin_actions = *ON;
          IF Rollup;
            // page suivante
-           EXSR CHGPAG;
+           CHGPAG();
            g_Fin_actions = *OFF;
          ENDIF;
          //
          IF ZSLIBELLOTP <> ZSLIBELLOT And g_Fin_actions;
          // Test si selection/ si changé on initialise
-           EXSR INITSF;
+           INITSF();
            g_Fin_actions = *OFF;
          ENDIF;
 
@@ -222,7 +219,7 @@
          //
          IF Refresh;
            // F5 Rafraichissement de l'écran
-           EXSR INITSF;
+           INITSF();
            g_Fin_actions = *OFF;
          ENDIF;
          //
@@ -234,7 +231,7 @@
            Gestion_Projet( PCHX
                           :NREC);
 
-           EXSR INITSF;
+           INITSF();
            g_Fin_actions = *OFF;
          ENDIF;
          IF Imprimer;
@@ -246,12 +243,13 @@
          ENDIF;
          // On ne fait ceci que s'il n'y a eu rien d'autre
          IF g_Fin_actions = '1';
-           EXSR TRTOPT;
+           TRTOPT();
          ENDIF;
          // On recommence la boucle d'attente
-       ENDSR;
+       End-proc;
+
        // Initialisation du sous-fichier
-       BEGSR INITSF;
+       Dcl-proc INITSF;
          //    l'indicateur 20 conditionne la zone OPT (protection)
          Zoptpr = *OFF;
          // Initialisation de la variable de sélection
@@ -309,12 +307,11 @@
              ;
          EXEC SQL OPEN curs_lots02;
 
-         *in70 = sqlcode < Trouve;
          // Chargement de la première page
-         EXSR CHGPAG;
-       ENDSR;
+         CHGPAG();
+       End-proc;
        // Traitement des options, on ne lit que les enregistrements modifiés
-       BEGSR TRTOPT;
+       Dcl-proc TRTOPT;
          // Lecture des enregistrements modifiés
          WRAN01=1;
          // Top pour rafraichir l'écran, si besoin
@@ -377,7 +374,7 @@
            // On aurait pu aussi faire IF..., en tout cas le choix est bon
            If g_Traitement_option;
              Gestion_Projet( PCHX
-                           :NREC);
+                            :NREC);
              g_Selection_OK=*on;
            EndIf;
 
@@ -387,12 +384,12 @@
 
          // Potentiellement il y a eu mise à jour, on pourrait affiner
          If g_Selection_OK;
-           EXSR INITSF;
+           INITSF();
          EndIf;
-       ENDSR;
+       End-proc;
 
        // Chargement d'une page
-       BEGSR CHGPAG;
+       Dcl-proc CHGPAG;
          // Il faut positionner correctement les indicateurs et les variables
          Sflnxtchg = *OFF;
          //                  SETON                                        04
@@ -409,7 +406,7 @@
          Clear NBRLIG;
       //
          DOW Sqlcode = Trouve
-         AND NBRLIG < 17;
+         AND NBRLIG < SFLPAGE;
            // Remplissage des zones écran
            g_Selection_OK = *ON;
            // Test s'il y a selection
@@ -492,4 +489,4 @@
          ENDIF;
 
            WRAN01 = LSTLIG;
-       ENDSR;
+       end-proc;
