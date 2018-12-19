@@ -20,7 +20,7 @@
       // Liste ddes lots
       //*********************************************************************
       // Déclaration des fichiers
-       dcl-f GSTLOT10FM workstn sfile(sfl01 :wran01) infds(dssfl1) indds(IndDs);
+       dcl-f GSTLOT10FM workstn sfile(sfl01 :wran01) indds(IndDs);
 
 
        // Prototypes d'appel
@@ -63,9 +63,8 @@
        Dcl-s NBRLIG Packed(4:0);
        // Le fameux WRAN01
        Dcl-s WRAN01 Packed(4:0);
-       Dcl-s g_Nblis1 Packed(4:0);
 
-       // Gestion des messages
+      // Gestion des messages
        Dcl-s PTYP Char(1);
        Dcl-s PFIM Char(10);
        Dcl-s PMID Char(7);
@@ -138,19 +137,13 @@
        // Constantes pour SQLCODE
        Dcl-c Non_trouve 100;
        Dcl-c Trouve 0;
-
-       // Initialisation de la taille du sous-fichier et de la page
-       SFLPAGE=17;
-       Sflsize=17;
+       Dcl-c c_nbr_ligne_page 17;
 
        // initialisation des variables système affichées à l'écran
        Zpgm = Procedure;
        Zdate=%Date;
        Zheur=%Time;
        Zjob=Job_name;
-
-       // le nombre de lignes afichables, déclaration a la volée
-       g_Nblis1 = SFLPAGE;
 
        // Initialisation du sous=fichier des messages
        WPGMQ='*  ';
@@ -405,7 +398,7 @@
          Clear NBRLIG;
       //
          DOW Sqlcode = Trouve
-         AND NBRLIG < SFLPAGE;
+         AND NBRLIG < c_nbr_ligne_page;
            // Remplissage des zones écran
            g_Selection_OK = *ON;
            // Test s'il y a selection

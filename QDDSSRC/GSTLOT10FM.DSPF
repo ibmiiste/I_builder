@@ -42,13 +42,11 @@
      A  05                                  SFLDSPCTL
      A  06                                  SFLCLR
      A  07                                  SFLEND
-     A                                      SFLSIZ(&SFLSIZE)
-     A                                      SFLPAG(&SFLPAGE)
+     A                                      SFLSIZ(17)
+     A                                      SFLPAG(17)
      A                                      SFLCSRRRN(&WRACSR)
      A            WRACSR         5S 0H
      A            WRAN01         4S 0H      SFLRCDNBR
-     A            SFLSIZE        5S 0P
-     A            SFLPAGE        5S 0P
      A            ZPGM          10   O  1  2
      A                                      OVRDTA
      A                                  1 58'Gestion des lots'
@@ -133,11 +131,11 @@
      A*%%RS+   <field-data>
      A*%%RS+    <field name="ZBIBLOT" value="LOT_000160" />
      A*%%RS+    <field name="ZLISTBIBPR" value="MIR_CICA95" />
-     A*%%RS+    <field name="ZOPT" value="2" />
      A*%%RS+    <field name="ZNUMLOT" value="1" />
+     A*%%RS+    <field name="ZOPT" value="2" />
+     A*%%RS+    <field name="ZLIBELLOT" value="Projet MIRUS" />
      A*%%RS+    <field name="HROWIDLOTS" value="345654eazd4r654zd6541D684d65a4D6
      A*%%RS+3SZDa4d65" />
-     A*%%RS+    <field name="ZLIBELLOT" value="Projet MIRUS" />
      A*%%RS+   </field-data>
      A*%%RS+  </record-write>
      A*%%RS+  <record-write record-format="FORE1" />
