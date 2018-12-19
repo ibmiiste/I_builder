@@ -19,125 +19,129 @@
       *   >>EXECUTE<<                                                 */
       * >>END-PRE-COMPILER<<                                          */
       *****************************************************************
-     h datedit(*dmy)  dftactgrp(*no)
-     ffliblst   cf   e             workstn sfile(sfl1:sflrrn)
-     f                                     sfile(sfl2:sflrrn)
-     ffliblst1  uf a e           k disk    usropn
-     ffliblst2  uf a e           k disk
-     f                                     prefix(f2_)
+       ctl-opt datedit(*dmy) dftactgrp(*no);
+       dcl-f FLIBLST workstn sfile(sfl1:sflrrn) sfile(sfl2:sflrrn);
+       dcl-f FLIBLST1 keyed usage(*update: *output) usropn;
+       dcl-f FLIBLST2 keyed usage(*update: *output) prefix(f2_);
 
-     d Entry           pr                  Extpgm('PLIBLSTR')
-     d  selusr                       10
-     d  sellst                        8
-     d Entry           pi
-     d  selusr                       10
-     d  sellst                        8
+       dcl-pr Entry extpgm('PLIBLSTR');
+         *n char(10); // selusr
+         *n char(8); // sellst
+       end-pr;
+       dcl-pi Entry;
+         selusr char(10);
+         sellst char(8);
+       end-pi;
 
-     d Addlib          pr                  Extpgm('PADDLIBC')
-     d                               10
+       dcl-pr Addlib extpgm('PADDLIBC');
+         *n char(10);
+       end-pr;
 
-     d Savlib          pr                  Extpgm('POSLIBC')
-     d                                4
-     d                               10
-     d                               10
-     d                               10
+       dcl-pr Savlib extpgm('POSLIBC');
+         *n char(4);
+         *n char(10);
+         *n char(10);
+         *n char(10);
+       end-pr;
 
-     d updsfl          S               n
-     d rrnsav          S                   like(sflrrn)
-     d seqnbr          S                   like(seqlib)
+       dcl-s updsfl ind;
+       dcl-s rrnsav like(sflrrn);
+       dcl-s seqnbr like(seqlib);
 
-     d Possav          s              4    inz('*SAV')
-     d Poslst          s             10    inz('LSTLIB')
-     d Poslib          s             10    inz('QTEMP')
-     d Poscur          s             10    inz('*YES')
+       dcl-s Possav char(4) inz('*SAV');
+       dcl-s Poslst char(10) inz('LSTLIB');
+       dcl-s Poslib char(10) inz('QTEMP');
+       dcl-s Poscur char(10) inz('*YES');
 
-     d Lstlib          s           2000    Dtaara
-     d I               s              4  0
+       dcl-s Lstlib char(2000) dtaara;
+       dcl-s I packed(4);
 
-     d pgmsts         sds
-     d user                  254    263
+       dcl-ds pgmsts PSDS;
+         user char(10) pos(254);
+       end-ds;
 
-     D dynArrInfo      ds                  qualified
-     D   numAlloc                    10i 0 inz(0)
-     D   current                     10i 0 inz(0)
-     D   p                             *
-     D dyndta          s             14a   dim(39) based(dynArrInfo.p)
+       dcl-ds dynArrInfo qualified;
+         numAlloc int(10) inz(0);
+         current int(10) inz(0);
+         p pointer;
+       end-ds;
 
-      /free
-        exsr sflini;
+       dcl-s dyndta char(14) dim(39) based(dynarrinfo.p);
 
-        dow *inkc = *off;
+       exsr sflini;
 
-        if rrnsav <> 0;
-         sflrrn = rrnsav;
-        endif;
+       dow *inkc = *off;
 
-        write sflfn1;
-        exfmt sflctl1;
+         if rrnsav <> 0;
+           sflrrn = rrnsav;
+         endif;
 
-        clear msgfn1;
+         write sflfn1;
+         exfmt sflctl1;
 
-        rrnsav = 0;
+         clear msgfn1;
 
-        if *in06;
-         exsr fmtadd;
-        else;
-        if sflrrn > 0;
-         exsr sflchg;
-        endif;
-        endif;
+         rrnsav = 0;
 
-        if updsfl = *on;
-         *in30 = *on;
-         *in31 = *on;
-         write sflctl1;
-         *in30 = *off;
-         *in31 = *off;
-         exsr sflini;
-        endif;
+         if *in06;
+           exsr fmtadd;
+         else;
+           if sflrrn > 0;
+             exsr sflchg;
+           endif;
+         endif;
 
-        enddo;
+         if updsfl = *on;
+           *in30 = *on;
+           *in31 = *on;
+           write sflctl1;
+           *in30 = *off;
+           *in31 = *off;
+           exsr sflini;
+         endif;
 
-        *inlr = *on;
+       enddo;
 
-        begsr sflchg;
+       *inlr = *on;
+
+       begsr sflchg;
          readc sfl1;
          rrnsav = sflrrn;
          dow not %eof;
-         if opt <> '';
-          rrnsav = sflrrn;
-          exsr chkaut;
-          select;
-           when opt = '2';
-            exsr fmtmaj;
-           when opt = '4';
-            exsr fmtdlt;
-            exsr sflini;
-           when opt = '5';
-            exsr fmtdsp;
-           when opt = '6';
-            exsr edtlib;
-           when opt = '7';
-            chain (lstname) fliblst2;
-            if %found(fliblst2);
-             addlib (lstname);
-            else;
+           if opt <> '';
+             rrnsav = sflrrn;
+             exsr chkaut;
+             select;
+               when opt = '2';
+                 exsr fmtmaj;
+               when opt = '4';
+                 exsr fmtdlt;
+                 exsr sflini;
+               when opt = '5';
+                 exsr fmtdsp;
+               when opt = '6';
+                 exsr edtlib;
+               when opt = '7';
+                 chain (lstname) fliblst2;
+                 if %found(fliblst2);
+                   addlib (lstname);
+                 else;
              msgfn1 = 'Liste ' + %trim(lstname) + 'vide. Option 7 rejetée.';
-            endif;
-          endsl;
-         endif;
-         if sflrrn > 0;
-          sflrrn = rrnsav;
-          chain sflrrn sfl1;
-          clear opt;
-          update sfl1;
-        endif;
-          readc sfl1;
+                 endif;
+             endsl;
+           endif;
+           if sflrrn > 0;
+             sflrrn = rrnsav;
+             chain sflrrn sfl1;
+             clear opt;
+             update sfl1;
+           endif;
+           readc sfl1;
          enddo;
-          sflrrn = rrnsav;
-        endsr;
+         sflrrn = rrnsav;
+       endsr;
 
-        begsr fmtdsp;
+       begsr fmtdsp;
          open fliblst1;
          chain (lstname) fliblst1;
          close fliblst1;
@@ -145,32 +149,32 @@
          *in32 = *off;
          *in34 = *off;
          exfmt fmt001;
-        endsr;
+       endsr;
 
-        begsr fmtdlt;
+       begsr fmtdlt;
          exfmt windlt;
          if optdlt = 'O';
-          open fliblst1;
-          chain lstname fliblst1;
-          chain lstname fliblst2;
-          if %found(fliblst2);
-          dow not %eof(fliblst2)
-            or not %found(fliblst2);
-          delete fliblst2;
-          reade lstname fliblst2;
-          enddo;
-          endif;
-          delete fliblst1;
-          close fliblst1;
+           open fliblst1;
+           chain lstname fliblst1;
+           chain lstname fliblst2;
+           if %found(fliblst2);
+             dow not %eof(fliblst2)
+               or not %found(fliblst2);
+               delete fliblst2;
+               reade lstname fliblst2;
+             enddo;
+           endif;
+           delete fliblst1;
+           close fliblst1;
          endif;
-          updsfl = *on;
-          if sflrrn > 1 and optdlt = 'O';
-          sflrrn = sflrrn - 1;
-          endif;
-          rrnsav = sflrrn;
-        endsr;
+         updsfl = *on;
+         if sflrrn > 1 and optdlt = 'O';
+           sflrrn = sflrrn - 1;
+         endif;
+         rrnsav = sflrrn;
+       endsr;
 
-        begsr fmtadd;
+       begsr fmtadd;
          clear fmt001;
          *in31 = *on;
          *in32 = *on;
@@ -182,27 +186,27 @@
          exfmt fmt001;
          open fliblst1;
          if lstname <> '';
-         chain lstname fliblst1;
-         if not %found(fliblst1);
-         lstdate = %date;
-         lsttime = %time;
-         lstuser = user;
-         if lstdesc = ' ';
-          lstdesc = 'Liste ' + lstname;
-         endif;
-         if lsttype = ' ';
-          lsttype = '1';
-         endif;
-         write flibls1r;
-         else;
-         msgfn1= 'La liste ' + %trim(lstname) + ' existe déjà !';
-         endif;
+           chain lstname fliblst1;
+           if not %found(fliblst1);
+             lstdate = %date;
+             lsttime = %time;
+             lstuser = user;
+             if lstdesc = ' ';
+               lstdesc = 'Liste ' + lstname;
+             endif;
+             if lsttype = ' ';
+               lsttype = '1';
+             endif;
+             write flibls1r;
+           else;
+             msgfn1= 'La liste ' + %trim(lstname) + ' existe déjà !';
+           endif;
          endif;
          close fliblst1;
          exsr sflini;
-        endsr;
+       endsr;
 
-        begsr fmtmaj;
+       begsr fmtmaj;
          open fliblst1;
          chain (lstname) fliblst1;
          *in31 = *off;
@@ -211,178 +215,176 @@
          *in35 = *on;
          exfmt fmt001;
          if lsttype = '2' and user <> lstuser;
-          lsttype = '1';
-          msgfn1 = 'Positionnement liste ' + %trim(lstname) +
-            ' en accès privé impossible.';
+           lsttype = '1';
+           msgfn1 = 'Positionnement liste ' + %trim(lstname) +
+             ' en accès privé impossible.';
          endif;
          update flibls1r;
          close fliblst1;
          update sfl1;
-        endsr;
+       endsr;
 
-        begsr sflini;
+       begsr sflini;
 
-        *in30 = *on;
-        *in31 = *on;
-        write sflctl1;
-        *in30 = *off;
-        *in31 = *off;
-
-        sflrrn = 0;
-        open fliblst1;
-        setll (*loval) fliblst1;
-        read fliblst1;
-        dow not %eof(fliblst1);
-         if sellst = '*ALL' and user = lstuser
-          or sellst = '*ALL' and selusr = lstuser
-          or sellst = '*ALL' and selusr = '*ALL'
-          or sellst = '*PRIVATE' and user = lstuser
-          or sellst = '*PRIVATE' and selusr = lstuser
-          or sellst = '*PRIVATE' and selusr = '*ALL';
-         sflrrn = sflrrn + 1;
-         write sfl1;
-         endif;
-         read fliblst1;
-        enddo;
-        if sflrrn > 0;
-         sflrrn = 1;
-        else;
-         *in30 = *off;
+         *in30 = *on;
          *in31 = *on;
-        endif;
-        close fliblst1;
-        endsr;
+         write sflctl1;
+         *in30 = *off;
+         *in31 = *off;
 
-        begsr edtlib;
+         sflrrn = 0;
+         open fliblst1;
+         setll (*loval) fliblst1;
+         read fliblst1;
+         dow not %eof(fliblst1);
+           if sellst = '*ALL' and user = lstuser
+             or sellst = '*ALL' and selusr = lstuser
+             or sellst = '*ALL' and selusr = '*ALL'
+             or sellst = '*PRIVATE' and user = lstuser
+             or sellst = '*PRIVATE' and selusr = lstuser
+             or sellst = '*PRIVATE' and selusr = '*ALL';
+             sflrrn = sflrrn + 1;
+             write sfl1;
+           endif;
+           read fliblst1;
+         enddo;
+         if sflrrn > 0;
+           sflrrn = 1;
+         else;
+           *in30 = *off;
+           *in31 = *on;
+         endif;
+         close fliblst1;
+       endsr;
 
-        rrnsav = sflrrn;
+       begsr edtlib;
 
-        dou *in12 = '1';
+         rrnsav = sflrrn;
 
-        *in30 = *on;
-        *in31 = *on;
-        write sflctl2;
-        *in30 = *off;
-        *in31 = *off;
+         dou *in12 = '1';
 
-        sflrrn = 0;
-        setll lstname fliblst2;
-        reade lstname fliblst2;
-        curlib = f2_lib;
-        reade lstname fliblst2;
-        seqlib = 10;
+           *in30 = *on;
+           *in31 = *on;
+           write sflctl2;
+           *in30 = *off;
+           *in31 = *off;
 
-        dow not %eof(fliblst2);
-         sflrrn = sflrrn + 1;
-         lib = f2_lib;
-         write sfl2;
-         seqlib = seqlib + 10;
-         reade lstname fliblst2;
-        enddo;
+           sflrrn = 0;
+           setll lstname fliblst2;
+           reade lstname fliblst2;
+           curlib = f2_lib;
+           reade lstname fliblst2;
+           seqlib = 10;
 
-        dou sflrrn = 39;
-         sflrrn = sflrrn + 1;
-         clear lib;
-         write sfl2;
-         seqlib = seqlib + 10;
-        enddo;
+           dow not %eof(fliblst2);
+             sflrrn = sflrrn + 1;
+             lib = f2_lib;
+             write sfl2;
+             seqlib = seqlib + 10;
+             reade lstname fliblst2;
+           enddo;
 
-        sflrrn = 1;
+           dou sflrrn = 39;
+             sflrrn = sflrrn + 1;
+             clear lib;
+             write sfl2;
+             seqlib = seqlib + 10;
+           enddo;
 
-        write sflfn2;
-        exfmt sflctl2;
+           sflrrn = 1;
 
-        if *in08;
-          *in30 = *on;
-          *in31 = *on;
-          write sflctl2;
-          *in30 = *off;
-          *in31 = *off;
-          savlib (possav:poslst:poslib:poscur);
-          in *lock *dtaara;
-          seqlib = 00;
-          sflrrn = 0;
-          curlib = %subst(Lstlib:1:10);
-          seqlib = 10;
-          for i = 11 by 11 to %len(Lstlib);
-          if sflrrn = 39;
-           leave;
-          else;
-           lib = %subst(Lstlib:i:10);
-           sflrrn = sflrrn + 1;
-           write sfl2;
-           seqlib = seqlib + 10;
-          endif;
-          endfor;
-          sflrrn = 1;
-          write sflfn2;
-          exfmt sflctl2;
-        endif;
+           write sflfn2;
+           exfmt sflctl2;
+
+           if *in08;
+             *in30 = *on;
+             *in31 = *on;
+             write sflctl2;
+             *in30 = *off;
+             *in31 = *off;
+             savlib (possav:poslst:poslib:poscur);
+             in *lock *dtaara;
+             seqlib = 00;
+             sflrrn = 0;
+             curlib = %subst(Lstlib:1:10);
+             seqlib = 10;
+             for i = 11 by 11 to %len(Lstlib);
+               if sflrrn = 39;
+                 leave;
+               else;
+                 lib = %subst(Lstlib:i:10);
+                 sflrrn = sflrrn + 1;
+                 write sfl2;
+                 seqlib = seqlib + 10;
+               endif;
+             endfor;
+             sflrrn = 1;
+             write sflfn2;
+             exfmt sflctl2;
+           endif;
 
      ** chargement des bibliothèques saisie à l'écran dans tableau
-        dynArrInfo.numAlloc = 39;
-        dynArrInfo.p = %alloc(%size(dyndta) *
-                            dynarrInfo.numAlloc);
-        dynArrInfo.current = 1;
+           dynArrInfo.numAlloc = 39;
+           dynArrInfo.p = %alloc(%size(dyndta) *
+             dynarrInfo.numAlloc);
+           dynArrInfo.current = 1;
 
-        for i = 1 by 1 to 39;
-         readc sfl2;
-         if lib <> '';
-           %subarr(dyndta : i : dynarrInfo.current) = *blank;
-           dyndta(i) = %editc(seqlib : 'X') + lib;
-         else;
-           dyndta(i) = '9999';
-         endif;
-        endfor;
+           for i = 1 by 1 to 39;
+             readc sfl2;
+             if lib <> '';
+               %subarr(dyndta : i : dynarrInfo.current) = *blank;
+               dyndta(i) = %editc(seqlib : 'X') + lib;
+             else;
+               dyndta(i) = '9999';
+             endif;
+           endfor;
 
-        sorta %subarr(dyndta: 1);
+           sorta %subarr(dyndta: 1);
 
      ** mise à jour du fichier
-        if curlib = ' ';
-         curlib = 'BERGER';
-        endif;
-        f2_seqlib = 0;
-        f2_lstname = lstname;
-        chain (lstname:f2_seqlib) fliblst2;
-        if %found(fliblst2);
-         f2_lib = curlib;
-         update flibls2r;
-        else;
-         f2_lib = curlib;
-         write flibls2r;
-        endif;
+           if curlib = ' ';
+             curlib = 'BERGER';
+           endif;
+           f2_seqlib = 0;
+           f2_lstname = lstname;
+           chain (lstname:f2_seqlib) fliblst2;
+           if %found(fliblst2);
+             f2_lib = curlib;
+             update flibls2r;
+           else;
+             f2_lib = curlib;
+             write flibls2r;
+           endif;
 
-        for i = 1 by 1 to 39;
-         f2_lstname = lstname;
-         f2_seqlib = f2_seqlib + 10;
-         chain (lstname:f2_seqlib) fliblst2;
-         if %found(fliblst2);
-         if  %subst(dyndta(i):5:10) <> '';
-          f2_lib = %subst(dyndta(i):5:10);
-          update flibls2r;
-         else;
-          delete flibls2r;
-         endif;
-         else;
-         if  %subst(dyndta(i):5:10) <> '';
-          f2_lib = %subst(dyndta(i):5:10);
-          write flibls2r;
-         endif;
-         endif;
-        endfor;
+           for i = 1 by 1 to 39;
+             f2_lstname = lstname;
+             f2_seqlib = f2_seqlib + 10;
+             chain (lstname:f2_seqlib) fliblst2;
+             if %found(fliblst2);
+               if  %subst(dyndta(i):5:10) <> '';
+                 f2_lib = %subst(dyndta(i):5:10);
+                 update flibls2r;
+               else;
+                 delete flibls2r;
+               endif;
+             else;
+               if  %subst(dyndta(i):5:10) <> '';
+                 f2_lib = %subst(dyndta(i):5:10);
+                 write flibls2r;
+               endif;
+             endif;
+           endfor;
 
-        enddo;
+         enddo;
 
-        endsr;
+       endsr;
 
-        begsr chkaut;
+       begsr chkaut;
          open fliblst1;
          chain (lstname) fliblst1;
          if user <> lstuser and lsttype = '2';
-          msgfn1 = 'Non autorisé à modifier liste ' + lstname;
-          clear opt;
+           msgfn1 = 'Non autorisé à modifier liste ' + lstname;
+           clear opt;
          endif;
          close fliblst1;
-        endsr;
-
-      /end-free
+       endsr;
