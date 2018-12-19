@@ -110,28 +110,6 @@
       // La DS de la table LOTS
        Dcl-ds Ds_Lots Extname('LOTS') End-ds;
 
-       dcl-ds WDSFIC;
-        WCDFIL char(8) pos(1);
-        WOPENF char(1) pos(9);
-        WSTSFI zoned(5) pos(11);
-        WOPCOD char(6) pos(16);
-        WRPGSQ char(8) pos(30);
-        WRPGNR char(8) pos(38);
-        WERRFI char(7) pos(46);
-        WNFICH char(10) pos(83);
-        WNLIBR char(10) pos(93);
-        WSPNAM char(10) pos(103);
-        WSPLIB char(10) pos(113);
-        WSPNUM int(5) pos(123);
-        WLIMBR char(10) pos(129);
-        WNBPUT int(10) pos(243);
-        WNBGET int(10) pos(247);
-        WNBPG int(10) pos(251);
-        WNBIO int(10) pos(255);
-        WRCDFT char(10) pos(261);
-        WNBRCD int(10) pos(283);
-        WNRCFI int(10) pos(397);
-       end-ds;
 
        // Constantes
        // Constantes pour SQLCODE
