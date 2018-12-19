@@ -201,7 +201,7 @@
          // Boucle d'attente de fin
          l_traitenement_ecran = *ON;
          DOW l_traitenement_ecran;
-           EXSR TRTSCR;
+           TRTSCR();
          ENDDO;
        On-error;
          Dump(a);
@@ -211,7 +211,7 @@
          //
        *INLR = *ON;
        // Les procédures
-       BEGSR TRTSCR;
+       Dcl-proc TRTSCR;
          WRITE WMGCTL;
          // On écrit l'écran
          WRITE FORE1;
@@ -285,19 +285,19 @@
          ENDIF;
          // contrle des données saisies
          IF l_Donnees_a_controler = '1';
-           EXSR CTLDTA;
+           CTLDTA();
            IF l_anomalie;
              // anomalie
-             EXSR ENVMSG;
+             ENVMSG();
              l_anomalie = *OFF;
            ELSE;
              // confirmation  pour suppression
-             EXSR VALID1;
+             VALID1();
            ENDIF;
          ENDIF;
-       ENDSR;
+       End-proc;
        // controle des données/si suppression demande de confirmation
-       BEGSR CTLDTA;
+       Dcl-proc CTLDTA;
          l_anomalie=*Off;
       // on vérifie que tout est bon
          IF PCHX = 'SU';
@@ -306,9 +306,9 @@
            // vérification du code fonction
            // Ajouter les contrôles sur la liste de bibliothèques
          ENDIF;
-       ENDSR;
+       End-proc;
        //** Création suppression et MJ selon le cas
-       BEGSR VALID1;
+       Dcl-proc VALID1;
          IF PCHX = 'SU';
            // La suppression se fait par la touche F15
          ELSE;
@@ -370,13 +370,13 @@
            endif;
          ENDIF;
          l_traitenement_ecran = *OFF;
-       ENDSR;
+       End-proc;
 
        //****Envoi d'un message programme
-       BEGSR ENVMSG;
+       Dcl-proc ENVMSG;
          Gestion_message( P_TYP
                          :P_FICM
                          :P_MGID
                          :P_MGDT);
 
-       ENDSR;
+       End-proc;
