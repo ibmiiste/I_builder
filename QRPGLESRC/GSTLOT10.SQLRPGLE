@@ -97,7 +97,6 @@
         Sflnxtchg Ind Pos(8);
         Zoptpr Ind Pos(20);
         Znomred Ind Pos(30);
-        Sflend Ind Pos(7);
         Sfldsp Ind Pos(4);
         Sfldspctl Ind Pos(5);
         Sflclr Ind Pos(6);
