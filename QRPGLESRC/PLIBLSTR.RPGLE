@@ -68,7 +68,7 @@
 
        dcl-s dyndta char(14) dim(39) based(dynarrinfo.p);
 
-       exsr sflini;
+       sflini();
 
        dow *inkc = *off;
 
@@ -84,10 +84,10 @@
          rrnsav = 0;
 
          if *in06;
-           exsr fmtadd;
+           fmtadd();
          else;
            if sflrrn > 0;
-             exsr sflchg;
+             sflchg();
            endif;
          endif;
 
@@ -97,30 +97,30 @@
            write sflctl1;
            *in30 = *off;
            *in31 = *off;
-           exsr sflini;
+           sflini();
          endif;
 
        enddo;
 
        *inlr = *on;
 
-       begsr sflchg;
+       Dcl-proc sflchg;
          readc sfl1;
          rrnsav = sflrrn;
          dow not %eof;
            if opt <> '';
              rrnsav = sflrrn;
-             exsr chkaut;
+             chkaut();
              select;
                when opt = '2';
-                 exsr fmtmaj;
+                 fmtmaj();
                when opt = '4';
-                 exsr fmtdlt;
-                 exsr sflini;
+                 fmtdlt();
+                 sflini();
                when opt = '5';
-                 exsr fmtdsp;
+                 fmtdsp();
                when opt = '6';
-                 exsr edtlib;
+                 edtlib();
                when opt = '7';
                  chain (lstname) fliblst2;
                  if %found(fliblst2);
@@ -139,9 +139,9 @@
            readc sfl1;
          enddo;
          sflrrn = rrnsav;
-       endsr;
+       End-proc;
 
-       begsr fmtdsp;
+       Dcl-proc fmtdsp;
          open fliblst1;
          chain (lstname) fliblst1;
          close fliblst1;
@@ -149,9 +149,9 @@
          *in32 = *off;
          *in34 = *off;
          exfmt fmt001;
-       endsr;
+       End-proc;
 
-       begsr fmtdlt;
+       Dcl-proc fmtdlt;
          exfmt windlt;
          if optdlt = 'O';
            open fliblst1;
@@ -172,9 +172,9 @@
            sflrrn = sflrrn - 1;
          endif;
          rrnsav = sflrrn;
-       endsr;
+       End-proc;
 
-       begsr fmtadd;
+       Dcl-proc fmtadd;
          clear fmt001;
          *in31 = *on;
          *in32 = *on;
@@ -203,10 +203,10 @@
            endif;
          endif;
          close fliblst1;
-         exsr sflini;
-       endsr;
+         sflini();
+       End-proc;
 
-       begsr fmtmaj;
+       Dcl-proc fmtmaj;
          open fliblst1;
          chain (lstname) fliblst1;
          *in31 = *off;
@@ -222,9 +222,9 @@
          update flibls1r;
          close fliblst1;
          update sfl1;
-       endsr;
+       End-proc;
 
-       begsr sflini;
+       Dcl-proc sflini;
 
          *in30 = *on;
          *in31 = *on;
@@ -255,9 +255,9 @@
            *in31 = *on;
          endif;
          close fliblst1;
-       endsr;
+       End-proc;
 
-       begsr edtlib;
+       Dcl-proc edtlib;
 
          rrnsav = sflrrn;
 
@@ -377,9 +377,9 @@
 
          enddo;
 
-       endsr;
+       End-proc;
 
-       begsr chkaut;
+       Dcl-proc chkaut;
          open fliblst1;
          chain (lstname) fliblst1;
          if user <> lstuser and lsttype = '2';
@@ -387,4 +387,4 @@
            clear opt;
          endif;
          close fliblst1;
-       endsr;
+       End-proc;
