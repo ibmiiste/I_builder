@@ -20,17 +20,22 @@
       * >>END-PRE-COMPILER<<                                          */
       *****************************************************************
        ctl-opt datedit(*dmy) dftactgrp(*no);
-       dcl-f FLIBLST workstn sfile(sfl1:sflrrn) sfile(sfl2:sflrrn);
-       dcl-f FLIBLST1 keyed usage(*update: *output) usropn;
-       dcl-f FLIBLST2 keyed usage(*update: *output) prefix(f2_);
+       dcl-f FLIBLST workstn sfile(sfl1:sflrrn) sfile(sfl2:sflrrn) indds(IndDs);
+       dcl-f FLIBLST1 keyed usage(*update: *output:*Delete) usropn;
+       dcl-f FLIBLST2 keyed usage(*update: *output:*Delete) prefix(f2_);
 
-       dcl-pr Entry extpgm('PLIBLSTR');
+       dcl-pr Gestion_liste_bibliotheque extpgm('PLIBLSTR');
          *n char(10); // selusr
          *n char(8); // sellst
+         *n Char(2); // Option action
+         *n Char(10); // Liste sélectionnée par l'option 1
        end-pr;
-       dcl-pi Entry;
+
+       dcl-pi Gestion_liste_bibliotheque;
          selusr char(10);
          sellst char(8);
+         Option_action Char(2); // Option opération
+         P_List_selectionnee Char(10); // Liste de bibliothèques sélectionnée
        end-pi;
 
        dcl-pr Addlib extpgm('PADDLIBC');
@@ -66,11 +71,26 @@
          p pointer;
        end-ds;
 
+       // Le DS des indicateurs de l'écran
+       Dcl-ds IndDs;
+        Selectionner Ind Pos(25);
+        Sflclr Ind Pos(30);
+        Not_SFLDSP Ind Pos(31);
+        Not_LSTNAME_PR Ind Pos(34);
+        Not_RESTE_PR Ind Pos(35);
+       End-ds;
+
        dcl-s dyndta char(14) dim(39) based(dynarrinfo.p);
+
+       // Renommage des touches de fonction
+       /Copy Qcpysrc,Fonction
+
+       // Sélection OK
+       Dcl-s l_Selection Ind Inz('0');
 
        sflini();
 
-       dow *inkc = *off;
+       dow Sortie and Not l_Selection;
 
          if rrnsav <> 0;
            sflrrn = rrnsav;
@@ -83,7 +103,7 @@
 
          rrnsav = 0;
 
-         if *in06;
+         if Creer;
            fmtadd();
          else;
            if sflrrn > 0;
@@ -92,11 +112,11 @@
          endif;
 
          if updsfl = *on;
-           *in30 = *on;
-           *in31 = *on;
+           Sflclr = *on;
+           Not_SFLDSP = *on;
            write sflctl1;
-           *in30 = *off;
-           *in31 = *off;
+           Sflclr = *off;
+           Not_SFLDSP = *off;
            sflini();
          endif;
 
@@ -112,6 +132,8 @@
              rrnsav = sflrrn;
              chkaut();
              select;
+               when opt = '1';
+                 Sellist();
                when opt = '2';
                  fmtmaj();
                when opt = '4';
@@ -124,9 +146,11 @@
                when opt = '7';
                  chain (lstname) fliblst2;
                  if %found(fliblst2);
+                   l_Selection=*on;
                    addlib (lstname);
                  else;
-             msgfn1 = 'Liste ' + %trim(lstname) + 'vide. Option 7 rejetée.';
+                   msgfn1 = 'Liste ' + %trim(lstname) +
+                                               'vide. Option 7 rejetée.';
                  endif;
              endsl;
            endif;
@@ -138,20 +162,26 @@
            endif;
            readc sfl1;
          enddo;
+         // Si un message existe alors sélection invalide
+         if Msgfn1<>'' And l_Selection=*on;
+           l_Selection=*off;
+         Endif;
+
          sflrrn = rrnsav;
        End-proc;
 
        Dcl-proc fmtdsp;
+         l_Selection=*on;
          open fliblst1;
          chain (lstname) fliblst1;
          close fliblst1;
-         *in31 = *off;
-         *in32 = *off;
-         *in34 = *off;
+         Not_SFLDSP = *off;
+         Not_LSTNAME_PR = *off;
          exfmt fmt001;
        End-proc;
 
        Dcl-proc fmtdlt;
+         l_Selection=*on;
          exfmt windlt;
          if optdlt = 'O';
            open fliblst1;
@@ -176,10 +206,9 @@
 
        Dcl-proc fmtadd;
          clear fmt001;
-         *in31 = *on;
-         *in32 = *on;
-         *in34 = *on;
-         *in35 = *on;
+         Not_SFLDSP = *on;
+         Not_LSTNAME_PR = *on;
+         Not_RESTE_PR = *on;
          lstdate = %date;
          lsttime = %time;
          lstuser = user;
@@ -203,16 +232,27 @@
            endif;
          endif;
          close fliblst1;
+
          sflini();
        End-proc;
 
+       // Choix d'une liste et renvoi dans le paramètre l'appel SELLIST
+       Dcl-proc Sellist;
+         If not l_Selection;
+           P_List_selectionnee=LSTNAME;
+           l_Selection=*on;
+         Else;
+           msgfn1 = 'Vous ne pouvez sélectionner qu''une seule liste';
+         Endif;
+       End-proc;
+
        Dcl-proc fmtmaj;
+         l_Selection=*on;
          open fliblst1;
          chain (lstname) fliblst1;
-         *in31 = *off;
-         *in32 = *on;
-         *in34 = *off;
-         *in35 = *on;
+         Not_SFLDSP = *off;
+         Not_LSTNAME_PR = *off;
+         Not_RESTE_PR = *on;
          exfmt fmt001;
          if lsttype = '2' and user <> lstuser;
            lsttype = '1';
@@ -226,11 +266,15 @@
 
        Dcl-proc sflini;
 
-         *in30 = *on;
-         *in31 = *on;
+         If Option_action='SE';
+           Selectionner=*On;
+         Endif;
+
+         Sflclr = *on;
+         Not_SFLDSP = *on;
          write sflctl1;
-         *in30 = *off;
-         *in31 = *off;
+         Sflclr = *off;
+         Not_SFLDSP = *off;
 
          sflrrn = 0;
          open fliblst1;
@@ -251,23 +295,23 @@
          if sflrrn > 0;
            sflrrn = 1;
          else;
-           *in30 = *off;
-           *in31 = *on;
+           Sflclr = *off;
+           Not_SFLDSP = *on;
          endif;
          close fliblst1;
        End-proc;
 
        Dcl-proc edtlib;
-
+         l_Selection=*on;
          rrnsav = sflrrn;
 
          dou *in12 = '1';
 
-           *in30 = *on;
-           *in31 = *on;
+           Sflclr = *on;
+           Not_SFLDSP = *on;
            write sflctl2;
-           *in30 = *off;
-           *in31 = *off;
+           Sflclr = *off;
+           Not_SFLDSP = *off;
 
            sflrrn = 0;
            setll lstname fliblst2;
@@ -297,11 +341,11 @@
            exfmt sflctl2;
 
            if *in08;
-             *in30 = *on;
-             *in31 = *on;
+             Sflclr = *on;
+             Not_SFLDSP = *on;
              write sflctl2;
-             *in30 = *off;
-             *in31 = *off;
+             Sflclr = *off;
+             Not_SFLDSP = *off;
              savlib (possav:poslst:poslib:poscur);
              in *lock *dtaara;
              seqlib = 00;
