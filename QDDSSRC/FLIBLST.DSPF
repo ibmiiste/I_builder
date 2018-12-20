@@ -1,6 +1,7 @@
      A*%%TS  SD  20171017  101146  MIAUT       REL-V7R1M0  5770-WDS
      A*%%EC
      A                                      DSPSIZ(24 80 *DS3)
+     A                                      INDARA
      A          R SFL1                      SFL
      A*%%TS  SD  20170110  182723  MIAUT       REL-V7R1M0  5770-WDS
      A            OPT            1A  B  7  2VALUES(' ' '2' '4' '5' '6' '7')
@@ -10,12 +11,12 @@
      A*%%TS  SD  20170110  182723  MIAUT       REL-V7R1M0  5770-WDS
      A                                      SFLSIZ(0999)
      A                                      SFLPAG(0015)
-     A                                      CA03(03 'FIN')
-     A                                      CA06(06 'AJOUT')
      A                                      OVERLAY
      A N30N31                               SFLDSP
      A N30                                  SFLDSPCTL
      A  30                                  SFLCLR
+     A                                      CA03
+     A                                      CA06
      A            SFLRRN         4S 0H      SFLRCDNBR(CURSOR)
      A                                  1  2SYSNAME
      A                                      COLOR(BLU)
@@ -29,12 +30,20 @@
      A                                  3  2'Indiquez vos options, puis appuyez-
      A                                       sur ENTREE.'
      A                                      COLOR(BLU)
-     A                                  4  4'2=Modifier  4=Supprimer  5=Affiche-
-     A                                      r   6=Réviser liste   7=Mise en lig-
-     A                                      ne'
+     A                                  4 17'2=Modifier'
      A                                      COLOR(BLU)
      A                                  6  1'Opt  Liste      Libellé'
      A                                      COLOR(WHT)
+     A                                  4 29'4=Supprimer'
+     A                                      COLOR(BLU)
+     A                                  4 43'5=Afficher'
+     A                                      COLOR(BLU)
+     A                                  4 55'6=Réviser liste'
+     A                                      COLOR(BLU)
+     A                                  5  2'7=Mise en ligne'
+     A                                      COLOR(BLU)
+     A  25                              4  2'1=Selectionner'
+     A                                      COLOR(BLU)
      A          R SFLFN1
      A*%%TS  SD  20170111  170856  MIAUT       REL-V7R1M0  5770-WDS
      A                                      OVERLAY
