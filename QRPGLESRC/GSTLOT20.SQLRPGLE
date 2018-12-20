@@ -72,6 +72,14 @@
          P_MDT Char(99);
        End-pr;
 
+       // Guide vers la liste des listes de bibliothèques
+       dcl-pr Gestion_liste_bibliotheque extpgm('PLIBLSTR');
+         *n char(10); // selusr
+         *n char(8); // sellst
+         *n Char(2); // Option action
+         *n Char(10); // Liste sélectionnée par l'option 1
+       end-pr;
+
        // La DS du programme
        /copy qcpysrc,Psds
 
@@ -220,7 +228,7 @@
 
          // Effacement des sous-fichiers de messages
          P_TYP = '3';
-         EXSR ENVMSG;
+         ENVMSG();
          P_TYP = '1';
 
          l_Donnees_a_controler = *ON;
@@ -231,14 +239,21 @@
            l_Donnees_a_controler = *OFF;
          ENDIF;
 
+         // Guide appui sur la touche F4
+         If guide And l_Donnees_a_controler;
+           If WZOCUR='ZLISTBIBPR';
+             Gestion_liste_bibliotheque( '*ALL'
+                                        :'*ALL'
+                                        :'SE'
+                                        :ZLISTBIBPR);
+             l_Donnees_a_controler = *OFF;
+           Endif;
+         Endif;
+
          // on met  jour l'heure
          ZHEUR=%Time();
 
-         //If *INKD
-         //And Donnees_a_controler;
-         // appui sur la touche F4
-         //  Donnees_a_controler = *OFF;
-         //ENDIF;
+
          //
          IF PCHX = 'SU';
            l_Donnees_a_controler = *OFF;
@@ -279,12 +294,12 @@
            ELSE;
              P_MGID = 'MSG0004';
              P_MGDT = *Blank;
-             EXSR ENVMSG;
+             ENVMSG();
              l_Confirmation_suppression = *ON;
            ENDIF;
          ENDIF;
          // contrle des données saisies
-         IF l_Donnees_a_controler = '1';
+         IF l_Donnees_a_controler;
            CTLDTA();
            IF l_anomalie;
              // anomalie
