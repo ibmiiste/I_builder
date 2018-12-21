@@ -1,0 +1,152 @@
+     A*%%TS  SD  20171017  101146  MIAUT       REL-V7R1M0  5770-WDS
+     A*%%EC
+     A                                      DSPSIZ(24 80 *DS3)
+     A                                      INDARA
+     A          R SFL1                      SFL
+     A*%%TS  SD  20170110  182723  MIAUT       REL-V7R1M0  5770-WDS
+     A            OPT            1A  B  7  2VALUES(' ' '1' '2' '4' '5' '6' '7')
+     A            LSTNAME       10A  O  7  6
+     A            LSTDESC       50A  O  7 17
+     A          R SFLCTL1                   SFLCTL(SFL1)
+     A*%%TS  SD  20170110  182723  MIAUT       REL-V7R1M0  5770-WDS
+     A                                      SFLSIZ(0999)
+     A                                      SFLPAG(0015)
+     A                                      OVERLAY
+     A N30N31                               SFLDSP
+     A N30                                  SFLDSPCTL
+     A  30                                  SFLCLR
+     A                                      CA03
+     A                                      CA06
+     A            SFLRRN         4S 0H      SFLRCDNBR(CURSOR)
+     A                                  1  2SYSNAME
+     A                                      COLOR(BLU)
+     A                                  1 23' Gestion liste des bibliothèques '
+     A                                      COLOR(WHT)
+     A                                  1 73DATE
+     A                                      EDTCDE(Y)
+     A                                      COLOR(BLU)
+     A                                  2 73TIME
+     A                                      COLOR(BLU)
+     A                                  3  2'Indiquez vos options, puis appuyez-
+     A                                       sur ENTREE.'
+     A                                      COLOR(BLU)
+     A                                  4 17'2=Modifier'
+     A                                      COLOR(BLU)
+     A                                  6  1'Opt  Liste      Libellé'
+     A                                      COLOR(WHT)
+     A                                  4 29'4=Supprimer'
+     A                                      COLOR(BLU)
+     A                                  4 43'5=Afficher'
+     A                                      COLOR(BLU)
+     A                                  4 55'6=Réviser liste'
+     A                                      COLOR(BLU)
+     A                                  5  2'7=Mise en ligne'
+     A                                      COLOR(BLU)
+     A  25                              4  2'1=Selectionner'
+     A                                      COLOR(BLU)
+     A          R SFLFN1
+     A*%%TS  SD  20170111  170856  MIAUT       REL-V7R1M0  5770-WDS
+     A                                      OVERLAY
+     A                                 23  1'F3=Quitter'
+     A                                      COLOR(BLU)
+     A                                 23 29'F6=Ajouter'
+     A                                      COLOR(BLU)
+     A            MSGFN1        70   O 24  1COLOR(WHT)
+     A          R SFL2                      SFL
+     A*%%TS  SD  20170728  134040  MIAUT       REL-V7R1M0  5770-WDS
+     A                                      SFLNXTCHG
+     A            SEQLIB         4Y 0B  9  4EDTCDE(Z)
+     A            LIB           10A  B  9 12CHECK(LC)
+     A          R SFLCTL2                   SFLCTL(SFL2)
+     A*%%TS  SD  20170111  114557  MIAUT       REL-V7R1M0  5770-WDS
+     A                                      CA12
+     A                                      CA08
+     A                                      OVERLAY
+     A N30                                  SFLDSP
+     A N30                                  SFLDSPCTL
+     A  30                                  SFLCLR
+     A N30                                  SFLEND(*MORE)
+     A                                      SFLSIZ(0999)
+     A                                      SFLPAG(0038)
+     A                                      SFLLIN(0009)
+     A            SFLRRN         4S 0H      SFLRCDNBR(CURSOR)
+     A                                  1  2SYSNAME
+     A                                      COLOR(BLU)
+     A                                  1 23' Révision de la liste des biblioth-
+     A                                      èques '
+     A                                      COLOR(WHT)
+     A                                  1 73DATE
+     A                                      EDTCDE(Y)
+     A                                      COLOR(BLU)
+     A                                  2 73TIME
+     A                                      COLOR(BLU)
+     A                                  3  2'Bibliothèque *CURLIB :'
+     A                                      COLOR(WHT)
+     A            CURLIB        10   B  3 25
+     A                                  5  2'Indiquez les informations nouvelle-
+     A                                      s ou modifiées, puis appuyez sur En-
+     A                                      trée.'
+     A                                      COLOR(BLU)
+     A                                  6  3'Numéro                     Numéro -
+     A                                                          Numéro'
+     A                                      COLOR(WHT)
+     A                                  7  5'de                         de     -
+     A                                                          de'
+     A                                      COLOR(WHT)
+     A                                  8  2'séquence  Biblio           séquenc-
+     A                                      e  Biblio           séquence  Bibli-
+     A                                      o'
+     A                                      COLOR(WHT)
+     A          R SFLFN2
+     A*%%TS  SD  20170111  110939  MIAUT       REL-V7R1M0  5770-WDS
+     A                                      OVERLAY
+     A                                 24  1'F12=Retour'
+     A                                      COLOR(BLU)
+     A                                 24 27'F8=Capture bibliothèques en ligne'
+     A                                      COLOR(BLU)
+     A          R FMT001
+     A*%%TS  SD  20171017  101146  MIAUT       REL-V7R1M0  5770-WDS
+     A                                      CA12
+     A                                      CHANGE(35)
+     A                                  1  2SYSNAME
+     A                                      COLOR(BLU)
+     A                                  1 24'Ajout liste bibliothèque '
+     A                                      COLOR(WHT)
+     A                                  1 73DATE
+     A                                      EDTCDE(Y)
+     A                                      COLOR(BLU)
+     A                                  2 73TIME
+     A                                      COLOR(BLU)
+     A                                  6  1'Nom :'
+     A                                      COLOR(WHT)
+     A            LSTNAME       10A  B  6  7
+     A N34                                  DSPATR(PR)
+     A                                  8  1'Description :'
+     A                                      COLOR(WHT)
+     A            LSTDESC       50A  B  8 15CHECK(LC)
+     A N35                                  DSPATR(PR)
+     A                                 10  1'Type de liste :'
+     A                                      COLOR(WHT)
+     A            LSTTYPE        1A  B 10 17VALUES('1' '2')
+     A N35                                  DSPATR(PR)
+     A                                      CHECK(MF)
+     A                                 10 19'(1=Public , 2=Privé)'
+     A N35                             12  1'Créé le  :'
+     A                                      COLOR(WHT)
+     A N35        LSTDATE         L  O 12 12DATFMT(*DMY)
+     A N35                             12 21'à'
+     A                                      COLOR(WHT)
+     A N35        LSTTIME         T  O 12 23
+     A N35                             12 32'par'
+     A                                      COLOR(WHT)
+     A N35        LSTUSER       10A  O 12 36
+     A                                 24  1'F12=Retour'
+     A                                      COLOR(BLU)
+     A          R WINDLT
+     A*%%TS  SD  20161214  104921  MIAUT       REL-V7R1M0  5770-WDS
+     A                                      WINDOW(10 20 4 23)
+     A                                  2  2'CONFIRMER SUPPRESSION'
+     A                                      COLOR(WHT)
+     A            OPTDLT         1A  B  3  9VALUES('O' 'N')
+     A                                      DFTVAL('N')
+     A                                  3 11'(O/N)'

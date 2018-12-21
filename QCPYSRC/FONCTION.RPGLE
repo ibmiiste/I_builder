@@ -30,6 +30,7 @@
        dcl-s F7 ind based(p_inkg);
        dcl-s P_INKH pointer inz(%addr(*inkh));
        dcl-s F8 ind based(p_inkh);
+       dcl-s Capture ind based(p_inkh);
        dcl-s Imprimer ind based(p_inkh);
        dcl-s P_INKI pointer inz(%addr(*inki));
        dcl-s F9 ind based(p_inki);
@@ -47,6 +48,7 @@
        dcl-s F14 ind based(p_inkn);
        dcl-s P_INKP pointer inz(%addr(*inkp));
        dcl-s F15 ind based(p_inkp);
+       dcl-s Confirmer ind based(p_inkp);
        dcl-s P_INKQ pointer inz(%addr(*inkq));
        dcl-s F16 ind based(p_inkq);
        dcl-s P_INKR pointer inz(%addr(*inkr));

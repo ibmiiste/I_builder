@@ -1,0 +1,6 @@
+     A          R FLIBLS2R
+     A            LSTNAME       10A         COLHDG('Liste')
+     A            LIB           10A         COLHDG('Bibliothèque')
+     A            SEQLIB         4S 0       COLHDG('Position')
+     A          K LSTNAME
+     A          K SEQLIB

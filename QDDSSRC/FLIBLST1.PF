@@ -1,0 +1,9 @@
+     A          R FLIBLS1R
+     A            LSTNAME       10A         COLHDG('Liste')
+     A            LSTDESC       50A         COLHDG('Description')
+     A            LSTTYPE        1A         COLHDG('P=Public' 'V=Private')
+     A            LSTDATE         L         COLHDG('Date' 'création')
+     A                                      DATFMT(*DMY)
+     A            LSTTIME         T         COLHDG('Heure' 'création')
+     A            LSTUSER       10A         COLHDG('Utilisateur')
+     A          K LSTNAME
