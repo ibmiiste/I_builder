@@ -88,9 +88,12 @@
        // Sélection OK
        Dcl-s l_Selection Ind Inz('0');
 
+       // Nombre d'option utilisé
+       Dcl-s l_Nbre_option Packed(4:0);
+
        sflini();
 
-       dow Sortie and Not l_Selection;
+       dow not Sortie and Not l_Selection;
 
          if rrnsav <> 0;
            sflrrn = rrnsav;
@@ -125,10 +128,12 @@
        *inlr = *on;
 
        Dcl-proc sflchg;
+         l_Nbre_option=0;
          readc sfl1;
          rrnsav = sflrrn;
          dow not %eof;
            if opt <> '';
+             l_Nbre_option+=1;
              rrnsav = sflrrn;
              chkaut();
              select;
@@ -146,7 +151,6 @@
                when opt = '7';
                  chain (lstname) fliblst2;
                  if %found(fliblst2);
-                   l_Selection=*on;
                    addlib (lstname);
                  else;
                    msgfn1 = 'Liste ' + %trim(lstname) +
@@ -163,15 +167,15 @@
            readc sfl1;
          enddo;
          // Si un message existe alors sélection invalide
-         if Msgfn1<>'' And l_Selection=*on;
+         if l_Selection=*on and l_Nbre_option > 1;
            l_Selection=*off;
+           msgfn1 = 'L''option 1=Selectionner s''utilise seule';
          Endif;
 
          sflrrn = rrnsav;
        End-proc;
 
        Dcl-proc fmtdsp;
-         l_Selection=*on;
          open fliblst1;
          chain (lstname) fliblst1;
          close fliblst1;
@@ -181,7 +185,6 @@
        End-proc;
 
        Dcl-proc fmtdlt;
-         l_Selection=*on;
          exfmt windlt;
          if optdlt = 'O';
            open fliblst1;
@@ -247,7 +250,6 @@
        End-proc;
 
        Dcl-proc fmtmaj;
-         l_Selection=*on;
          open fliblst1;
          chain (lstname) fliblst1;
          Not_SFLDSP = *off;
@@ -302,10 +304,9 @@
        End-proc;
 
        Dcl-proc edtlib;
-         l_Selection=*on;
          rrnsav = sflrrn;
 
-         dou *in12 = '1';
+         dou Annuler;
 
            Sflclr = *on;
            Not_SFLDSP = *on;
@@ -340,7 +341,7 @@
            write sflfn2;
            exfmt sflctl2;
 
-           if *in08;
+           if Capture;
              Sflclr = *on;
              Not_SFLDSP = *on;
              write sflctl2;
