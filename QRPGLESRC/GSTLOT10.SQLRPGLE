@@ -451,7 +451,6 @@
            Clear ZNUMLOT;
            Clear ZLISTBIBPR;
            Clear ZBIBLOT;
-           Clear WDSFIC;
            Clear HNREC;
 
            // Ecriture du message sur la première ligne
