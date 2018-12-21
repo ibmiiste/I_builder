@@ -96,8 +96,10 @@
      A                                  5 67'Liste de biblothèques'
      A            ZLISTBIBPRR        B  5 89REFFLD(LOTSF/LISTBIBPRJ *LIBL/LOTS)
      A                                      COLOR(WHT)
+     A                                      OVRDTA
      A N14                                  DSPATR(UL)
      A  14                                  DSPATR(PR)
+     A  25                                  DSPATR(RI PC)
      A                                  4103'Statut'
      A            ZSTATLOT      20   O  4111
      A                                      COLOR(WHT)
