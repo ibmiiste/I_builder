@@ -41,5 +41,13 @@
                 MONMSG     MSGID(CPF0000)
                 GOTO       CMDLBL(FINI)
              ENDDO
+ /* MESSAGE TYPE 5 = DEF = INFO en envoyant sur la MSGQ spécifique d'un programme */
+             IF         COND(&PTYP = '5') THEN(DO)
+             SNDPGMMSG  MSGID(&PMGID) MSGF(*LIBL/&PFICM) +
+                          MSGDTA(&PMGDT) TOPGMQ(*SAME (&PGM &PGM +
+                          &PGM))
+                MONMSG     MSGID(CPF0000)
+                GOTO       CMDLBL(FINI)
+             ENDDO
  /* LA FIN */
  FINI:       ENDPGM
