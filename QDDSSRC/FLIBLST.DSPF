@@ -4,7 +4,7 @@
      A                                      INDARA
      A          R SFL1                      SFL
      A*%%TS  SD  20170110  182723  MIAUT       REL-V7R1M0  5770-WDS
-     A            OPT            1A  B  7  2VALUES(' ' '2' '4' '5' '6' '7')
+     A            OPT            1A  B  7  2VALUES(' ' '1' '2' '4' '5' '6' '7')
      A            LSTNAME       10A  O  7  6
      A            LSTDESC       50A  O  7 17
      A          R SFLCTL1                   SFLCTL(SFL1)
@@ -59,8 +59,8 @@
      A            LIB           10A  B  9 12CHECK(LC)
      A          R SFLCTL2                   SFLCTL(SFL2)
      A*%%TS  SD  20170111  114557  MIAUT       REL-V7R1M0  5770-WDS
-     A                                      CA12(12 'RETOUR')
-     A                                      CA08(08 'CAPTURE')
+     A                                      CA12
+     A                                      CA08
      A                                      OVERLAY
      A N30                                  SFLDSP
      A N30                                  SFLDSPCTL
@@ -106,7 +106,7 @@
      A                                      COLOR(BLU)
      A          R FMT001
      A*%%TS  SD  20171017  101146  MIAUT       REL-V7R1M0  5770-WDS
-     A                                      CA12(12 'RETOUR')
+     A                                      CA12
      A                                      CHANGE(35)
      A                                  1  2SYSNAME
      A                                      COLOR(BLU)
