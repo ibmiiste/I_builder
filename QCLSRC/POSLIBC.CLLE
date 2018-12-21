@@ -37,12 +37,15 @@
              IF         COND(&SAVRST *EQ 'SAV' *OR &SAVRST *EQ '*SAV') THEN(DO)
                 CHKOBJ     OBJ(&PLIB/&LISTE) OBJTYPE(*DTAARA)
                 MONMSG     MSGID(CPF9801) EXEC(DO)
-                   CRTDTAARA  DTAARA(&PLIB/&LISTE) TYPE(*CHAR) LEN(2000) TEXT('Dtaara créé par commande POSLIB')
+             CRTDTAARA  DTAARA(&PLIB/&LISTE) TYPE(*CHAR) LEN(2000) +
+                          TEXT('Dtaara créé par commande POSLIB')
                 ENDDO
                 RTVJOBA    CURLIB(&CURLIB) USRLIBL(&USRLIBL)
                 CHGDTAARA  DTAARA(&PLIB/&LISTE (11 1990)) VALUE(&USRLIBL)
                 CHGDTAARA  DTAARA(&PLIB/&LISTE (1 10)) VALUE(&CURLIB)
-                SNDPGMMSG  MSG('Liste des bibliothèque (*USRLIBL) sauvegardée dans DTAARA' *BCAT &LISTE) MSGTYPE(*COMP)
+             SNDPGMMSG  MSG('Liste des bibliothèque (*USRLIBL) +
+                          sauvegardée dans DTAARA' *BCAT &LISTE) +
+                          MSGTYPE(*COMP)
                 GOTO       CMDLBL(FIN)
              ENDDO
 
@@ -55,8 +58,9 @@
                 ELSE       CMD(DO)
                    CHKOBJ     OBJ(&PLIB/&LISTE) OBJTYPE(*DTAARA)
                    MONMSG     MSGID(CPF9801) EXEC(DO)
-                      SNDPGMMSG  MSG('Dtaara' *BCAT &LISTE *BCAT 'non trouvée dans bibliothèque' *BCAT &PLIB *TCAT +
-                                   '.') MSGTYPE(*COMP)
+             SNDPGMMSG  MSG('Dtaara' *BCAT &LISTE *BCAT 'non trouvée +
+                          dans bibliothèque' *BCAT &PLIB *TCAT '.') +
+                          MSGTYPE(*COMP)
                       GOTO       CMDLBL(FIN)
                    ENDDO
                 ENDDO
@@ -81,7 +85,9 @@
                    ELSE       CMD(DO)
                       CHGCURLIB  CURLIB(&CURLIB)
                       MONMSG     MSGID(CPF0000) EXEC(DO)
-                         SNDPGMMSG  MSG('Impossible de rétablir la bibliothèque courante (' *TCAT &CURLIB *TCAT ')') MSGTYPE(*COMP)
+             SNDPGMMSG  MSG('Impossible de rétablir la bibliothèque +
+                          courante (' *TCAT &CURLIB *TCAT ')') +
+                          MSGTYPE(*COMP)
                          GOTO       CMDLBL(FIN)
                       ENDDO
                    ENDDO
@@ -90,7 +96,9 @@
                 CHGVAR     VAR(&P) VALUE(11)
  LOOP_2:        RTVDTAARA  DTAARA(&PLIB/&LISTE (&P 10)) RTNVAR(&LIB)
                 IF         COND(%TRIM(&LIB) *EQ ' ') THEN(DO)
-                   SNDPGMMSG  MSG('Liste des bibliothèque (*USRLIBL) restaurée depuis DTAARA' *BCAT &LISTE) MSGTYPE(*COMP)
+             SNDPGMMSG  MSG('Liste des bibliothèque (*USRLIBL) +
+                          restaurée depuis DTAARA' *BCAT &LISTE) +
+                          MSGTYPE(*COMP)
                    GOTO       CMDLBL(FIN)
                 ENDDO
  /*          IF         COND(&LIB *NE 'QTEMP') THEN(DO)   +

@@ -56,7 +56,11 @@
              MONMSG     MSGID(CPF0000)
 
              RTVOBJD    OBJ(FLIBLST2) OBJTYPE(*FILE) RTNLIB(&RTNLIB)
-             CHGVAR     VAR(&SQL) VALUE('DECLARE GLOBAL TEMPORARY TABLE WLIBLST2 AS (SELECT * FROM' *BCAT &RTNLIB *TCAT '.FLIBLST2 WHERE LSTNAME = ''' *TCAT &LSTLIB *TCAT ''') WITH DATA WITH REPLACE')
+             CHGVAR     VAR(&SQL) VALUE('DECLARE GLOBAL TEMPORARY +
+                          TABLE WLIBLST2 AS (SELECT * FROM' *BCAT +
+                          &RTNLIB *TCAT '.FLIBLST2 WHERE LSTNAME = +
+                          ''' *TCAT &LSTLIB *TCAT ''') WITH DATA +
+                          WITH REPLACE')
              RUNSQL     SQL(&SQL) COMMIT(*NONE) NAMING(*SQL)
              MONMSG     MSGID(CPF0000)
 
@@ -71,7 +75,8 @@
              ENDDO
              GOTO       CMDLBL(LOOP)
  FIN:        /*   RMVLIBLE LIB(&LIB)       */
-             IF         COND(&LIB *NE ' ' *AND &LIB *NE '*NONE' *AND &RSTCURLIB2 *EQ '*YES') THEN(DO)
+             IF         COND(&LIB *NE ' ' *AND &LIB *NE '*NONE' *AND +
+                          &RSTCURLIB2 *EQ '*YES') THEN(DO)
                 CHGLIBL    CURLIB(&LIB)
              ENDDO
              ELSE       CMD(DO)
