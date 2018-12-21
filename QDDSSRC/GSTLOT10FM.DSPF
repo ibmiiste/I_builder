@@ -29,7 +29,7 @@
      A            ZLIBELLOT R        O  8 17REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
      A            ZLISTBIBPRR        O  8 70REFFLD(LOTSF/LISTBIBPRJ *LIBL/LOTS)
      A            ZBIBLOT   R        O  8 83REFFLD(LOTSF/BIBLOT *LIBL/LOTS)
-     A            ZSTATLOT      10   O  8 96
+     A            ZSTATLOT      13   O  8 96
      A          R FORE1                     SFLCTL(SFL01)
      A                                      RTNCSRLOC(&WLICSR &WZOCSR &WPRCSR)
      A                                      OVERLAY

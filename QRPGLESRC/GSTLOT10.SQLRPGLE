@@ -399,7 +399,14 @@
              ZLIBELLOT = LIBELLOT;
              ZLISTBIBPR = LISTBIBPRJ;
              ZBIBLOT =  BIBLOT;
-             ZSTATLOT  = STATLOT;
+             Select;
+               When STATLOT='D';
+                 ZSTATLOT  = 'DÉVELOPPEMENT';
+               When STATLOT='R';
+                 ZSTATLOT  = 'RECETTE';
+               When STATLOT='P';
+                 ZSTATLOT  = 'PRODUCTION';
+             Endsl;
              HNREC=g_numero_relatif;
              IF STATLOT = '0';
                // Top statut Lot fermé
