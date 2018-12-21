@@ -33,7 +33,7 @@
          p_Num_lot Like(r_Num_lot) Const;
        End-pr;
 
-       Dcl-pr Gestion_message Extpgm('ENVMSG01');
+       Dcl-pr Gestion_message Extpgm('GSTMSG01');
          PTYP Char(1);
          PFIM Char(10);
          PMID Char(7);

@@ -78,7 +78,7 @@
        /Copy Qcpysrc,Prtbuilder
 
 
-       Dcl-pr Gestion_message Extpgm('ENVMSG01');
+       Dcl-pr Gestion_message Extpgm('GSTMSG01');
          P_TYP Char(1);
          P_FIM Char(10);
          P_MID Char(7);

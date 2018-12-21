@@ -39,7 +39,7 @@
        END-PI ;
 
        // Gestion des messages
-       dcl-pr gst_message_CL extpgm('ENVMSG01');
+       dcl-pr gst_message_CL extpgm('GSTMSG01');
          a_typ like(r_typmsg);
          a_fim like(r_Nom_obj_IBMi);
          a_mid like(r_numero_msg);
