@@ -1,12 +1,7 @@
-      /* >>PRE-COMPILER<<                                                 */
-      /*   >>CRTCMD<<  CRTBNDCL SRCFILE(&SL/&SF) SRCMBR(&SM);             */
-      /*   >>IMPORTANT<<                                                  */
-      /*     >>PARM<<  PGM(&LI/&OB);                                      */
-      /*     >>PARM<<  OPTION(*EVENTF);                                   */
-      /*     >>PARM<<  DBGVIEW(*LIST);                                    */
-      /*   >>END-IMPORTANT<<                                              */
-      /*   >>EXECUTE<<                                                    */
-      /* >>END-PRE-COMPILER<<                                             */
+/* ================================================================================ */
+/* i_PUSH est un programme qui envoi un objet sur une autre marchine par ftp        */
+/* et qui le restaure sur la machine cible                                          */
+/* =================================================================================*/
              PGM        PARM(&OBJETQ &MACHINE &USER &MDP)
 
              DCL        VAR(&OBJETQ) TYPE(*CHAR) LEN(20)
@@ -37,6 +32,12 @@
              CHGVAR     VAR(&SAVF) VALUE('S' *TCAT &NUMALEC)
 
              CRTSAVF    FILE(QTEMP/&SAVF)
+
+             /* On vérifie si 1SAVF est en ligne, s'il ne l'est pas c'est que QTEMP  */
+             /* n'est pas en ligne                                                   */
+             CHKOBJ     OBJ(&SAVF) OBJTYPE(*FILE)
+             MONMSG     MSGID(CPF9801) EXEC(ADDLIBLE QTEMP)
+
              CHGVAR     VAR(&CMD) VALUE('CRTSAVF FILE(QGPL/' *TCAT &SAVF *TCAT ')')
 
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) RMTPWD(&MDP)
