@@ -34,6 +34,10 @@
          p_Num_lot Like(r_Num_lot) Const;
        END-PR ;
 
+       Dcl-pr X_ref Extpgm('XREF');
+         ParmEntry char(150);
+       End-pr;
+
        DCL-PI liste_objet_construction;
          p_Num_lot Like(r_Num_lot) Const;
        END-PI ;
@@ -178,6 +182,25 @@
          wnbrcd bindec(4:0);
          wnrcfi bindec(4:0);
        end-ds;
+
+       // paramètres d'entrée de XREF
+       dcl-ds ParmEntry1;
+        Entry_Obj char(10);
+        Entry_Lib char(10);
+        Entry_typ char(7);
+        Entry_Fct char(10) Inz('*NONE     ');
+        Entry_Output char(8) Inz('*DISPLAY');
+        Entry_Trt char(12) Inz('*INTERACTIVE');
+        Code bindec(4) Inz(3);
+        Entry_FicSrc char(10) Inz('*NONE     ');
+        Entry_BibSrc char(10) Inz('*LIBOBJ   ');
+        Entry_MbrSrc char(10) Inz('*OBJ      ');
+        Entry_Text char(50) pos(90)
+                   Inz('                                                  ');
+       end-ds;
+
+       // Paramètre d'appel de XREF
+       Dcl-s ParmEntry char(150);
 
        // inherited variables
        // héritage des types
@@ -516,7 +539,15 @@
               a_chx='AF';
             when (zopt = '6') or (zopt = ' 6');
               g_filtre = *off;
-            when (zopt = '7') or (zopt = ' 7');
+
+            when %Trim(zopt) = '7';
+              Entry_Obj=ZOBJDST;
+              Entry_Lib=ZBIBDST;
+              Entry_typ=ZTYPOBJ;
+              ParmEntry=ParmEntry1;
+              X_ref(ParmEntry);
+
+            when (zopt = '9') or (zopt = ' 9');
               g_BIBSRC_pre=ZBIBSRC;
               g_FicSrc_pre=ZFICSRC;
               g_MbrSrc_pre=ZMBRSRC;
@@ -545,7 +576,7 @@
               if  g_Failed<>0;
                 EnvRapMel();
               EndIf;
-            when (zopt = '8') or (zopt = ' 8');
+            when zopt = '10';
               g_BIBSRC_pre=ZBIBSRC;
               g_FicSrc_pre=ZFICSRC;
               g_MbrSrc_pre=ZMBRSRC;
@@ -571,7 +602,7 @@
               if  g_Failed<>0;
                 EnvRapMel();
               EndIf;
-            when (zopt = '9') or (zopt = ' 9');
+            when zopt = '19';
               g_BIBSRC_pre=ZBIBSRC;
               g_FicSrc_pre=ZFICSRC;
               g_MbrSrc_pre=ZMBRSRC;
