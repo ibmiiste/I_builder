@@ -68,10 +68,7 @@
      A                                  3  3'Indiquez vos options, puis appuyez-
      A                                       sur ENTREE.'
      A                                      COLOR(BLU)
-     A                                  4  3'2=Modifier 3=Copier 4=Supprimer 5=-
-     A                                      Afficher 6=Imprimer 7=Construction -
-     A                                      8=Livraison Recette 9=Livraison Pro-
-     A                                      duction'
+     A                                  4  3'2=Modifier'
      A                                      COLOR(BLU)
      A                                  5  3'Selection par nom :'
      A            ZSOBJET       10   B  5 23
@@ -98,6 +95,22 @@
      A            ZFICSRCC      10   B  7110
      A            ZMBRSRCC      10   B  7122
      A            ZTYPOBJC      10   B  7 34CHECK(ER)
+     A                                  4 14'3=Copier'
+     A                                      COLOR(BLU)
+     A                                  4 23'4=Supprimer'
+     A                                      COLOR(BLU)
+     A                                  4 35'5=Afficher'
+     A                                      COLOR(BLU)
+     A                                  4 46'6=Imprimer'
+     A                                      COLOR(BLU)
+     A                                  4 57'7=Ref. croisées'
+     A                                      COLOR(BLU)
+     A                                  4 73'9=Construction'
+     A                                      COLOR(BLU)
+     A                                  4 88'10=Livraison Recette'
+     A                                      COLOR(BLU)
+     A                                  4109'11=Livraison Production'
+     A                                      COLOR(BLU)
      A          R FORB1
      A                                      CF03
      A                                      CF05
