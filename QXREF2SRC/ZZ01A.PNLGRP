@@ -1,0 +1,362 @@
+:pnlgrp.
+.************************************************************************
+.*  Help for command XREF
+.************************************************************************
+:help name='XREF'.
+X-Ref : Analyse iSeries - v1.9.0
+:p.X-Ref : Référence Technique est une application d'analyse AS400 orienté
+programme, Ile et fichier.
+Elle permet d'analyser de façon simple et rapide la plupart des objets AS400 avec une seule commande
+:p.:hp2.Restrictions::ehp2.
+:ul.
+:li.
+Aucuns droits particuliers pour lancer cette commande.
+.* List all special authorities required to run the command.
+:li.
+Vous devez avoir les droits *USE sur les objets que vous souhaitez analyser.
+.* List object or data authorities required to run the command.
+:li.
+Cette commande peut être lancée plusieurs fois par le même utilisateur
+.* If conditionally threadsafe, list threadsafe conditions or restrictions.
+:li.
+En cas de problème, faites un RCLACTGRP XREF à partir de la
+ligne de commande pour supprimer le groupe de travail.
+Vous pouvez aussi vous rendre sur http:\\xref.dieorkill.com et déclarer un incident.
+.* Describe other command-level restrictions.
+.* Parameter-level restrictions belong in parameter help sections, not here.
+:eul.
+:ehelp.
+.*******************************************
+.*   Help for parameter COMPOSANT
+.*******************************************
+:help name='XREF/COMPOSANT'.
+Composant à analyser (COMPOSANT) - Help
+:xh3.Composant à analyser (COMPOSANT)
+:p.Ce paramètre est facultatif. Il désigne le composant à analyser.
+Si les valeurs par défaut sont utilisées, X-Ref sera lancé sans sélection préalable.
+:p.:hp2.Qualificatif 1: Objet:ehp2.
+:parml.
+:pt.:pk def.*NONE:epk.
+:pd.
+X-Ref est lancé sans sélection d'objet. Vous arrivez alors sur l'écran de sélection de X-Ref.
+:pt.:pv.nom:epv.
+:pd.
+Vous pouvez renseigner un nom de composant ou une partie du nom en ajoutant une * à la fin.
+:eparml.
+:p.:hp2.Qualificatif 2: Bibliothèque:ehp2.
+:parml.
+:pt.:pk def.*LIBL:epk.
+:pd.
+La recherche du composant se fera à partir de la liste de bibliothèque renseignée dans X-Ref.
+:pt.:pv.nom:epv.
+:pd.
+La recherche ne se fera que dans la bibliothèque indiquée dans ce paramètre.
+.* Describe the function provided by the user-defined parameter value.
+:eparml.
+:p.:hp2.Qualificatif 3: Type d'objet:ehp2.
+:parml.
+:pt.:pk def.*ALL:epk.
+:pd.
+Tous les types d'objets seront recherchés.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*PGM:epk.
+:pd.
+Seuls les objets de type *PGM seront recherchés.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*FILE:epk.
+:pd.
+Seuls les objets de type *FILE seront recherchés.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*SRVPGM:epk.
+:pd.
+Seuls les objets de type *SRVPGM seront recherchés.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*DTAARA:epk.
+:pd.
+Seuls les objets de type *DTAARA seront recherchés.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*MODULE:epk.
+:pd.
+Seuls les objets de type *MODULE seront recherchés.
+.* Describe the function provided by the pre-defined parameter value.
+:eparml.
+:ehelp.
+.*******************************************
+.*   Help for parameter FONCTION
+.*******************************************
+:help name='XREF/FONCTION'.
+Fonctionnalité (FONCTION) - Help
+:xh3.Fonctionnalité (FONCTION)
+:p.Vous pouvez renseigner une fonction à lancer si X-Ref trouve le composant
+indiqué au paramètre COMPOSANT.
+.* Describe the function provided by the parameter.
+:parml.
+:pt.:pk def.*NONE:epk.
+:pd.
+Aucune fonctionnalité ne sera lancée automatiquement à l'appel de X-Ref.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*XREF:epk.
+:pd.
+La fonction *XREF/[F02] sera lancée : il s'agit de lister tous les objets utilisés
+par le composant. Fonction utilisable pour les modules, les programmes et
+les programmes de service.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*RECDESC:epk.
+:pd.
+La fonction *RECDESC/[F04] sera lancée : il s'agit de lister tous les composants dont la
+description ressemble à celle renseignée dans le paramètre TEXTE
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*DESCFILE:epk.
+:pd.
+La fonction *DESCFILE/[F07] sera lancée : il s'agit le lister toutes les zones d'un fichier.
+Cette fonctionnalité est utilisable par les fichiers physiques, logiques, écran et
+imprimante.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*LSTLF:epk.
+:pd.
+La fonctionnalité *LSTLF/[F08] sera lancée : il s'agit de lister tous les logiques et vues d'un
+fichier physique. Si le composant est un fichier logique ou une vue, sa définition sera
+fournie.
+Cette fonctionnalité est utilisable par les fichier physiques et logiques.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*RECCAR:epk.
+:pd.
+La fonctionnalité *RECCAR/[F22] sera lancée : il s'agit de lister tous les fichiers physiques
+contenant la zone indiquée dans le paramètre COMPOSANT. Cette option peut être très longue :
+à utiliser en mode batch de préférence.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*WHEREUSED:epk.
+:pd.
+La fonctionnalité *WHEREUSED/[F14] sera lancée : il s'agit de lister tous les programmes, modules
+et programmes de service utilisant l'objet renseignée dans le paramètre COMPOSANT.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*CARTOPGM:epk.
+:pd.
+La fonctionnalité *CARTOPGM/[F15] sera lancée : il s'agit d'établir la cartographie des programmes
+utilisées par le programme indiqué dans le paramètre COMPOSANT : cette fonctionnalité établit alors
+une arborescence de tous les programmes impliquées sous forme schématique.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*CARTOSRC:epk.
+:pd.
+La fonctionnalité *CARTOSRC/[F16] sera lancée : il s'agit d'établir la cartographie du source de pro
+écrit en RPG, RPGLE, SQLRPG ou SQLRPGLE indiqué dans le paramètre SOURCE : cette fonctionnalité étab
+alors une arborescence de toutes les routines, procédures et programmes, appelés dans le source.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*CARTOSRC2:epk.
+:pd.
+La fonctionnalité *CARTOSRC2/[F16] sera lancée : il s'agit d'établir la cartographie du source de pr
+écrit en RPG, RPGLE, SQLRPG ou SQLRPGLE indiqué dans le paramètre SOURCE : cette fonctionnalité étab
+alors une arborescence de toutes les routines, procédures et programmes, appelés dans le source.
+A la différence de *CARTOSRC, *CARTOSRC2 va plus loin dans l'analyse en incluant la recherche
+dans les /COPY du source.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*RECZONE:epk.
+:pd.
+La fonctionnalité *RECZONE/[F17] sera lancée : il s'agit de lister tous les fichiers qui
+contiennent la zone indiquée dans le paramètre COMPOSANT.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*RECPROC:epk.
+:pd.
+La fonctionnalité *RECPROC/[F18] sera lancée : il s'agit de lister tous les modules qui
+contiennent la procédure indiquée dans le paramètre TEXTE.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*DESCOBJ:epk.
+:pd.
+La fonctionnalité *DESCOBJ/[F19] sera lancée : il s'agit d'une description sommaire du
+composant indiqué dans le paramètre COMPOSANT.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*CARTOILE:epk.
+:pd.
+La fonctionnalité *CARTOILE/[F20] sera lancée : il s'agit d'établir la cartographie
+I.L.E. d'un programme, d'un module ou d'un programme de service indiqué dans le paramètre
+COMPOSANT.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*LIBRARY:epk.
+:pd.
+La fonctionnalité *LIBRARY/[F24] sera lancée : il s'agit d'accèder directement à la gestion
+de la liste de bibliothèque de X-Ref.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*RUNQRY:epk.
+:pd.
+La fonctionnalité *RUNQRY/[F06] sera lancée : il s'agit de faire appel à la commande
+RUNQRY pour le composant de type fichier indiqué dans le paramètre COMPOSANT.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*WRKSPLF:epk.
+:pd.
+La fonctionnalité *WRKSPLF/[F11] sera lancée : il s'agit de faire appel à la commande
+WRKSPLF sans paramètres particuliers.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*CMD:epk.
+:pd.
+La fonctionnalité *CMD/[F21] sera lancée : il s'agit de faire appel à la ligne de commande depuis
+*XREF.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*ANALYSE:epk.
+:pd.
+La fonctionnalité *ANALYSE/[F23] sera lancée : il s'agit de lister toutes les analyses faites
+avec une sortie fichier.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*PGMREF:epk.
+:pd.
+La fonctionnalité *PGMREF sera lancée : il s'agit de lancer les références techniques pour la
+bibliothèque indiquée dans la paramètre COMPOSANT.
+.* Describe the function provided by the pre-defined parameter value.
+:eparml.
+:ehelp.
+.*******************************************
+.*   Help for parameter TEXTE
+.*******************************************
+:help name='XREF/TEXTE'.
+Texte (TEXTE) - Help
+:xh3.Texte (TEXTE)
+:p.Ce paramètre est utilisé pour les fonctions recherche par description et recherche
+de procédures.
+.* Describe the function provided by the parameter.
+:parml.
+:pt.:pv.nom:epv.
+:pd.
+Indiquez dans cette zone la description de l'objet recherché ou le nom de la procédure recherchée
+suivant la fonction indiquée dans le paramètre FONCTION.
+.* Describe the function provided by the user-defined parameter value.
+:eparml.
+:ehelp.
+.*******************************************
+.*   Help for parameter SOURCE
+.*******************************************
+:help name='XREF/SOURCE'.
+Source à analyser (SOURCE) - Help
+:xh3.Source à analyser (SOURCE)
+:p.Ce paramètre est utilisé pour les fonctions *CARTOSRC et *CARTOSRC2.
+.* Describe the function provided by the parameter.
+:p.:hp2.Element 1: Fichier Source:ehp2.
+:parml.
+:pt.:pk def.*NONE:epk.
+:pd.
+Si ce paramètre est à *NONE, X-Ref tentera de déterminer le fichier source du composant
+à analyser.
+.* Describe the function provided by the default parameter value.
+:pt.:pv.nom:epv.
+:pd.
+Indiquez le nom du fichier source où se trouve le source du composant.
+.* Describe the function provided by the user-defined parameter value.
+:eparml.
+:p.:hp2.Element 2: Bibliothèque:ehp2.
+:parml.
+:pt.:pk def.*LIBOBJ:epk.
+:pd.
+Si ce paramètre est à *LIBOBJ, X-Ref prendra la bibliothèque indiqué dans le paramètre COMPOSANT.
+.* Describe the function provided by the default parameter value.
+:pt.:pv.nom:epv.
+:pd.
+Indiquez le nom de la bibliothèque où se trouve le fichier source du composant à analyser.
+.* Describe the function provided by the user-defined parameter value.
+:eparml.
+:p.:hp2.Element 3: Membre:ehp2.
+:parml.
+:pt.:pk def.*OBJ:epk.
+:pd.
+Si *OBJ est indiqué, le nom du composant sera utilisé pour l'analyse du source.
+.* Describe the function provided by the default parameter value.
+:pt.:pv.nom:epv.
+:pd.
+Indiquez le nom du source à analyser. Ce source doit être écrit en RPG, SQLRPG, RPGLE,
+SQLRPG ou SQLRPGLE.
+.* Describe the function provided by the user-defined parameter value.
+:eparml.
+:ehelp.
+.*******************************************
+.*   Help for parameter OUTPUT
+.*******************************************
+:help name='XREF/OUTPUT'.
+Sortie (OUTPUT) - Help
+:xh3.Sortie (OUTPUT)
+:p.Ce paramètre définit le format de sortie lors de l'appel de X-Ref. Par défaut,
+ce paramètre est à *DISPLAY.
+.* Describe the function provided by the parameter.
+:parml.
+:pt.:pk def.*DISPLAY:epk.
+:pd.
+Le format de sortie se fera sur écran de type 5250 avec la résolution 127*80 obligatoirement.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*OUTFILE:epk.
+:pd.
+L'analyse sera ajoutée au fichier ZZ01OUT.
+:pt.:pk.*PRINTER:epk.
+:pd.
+L'analyse sera directement mise sous forme de spool accessible par la fonction F11 ensuite.
+.* Describe the function provided by the pre-defined parameter value.
+:eparml.
+:ehelp.
+.*******************************************
+.*   Help for parameter MODE
+.*******************************************
+:help name='XREF/MODE'.
+Mode d'analyse (MODE) - Help
+:xh3.Mode d'analyse (MODE)
+:p.Ce paramètre définit le mode d'appel de X-Ref. Par défaut, ce
+paramètre est à *INTERACTIVE.
+.* Describe the function provided by the parameter.
+:parml.
+:pt.:pk def.*INTERACTIVE:epk.
+:pd.
+L'appel de X-Ref se fait en interactif.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*BATCH:epk.
+:pd.
+L'appel de X-Ref se fait en batch avec un nom de travail définit par le nom du composant
+à analyser. Si aucun composant n'est indiqué, le nom du job sera NONE.
+.* Describe the function provided by the pre-defined parameter value.
+:pt.:pk.*NOPROMPT:epk.
+:pd.
+L'appel de X-Ref se fera sans mode particulier. Ce mode est réservé à W-Ref.
+Ne pas utiliser depuis un écran 5250.
+.* Describe the function provided by the pre-defined parameter value.
+:eparml.
+:ehelp.
+.**************************************************
+.*
+.* Examples for XREF
+.*
+.**************************************************
+:help name='XREF/COMMAND/EXAMPLES'.
+Examples for XREF - Help
+:xh3.Exemples pour XREF
+:p.:hp2.Exemple 1: Appel simple:ehp2.
+:xmp.
+XREF
+:exmp.
+:p.Cette commande lance X-Ref sans aucune fonction, en mode interactif et en sortie écran.
+Il s'agit du mode d'appel par défaut.
+.* Describe a simple invocation of the command.
+.*
+:p.:hp2.Exemple 2: Appel simple:ehp2.
+:xmp.
+XREF SHIRLOCK/ZZ01
+:exmp.
+:p.Nouveautés de la v1.9.0 - Appel de XRef pour le programme ZZ01 de la bibliothèque
+SHIRLOCK. L'utilisateur se trouvera sur la fenêtre de sélection de composant si plusieurs
+objets ZZ01 existent dans SHIRLOCK sinon il sera sur l'écran principal de Xref avec le
+composant ZZ01 de SHIRLOCK déjà sélectionné.
+.* Describe a simple invocation of the command.
+.*
+:p.:hp2.Exemple 3: Appel en sortie fichier:ehp2.
+:xmp.
+XREF COMPOSANT(ZZ01) FONCTION(*XREF) OUTPUT(*OUTFILE)
+:exmp.
+:p.Cette commande fera appel à la fonction *XREF (référence technique) pour le composant ZZ01
+qui sera trouvé dans la liste de bibliothèque de X-Ref. Le résultat sera
+placé dans ZZ01OUT. A la fin de l'analyse, l'utilisateur sera placé dans X-Ref en mode interactif
+et en format de sortie Fichier.
+.* Describe a more complex invocation of the command.
+:p.:hp2.Exemple 4: Appel en mode batch:ehp2.
+:xmp.
+XREF COMPOSANT(*PGM/SHIRLOCK/ZZ01)
+FONCTION(*XREF) OUTPUT(*OUTFILE) MODE(*BATCH)
+:exmp.
+:p.Cette commande fera appel à la fonction *XREF (référence technique) pour le programme ZZ01
+de la bibliothèque SHIRLOCK. Le résultat sera
+placé dans ZZ01OUT. Le travail ZZ01 sera lancée pour effectuer l'analyse.
+L'utilisateur se retrouve sur la ligne de commande.
+.* Describe a more complex invocation of the command.
+:ehelp.
+:epnlgrp.

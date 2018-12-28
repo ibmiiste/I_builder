@@ -1,0 +1,486 @@
+     A*%%TS  SD  20090723  102920  PELTIERI    REL-V5R4M0  5722-WDS
+     A**----------------------------------------------------------------------**
+     A**---ZZ01D : Ecran X-Ref------------------------------------------------**
+     A**----------------------------------------------------------------------**
+     A*%%EC
+     A                                      DSPSIZ(27 132 *DS4)
+     A                                      INDARA
+     A                                      CA01(01)
+     A  31                                  CA02(02)
+     A                                      CA03(03)
+     A                                      CA04(04)
+     A                                      CA05(05)
+     A  40                                  CA06(06)
+     A  33                                  CA07(07)
+     A  34                                  CA08(08)
+     A                                      CA09(09)
+     A                                      CA10(10)
+     A                                      CA11(11)
+     A                                      CA12(12)
+     A                                      CA13(13)
+     A  32                                  CA14(14)
+     A  36                                  CA15(15)
+     A  37                                  CA16(16)
+     A                                      CA17(17)
+     A                                      CA18(18)
+     A                                      CA19(19)
+     A  38                                  CA20(20)
+     A                                      CA21(21)
+     A  35                                  CA22(22)
+     A                                      CA23(23)
+     A                                      CA24(24)
+     A                                      HELP(22)
+     A**----------------------------------------------------------------------**
+     A**---Format F01 : sélection du composant--------------------------------**
+     A**----------------------------------------------------------------------**
+     A          R F01
+     A*%%TS  SD  20090721  151123  PELTIERI    REL-V5R4M0  5722-WDS
+     A                                      HOME(45)
+     A                                      KEEP
+     A                                      RTNCSRLOC(*MOUSE &F01LIG &F01COL)
+     A                                      CSRLOC(F01LIGOUT  F01COLOUT)
+     A                                      OVERLAY
+     A**---Zones cachées------------------------------------------------------**
+     A            F01COLOUT      3S 0H
+     A            F01LIGOUT      3S 0H
+     A            F01LIG         3S 0H
+     A            F01COL         3S 0H
+     A**---Ligne 1------------------------------------------------------------**
+     A                                  1  2'==================================-
+     A                                      ================'
+     A                                      COLOR(WHT)
+     A            F01TITRE      27A  O  1 53COLOR(WHT)
+     A                                  1 81'==================================-
+     A                                      ================='
+     A                                      COLOR(WHT)
+     A**---Ligne 2------------------------------------------------------------**
+     A            F01INFO      112A  O  2  2COLOR(WHT)
+     A                                  2115'Version :'
+     A                                      COLOR(WHT)
+     A            F01VERSION     7A  O  2125COLOR(WHT)
+     A**---Ligne 3------------------------------------------------------------**
+     A N42                              3  2'Nom du Composant : '
+     A                                      COLOR(WHT)
+     A  42                              3  2'Renseignez cette Zone ->'
+     A                                      COLOR(WHT)
+     A            F01OBJ        10A  B  3 22CHECK(LC)
+     A N43                                  DSPATR(PC)
+     A  41                                  DSPATR(PR)
+     A  42                                  DSPATR(ND)
+     A            F01DES        50A  B  3 34COLOR(YLW)
+     A N60                                  DSPATR(PR)
+     A  43                                  DSPATR(PC)
+     A                                      CHECK(LC)
+     A                                  3 86'Bibliothèque :'
+     A                                      COLOR(WHT)
+     A  42                                  DSPATR(ND)
+     A            F01BIB        10A  O  3101
+     A  42                                  DSPATR(ND)
+     A  44                                  COLOR(PNK)
+     A  44                                  DSPATR(RI)
+     A                                  3115'Type :'
+     A  42                                  DSPATR(ND)
+     A                                      COLOR(WHT)
+     A            F01TYP        10A  O  3122
+     A  42                                  DSPATR(ND)
+     A**---Ligne 4------------------------------------------------------------**
+     A                                  4  2'Traitement :'
+     A                                      COLOR(WHT)
+     A            F01MODE        2Y 0B  4 16SNGCHCFLD((*NUMCOL 2) (*GUTTER 2))
+     A                                      CHOICE(1 'Inter.')
+     A                                      CHOICE(2 'Batch')
+     A                                  4 45'Sortie :'
+     A                                      COLOR(WHT)
+     A            F01OUTPUT      2Y 0B  4 56SNGCHCFLD((*NUMCOL 3) (*GUTTER 2))
+     A                                      CHOICE(1 'Ecran')
+     A                                      CHOICE(2 'Fichier')
+     A                                      CHOICE(3 'Impr.')
+     A                                  4115'N° :'
+     A            IND_RAPPEL     5Y 0O  4128COLOR(YLW)
+     A                                      EDTCDE(Z)
+     A            INDRAPWRK      5Y 0O  4120COLOR(YLW)
+     A                                      EDTCDE(Z)
+     A                                  4126'/'
+     A            F01NBR         5Y 0O  4102COLOR(BLU)
+     A                                      EDTCDE(Z)
+     A                                  4108'Enreg.'
+     A                                      COLOR(BLU)
+     ?**----------------------------------------------------------------------**
+     ?**---Sous-fichier : sélection du composant------------------------------**
+     ?**----------------------------------------------------------------------**
+     A          R F02SFL                    SFL
+     A            F02OBJ        10A  O  3  1
+     A  43                                  DSPATR(PC)
+     A            F02LIB        10A  O  3 12
+     A  44                                  COLOR(PNK)
+     A  44                                  DSPATR(RI)
+     A            F02TYP        10A  O  3 23
+     A            F02DES        50   O  3 34
+     ?**----------------------------------------------------------------------**
+     ?**---Sous-fichier : sélection du composant - Format de contrôle---------**
+     ?**----------------------------------------------------------------------**
+     A          R F02CTL                    SFLCTL(F02SFL)
+     A                                      SFLSIZ(0006)
+     A                                      SFLPAG(0005)
+     A                                      WINDOW(7 2 8 85)
+     A                                      RTNCSRLOC(*WINDOW &F02LIG &F02COL)
+     A                                      OVERLAY
+     A                                      SFLCSRRRN(&F02CUR)
+     A N50                                  SFLDSP
+     A N50                                  SFLDSPCTL
+     A  50                                  SFLCLR
+     A N99                                  SFLEND(*SCRBAR *SCRBAR)
+     ?**---Zones cachées------------------------------------------------------**
+     A            F02LIG         3S 0H
+     A            F02COL         3S 0H
+     A            F02CUR         5S 0H
+     A                                  1  1'Sélection du composant :'
+     A                                      COLOR(WHT)
+     A            OBJCOMP       10A  O  1 26COLOR(YLW)
+     A                                  2  1'Nom        Biblio.    Type       D-
+     A                                      escription'
+     A                                      COLOR(BLU)
+     ?**----------------------------------------------------------------------**
+     ?**---Sous-fichier : modifications/Aide----------------------------------**
+     ?**----------------------------------------------------------------------**
+     A          R F03SFL                    SFL
+     A                                      SFLNXTCHG
+     A            F03DES        80A  O  9  2
+     A            F03DATE       11A  O  9 83
+     A**----------------------------------------------------------------------**
+     A**---Sous-fichier : modifications/Aide - Format de contrôle-------------**
+     A**----------------------------------------------------------------------**
+     A          R F03CTL                    SFLCTL(F03SFL)
+     A*%%TS  SD  20071002  081325  PELTIERI    REL-V5R4M0  5722-WDS
+     A                                      SFLSIZ(0008)
+     A                                      SFLPAG(0007)
+     A                                      WINDOW(7 2 16 96)
+     A                                      OVERLAY
+     A                                      SFLCSRRRN(&F03CUR)
+     A N50                                  SFLDSP
+     A N50                                  SFLDSPCTL
+     A  50                                  SFLCLR
+     A N99                                  SFLEND(*SCRBAR *SCRBAR)
+     A**---Zones cachées------------------------------------------------------**
+     A            F03LIG         3S 0H
+     A            F03COL         3S 0H
+     A            F03CUR         5S 0H
+     A                                  1  2'A propos de X-Ref'
+     A                                      COLOR(WHT)
+     A                                      DSPATR(UL)
+     A                                  3  1'XRef est un logiciel gratuit. Si v-
+     A                                      ous rencontrez un bug ou si une fon-
+     A                                      ctionnalité'
+     A                                  4  1'qui ne fait pas ce qu elle devrait-
+     A                                       faire, n hésitez pas et allez sur -
+     A                                      :'
+     A                                  5 32'http:\\shirlock.free.fr'
+     A                                      COLOR(WHT)
+     A                                      DSPATR(UL)
+     A                                  6 31'COPYRIGHT : ©Sh!rl0ck 2009'
+     A                                      COLOR(BLU)
+     A                                  7 30'E-Mail : shirlock@wanadoo.fr'
+     A                                      COLOR(BLU)
+     ?**----------------------------------------------------------------------**
+     ?**---Sous-fichier : Gestion des analyses--------------------------------**
+     ?**----------------------------------------------------------------------**
+     A          R F04SFL                    SFL
+     A            OPT04          1A  B  4  1VALUES(' ' '4' '5')
+     A            OBJ04         10A  O  4  3
+     A            LIB04         10A  O  4 14
+     A            TYPE04         7A  O  4 25
+     A            FONC04        10A  O  4 33
+     A            TMST04        26A  O  4 44
+     A            MODE04        12A  O  4 71
+     ?**----------------------------------------------------------------------**
+     ?**---Sous-fichier : Gestion des analyses - Format de contrôle-----------**
+     ?**----------------------------------------------------------------------**
+     A          R F04CTL                    SFLCTL(F04SFL)
+     A                                      OVERLAY
+     A N50                                  SFLDSP
+     A N50                                  SFLDSPCTL
+     A  50                                  SFLCLR
+     A N99                                  SFLEND(*SCRBAR *SCRBAR)
+     A                                      SFLSIZ(0006)
+     A                                      SFLPAG(0005)
+     A                                      WINDOW(7 2 9 84)
+     A                                  1 38'Liste des Analyses'
+     A                                      COLOR(RED)
+     A                                  2  1'5: Afficher'
+     A                                      COLOR(BLU)
+     A                                  2 14'4: Supprimer'
+     A                                      COLOR(BLU)
+     A                                  3  3'Composant'
+     A                                      COLOR(WHT)
+     A                                  3 14'Biblio.'
+     A                                      COLOR(WHT)
+     A                                  3 25'Type'
+     A                                      COLOR(WHT)
+     A                                  3 33'Fonction'
+     A                                      COLOR(WHT)
+     A                                  3 44'TimeStamp'
+     A                                      COLOR(WHT)
+     A                                  3 71'Mode'
+     A                                      COLOR(WHT)
+     A**----------------------------------------------------------------------**
+     A**---Sous-fichier : Sélection des plugins-------------------------------**
+     A**----------------------------------------------------------------------**
+     A          R F05SFL                    SFL
+     A            PLUG05        55A  O  2  2DSPATR(PC)
+     ?**----------------------------------------------------------------------**
+     ?**---Sous-fichier : Sélection des plugins - Format de contrôle----------**
+     ?**----------------------------------------------------------------------**
+     A          R F05CTL                    SFLCTL(F05SFL)
+     A                                      OVERLAY
+     A N50                                  SFLDSP
+     A N50                                  SFLDSPCTL
+     A  50                                  SFLCLR
+     A N99                                  SFLEND(*SCRBAR *SCRBAR)
+     A                                      SFLSIZ(0006)
+     A                                      SFLPAG(0005)
+     A                                      WINDOW(7 2 8 60)
+     A                                      SFLCSRRRN(&F05CUR)
+     A            F05LIG         3S 0H
+     A            F05COL         3S 0H
+     A            F05CUR         5S 0H
+     A                                  1  2'Utilitaires'
+     A                                      COLOR(WHT) DSPATR(UL)
+     ?**----------------------------------------------------------------------**
+     ?**---Sous-fichier : Gestion des bibliothèques---------------------------**
+     ?**----------------------------------------------------------------------**
+     A          R F06SFL                    SFL
+     A                                      CHGINPDFT(UL)
+     A                                  4  2'['
+     A            F06OPT         1A  B  4  4VALUES('S' 'O' 'R' ' ' 'C')
+     A  73                                  DSPATR(PR)
+     A N73                                  DSPATR(UL)
+     A                                  4  6']'
+     A            F06LIB        10A  B  4 10
+     A  73                                  DSPATR(PR)
+     A N73                                  DSPATR(UL)
+     A  74                                  COLOR(RED)
+     A  75                                  COLOR(BLU)
+     A  76                                  COLOR(PNK)
+     A            F06DES        50A  O  4 22
+     A            F06MAJ         1A  B  4 75VALUES(' ' 'X')
+     A  72                                  DSPATR(ND)
+     A  73
+     AO 72                                  DSPATR(PR)
+     A N73                                  DSPATR(UL)
+     A            F06DATE       21A  O  4 80
+     ?**----------------------------------------------------------------------**
+     ?**---Sous-fichier : Gestion des bibliothèques - Format de contrôle------**
+     ?**----------------------------------------------------------------------**
+     A          R F06CTL                    SFLCTL(F06SFL)
+     A                                      OVERLAY
+     A N50                                  SFLDSP
+     A N50                                  SFLDSPCTL
+     A  50                                  SFLCLR
+     A N99                                  SFLEND(*SCRBAR *SCRBAR)
+     A                                      SFLSIZ(0012)
+     A                                      SFLPAG(0011)
+     A                                      WINDOW(7 2 15 103)
+     ?**---Zones cachées------------------------------------------------------**
+     A            F06LIG         3S 0H
+     A            F06COL         3S 0H
+     A            F06CUR         5S 0H
+     A                                  1 26'Liste de bibliothèque'
+     A                                      COLOR(WHT)
+     A                                      DSPATR(UL)
+     A                                  2  2'Type de Bibliothèque'
+     A                                      COLOR(YLW)
+     A                                  3  2'R:'
+     A                                      COLOR(YLW)
+     A                                  3  5'Référence'
+     A                                      COLOR(RED)
+     A                                  3 16'O:'
+     A                                      COLOR(YLW)
+     A                                  3 19'Objet'
+     A                                      COLOR(BLU)
+     A                                  3 25'S:'
+     A                                      COLOR(YLW)
+     A                                  3 28'Source'
+     A                                      COLOR(PNK)
+     A                                  3 35'C:'
+     A                                      COLOR(YLW)
+     A                                  3 38'Créer PGMREF'
+     A                                  3 74'MàJ'
+     A                                      COLOR(BLU)
+     A                                  3 83'Date Extraction'
+     A                                      COLOR(BLU)
+     ?**----------------------------------------------------------------------**
+     ?**---Incident X-Ref-----------------------------------------------------**
+     ?**----------------------------------------------------------------------**
+     A          R F07
+     A                                      WINDOW(7 2 9 40)
+     A                                  1 12'Incident de X-REF'
+     A                                      COLOR(RED)
+     A                                      DSPATR(HI)
+     A                                  2  2'Un enregistrement a été créé dans -
+     A                                      le'
+     A                                  3  2'fichier de sortie ZZ01OUT.'
+     A                                  4  2'http://shirlock.free.fr pour'
+     A                                  5  2'signaler le problème.'
+     A                                  7 11'Merci de votre compréhension'
+     A                                  8 30'Sh!rl0ck'
+     A                                      COLOR(WHT)
+     ?**----------------------------------------------------------------------**
+     ?**---Sélection du source à analyser-------------------------------------**
+     ?**----------------------------------------------------------------------**
+     A          R F12
+     A                                      WINDOW(7 2 11 50)
+     A                                  1 12'Choix du source à analyser'
+     A                                      COLOR(WHT)
+     A                                  3  2'Fichier Source . . . . . :'
+     A            F12SRC        10A  B  3 29
+     A                                  5  2'Bibliothèque . . . . . . :'
+     A            F12LIB        10A  B  5 29
+     A                                  7  6'Membre . . . . . . . :'
+     A            F12MBR        10A  B  7 29CHECK(LC)
+     A                                  9  2'Mode Détaillé (1/0). . . :'
+     A            F12MOD         1A  B  9 29VALUES('1' '0')
+     A                                 10  2'*** Analyse plus longue si mode dé+
+     A                                       taillé ***'
+     A                                      COLOR(RED)
+     ?**----------------------------------------------------------------------**
+     ?**---Etat d'avancement de l'analyse-------------------------------------**
+     ?**----------------------------------------------------------------------**
+     A          R F13
+     A                                      KEEP
+     A                                      OVERLAY
+     A                                      WINDOW(15 70 7 35)
+     A                                  1  9'Etat d''avancement'
+     A                                      COLOR(WHT)
+     A            STAT001       30A  O  3  3
+     A            STAT002       30A  O  4  3
+     A            STAT003       30A  O  5  3
+     A            STAT004       30A  O  6  3
+     ?**----------------------------------------------------------------------**
+     ?**---Sous-fichier principal---------------------------------------------**
+     ?**----------------------------------------------------------------------**
+     A          R FZZSFL                    SFL
+     A            FZZZONE      128A  O  7  2CHRID
+     ?**----------------------------------------------------------------------**
+     ?**---Sous-fichier principal : format de contrôle------------------------**
+     ?**----------------------------------------------------------------------**
+     A          R FZZCTL                    SFLCTL(FZZSFL)
+     A                                      RTNCSRLOC(*MOUSE &FZZLIG &FZZCOL)
+     A                                      OVERLAY
+     A                                      SFLCSRRRN(&FZZCUR)
+     A N50                                  SFLDSP
+     A N50                                  SFLDSPCTL
+     A  50                                  SFLCLR
+     A N99                                  SFLEND(*SCRBAR *SCRBAR)
+     A                                      SFLSIZ(0018)
+     A                                      SFLPAG(0017)
+     ?**---Zones cachées------------------------------------------------------**
+     A            FZZRCD         4S 0H      SFLRCDNBR
+     A            FZZLIG         3S 0H
+     A            FZZCOL         3S 0H
+     A            FZZCUR         5S 0H
+     ?**---Ligne 5------------------------------------------------------------**
+     A            TITRE         50A  O  5 38COLOR(PNK)
+     ?**---Ligne 6------------------------------------------------------------**
+     A            FZZDESC      130A  O  6  2COLOR(WHT)
+     A                                      DSPATR(UL)
+     ?**----------------------------------------------------------------------**
+     ?**---Touches de fonctions-----------------------------------------------**
+     ?**----------------------------------------------------------------------**
+     A          R FOOT
+     A                                      OVERLAY
+     A            FONCT01      130A  O 24  2COLOR(BLU)
+     A            FONCT02      130A  O 25  2COLOR(BLU)
+     A            FONCT03      130A  O 26  2COLOR(BLU)
+     ?**----------------------------------------------------------------------**
+     ?**---Ecran d'accueil----------------------------------------------------**
+     ?**----------------------------------------------------------------------**
+     A          R F1201
+     A*%%TS  SD  20080425  085351  PELTIERI    REL-V5R4M0  5722-WDS
+     A                                      OVERLAY
+     A                                      KEEP
+     A                                  3 11'SOURCE'
+     A                                      COLOR(WHT)
+     A                                  4  2'Fichier Source :'
+     A                                  5  2'Biblio. Source :'
+     A                                  6  2'Membre  Source :'
+     A                                  5 36'Bibliothèque :'
+     A                                  4 36'Nom :'
+     A            F01FSRC       10A  B  4 19FLDCSRPRG(F01LSRC)
+     A            F01LSRC       10A  B  5 19FLDCSRPRG(F01MSRC)
+     A            F01MSRC       10A  B  6 19FLDCSRPRG(F01FILE)
+     A            F01FILE       10A  B  4 53FLDCSRPRG(F01LIBL)
+     A            F01LIBL       10A  B  5 53FLDCSRPRG(F01FSRC)
+     A                                  3 46'FICHIER'
+     A                                      COLOR(WHT)
+     A                                  1 43'Analyse Zones d''un fichier dans u-
+     A                                      n programme'
+     A                                      COLOR(BLU)
+     A                                      DSPATR(UL)
+     A          R F12SFL                    SFL
+     A*%%TS  SD  20070903  105836  PELTIERI    REL-V5R4M0  5722-WDS
+     A            SRCSEQ12       8A  O 10  2
+     A            SRCDTA12      83A  O 10 11
+     A            COLUMN        20A  O 10 95
+     A            TABLEN        10A  O 10116
+     A            PST            3A  O 10127
+     A          R F12CTL                    SFLCTL(F12SFL)
+     A*%%TS  SD  20070903  105836  PELTIERI    REL-V5R4M0  5722-WDS
+     A                                      SFLSIZ(0015)
+     A                                      SFLPAG(0014)
+     A                                      RTNCSRLOC(*MOUSE &F12LIG &F12COL)
+     A                                      SFLCSRRRN(&F12CUR)
+     A                                      OVERLAY
+     A  48                                  SFLDSP
+     A  49                                  SFLDSPCTL
+     A  50                                  SFLCLR
+     A N99                                  SFLEND(*SCRBAR *SCRBAR)
+     A            F12RCD         4S 0H      SFLRCDNBR
+     A            F12LIG         3S 0H
+     A            F12COL         3S 0H
+     A            F12CUR         5S 0H
+     A                                  8  3'Séq.'
+     A                                      COLOR(WHT)
+     A                                  8 11'Lignes de codes'
+     A                                      COLOR(WHT)
+     A                                  8 95'Zone du fichier'
+     A                                      COLOR(WHT)
+     A                                  8116'Fichier'
+     A                                      COLOR(WHT)
+     A                                  8127'Pst'
+     A                                      COLOR(WHT)
+     A                                  9  2'==================================-
+     A                                      ===================================-
+     A                                      ===================================-
+     A                                      ========================'
+     A                                      COLOR(WHT)
+     A          R F14
+     A*%%TS  SD  20090721  114031  PELTIERI    REL-V5R4M0  5722-WDS
+     A                                      WINDOW(5 2 10 50)
+     A                                  1  4'Paramètres supplémentaires'
+     A                                      COLOR(WHT)
+     A            F14_OUT        2Y 0B  3  2SNGCHCFLD
+     A                                      CHOICE(1 'Fichier en mise à jour')
+     A                                  4  2'Choix des bibliothèques à ...'
+     A                                      COLOR(BLU)
+     A            F14_DIF        2Y 0B  5  2SNGCHCFLD((*NUMCOL 2) (*GUTTER 2))
+     A                                      CHOICE(1 'Inclure')
+     A                                      CHOICE(2 'Exclure')
+     A            F14_LIB1      10A  B  6  6
+     A            F14_LIB2      10A  B  7  6
+     A            F14_LIB3      10A  B  8  6
+     A            F14_DES       25A  B  9 13CHECK(LC)
+     A                                  9  2'Comprenant'
+     A                                      COLOR(BLU)
+     A          R F15
+     A*%%TS  SD  20090723  102920  PELTIERI    REL-V5R4M0  5722-WDS
+     A                                      WINDOW(13 2 4 50)
+     A                                      KEEP
+     A                                      OVERLAY
+     A                                  1  3'Mise à jour des références pour la-
+     A                                       nouvelle'
+     A                                  2  3'bibliothèque'
+     A            F15BIB        10A  O  2 16COLOR(RED)
+     A                                  3  3'F12= Pas de Mise à jour'
+     A                                      COLOR(BLU)
+     A                                  3 28'Entrée=Mise à jour'
+     A                                      COLOR(BLU)
