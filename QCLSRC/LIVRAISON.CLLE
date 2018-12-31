@@ -7,10 +7,10 @@
       /*   >>END-IMPORTANT<<                                              */
       /*   >>EXECUTE<<                                                    */
       /* >>END-PRE-COMPILER<<                                             */
-             PGM        PARM(&OBJETQ &GESTDATA &MACHINE &USER &MDP)
+             PGM        PARM(&NUMLOT &MACHINE &USER &MDP)
 
-             DCL        VAR(&OBJETQ) TYPE(*CHAR) LEN(20)
-             DCL        VAR(&OBJET) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&NUMLOT) TYPE(*DEC) LEN(9 0)
+             DCL        VAR(&NUMLOTC) TYPE(*CHAR) LEN(9)
              DCL        VAR(&BIBLIO) TYPE(*CHAR) LEN(10)
              DCL        VAR(&MACHINE) TYPE(*CHAR) LEN(32)
              DCL        VAR(&USER) TYPE(*CHAR) LEN(10)
@@ -25,47 +25,13 @@
                           et appel livraison') BNDDIR(I_BUILDER)
              MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
 
-             CHGVAR     VAR(&OBJET) VALUE(%SST( &OBJETQ 1 10))
-             CHGVAR     VAR(&BIBLIO) VALUE(%SST( &OBJETQ 11 10))
+             CHGVAR     VAR(&NUMLOTC) VALUE(&NUMLOT)
 
-             /* Avant livraison du fichier, ses données sont copiés dans QGPL*/
-             IF         COND(&GESTDATA *EQ 'C') THEN(DO)
+             CHGVAR     VAR(&BIBLIO) VALUE('L' *TCAT &NUMLOTC)
 
-                CALLPRC    PRC(ALEATOIRE) PARM((&RAND)) RTNVAL(&NUMALEA)
+             CRTDUPOBJ  OBJ(DSTLOT10) FROMLIB(I_BUILDER) +
+                          OBJTYPE(*PGM) TOLIB(&BIBLIO)
 
-                CHGVAR     VAR(&NUMALEC) VALUE(&NUMALEA)
-
-                CHGVAR     VAR(&FICSV) VALUE('S' *TCAT &NUMALEC)
-
-                CHGVAR     VAR(&CMD) VALUE('CPYF FROMFILE(' *TCAT &BIBLIO +
-                             *TCAT '/' *TCAT &OBJET *TCAT ') TOFILE(QGPL/' +
-                             *TCAT &FICSV *TCAT ') MBROPT(*REPLACE) +
-                             CRTFILE(*YES)')
-
-                RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) +
-                             RMTUSER(&USER) RMTPWD(&MDP)
-             ENDDO
-
-             /*Livraison de l'objet sur le système &MACHINE                   */
-             CALL       PGM(I_PUSH) PARM(&OBJETQ &MACHINE &USER &MDP)
-
-             /*Après la livraison restauration des données                    */
-             IF         COND(&GESTDATA *EQ 'C') THEN(DO)
-
-                CHGVAR     VAR(&CMD) VALUE('CPYF FROMFILE(QGPL/' *TCAT +
-                             &FICSV *TCAT ') TOFILE(' *TCAT &BIBLIO *TCAT +
-                             '/' *TCAT &OBJET *TCAT ') MBROPT(*REPLACE) +
-                             FMTOPT(*MAP *DROP)')
-
-                RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) +
-                             RMTUSER(&USER) RMTPWD(&MDP)
-
-                CHGVAR     VAR(&CMD) VALUE('DLTF FILE(QGPL/' *TCAT &FICSV +
-                             *TCAT ')')
-
-                RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) +
-                             RMTUSER(&USER) RMTPWD(&MDP)
-             ENDDO
 
              GOTO       CMDLBL(FIN)
 
