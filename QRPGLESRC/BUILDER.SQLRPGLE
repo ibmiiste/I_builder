@@ -148,7 +148,16 @@
 
          if g_Failed<>0;
            EnvRapMel();
+         Else;
+           If P_Livr_Env_Dst;
+             Livraison( P_Biblio_Lot
+                       :P_Sys_Dst
+                       :P_User
+                       :P_Mot_De_Passe);
+           Endif;
          EndIf;
+
+
 
          Return;
 
