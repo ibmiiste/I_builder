@@ -127,17 +127,5 @@
                           OBJ(&BIBDST/&OBJDST) OBJTYPE(*FILE) +
                           USER(*PUBLIC) AUT(*ALL))
              CHGVAR     VAR(&OBJETQ) VALUE(&OBJDST *CAT &BIBDST)
-             IF         COND(&LIVRAISON *EQ '1') THEN(DO)
-             IF         COND(&ATROBJ *EQ 'PF') THEN(CHGVAR +
-                          VAR(&GESTDATA) VALUE('C'))
-             CALLPRC    PRC(LIVRAISON) PARM((&OBJETQ) (&GESTDATA) +
-                          (&MACHINE) (&USER) (&MDP)) RTNVAL(*NONE)
-             ENDDO
 
-             IF         COND(&ATROBJ *EQ 'PF' *AND &EXISTS *EQ '1') THEN(DO)
-             CHGVAR     VAR(&NOM_TRAV) VALUE('RST' *TCAT &OBJDST)
-             SBMJOB     CMD(CALL PGM(RST_DATA) PARM(&NOM_TRAV &QTEMP &SAUV_TAB +
-                          &BIBDST &OBJDST)) JOB(&NOM_TRAV)
-
-             ENDDO
              ENDPGM
