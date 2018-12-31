@@ -268,8 +268,7 @@
        // Préparation de la livraison
        //---------------------------------------------------
        Dcl-pr Livraison;
-         p_Objet_qual char(20) Const;
-         P_gestion_donnees Char(1) Const;
+         p_Num_lot Like(r_Num_lot) value;
          p_Sys_Dst char(32) Const;
          P_User Char(10) Const;
          P_Mot_De_Passe Char(10) Const;
