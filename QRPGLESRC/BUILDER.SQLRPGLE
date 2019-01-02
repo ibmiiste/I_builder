@@ -157,11 +157,7 @@
            Endif;
          EndIf;
 
-
-
          Return;
-
-
 
        // --------------------------------------------------
        // Procedure name: Ouvrir_curseur
