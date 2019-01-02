@@ -38,6 +38,8 @@
 
              CRTSAVF    FILE(&BIBLIO/&SAVF)
 
+             CALLPRC    PRC(CRTSAVLOT) PARM((&NUMLOT))
+
              GOTO       CMDLBL(FIN)
 
  ERREUR:     DMPCLPGM
