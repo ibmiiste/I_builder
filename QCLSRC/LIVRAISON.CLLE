@@ -21,8 +21,10 @@
              DCL        VAR(&CMD) TYPE(*CHAR) LEN(2000)
              DCL        VAR(&FICSV) TYPE(*CHAR) LEN(10)
              DCL        VAR(&RAND) TYPE(*DEC) LEN(15 0) VALUE(999999999)
+             DCL        VAR(&SAVF) TYPE(*CHAR) LEN(10)
+
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Préparation à la livraison +
-                          et appel livraison') BNDDIR(I_BUILDER)
+                          et livraison') BNDDIR(I_BUILDER)
              MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
 
              CHGVAR     VAR(&NUMLOTC) VALUE(&NUMLOT)
@@ -32,6 +34,9 @@
              CRTDUPOBJ  OBJ(DSTLOT10) FROMLIB(I_BUILDER) +
                           OBJTYPE(*PGM) TOLIB(&BIBLIO)
 
+             CHGVAR     VAR(&SAVF) VALUE('S' *TCAT &NUMLOTC)
+
+             CRTSAVF    FILE(&BIBLIO/&SAVF)
 
              GOTO       CMDLBL(FIN)
 
