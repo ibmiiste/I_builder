@@ -134,7 +134,7 @@
          Sflend_Msgf = *ON;
          Sflinz_Msgf = *ON;
          P_TYP = '5';
-         P_FICM = 'FICMSG   ';
+         P_FICM = 'BUILDMSGF';
 
          Protection = *ON;
 

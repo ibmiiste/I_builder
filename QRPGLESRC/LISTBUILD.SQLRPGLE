@@ -468,7 +468,7 @@
            if sqlcode = 0;
              // envoyer un message pour dire que l'option n'existe pas
              a_typ='1';
-             a_fim='FICMSG   ';
+             a_fim='BUILDMSGF';
              a_mid='MSG0002';
              gst_message_CL(  a_typ
                          : a_fim
