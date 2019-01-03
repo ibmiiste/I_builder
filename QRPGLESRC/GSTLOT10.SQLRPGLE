@@ -323,7 +323,7 @@
              g_Traitement_option = *OFF;
              // Envoyer un message pour dire que l'option n'existe pas
              PTYP = '1';
-             PFIM = 'FICMSG   ';
+             PFIM = 'BUILDMSGF';
              PMID = 'MSG0002';
              Gestion_message( PTYP
                              :PFIM

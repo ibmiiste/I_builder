@@ -25,9 +25,14 @@
              DCL        VAR(&SAVF) TYPE(*CHAR) LEN(10)
              DCL        VAR(&CHEMINSAVO) TYPE(*CHAR) LEN(256)
              DCL        VAR(&CHEMINSAVD) TYPE(*CHAR) LEN(256)
+             DCL        VAR(&PTYP) TYPE(*CHAR) LEN(1) VALUE('5')
+             DCL        VAR(&PFICM) TYPE(*CHAR) LEN(10) VALUE ('BUILDMSGF')
+             DCL        VAR(&PMGID) TYPE(*CHAR) LEN(7)
+             DCL        VAR(&PMGDT) TYPE(*CHAR) LEN(99)
+             DCL        VAR(&PGM) TYPE(*CHAR) LEN(10) VALUE('GSTLOT20')
+             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Préparation à la livraison et +
+                          livraison') BNDDIR(I_BUILDER)
 
-             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Préparation à la livraison +
-                          et livraison') BNDDIR(I_BUILDER)
              MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
 
              CHGVAR     VAR(&NUMLOTC) VALUE(&NUMLOT)
@@ -44,12 +49,14 @@
              CHGVAR     VAR(&CMD) VALUE('CRTLIB LIB(' *TCAT &BIBLIO *TCAT ')')
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
                           RMTPWD(&MDP)
+             MONMSG     MSGID(CPF91CF) EXEC(CALL PGM(GSTMSG01) PARM(&PTYP &PFICM +
+                          &PMGID &PMGDT &PGM))
 
              CHGVAR     VAR(&CMD) VALUE('CRTSAVF FILE(' *TCAT &BIBLIO *TCAT '/' +
                           *TCAT &SAVF *TCAT ')')
-
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
                           RMTPWD(&MDP)
+             MONMSG     MSGID(CPF91CF)
 
              CALLPRC    PRC(CRTSAVLOT) PARM((&NUMLOT))
 
