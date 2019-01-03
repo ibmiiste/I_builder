@@ -8,7 +8,8 @@
       /*   >>EXECUTE<<                                                    */
       /* >>END-PRE-COMPILER<<                                             */
 
-             pgm        PARM((&USER) (&MDP) (&SAVF) (&SRCF))
+             pgm        PARM((&USER) (&MDP) (&SAVF) (&SRCF) (&CHEMINSAVO) +
+                          (&CHEMINSAVD))
 
              DCL        VAR(&USER) TYPE(*CHAR) LEN(10)
              DCL        VAR(&MDP) TYPE(*CHAR) LEN(10)
@@ -35,8 +36,6 @@
              ADDPFM     FILE(QTEMP/&SRCF) MBR(OUT) TEXT('log du ftp')
 
              OVRDBF     FILE(FTPCMD) TOFILE(QTEMP/&SRCF) MBR(IN)
-             CHGVAR     VAR(&CHEMINSAVO) VALUE('/QSYS.LIB/QTEMP.LIB/')
-             CHGVAR     VAR(&CHEMINSAVD) VALUE('/QSYS.LIB/QGPL.LIB/')
              CHGVAR     VAR(&FILE) VALUE(&SAVF)
              CALLPRC    PRC(ECRITURE_SCRIPT_FTP) PARM((&USER) (&MDP) (&FILE) (&CHEMINSAVO) +
                           (&CHEMINSAVD))
