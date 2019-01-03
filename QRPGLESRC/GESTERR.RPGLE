@@ -3,7 +3,8 @@
       *                 SRCMBR(&SM);
       *   >>IMPORTANT<<
       *     >>PARM<<  OPTION(*EVENTF);
-      *     >>PARM<<  DBGVIEW(*LIST);
+      *     >>PARM<<  DBGVIEW(*ALL);
+      *     >>PARM<<  OPTIMIZE(&U0);
       *     >>PARM<<  TRUNCNBR(*NO);
       *   >>END-IMPORTANT<<
       *   >>EXECUTE<<
