@@ -38,8 +38,20 @@
 
              CRTSAVF    FILE(&BIBLIO/&SAVF)
 
+             CHGVAR     VAR(&CMD) VALUE('CRTLIB LIB(' *TCAT &BIBLIO *TCAT ')')
+             RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
+                          RMTPWD(&MDP)
+
+             CHGVAR     VAR(&CMD) VALUE('CRTSAVF FILE(' *TCAT &BIBLIO *TCAT '/' +
+                          *TCAT &SAVF *TCAT ')')
+
+             RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
+                          RMTPWD(&MDP)
+
              CALLPRC    PRC(CRTSAVLOT) PARM((&NUMLOT))
 
+
+             CALLPRC    PRC(SCRIPTFTP) PARM((&USER) (&MDP) (&SAVF) (&SRCF))
              GOTO       CMDLBL(FIN)
 
  ERREUR:     DMPCLPGM
