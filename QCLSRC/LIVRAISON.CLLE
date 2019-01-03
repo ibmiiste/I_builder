@@ -49,14 +49,22 @@
              CHGVAR     VAR(&CMD) VALUE('CRTLIB LIB(' *TCAT &BIBLIO *TCAT ')')
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
                           RMTPWD(&MDP)
-             MONMSG     MSGID(CPF91CF) EXEC(CALL PGM(GSTMSG01) PARM(&PTYP &PFICM +
-                          &PMGID &PMGDT &PGM))
-
+             MONMSG     MSGID(CPF91CF) EXEC(DO)
+                CHGVAR     VAR(&PMGDT) VALUE(&MACHINE)
+                CHGVAR     VAR(&PMGID) VALUE('ERR0002')
+                CALL       PGM(GSTMSG01) PARM(&PTYP &PFICM &PMGID &PMGDT &PGM)
+                GOTO       CMDLBL(FIN)
+             ENDDO
              CHGVAR     VAR(&CMD) VALUE('CRTSAVF FILE(' *TCAT &BIBLIO *TCAT '/' +
                           *TCAT &SAVF *TCAT ')')
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
                           RMTPWD(&MDP)
-             MONMSG     MSGID(CPF91CF)
+             MONMSG     MSGID(CPF91CF) EXEC(DO)
+                CHGVAR     VAR(&PMGDT) VALUE(&MACHINE)
+                CHGVAR     VAR(&PMGID) VALUE('ERR0003')
+                CALL       PGM(GSTMSG01) PARM(&PTYP &PFICM &PMGID &PMGDT &PGM)
+                GOTO       CMDLBL(FIN)
+             ENDDO
 
              CALLPRC    PRC(CRTSAVLOT) PARM((&NUMLOT))
 
@@ -80,11 +88,23 @@
                           '/' *TCAT &SAVF *TCAT ') MBROPT(*NEW) ALWOBJDIF(*ALL)')
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
                           RMTPWD(&MDP)
+             MONMSG     MSGID(CPF91CF) EXEC(DO)
+                CHGVAR     VAR(&PMGDT) VALUE(&MACHINE)
+                CHGVAR     VAR(&PMGID) VALUE('ERR0004')
+                CALL       PGM(GSTMSG01) PARM(&PTYP &PFICM &PMGID &PMGDT &PGM)
+                GOTO       CMDLBL(FIN)
+             ENDDO
 
              CHGVAR     VAR(&CMD) VALUE('CALL' *BCAT &BIBLIO *TCAT '/DSTLOT10 +
                           PARM(' *TCAT &NUMLOTC *TCAT ')')
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
                           RMTPWD(&MDP)
+             MONMSG     MSGID(CPF91CF) EXEC(DO)
+                CHGVAR     VAR(&PMGDT) VALUE(&MACHINE)
+                CHGVAR     VAR(&PMGID) VALUE('ERR0005')
+                CALL       PGM(GSTMSG01) PARM(&PTYP &PFICM &PMGID &PMGDT &PGM)
+                GOTO       CMDLBL(FIN)
+             ENDDO
 
              DLTF       FILE(&BIBLIO/&SAVF)
 
