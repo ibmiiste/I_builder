@@ -68,9 +68,9 @@
 
              CHGVAR     VAR(&JOBNAME) VALUE('R' *TCAT &NUMLOTC)
 
-             CHGVAR     VAR(&CMD) VALUE('RSTOBJ OBJ(*ALL) SAVLIB(' *TCAT &BIBLIO +
-                          *TCAT ') DEV(*SAVF) SAVF(' *TCAT &BIBLIO *TCAT '/' *TCAT +
-                          &SAVF *TCAT ') MBROPT(*NEW) ALWOBJDIF(*ALL)')
+             CHGVAR     VAR(&CMD) VALUE('RSTOBJ OBJ(DSTLOT10) SAVLIB(' *TCAT +
+                          &BIBLIO *TCAT ') DEV(*SAVF) SAVF(' *TCAT &BIBLIO *TCAT +
+                          '/' *TCAT &SAVF *TCAT ') MBROPT(*NEW) ALWOBJDIF(*ALL)')
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
                           RMTPWD(&MDP)
 
@@ -79,7 +79,7 @@
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
                           RMTPWD(&MDP)
 
-
+             DLTF       FILE(&BIBLIO/&SAVF)
 
              GOTO       CMDLBL(FIN)
 
