@@ -6,7 +6,7 @@
        //  Général BESAIF
        //----------------------------------------------------------------
        //  DESCRIPTION :
-       //  La procdure Exists vrifie l'existence d'un objet
+       //  La procdure Exist vérifie l'existence d'un objet
        //  Elle renvoie la valeur boolenne 1 si l'objet existe
        //  et 0 si l'objet n'existe pas
        //----------------------------------------------------------------
@@ -29,6 +29,7 @@
        //     >>PARM<<  CLOSQLCSR(*ENDACTGRP);                          */
        //     >>PARM<<  DATFMT(*ISO);                                   */
        //     >>PARM<<  TIMFMT(*ISO);                                   */
+       //     >>PARM<<  COMPILEOPT(&U0);                                */
        //   >>END-IMPORTANT<<                                           */
        //   >>EXECUTE<<                                                 */
        // >>END-PRE-COMPILER<<                                          */
