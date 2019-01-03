@@ -6,6 +6,18 @@
          ObjType char(10) CONST;
        end-pr;
 
+      // Retrieve Object Description (QUSROBJD) API
+       Dcl-pr RtvObj EXTPGM('QUSROBJD');
+         Receiver char(1000) OPTIONS(*VARSIZE);    // Receiver variable
+         RcvLen  int(10:0) CONST;                  // Length of receiver
+         FmtName char(8) CONST;                    // Format name
+         ObjName char(20) CONST;                   // Object and library
+         ObjType char(10) CONST;                   // Object type
+      //  Optional 1
+         ErrorCode char(1300) OPTIONS(*VARSIZE:*NOPASS); // Error Code
+       end-pr;
+      //  Optional 2
+      // Auxiliary storage pool (ASP) control  INPUT char(*)
 
       // OBJD0100 Format
        Dcl-ds OBJD0100_t qualified template;
@@ -422,7 +434,6 @@
        DCL-PR edtliblot;
           p_List_bibliotheques char(10) const;
        END-PR;
-
 
       *---------------------------------------------------------------*
       *                                                               *
