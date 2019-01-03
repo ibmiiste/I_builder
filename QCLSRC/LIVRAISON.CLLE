@@ -15,6 +15,7 @@
              DCL        VAR(&MACHINE) TYPE(*CHAR) LEN(32)
              DCL        VAR(&USER) TYPE(*CHAR) LEN(10)
              DCL        VAR(&MDP) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&JOBNAME) TYPE(*CHAR) LEN(10)
              DCL        VAR(&GESTDATA) TYPE(*CHAR) LEN(1)
              DCL        VAR(&NUMALEA) TYPE(*DEC) LEN(15 0)
              DCL        VAR(&NUMALEC) TYPE(*CHAR) LEN(9)
@@ -22,6 +23,8 @@
              DCL        VAR(&FICSV) TYPE(*CHAR) LEN(10)
              DCL        VAR(&RAND) TYPE(*DEC) LEN(15 0) VALUE(999999999)
              DCL        VAR(&SAVF) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&CHEMINSAVO) TYPE(*CHAR) LEN(256)
+             DCL        VAR(&CHEMINSAVD) TYPE(*CHAR) LEN(256)
 
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Préparation à la livraison +
                           et livraison') BNDDIR(I_BUILDER)
@@ -51,7 +54,27 @@
              CALLPRC    PRC(CRTSAVLOT) PARM((&NUMLOT))
 
 
-             CALLPRC    PRC(SCRIPTFTP) PARM((&USER) (&MDP) (&SAVF) (&SRCF))
+             CHGVAR     VAR(&CHEMINSAVO) VALUE('/QSYS.LIB/' *TCAT &BIBLIO *TCAT +
+                          '.LIB')
+             CHGVAR     VAR(&CHEMINSAVD) VALUE(&CHEMINSAVO)
+
+             CALLPRC    PRC(SCRIPTFTP) PARM((&USER) (&MDP) (&SAVF) (&SRCF) +
+                          (&CHEMINSAVO) (&CHEMINSAVD))
+
+             OVRDBF     FILE(INPUT) TOFILE(&SRCF) MBR(IN)
+             OVRDBF     FILE(OUTPUT) TOFILE(&SRCF) MBR(OUT)
+
+             FTP        RMTSYS(&MACHINE)
+
+             CHGVAR     VAR(&JOBNAME) VALUE('R' *TCAT &NUMLOTC)
+
+             CHGVAR     VAR(&CMD) VALUE('RSTOBJ OBJ(*ALL) SAVLIB(' *TCAT &BIBLIO +
+                          *TCAT ') DEV(*SAVF) SAVF(' *TCAT &BIBLIO *TCAT '/' *TCAT +
+                          &SAVF *TCAT ') MBROPT(*NEW) ALWOBJDIF(*ALL)')
+
+             RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
+                          RMTPWD(&MDP)
+
              GOTO       CMDLBL(FIN)
 
  ERREUR:     DMPCLPGM
