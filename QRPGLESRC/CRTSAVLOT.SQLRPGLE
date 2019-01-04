@@ -1,3 +1,4 @@
+       /copy qcpysrc,cpyctlstm
       //
       //  Program SAVUSROBJ:  Save User Objects. Saves the objects that
       //                      have been entered into the SAVINFO file.
@@ -35,97 +36,94 @@
          LenUsrSpc Int(10) Const;
          UsrSpc Char(1000000) Const Options(*VarSize);
          Force2Aux Char(1);
-         Error Like(ApiError)
+         Error Like(ApiError);
+       END-PR;
+
+       // Sauvegarde des objets
+       Dcl-pr Sauve_objets Extpgm('QSRSAVO');
+         UsrSpcName Char(20) Const;
+         Error Like(ApiError);
        END-PR;
 
        dcl-c cUsrSpcNam const('SAVUSROBJ QTEMP     ');
 
 
-      //  Data structure for user space (note, 4-byte binary fields must
-      //  be defined as 9.0 in RPG). Lx = record length, Kx = Key,
-      //  LPx = Length of key-specific Parameter data.
+       //  Data structure for user space (note, 4-byte binary fields must
+       //  be defined as 9.0 in RPG). Lx = record length, Kx = Key,
+       //  LPx = Length of key-specific Parameter data.
 
 
-      //     $Keys = the number of records that follow.
+       //     $Keys = the number of records that follow.
        dcl-ds UsrSpc;
 
-      //     Library info record.
-        $Keys bindec(9) inz(4);
-        L1 bindec(9) inz(26);
-        K1 bindec(9) inz(2);
-        LP1 bindec(9) inz(14);
-        $Libs bindec(9) inz(1);
+       //     Library info record.
+         $Keys bindec(9) inz(4);
+         L1 bindec(9) inz(26);
+         K1 bindec(9) inz(2);
+         LP1 bindec(9) inz(14);
+         $Libs bindec(9) inz(1);
 
-      //     Tape device record.
-        LibName char(10);
-        L2 bindec(9) inz(26);
-        K2 bindec(9) inz(3);
-        LP2 bindec(9) inz(14);
-        $Devs bindec(9) inz(1);
+       //     Tape device record.
+         LibName char(10);
+         L2 bindec(9) inz(26);
+         K2 bindec(9) inz(3);
+         LP2 bindec(9) inz(14);
+         $Devs bindec(9) inz(1);
 
-      //     End-of-tape option record.
-        DevName char(10) inz('TAP01');
-        L3 bindec(9) inz(13);
-        K3 bindec(9) inz(10);
-        LP3 bindec(9) inz(1);
+       //     End-of-tape option record.
+         DevName char(10) inz('TAP01');
+         L3 bindec(9) inz(13);
+         K3 bindec(9) inz(10);
+         LP3 bindec(9) inz(1);
 
-      //     Object info record (length not known).
-        EndTapeOpt char(1) inz('1');
-        L4 bindec(9);
-        K4 bindec(9) inz(1);
-        LP4 bindec(9);
-        $Objs bindec(9);
-        ObjArr char(20) dim(1600);
-       end-ds;
+       //     Object info record (length not known).
+         EndTapeOpt char(1) inz('1');
+         L4 bindec(9);
+         K4 bindec(9) inz(1);
+         LP4 bindec(9);
+         $Objs bindec(9);
+         ObjArr char(20) dim(1600);
+        end-ds;
 
-      // ----------  End of UsrSpc data structure  ------------
+       // ----------  End of UsrSpc data structure  ------------
 
 
        dcl-s Max$Objs bindec(9) inz(%elem(objarr));
 
-      //  The following data structure is used to overlay the
-      //  object array in UsrSpc (ObjArr) with the object name
-      //  and object type in the proper format.
-       dcl-ds ObjDS;
-        SIOBJ;
-        SITYP;
-       end-ds;
+       //  The following data structure is used to overlay the
+       //  object array in UsrSpc (ObjArr) with the object name
+       //  and object type in the proper format.
+       Dcl-ds ObjDS;
+         SIOBJ;
+         SITYP;
+       End-ds;
 
-       dcl-s LenUsrSpc bindec(9);
-       dcl-s StartPos bindec(9) inz(1);
+       Dcl-s LenUsrSpc bindec(9);
+       Dcl-s StartPos bindec(9) inz(1);
 
-
-       Exec sql
-         DECLARE List_obj CURSOR FOR
-           Select ORDRE,
-                  BIBDST,
-                  OBJDST,
-                  TYPOBJ
-             From LIST_OBJET_BUILD
-             Where LOT_NUMBER = :p_Num_lot;
-
+         EXEC SQL
+           DECLARE List_Obj CURSOR FOR
+             SELECT Bibdst,
+                    Objdst,
+                    Typobj
+               FROM List_Objet_Build
+               WHERE Lot_Number = :P_Num_Lot
+               ORDER BY Ordre;
 
 
-       DOW *inlr = '0';
+         EXEC SQL
+           OPEN List_Obj;
 
-
-       $Objs=*Zeros;
-       LibName=SILIB;
-
-      //  Fill up ObjArr array.
-         Dow SILIB = LibName
-         AND $Objs < Max$Objs
-         AND *inlr = '0';
+         $Objs=*Zeros;
+         EXEC SQL
+           FETCH List_Obj INTO :Libname, :Siobj,:Sityp;
+         DOW Sqlcode = c_Trouve
+         And $Objs < Max$Objs;
            $Objs+=1;
            ObjArr($Objs)=ObjDS;
-           read SAVINFO;
-           *INlr = %EOF;
+           EXEC SQL
+             FETCH List_Obj INTO :Libname, :Siobj,:Sityp;
          EndDo;
-
-         //  Rewind tape if last save ('0' = rewind).
-         IF *inlr = '1';
-           EndTapeOpt='0';
-         EndIf;
 
          //  Set the len of the var-len record (L4) and the len of
          //  parm data (LP4) for the Object Information record.
@@ -141,17 +139,12 @@
                             :StartPos
                             :LenUsrSpc
                             :UsrSpc
-                            :Force2Aux);         1
+                            :Force2Aux
+                            :ApiError);
 
-      //  Call the QSRSAVO API to perform save.
-     c                   call      'QSRSAVO'
-     c                   parm      cUsrSpcNam    UsrSpcName       20
-     c                   parm      x'00000000'   ResigError        4
+         //  Call the QSRSAVO API to perform save.
+         Sauve_objets( cUsrSpcNam
+                      :Apierror);
 
-      //  Do next library.
-      /FREE
-       EndDo;
-
-
-       Return;
-      /END-FREE
+         Return;
+       End-proc;
