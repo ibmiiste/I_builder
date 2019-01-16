@@ -66,6 +66,7 @@
                 GOTO       CMDLBL(FIN)
              ENDDO
 
+             /* Sauvegarde des objets du lots dans une SAVF                               */
              CALLPRC    PRC(CRTSAVLOT) PARM((&NUMLOT))
 
 
