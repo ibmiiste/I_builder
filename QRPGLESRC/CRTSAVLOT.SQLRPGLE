@@ -1,175 +1,160 @@
-**Free
-/copy qcpysrc,cpyctlstm
-//
-//  Program SAVUSROBJ:  Save User Objects. Saves the objects that
-//                      have been entered into the SAVINFO file.
-//                      The objects are grouped by library and
-//                      saved together. That is, objects in the same
-//                      library are all saved together using a single
-//                      save operation and a single tape label (up to
-//                      the maximum of 1600 objects in a single save
-//                      operation). If file SAVINFO contains more
-//                      than 1600 objects for a single library,
-//                      objects are saved 1600 at a time until all
-//                      objects have been saved.
-//
-//                      User space SAVUSROBJ must already exist in
-//                      QTEMP. Note, it would be more efficient to
-//                      base data structure UsrSpc on a pointer set
-//                      to point to the actual user space object with
-//                      the QUSPTRUS API. This would also allow the
-//                      ObjArr array to be expanded to 32,767 elements.
-//                      The following method simplifies the code,
-//                      especially the initialization code (ie, the
-//                      INZ keyword cannot be used in a based-on
-//                      data structure).
-//
+**FREE
+// Option de compilation et de programme
+ /Copy Qcpysrc,Cpyctlstm
+
+
+// Main procedure prototype
+// Prototype Procédure principale
+// dcl-pr programme extpgm('PGM');
+//   paramentre char(5);
+//   paramsortie packed(9:6);
+// END-PR;
+
+// External subprocedures prototypes globales
+// prototype sous-procédures externes
+
 /Copy Qcpysrc,Prtbuilder
 
+Dcl-pr Creation_usr_space Extpgm('QUSCHGUS');
+  UsrSpcName Char(20) Const;
+  StartPos Int(10) Const;
+  LenUsrSpc Int(10) Const;
+  UsrSpc Char(1000000) Const Options(*VarSize);
+  Force2Aux Char(1);
+  Error Like(ApiError);
+END-PR;
+
+// Sauvegarde des objets
+Dcl-pr Sauve_objets Extpgm('QSRSAVO');
+  UsrSpcName Char(20) Const;
+  Error Like(ApiError);
+END-PR;
+
+
+// Internal subprocedures prototypes globales
+// Prototype sous-procédures internes globales
+
+
+// Global data-structures
+// Structures de données globales
+// Indicateurs renommés avec Indara et INDDS
+// dcl-ds ds1;
+//   donneeds1 like(r_ref4);
+//   donneeds2 like(r_ref5);
+// end-ds;
+
+// global variables
+// variables globales
+// dcl-s donnee3 like(r_ref3);
+
+// Program status data structure
+// Data Structure d'information programme
+///copy qcpysrc,psds
+
+// Définition de l'Interface de la procédure
+// Paramètres d'appel
+// Procedure-Interface definition
 Dcl-proc Sauv_obj_lot Export;
   Dcl-pi Sauv_obj_lot;
     p_Num_lot Packed(9:0);
   END-PI;
 
-  // API de changement d'attribut d'un user space
-  dcl-pr ChgUsrSpcA extpgm('QUSCUSAT');
-    *n char(10); // RtnUsrSpcLib
-    *n char(20) const; // QualUsrSpcN
-    *n char(1) const options(*varsize); // UsrSpcAttrs
-    *n likeds(qusec); // ErrCde
-  end-pr;
+  // local functions prototypes
+  // prototypes fonctions locales
+  // dcl-pr sous_proc1 ind;
+  //   donnees2 char(150);
+  // end-pr;
 
-  // API Create User Space (QUSCRTUS)
-  dcl-pr CrtUsrSpc extpgm('QUSCRTUS');
-    *n char(20) const; // QualUsrSpcN
-    *n char(10) const; // XAttr
-    *n int(10) const; // IntSize
-    *n char(1) const; // IntValue
-    *n char(10) const; // PubAut
-    *n char(50) const; // TxtDesc
-    *n char(10) const options(*nopass); // ReplaceOpt
-    *n likeds(qusec) options(*nopass); // ErrCde
-    *n char(10) const options(*nopass); // Domain
-    *n int(10) const options(*nopass); // TfrSize
-    *n char(1) const options(*nopass); // OptSpcAlgn
-  end-pr;
+  // Indicateurs
+  // dcl-s g_indic1 ind;
 
-  // API Change User Space (QUSCHGUS)
-  Dcl-pr Creation_usr_space Extpgm('QUSCHGUS');
-    UsrSpcName Char(20) Const;
-    StartPos Int(10) Const;
-    LenUsrSpc Int(10) Const;
-    UsrSpc Char(1000000) Const Options(*VarSize);
-    Force2Aux Char(1);
-    Error Like(ApiError);
-  END-PR;
+  // Touches de fonction
+  ///copy qcpysrc,fonction
 
-  // Sauvegarde des objets
-  Dcl-pr Sauve_objets Extpgm('QSRSAVO');
-    UsrSpcName Char(20) Const;
-    Error Like(ApiError);
-  END-PR;
+  // Local data-structures
+  // structures de données locales
+  // Indicateurs renommés avec Indara et INDDS
+  // $Keys = the number of records that follow.
 
-  dcl-c cUsrSpcNam const('SAVUSROBJ QTEMP     ');
-
-
-  //  Data structure for user space (note, 4-byte binary fields must
-  //  be defined as 9.0 in RPG). Lx = record length, Kx = Key,
-  //  LPx = Length of key-specific Parameter data.
-
-
-  //     $Keys = the number of records that follow.
   dcl-ds UsrSpc;
 
-    //     Library info record.
-    $Keys bindec(9) inz(4);
-    L1 bindec(9) inz(26);
-    K1 bindec(9) inz(2);
-    LP1 bindec(9) inz(14);
-    $Libs bindec(9) inz(1);
+    // $Keys = the number of records that follow.
+    $Keys bindec(9) inz(5);
 
-    //     Tape device record.
-    LibName char(10);
+    // Library info record.
     L2 bindec(9) inz(26);
-    K2 bindec(9) inz(4);
+    K2 bindec(9) inz(2);
     LP2 bindec(9) inz(14);
+    $Libs bindec(9) inz(1);
+    LibName char(10);
+
+    // Device information.
+    L3 bindec(9) inz(26);
+    K3 bindec(9) inz(4);
+    LP3 bindec(9) inz(14);
     $Devs bindec(9) inz(1);
+    DevName Char(10) Inz('*SAVF');
 
-    //     End-of-tape option record.
-    DevName char(10) inz('TAP01');
-    L3 bindec(9) inz(13);
-    K3 bindec(9) inz(10);
-    LP3 bindec(9) inz(1);
+    // Device information.
+    L4 bindec(9) inz(36);
+    K4 bindec(9) inz(4);
+    LP4 bindec(9) inz(20);
+    $Devs bindec(9) inz(1);
+    DevName Char(20);
 
-    //     Object info record (length not known).
-    EndTapeOpt char(1) inz('1');
-    L4 bindec(9);
-    K4 bindec(9) inz(1);
-    LP4 bindec(9);
+    // Object info record (length not known).
+    L1 bindec(9);
+    K1 bindec(9) inz(1);
+    LP1 bindec(9);
     $Objs bindec(9);
     ObjArr char(20) dim(1600);
   end-ds;
 
-  // ----------  End of UsrSpc data structure  ------------
+  Dcl-ds Device;
+    $Devs bindec(9) inz(1);
+    DevName Char(10) Inz('*SAVF');
+  END-DS;
+  // inherited variables
+  // héritage des types
+  ///copy QINHLESRC,INH32766
+
+  // constants
+  // constantes
+  dcl-c cUsrSpcNam const('SAVUSROBJ QTEMP     ');
+
+  // main function
+  // Procédure principale
+
+  // indicateur de fin de programme
+  *inlr = *on;
+   monitor;
+
+  on-error;
+    dump(a);
+    gest_erreur();
+  endmon;
 
 
-  dcl-s Max$Objs bindec(9) inz(%elem(objarr));
+  // les sous-routines
+  // traitement de l'écran
+  // begsr sr1;
 
-  //  The following data structure is used to overlay the
-  //  object array in UsrSpc (ObjArr) with the object name
-  //  and object type in the proper format.
-  Dcl-ds ObjDS;
-    SIOBJ;
-    SITYP;
-  End-ds;
-
-  Dcl-s LenUsrSpc bindec(9);
-  Dcl-s StartPos bindec(9) inz(1);
-
-  EXEC SQL
-    DECLARE List_Obj CURSOR FOR
-      SELECT Bibdst,
-             Objdst,
-             Typobj
-        FROM List_Objet_Build
-        WHERE Lot_Number = :P_Num_Lot
-        ORDER BY Ordre;
+  // endsr;
 
 
-  EXEC SQL
-    OPEN List_Obj;
+// --------------------------------------------------
+// Procedure name: sous_proc1
+// Purpose:
+// Returns:
+// --------------------------------------------------
+// DCL-PROC sous_proc1 ;
 
-  $Objs=*Zeros;
-  EXEC SQL
-    FETCH List_Obj INTO :Libname, :Siobj,:Sityp;
-  DOW Sqlcode = c_Trouve
-  And $Objs < Max$Objs;
-    $Objs+=1;
-    ObjArr($Objs)=ObjDS;
-    EXEC SQL
-      FETCH List_Obj INTO :Libname, :Siobj,:Sityp;
-  EndDo;
+// dcl-pi sous_proc1 ind;
+//   donnees2 char(150);
+// end-pi;
+     // Données locales
+// DCL-S l_donnee1 like(r_ref6);
+     // Programmation
 
-  //  Set the len of the var-len record (L4) and the len of
-  //  parm data (LP4) for the Object Information record.
-  LP4 = ($Objs * 20) + 4;
-  L4 = LP4 + 12;
 
-  //  Set the len of data in data structure.
-  LenUsrSpc = L1 + L2 + L3 + L4 + 4;
-
-  //  Write it to the user space.
-
-  Creation_usr_space( cUsrSpcNam
-                     :StartPos
-                     :LenUsrSpc
-                     :UsrSpc
-                     :Force2Aux
-                     :ApiError);
-
-  //  Call the QSRSAVO API to perform save.
-  Sauve_objets( cUsrSpcNam
-               :Apierror);
-
-  Return;
-End-proc;
+// END-PROC ;
