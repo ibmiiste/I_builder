@@ -54,17 +54,81 @@ END-PR;
 
 // Global data-structures
 // Structures de données globales
-// Indicateurs renommés avec Indara et INDDS
-// dcl-ds ds1;
-//   donneeds1 like(r_ref4);
-//   donneeds2 like(r_ref5);
-// end-ds;
+Dcl-s savobjuspptr Pointer;
+dcl-ds savobjusp Based(savobjuspptr) End-ds;
+
+
+// Nombres de clef utilisées dans l'API
+Dcl-s Nbr_post_cle_ptr Pointer;
+Dcl-ds Ds_Nbr_post_cle_var Based(Nbr_post_cle_ptr);
+  g_Nbr_post_cle_var Int(10:0) inz(5);
+End-ds;
+
+// Library info record.
+Dcl-s g_Biblio_define Pointer;
+Dcl-ds DS_Biblio_define Based(g_Biblio_define);
+  g_Longueur_post_biblio Int(10:0);
+  g_clef_bibliotheque Int(10:0);
+  g_Longueur_valeur_biblio Int(10:0);
+  g_Nombre_valeur_biblio Int(10:0);
+  g_nom_biblio char(10);
+End_ds;
+
+// Device information.
+Dcl-s g_Device_define Pointer;
+Dcl-Ds Ds_Device_define Based(g_Device_define);
+  g_Longueur_post_device Int(10:0) inz(26);
+  g_Clef_device Int(10:0) inz(4);
+  g_Longueur_valeurs_device Int(10:0) inz(14);
+  g_Nombre_valeur_device Int(10:0) inz(1);
+  g_nom_device Char(10) Inz('*SAVF');
+End-ds;
+
+// SAVF information.
+Dcl-s g_SAVF_define Pointer;
+Dcl-Ds Ds_SAVF_define Based(g_SAVF_define);
+  g_Longueur_post_SAVF Int(10:0) inz(36);
+  g_Clef_SAVF Int(10:0) inz(4);
+  g_Longueur_valeurs_SAVF Int(10:0) inz(20);
+  g_Nombre_valeur_SAVF Int(10:0) inz(1);
+  g_Nom_SAVF Char(20);
+End-ds;
+
+// Object info record (length not known).
+Dcl-s g_Objet_define Pointer;
+Dcl-Ds DS_Objet_define Based(g_Objet_define);
+  g_Longueur_post_Objet Int(10:0);
+  g_Clef_Objet Int(10:0) inz(1);
+  g_Longueur_valeurs_Objet Int(10:0);
+  g_Nombre_valeur_Objet Int(10:0);
+  g_Nom_objet_qualifie char(20) dim(1600);
+end-ds;
+
+//-----------------------------------------------------
+// API error code data structure
+//-----------------------------------------------------
+Dcl-ds MyErrCode;
+  BytesProv int(10) inz(%size(myerrcode));
+  BytesAvail int(10) inz(0);
+  MsgID char(7);
+  Reserved char(1);
+  MessageData char(1000);
+End-ds;
+
+// Activiation de l'attribut autoextensible du User space
+Dcl-ds DS_Usr_space_Attrs qualified;
+  g_NbrAttrs int(10) inz(1);
+  g_AutoXtndKey int(10) inz(3);
+  g_LenKeyVal int(10) inz(1);
+  g_AutoXtndYes char(1) inz('1');
+End-ds;
+
 
 // global variables
 // variables globales
 
 // Nom bibliothèque retour
-Dcl-s l_biblio_retournee char(10);
+Dcl-s g_biblio_retournee char(10);
 
 // Program status data structure
 // Data Structure d'information programme
@@ -92,75 +156,7 @@ Dcl-proc Sauv_obj_lot Export;
 
   // Local data-structures
   // structures de données locales
-  // Indicateurs renommés avec Indara et INDDS
-  // $Keys = the number of records that follow.
-  Dcl-s savobjuspptr Pointer;
-  dcl-ds savobjusp Based(savobjuspptr) End-ds;
 
-  // Nombres de clef utilisées dans l'API
-  Dcl-s Nbr_post_cle_ptr Pointer;
-  Dcl-ds Ds_Nbr_post_cle_var Based(Nbr_post_cle_ptr);
-    l_Nbr_post_cle_var Int(10:0) inz(5);
-  End-ds;
-
-  // Library info record.
-  Dcl-s l_Biblio_define Pointer;
-  Dcl-ds DS_iblio_define Based(l_Biblio_define);
-    l_Longueur_post_biblio Int(10:0) inz(26);
-    l_clef_bibliotheque Int(10:0) inz(2);
-    l_Longueur_valeur_biblio Int(10:0) inz(14);
-    l_Nombre_valeur_biblio Int(10:0) inz(1);
-    l_nom_biblio char(10);
-  End_ds;
-
-  // Device information.
-  Dcl-s l_Device_define Pointer;
-  Dcl-Ds Ds_Device_define Based(l_Device_define);
-    l_Longueur_post_device Int(10:0) inz(26);
-    l_Clef_device Int(10:0) inz(4);
-    l_Longueur_valeurs_device Int(10:0) inz(14);
-    l_Nombre_valeur_device Int(10:0) inz(1);
-    l_nom_device Char(10) Inz('*SAVF');
-  End-ds;
-
-    // SAVF information.
-  Dcl-s l_SAVF_define Pointer;
-  Dcl-Ds Ds_SAVF_define Based(l_SAVF_define);
-    l_Longueur_post_SAVF Int(10:0) inz(36);
-    l_Clef_SAVF Int(10:0) inz(4);
-    l_Longueur_valeurs_SAVF Int(10:0) inz(20);
-    l_Nombre_valeur_SAVF Int(10:0) inz(1);
-    l_Nom_SAVF Char(20);
-  End-ds;
-
-    // Object info record (length not known).
-  Dcl-s l_Objet_define Pointer;
-  Dcl-Ds DS_Objet_define Based(l_Objet_define);
-    l_Longueur_post_Objet Int(10:0);
-    l_Clef_Objet Int(10:0) inz(1);
-    l_Longueur_valeurs_Objet Int(10:0);
-    l_Nombre_valeur_Objet Int(10:0);
-    l_Nom_objet_qualifie char(20) dim(1600);
-  end-ds;
-
-  //-----------------------------------------------------
-  // API error code data structure
-  //-----------------------------------------------------
-  Dcl-ds MyErrCode;
-    BytesProv int(10) inz(%size(myerrcode));
-    BytesAvail int(10) inz(0);
-    MsgID char(7);
-    Reserved char(1);
-    MessageData char(1000);
-  End-ds;
-
-  // Activiation de l'attribut autoextensible du User space
-  Dcl-ds DS_Usr_space_Attrs qualified;
-    l_NbrAttrs int(10) inz(1);
-    l_AutoXtndKey int(10) inz(3);
-    l_LenKeyVal int(10) inz(1);
-    l_AutoXtndYes char(1) inz('1');
-  End-ds;
 
   // inherited variables
   // héritage des types
@@ -168,7 +164,7 @@ Dcl-proc Sauv_obj_lot Export;
 
   // constants
   // constantes
-  dcl-c c_usr_sp_SAVOBJ const('SAVUSROBJ QTEMP     ');
+  dcl-c c_usr_sp_SAVOBJ const('USPSAVOBJ QTEMP     ');
 
   // main function
   // Procédure principale
@@ -177,7 +173,9 @@ Dcl-proc Sauv_obj_lot Export;
   *inlr = *on;
   monitor;
 
-  Init_sauvegarde();
+  Creat_user_space();
+
+  Init_keys_SAVOBJ();
 
   on-error;
     dump(a);
@@ -191,6 +189,8 @@ Dcl-proc Sauv_obj_lot Export;
 
   // endsr;
 
+  return ;
+END-PROC ;
 
 // --------------------------------------------------
 // Procedure name: Init_sauvegarde
@@ -201,11 +201,9 @@ Dcl-proc Sauv_obj_lot Export;
 //          Option de non sauvegarde des logiques
 // Returns:
 // --------------------------------------------------
-DCL-PROC Init_sauvegarde;
+DCL-PROC Creat_user_space;
 
-  Dcl-pi Init_sauvegarde End-pi;
-
-    // Pavé de création de SavObjSpc user space QTEMP/SAVLIST utilisé par l'API Save Objects
+  // Pavé de création de SavObjSpc user space QTEMP/SAVLIST utilisé par l'API Save Objects
   // List QSRSAVO
   // Vérification que le User space n'existe pas avec l'API Retrieve Pointer to User Space
   // QUSPTRUS
@@ -236,7 +234,7 @@ DCL-PROC Init_sauvegarde;
                        :0
                        :'1');
 
-    Chg_attrib_usr_space( l_biblio_retournee
+    Chg_attrib_usr_space( g_biblio_retournee
                          :c_Usr_sp_SAVOBJ
                          :DS_Usr_space_Attrs
                          :MyErrCode);
@@ -248,19 +246,40 @@ DCL-PROC Init_sauvegarde;
   other;
     // Serious problem, so report it
 
-    MsgTxt = 'Error accessing SavHdrPtr: ' +
+    MsgTxt = 'Erreur d''accès au user space ' + c_Usr_sp_SAVOBJ + ': ' +
              MyErrCode.MsgID;
     SndMsg('*DIAG' :'CPF9897'
            :MsgTxt :%len(%trimr(MsgTxt)));
     SndAPIMsg();
   endsl;
 
+  Return;
 
-  L2= bindec(9) inz(26);
-  K2 bindec(9) inz(2);
-  LP2 bindec(9) inz(14);
-  $Libs bindec(9) inz(1);
-  LibName char(10);
+END-PROC ;
+
+
+// --------------------------------------------------
+// Procedure name: Init_keys_SAVOBJ
+// Purpose:
+// Returns:
+// --------------------------------------------------
+DCL-PROC Init_keys_SAVOBJ ;
+
+  g_Nbr_post_cle_var=0;
+  //Le pointer Nbr_post_cle_ptr est positionné au début du pointer de SavObjUspPtr
+  // pour pouvoir modifier le nombre de clef au fur et à mesure des ajouts
+  Nbr_post_cle_ptr=SavObjUspPtr;
+  SavObjUspPtr += %Size(Ds_Nbr_post_cle_var);
+
+
+  g_Longueur_post_biblio=%Size(g_Longueur_post_biblio);
+  g_clef_bibliotheque=2;
+  g_Longueur_valeur_biblio=14;
+  g_Nombre_valeur_biblio=1;
+  g_nom_biblio='L' + %Editc(p_Num_lot:'X');
+
+  SavObjUspPtr+=%Size(DS_Biblio_define);
+  Nbr_post_cle_ptr+=1;
 
   // Device information.
   L3 bindec(9) inz(26);
@@ -276,4 +295,5 @@ DCL-PROC Init_sauvegarde;
   $Devs bindec(9) inz(1);
   DevName Char(20);
 
-END-PROC ;
+ End-proc;
+
