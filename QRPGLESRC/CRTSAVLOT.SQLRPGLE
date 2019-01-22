@@ -75,45 +75,56 @@ Dcl-proc Sauv_obj_lot Export;
   // structures de données locales
   // Indicateurs renommés avec Indara et INDDS
   // $Keys = the number of records that follow.
+  Dcl-s savobjuspptr Pointer;
+  dcl-ds savobjusp Based(savobjuspptr) End-ds;
 
-  dcl-ds UsrSpc;
+  // Nombres de clef utilisées dans l'API
+  Dcl-s Nbr_post_cle_ptr Pointer;
+  Dcl-ds Ds_Nbr_post_cle_var Based(Nbr_post_cle_ptr);
+    l_Nbr_post_cle_var Int(10:0) inz(5);
+  End-ds;
 
-    // $Keys = the number of records that follow.
-    $Keys bindec(9) inz(5);
+  // Library info record.
+  Dcl-s l_Biblio_define Pointer;
+  Dcl-ds DS_iblio_define Based(l_Biblio_define);
+    l_Longueur_post_biblio Int(10:0) inz(26);
+    l_clef_bibliotheque Int(10:0) inz(2);
+    l_Longueur_valeur_biblio Int(10:0) inz(14);
+    l_Nombre_valeur_biblio Int(10:0) inz(1);
+    l_nom_biblio char(10);
+  End_ds;
 
-    // Library info record.
-    L2 bindec(9) inz(26);
-    K2 bindec(9) inz(2);
-    LP2 bindec(9) inz(14);
-    $Libs bindec(9) inz(1);
-    LibName char(10);
+  // Device information.
+  Dcl-s l_Device_define Pointer;
+  Dcl-Ds Ds_Device_define Based(l_Device_define);
+    l_Longueur_post_device Int(10:0) inz(26);
+    l_Clef_device Int(10:0) inz(4);
+    l_Longueur_valeurs_device Int(10:0) inz(14);
+    l_Nombre_valeur_device Int(10:0) inz(1);
+    l_nom_device Char(10) Inz('*SAVF');
+  End-ds;
 
-    // Device information.
-    L3 bindec(9) inz(26);
-    K3 bindec(9) inz(4);
-    LP3 bindec(9) inz(14);
-    $Devs bindec(9) inz(1);
-    DevName Char(10) Inz('*SAVF');
-
-    // Device information.
-    L4 bindec(9) inz(36);
-    K4 bindec(9) inz(4);
-    LP4 bindec(9) inz(20);
-    $Devs bindec(9) inz(1);
-    DevName Char(20);
+    // SAVF information.
+  Dcl-s l_SAVF_define Pointer;
+  Dcl-Ds Ds_SAVF_define Based(l_SAVF_define);
+    l_Longueur_post_SAVF Int(10:0) inz(36);
+    l_Clef_SAVF Int(10:0) inz(4);
+    l_Longueur_valeurs_SAVF Int(10:0) inz(20);
+    l_Nombre_valeur_SAVF Int(10:0) inz(1);
+    l_Nom_SAVF Char(20);
+  End-ds;
 
     // Object info record (length not known).
-    L1 bindec(9);
-    K1 bindec(9) inz(1);
-    LP1 bindec(9);
-    $Objs bindec(9);
-    ObjArr char(20) dim(1600);
+  Dcl-s l_Objet_define Pointer;
+  Dcl-Ds DS_Objet_define Based(l_Objet_define);
+    l_Longueur_post_Objet Int(10:0);
+    l_Clef_Objet Int(10:0) inz(1);
+    l_Longueur_valeurs_Objet Int(10:0);
+    l_Nombre_valeur_Objet Int(10:0);
+    l_Nom_objet_qualifie char(20) dim(1600);
   end-ds;
 
-  Dcl-ds Device;
-    $Devs bindec(9) inz(1);
-    DevName Char(10) Inz('*SAVF');
-  END-DS;
+
   // inherited variables
   // héritage des types
   ///copy QINHLESRC,INH32766
@@ -127,7 +138,9 @@ Dcl-proc Sauv_obj_lot Export;
 
   // indicateur de fin de programme
   *inlr = *on;
-   monitor;
+  monitor;
+
+  Init_sauvegarde();
 
   on-error;
     dump(a);
@@ -143,18 +156,37 @@ Dcl-proc Sauv_obj_lot Export;
 
 
 // --------------------------------------------------
-// Procedure name: sous_proc1
-// Purpose:
+// Procedure name: Init_sauvegarde
+// Purpose: Initialisation des enregistrements de l'API QSRSAVO
+//          Bibliothèque à sauvegarder
+//          Device de sauvegarde (*SAVF)
+//          Emplacement de la SAVF
+//          Option de non sauvegarde des logiques
 // Returns:
 // --------------------------------------------------
-// DCL-PROC sous_proc1 ;
+DCL-PROC Init_sauvegarde;
 
-// dcl-pi sous_proc1 ind;
-//   donnees2 char(150);
-// end-pi;
-     // Données locales
-// DCL-S l_donnee1 like(r_ref6);
-     // Programmation
+  Dcl-pi Init_sauvegarde End-pi;
 
 
-// END-PROC ;
+  L2= bindec(9) inz(26);
+  K2 bindec(9) inz(2);
+  LP2 bindec(9) inz(14);
+  $Libs bindec(9) inz(1);
+  LibName char(10);
+
+  // Device information.
+  L3 bindec(9) inz(26);
+  K3 bindec(9) inz(4);
+  LP3 bindec(9) inz(14);
+  $Devs bindec(9) inz(1);
+  DevName Char(10) Inz('*SAVF');
+
+  // Device information.
+  L4 bindec(9) inz(36);
+  K4 bindec(9) inz(4);
+  LP4 bindec(9) inz(20);
+  $Devs bindec(9) inz(1);
+  DevName Char(20);
+
+END-PROC ;
