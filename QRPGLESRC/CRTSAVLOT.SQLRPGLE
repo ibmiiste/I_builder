@@ -15,6 +15,7 @@
 
 /Copy Qcpysrc,Prtbuilder
 
+// API de création de User Space
 Dcl-pr Creation_usr_space Extpgm('QUSCHGUS');
   UsrSpcName Char(20) Const;
   StartPos Int(10) Const;
@@ -23,6 +24,22 @@ Dcl-pr Creation_usr_space Extpgm('QUSCHGUS');
   Force2Aux Char(1);
   Error Like(ApiError);
 END-PR;
+
+// API de changement d'attributs d'un User Space
+Dcl-pr Chg_attrib_usr_space extpgm('QUSCUSAT');
+  *n char(10); // RtnUsrSpcLib
+  *n char(20) const; // QualUsrSpcN
+  *n char(1) const options(*varsize); // UsrSpcAttrs
+  *n likeds(qusec); // ErrCde
+End-pr;
+
+// Récupérer le pointer d'un User Space
+Dcl-pr Recup_Usr_Spc_Ptr extpgm('QUSPTRUS');
+  *n char(20) const; // QualUsrSpcN
+  *n pointer; // UsrSpcPtr
+  *n likeds(qusec) options(*nopass); // ErrCde
+end-pr;
+
 
 // Sauvegarde des objets
 Dcl-pr Sauve_objets Extpgm('QSRSAVO');
@@ -45,7 +62,9 @@ END-PR;
 
 // global variables
 // variables globales
-// dcl-s donnee3 like(r_ref3);
+
+// Nom bibliothèque retour
+Dcl-s l_biblio_retournee char(10);
 
 // Program status data structure
 // Data Structure d'information programme
@@ -124,6 +143,24 @@ Dcl-proc Sauv_obj_lot Export;
     l_Nom_objet_qualifie char(20) dim(1600);
   end-ds;
 
+  //-----------------------------------------------------
+  // API error code data structure
+  //-----------------------------------------------------
+  Dcl-ds MyErrCode;
+    BytesProv int(10) inz(%size(myerrcode));
+    BytesAvail int(10) inz(0);
+    MsgID char(7);
+    Reserved char(1);
+    MessageData char(1000);
+  End-ds;
+
+  // Activiation de l'attribut autoextensible du User space
+  Dcl-ds DS_Usr_space_Attrs qualified;
+    l_NbrAttrs int(10) inz(1);
+    l_AutoXtndKey int(10) inz(3);
+    l_LenKeyVal int(10) inz(1);
+    l_AutoXtndYes char(1) inz('1');
+  End-ds;
 
   // inherited variables
   // héritage des types
@@ -131,7 +168,7 @@ Dcl-proc Sauv_obj_lot Export;
 
   // constants
   // constantes
-  dcl-c cUsrSpcNam const('SAVUSROBJ QTEMP     ');
+  dcl-c c_usr_sp_SAVOBJ const('SAVUSROBJ QTEMP     ');
 
   // main function
   // Procédure principale
@@ -167,6 +204,56 @@ Dcl-proc Sauv_obj_lot Export;
 DCL-PROC Init_sauvegarde;
 
   Dcl-pi Init_sauvegarde End-pi;
+
+    // Pavé de création de SavObjSpc user space QTEMP/SAVLIST utilisé par l'API Save Objects
+  // List QSRSAVO
+  // Vérification que le User space n'existe pas avec l'API Retrieve Pointer to User Space
+  // QUSPTRUS
+  // S'il n'existe pas, il est créé avec l'API Create User Space (QUSCRTUS)
+  // Modification des attributs du User Space avec l'API Change User Space Attributes
+  // QUSCUSAT : Il est rendu autoextensible
+  // et récupére le pointeur du User space
+  Recup_Usr_Spc_Ptr( c_usr_sp_SAVOBJ
+                    :savobjuspptr
+                    :MyErrCode);
+
+  select;
+  when MyErrCode.BytesProv = 0;
+  // All is OK
+
+  when MyErrCode.MsgID = 'CPF9801';
+    // UsrSpc not found, so create it
+
+    Creation_usr_space( SavObjUspPtr
+                       :c_Usr_sp_SAVOBJ
+                       :4096
+                       :x'00'
+                       :'*ALL'
+                       :'Utilise par CRTSAVLOT'
+                       :'*YES'
+                       :MyErrCode
+                       :'*DEFAULT'
+                       :0
+                       :'1');
+
+    Chg_attrib_usr_space( l_biblio_retournee
+                         :c_Usr_sp_SAVOBJ
+                         :DS_Usr_space_Attrs
+                         :MyErrCode);
+
+    Recup_Usr_Spc_Ptr( c_Usr_sp_SAVOBJ
+                      :SavObjUspPtr
+                      :MyErrCode);
+
+  other;
+    // Serious problem, so report it
+
+    MsgTxt = 'Error accessing SavHdrPtr: ' +
+             MyErrCode.MsgID;
+    SndMsg('*DIAG' :'CPF9897'
+           :MsgTxt :%len(%trimr(MsgTxt)));
+    SndAPIMsg();
+  endsl;
 
 
   L2= bindec(9) inz(26);
