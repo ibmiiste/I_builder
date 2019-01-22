@@ -322,7 +322,7 @@
              // La saisie ne correspond à rien
              g_Traitement_option = *OFF;
              // Envoyer un message pour dire que l'option n'existe pas
-             PTYP = '1';
+             PTYP = '5';
              PFIM = 'BUILDMSGF';
              PMID = 'MSG0002';
              Gestion_message( PTYP
