@@ -269,32 +269,45 @@ DCL-PROC Init_keys_SAVOBJ ;
   //Le pointer Nbr_post_cle_ptr est positionné au début du pointer de SavObjUspPtr
   // pour pouvoir modifier le nombre de clef au fur et à mesure des ajouts
   Nbr_post_cle_ptr=SavObjUspPtr;
+  // On déplace le pointeur de la taille de Ds_Nbr_post_cle_var pour écrire à la suite
   SavObjUspPtr += %Size(Ds_Nbr_post_cle_var);
 
+  // On place le pointeur g_Biblio_define au même emplacement que SavObjUspPtr
   g_Biblio_define=SavObjUspPtr;
+  // On alimente la DS g_Longueur_post_biblio qui se place à l'emplacement indiqué par le pointeur
+  // g_Biblio_define dans le Usr Space
+  // Information bibliothèque
   g_Longueur_post_biblio=%Size(DS_Biblio_define);
   g_clef_bibliotheque=2;
   g_Longueur_valeur_biblio=14;
   g_Nombre_valeur_biblio=1;
   g_nom_biblio='L' + %Editc(p_Num_lot:'X');
 
+  // On déplace le pointeur de la taille de la DS alimentée précédemment
   SavObjUspPtr+=%Size(DS_Biblio_define);
   Nbr_post_cle_ptr+=1;
 
   // Device information.
+  g_Device_define=SavObjUspPtr;
+  g_Longueur_post_device=%Size(Ds_Device_define);
+  g_Clef_device=3;
+  g_Longueur_valeurs_device=14;
+  g_Nombre_valeur_device=1;
+  g_nom_device='*SAVF';
 
-  L3 bindec(9) inz(26);
-  K3 bindec(9) inz(4);
-  LP3 bindec(9) inz(14);
-  $Devs bindec(9) inz(1);
-  DevName Char(10) Inz('*SAVF');
+  SavObjUspPtr+=%Size(Ds_Device_define);
+  Nbr_post_cle_ptr+=1;
 
-  // Device information.
-  L4 bindec(9) inz(36);
-  K4 bindec(9) inz(4);
-  LP4 bindec(9) inz(20);
-  $Devs bindec(9) inz(1);
-  DevName Char(20);
+    // SAVF information.
+  g_SAVF_define=SavObjUspPtr;
+  g_Longueur_post_SAVF=%Size(Ds_SAVF_define);
+  g_Clef_SAVF=4;
+  g_Longueur_valeurs_SAVF=20;
+  g_Nombre_valeur_SAVF=1;
+  g_Nom_SAVF='S' + %Editc(p_Num_lot:'X') + 'L' + %Editc(p_Num_lot:'X');
 
- End-proc;
+  SavObjUspPtr+=%Size(Ds_SAVF_define);
+  Nbr_post_cle_ptr+=1;
+
+End-proc;
 
