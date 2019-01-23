@@ -271,8 +271,8 @@ DCL-PROC Init_keys_SAVOBJ ;
   Nbr_post_cle_ptr=SavObjUspPtr;
   SavObjUspPtr += %Size(Ds_Nbr_post_cle_var);
 
-
-  g_Longueur_post_biblio=%Size(g_Longueur_post_biblio);
+  g_Biblio_define=SavObjUspPtr;
+  g_Longueur_post_biblio=%Size(DS_Biblio_define);
   g_clef_bibliotheque=2;
   g_Longueur_valeur_biblio=14;
   g_Nombre_valeur_biblio=1;
@@ -282,6 +282,7 @@ DCL-PROC Init_keys_SAVOBJ ;
   Nbr_post_cle_ptr+=1;
 
   // Device information.
+
   L3 bindec(9) inz(26);
   K3 bindec(9) inz(4);
   LP3 bindec(9) inz(14);
