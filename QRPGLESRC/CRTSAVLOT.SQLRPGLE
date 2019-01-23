@@ -77,21 +77,31 @@ End_ds;
 // Device information.
 Dcl-s g_Device_define Pointer;
 Dcl-Ds Ds_Device_define Based(g_Device_define);
-  g_Longueur_post_device Int(10:0) inz(26);
-  g_Clef_device Int(10:0) inz(4);
-  g_Longueur_valeurs_device Int(10:0) inz(14);
-  g_Nombre_valeur_device Int(10:0) inz(1);
-  g_nom_device Char(10) Inz('*SAVF');
+  g_Longueur_post_device Int(10:0);
+  g_Clef_device Int(10:0);
+  g_Longueur_valeurs_device Int(10:0);
+  g_Nombre_valeur_device Int(10:0);
+  g_nom_device Char(10);
 End-ds;
 
 // SAVF information.
 Dcl-s g_SAVF_define Pointer;
 Dcl-Ds Ds_SAVF_define Based(g_SAVF_define);
-  g_Longueur_post_SAVF Int(10:0) inz(36);
-  g_Clef_SAVF Int(10:0) inz(4);
-  g_Longueur_valeurs_SAVF Int(10:0) inz(20);
-  g_Nombre_valeur_SAVF Int(10:0) inz(1);
+  g_Longueur_post_SAVF Int(10:0);
+  g_Clef_SAVF Int(10:0);
+  g_Longueur_valeurs_SAVF Int(10:0);
+  g_Nombre_valeur_SAVF Int(10:0);
   g_Nom_SAVF Char(20);
+End-ds;
+
+// Chemin d'accès information.
+Dcl-s g_Access_Path_define Pointer;
+Dcl-Ds Ds_Access_Path_define Based(g_Access_Path_define);
+  g_Longueur_post_Access_Path Int(10:0) inz(36);
+  g_Clef_Access_Path Int(10:0) inz(4);
+  g_Longueur_valeurs_Access_Path Int(10:0) inz(20);
+  g_Nombre_valeur_Access_Path Int(10:0) inz(1);
+  g_valeur_Access_Path Char(1);
 End-ds;
 
 // Object info record (length not known).
@@ -173,9 +183,20 @@ Dcl-proc Sauv_obj_lot Export;
   *inlr = *on;
   monitor;
 
+  // Sous-procédure de création du User Space utilisé par l'API QSRSAVO
   Creat_user_space();
 
+  // Alimenation du User Space USPSAVOBJ avec les clefs 2, 3, 4 et 18
+  // Cela définit la bibliothèque des objets à sauvegarder
+  //              Le support de sauvegarde
+  //              Le SAVF utilisé comme support
+  //              l'option de ne pas sauvegarder les accès liés à des physiques présents dans la
+  //              liste d'objets à sauvegarder
   Init_keys_SAVOBJ();
+
+  // Alimentation du user space USPSAVOBJ avec la clef 1 et les objets à sauvegarder
+
+  Sauve_obj();
 
   on-error;
     dump(a);
@@ -298,7 +319,7 @@ DCL-PROC Init_keys_SAVOBJ ;
   SavObjUspPtr+=%Size(Ds_Device_define);
   Nbr_post_cle_ptr+=1;
 
-    // SAVF information.
+  // SAVF information.
   g_SAVF_define=SavObjUspPtr;
   g_Longueur_post_SAVF=%Size(Ds_SAVF_define);
   g_Clef_SAVF=4;
@@ -309,5 +330,15 @@ DCL-PROC Init_keys_SAVOBJ ;
   SavObjUspPtr+=%Size(Ds_SAVF_define);
   Nbr_post_cle_ptr+=1;
 
+  // Save access paths information.
+  g_Access_Path_define=SavObjUspPtr;
+  g_Longueur_post_Access_Path=%Size(Ds_Access_Path_define);
+  g_Clef_Access_Path_=18;
+  g_Longueur_valeurs_Access_Path=1;
+  g_Nombre_valeur_Access_Path=1;
+  g_Flag_Access_Path_='0';
+
+  SavObjUspPtr+=%Size(Ds_Access_Path_define);
+  Nbr_post_cle_ptr+=1;
 End-proc;
 
