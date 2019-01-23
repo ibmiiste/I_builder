@@ -51,6 +51,9 @@ END-PR;
 // Internal subprocedures prototypes globales
 // Prototype sous-procédures internes globales
 
+// inherited variables
+// héritage des types
+/copy Qcpysrc,INHBuilder
 
 // Global data-structures
 // Structures de données globales
@@ -104,15 +107,21 @@ Dcl-Ds Ds_Access_Path_define Based(g_Access_Path_define);
   g_valeur_Access_Path Char(1);
 End-ds;
 
-// Object info record (length not known).
+// Entête Object info record (length not known).
 Dcl-s g_Objet_define Pointer;
 Dcl-Ds DS_Objet_define Based(g_Objet_define);
   g_Longueur_post_Objet Int(10:0);
   g_Clef_Objet Int(10:0) inz(1);
   g_Longueur_valeurs_Objet Int(10:0);
   g_Nombre_valeur_Objet Int(10:0);
-  g_Nom_objet_qualifie char(20) dim(1600);
-end-ds;
+End-ds;
+
+// Description des objets à sauvegarder
+Dcl-s g_Objet_desc Pointer;
+Dcl-ds DS_Object_Desc Based(g_Objet_desc);
+  g_Nom_objet Like(r_Nom_obj_IBMi);
+  g_Type_objet Like(r_Typobj);
+End-ds;
 
 //-----------------------------------------------------
 // API error code data structure
@@ -142,14 +151,14 @@ Dcl-s g_biblio_retournee char(10);
 
 // Program status data structure
 // Data Structure d'information programme
-///copy qcpysrc,psds
+/copy qcpysrc,psds
 
 // Définition de l'Interface de la procédure
 // Paramètres d'appel
 // Procedure-Interface definition
 Dcl-proc Sauv_obj_lot Export;
   Dcl-pi Sauv_obj_lot;
-    p_Num_lot Packed(9:0);
+    p_Num_lot Like(r_Num_lot);
   END-PI;
 
   // local functions prototypes
@@ -168,10 +177,6 @@ Dcl-proc Sauv_obj_lot Export;
   // structures de données locales
 
 
-  // inherited variables
-  // héritage des types
-  ///copy QINHLESRC,INH32766
-
   // constants
   // constantes
   dcl-c c_usr_sp_SAVOBJ const('USPSAVOBJ QTEMP     ');
@@ -183,20 +188,20 @@ Dcl-proc Sauv_obj_lot Export;
   *inlr = *on;
   monitor;
 
-  // Sous-procédure de création du User Space utilisé par l'API QSRSAVO
-  Creat_user_space();
+    // Sous-procédure de création du User Space utilisé par l'API QSRSAVO
+    Creat_user_space();
 
-  // Alimenation du User Space USPSAVOBJ avec les clefs 2, 3, 4 et 18
-  // Cela définit la bibliothèque des objets à sauvegarder
-  //              Le support de sauvegarde
-  //              Le SAVF utilisé comme support
-  //              l'option de ne pas sauvegarder les accès liés à des physiques présents dans la
-  //              liste d'objets à sauvegarder
-  Init_keys_SAVOBJ();
+    // Alimentation du User Space USPSAVOBJ avec les clefs 2, 3, 4 et 18
+    // Cela définit la bibliothèque des objets à sauvegarder
+    //              Le support de sauvegarde
+    //              Le SAVF utilisé comme support
+    //              l'option de ne pas sauvegarder les accès liés à des physiques présents dans la
+    //              liste d'objets à sauvegarder
+    Init_keys_SAVOBJ();
 
-  // Alimentation du user space USPSAVOBJ avec la clef 1 et les objets à sauvegarder
+    // Alimentation du user space USPSAVOBJ avec la clef 1 et les objets à sauvegarder
 
-  Sauve_obj();
+    Ajout_clef_obj_sauv();
 
   on-error;
     dump(a);
@@ -341,4 +346,69 @@ DCL-PROC Init_keys_SAVOBJ ;
   SavObjUspPtr+=%Size(Ds_Access_Path_define);
   Nbr_post_cle_ptr+=1;
 End-proc;
+
+
+// --------------------------------------------------
+// Procedure name: Ajout_clef_obj_sauv
+// Purpose:        Ajouter la clef listant les objets à sauvegarder da...
+//                          ns le User Space utilisé par l'API QSRSAVO
+// Returns:
+// --------------------------------------------------
+DCL-PROC Ajout_clef_obj_sauv ;
+  Dcl-pi Ajout_clef_obj_sauv;
+    p_Num_lot like(r_Numlot);
+  END-PI;
+  Dcl-s L_Objdst Like(r_Nom_obj_IBMi);
+  Dcl-s L_Typobj Like(r_TypObj);
+
+  EXEC SQL
+    CLOSE Csr_Obj_Sav;
+
+  EXEC SQL
+    DECLARE Csr_Obj_Sav CURSOR FOR
+      SELECT Objet_Destination,
+             Type_Objet
+        FROM List_Objet_Build
+        WHERE Lot_Number = :L_Num_Lot
+        ORDER BY Ordre;
+
+  EXEC SQL
+    OPEN Csr_Obj_Sav;
+
+  // Lecture des objets du lot à livrer
+  EXEC SQL
+    FETCH List_Obj INTO :L_Objdst, :L_Typobj;
+
+  // Alimentation du User Space avec l'entête de la partie clef=1 définition objet
+  g_Objet_define=SavObjUspPtr;
+  g_Clef_Objet=1;
+  g_Nombre_valeur_Objet=0;
+
+  // Ajout de 1 au nombre de clef
+  Nbr_post_cle_ptr+=1;
+  // On déplace le pointeur de la longueur de la DS d'entête de la clef 1
+  SavObjUspPtr += %Size(DS_Objet_define);
+  // On place le pointeur de description d'objet sur le pointeur du user space de sauvegarde
+  g_Objet_desc=SavObjUspPtr;
+  Dow Sqlcode=c_Trouve;
+    // Save access paths information.
+
+
+    g_Nom_objet=L_Objdst;
+    g_Type_objet=L_Typobj;
+    g_Nombre_valeur_Objet+=1;
+
+    g_Objet_desc+=%Size(DS_Object_Desc);
+
+
+    EXEC SQL
+      FETCH List_Obj INTO :L_Objdst, :L_Typobj;
+  Enddo;
+
+  g_Longueur_valeurs_Objet=g_Nombre_valeur_Objet*20;
+
+  g_Longueur_post_Objet=%Size(DS_Objet_define)+g_Longueur_valeurs_Objet;
+
+  return ;
+END-PROC ;
 
