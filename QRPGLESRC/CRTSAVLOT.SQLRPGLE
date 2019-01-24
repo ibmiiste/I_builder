@@ -15,28 +15,33 @@
         /Copy Qcpysrc,Prtbuilder
 
         // API de création de User Space
-        Dcl-pr Creation_usr_space Extpgm('QUSCHGUS');
-          UsrSpcName Char(20) Const;
-          StartPos Int(10) Const;
-          LenUsrSpc Int(10) Const;
-          UsrSpc Char(1000000) Const Options(*VarSize);
-          Force2Aux Char(1);
-          Error Like(ApiError);
-        END-PR;
+        Dcl-pr Creation_usr_space extpgm('QUSCRTUS');
+          *n char(20) const; // QualUsrSpcN
+          *n char(10) const; // XAttr
+          *n int(10) const; // IntSize
+          *n char(1) const; // IntValue
+          *n char(10) const; // PubAut
+          *n char(50) const; // TxtDesc
+          *n char(10) const options(*nopass); // ReplaceOpt
+          *n likeds(ApiError) options(*nopass); // ErrCde
+          *n char(10) const options(*nopass); // Domain
+          *n int(10) const options(*nopass); // TfrSize
+          *n char(1) const options(*nopass); // OptSpcAlgn
+        End-pr;
 
         // API de changement d'attributs d'un User Space
         Dcl-pr Chg_attrib_usr_space extpgm('QUSCUSAT');
           *n char(10); // RtnUsrSpcLib
           *n char(20) const; // QualUsrSpcN
           *n char(1) const options(*varsize); // UsrSpcAttrs
-          *n likeds(qusec); // ErrCde
+          *n likeds(ApiError); // ErrCde
         End-pr;
 
         // Récupérer le pointer d'un User Space
         Dcl-pr Recup_Usr_Spc_Ptr extpgm('QUSPTRUS');
           *n char(20) const; // QualUsrSpcN
           *n pointer; // UsrSpcPtr
-          *n likeds(qusec) options(*nopass); // ErrCde
+          *n likeds(ApiError) options(*nopass); // ErrCde
         end-pr;
 
 
@@ -46,9 +51,37 @@
           Error Like(ApiError);
         END-PR;
 
+        Dcl-pr SndPgmMsg extpgm('QMHSNDPM');
+          *n char(7) const; // MsgID
+          *n char(20) const; // QualMsgF
+          *n char(256) const options(*varsize); // MsgDta
+          *n int(10) const; // LenMsgDta
+          *n char(10) const; // MsgType
+          *n char(10) const; // CSE
+          *n int(10) const; // CSECtr
+          *n char(4); // MsgKey
+          *n likeds(qusec); // ErrCde
+          *n int(10) const options(*nopass); // LenCSE
+          *n char(20) const options(*nopass); // CSEQual
+          *n int(10) const options(*nopass); // DspWait
+          *n char(10) const options(*nopass); // CSEType
+          *n int(10) const options(*nopass); // CCSID
+        End-pr;
+
 
         // Internal subprocedures prototypes globales
         // Prototype sous-procédures internes globales
+        Dcl-pr SndMsg;
+            MsgType char(10) const;
+            MsgID char(7) const;
+            MsgDta char(256) const options(*varsize);
+            LenMsgDta int(10) const;
+        End-pr;
+
+        Dcl-pr Init_keys_SAVOBJ;
+            p_Num_lot like(r_Num_lot);
+        END-Pr;
+
 
         // inherited variables
         // héritage des types
@@ -74,7 +107,7 @@
           g_Longueur_valeur_biblio Int(10:0);
           g_Nombre_valeur_biblio Int(10:0);
           g_nom_biblio char(10);
-        End_ds;
+        End-ds;
 
         // Device information.
         Dcl-s g_Device_define Pointer;
@@ -99,10 +132,10 @@
         // Chemin d'accès information.
         Dcl-s g_Access_Path_define Pointer;
         Dcl-Ds Ds_Access_Path_define Based(g_Access_Path_define);
-          g_Longueur_post_Access_Path Int(10:0) inz(36);
-          g_Clef_Access_Path Int(10:0) inz(4);
-          g_Longueur_valeurs_Access_Path Int(10:0) inz(20);
-          g_Nombre_valeur_Access_Path Int(10:0) inz(1);
+          g_Longueur_post_Access_Path Int(10:0);
+          g_Clef_Access_Path Int(10:0);
+          g_Longueur_valeurs_Access_Path Int(10:0);
+          g_Nombre_valeur_Access_Path Int(10:0);
           g_valeur_Access_Path Char(1);
         End-ds;
 
@@ -110,7 +143,7 @@
         Dcl-s g_Objet_define Pointer;
         Dcl-Ds DS_Objet_define Based(g_Objet_define);
           g_Longueur_post_Objet Int(10:0);
-          g_Clef_Objet Int(10:0) inz(1);
+          g_Clef_Objet Int(10:0);
           g_Longueur_valeurs_Objet Int(10:0);
           g_Nombre_valeur_Objet Int(10:0);
         End-ds;
@@ -130,7 +163,7 @@
           BytesAvail int(10) inz(0);
           MsgID char(7);
           Reserved char(1);
-          MessageData char(1000);
+          MessageData char(32767);
         End-ds;
 
         // Activiation de l'attribut autoextensible du User space
@@ -148,9 +181,16 @@
         // Nom bibliothèque retour
         Dcl-s g_biblio_retournee char(10);
 
+        Dcl-s g_MsgTxt char(256);
+
         // Program status data structure
         // Data Structure d'information programme
         /copy qcpysrc,psds
+
+        // constants
+        // constantes
+        Dcl-c c_usr_sp_SAVOBJ 'USPSAVOBJ QTEMP     ';
+        Dcl-c c_Trouve 100;
 
         // Définition de l'Interface de la procédure
         // Paramètres d'appel
@@ -176,15 +216,10 @@
           // structures de données locales
 
 
-          // constants
-          // constantes
-          dcl-c c_usr_sp_SAVOBJ const('USPSAVOBJ QTEMP     ');
-
           // main function
           // Procédure principale
 
-          // indicateur de fin de programme
-          *inlr = *on;
+
           monitor;
 
             // Sous-procédure de création du User Space utilisé par l'API QSRSAVO
@@ -200,7 +235,7 @@
 
             // Alimentation du user space USPSAVOBJ avec la clef 1 et les objets à sauvegarder
 
-            Ajout_clef_obj_sauv();
+            Ajout_clef_obj_sauv(p_Num_lot);
 
           on-error;
             dump(a);
@@ -247,8 +282,8 @@
           when MyErrCode.MsgID = 'CPF9801';
             // UsrSpc not found, so create it
 
-            Creation_usr_space( SavObjUspPtr
-                               :c_Usr_sp_SAVOBJ
+            Creation_usr_space( c_Usr_sp_SAVOBJ
+                               :SavObjUspPtr
                                :4096
                                :x'00'
                                :'*ALL'
@@ -271,10 +306,10 @@
           other;
             // Serious problem, so report it
 
-            MsgTxt = 'Erreur d''accès au user space ' + c_Usr_sp_SAVOBJ + ': ' +
+            g_MsgTxt = 'Erreur d''accès au user space ' + c_Usr_sp_SAVOBJ + ': ' +
                      MyErrCode.MsgID;
             SndMsg('*DIAG' :'CPF9897'
-                   :MsgTxt :%len(%trimr(MsgTxt)));
+                   :g_MsgTxt :%len(%trimr(g_MsgTxt)));
             SndAPIMsg();
           endsl;
 
@@ -288,7 +323,14 @@
         // Purpose:
         // Returns:
         // --------------------------------------------------
-        DCL-PROC Init_keys_SAVOBJ ;
+        DCL-PROC Init_keys_SAVOBJ;
+          Dcl-pi Init_keys_SAVOBJ;
+            p_Num_lot like(r_Num_lot);
+          END-PI;
+
+          Dcl-s l_Num_lot like(r_Num_lot);
+
+          l_Num_lot=p_Num_lot;
 
           g_Nbr_post_cle_var=0;
           //Le pointer Nbr_post_cle_ptr est positionné au début du pointer de SavObjUspPtr
@@ -306,7 +348,7 @@
           g_clef_bibliotheque=2;
           g_Longueur_valeur_biblio=14;
           g_Nombre_valeur_biblio=1;
-          g_nom_biblio='L' + %Editc(p_Num_lot:'X');
+          g_nom_biblio='L' + %Editc(l_Num_lot:'X');
 
           // On déplace le pointeur de la taille de la DS alimentée précédemment
           SavObjUspPtr+=%Size(DS_Biblio_define);
@@ -337,10 +379,10 @@
           // Save access paths information.
           g_Access_Path_define=SavObjUspPtr;
           g_Longueur_post_Access_Path=%Size(Ds_Access_Path_define);
-          g_Clef_Access_Path_=18;
+          g_Clef_Access_Path=18;
           g_Longueur_valeurs_Access_Path=1;
           g_Nombre_valeur_Access_Path=1;
-          g_Flag_Access_Path_='0';
+          g_valeur_Access_Path='0';
 
           SavObjUspPtr+=%Size(Ds_Access_Path_define);
           Nbr_post_cle_ptr+=1;
@@ -355,12 +397,14 @@
         // --------------------------------------------------
         DCL-PROC Ajout_clef_obj_sauv ;
           Dcl-pi Ajout_clef_obj_sauv;
-            p_Num_lot like(r_Numlot);
+            p_Num_lot like(r_Num_lot);
           END-PI;
 
           Dcl-s l_Objdst Like(r_Nom_obj_IBMi);
           Dcl-s l_Typobj Like(r_TypObj);
-          Dcl-s l_Num_lot like(r_Numlot);
+          Dcl-s l_Num_lot like(r_Num_lot);
+
+          l_Num_lot=p_Num_lot;
 
           EXEC SQL
             CLOSE Csr_Obj_Sav;
@@ -413,3 +457,37 @@
           return ;
         END-PROC ;
 
+        Dcl-proc SndMsg;
+          Dcl-pi SndMsg;
+            MsgType char(10) const;
+            MsgID char(7) const;
+            MsgDta char(256) const options(*varsize);
+            LenMsgDta int(10) const;
+          End-pi;
+
+          Dcl-s l_MsgKey char(4);
+
+          SndPgmMsg(MsgID :'QCPFMSG   *LIBL' :MsgDta :LenMsgDta
+                   :MsgType :'*PGMBDY' :1 :l_MsgKey :QUSEC);
+        End-proc;
+
+
+        Dcl-proc SndAPIMsg;
+          Dcl-pi SndAPIMsg end-pi;
+
+          Dcl-s LenMsgDta int(10);
+          Dcl-s l_MsgKey char(4);
+
+          Select;
+          When MyErrCode.BytesAvail <= 16;
+             LenMsgDta = 0;
+          When MyErrCode.BytesAvail > %size(MyErrCode);
+             LenMsgDta = %size(MyErrCode.MessageData);
+          Other;
+             LenMsgDta = MyErrCode.BytesAvail - %size(MyErrCode);
+          Endsl;
+
+          SndPgmMsg( MyErrCode.MsgID :'QCPFMSG   *LIBL'
+                    :MyErrCode.MessageData :LenMsgDta
+                    :'*ESCAPE' :'*PGMBDY' :1 :l_MsgKey :QUSEC);
+        End-proc;
