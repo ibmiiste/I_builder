@@ -165,11 +165,11 @@
 
       // Prototype retour erreur API
        Dcl-ds ApiError qualified;
-         ErrLen int(10) inz(%len(ApiError));  // Bytes provided
-         ErrRtn int(10);                // Bytes available
-         ErrId char(7);                 // Exception ID
-         Filler char(1);                // Reserved  data
-         ErrData char(32767);           //  Exception data
+         BytesProv int(10) inz(%len(ApiError));  // Bytes provided
+         BytesAvail int(10);                     // Bytes available
+         MsgID char(7);                          // Exception ID
+         Reserved char(1);                       // Reserved  data
+         MessageData char(32767);                //  Exception data
        end-ds;
 
 
