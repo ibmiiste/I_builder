@@ -60,7 +60,7 @@
           *n char(10) const; // CSE
           *n int(10) const; // CSECtr
           *n char(4); // MsgKey
-          *n likeds(qusec); // ErrCde
+          *n likeds(ApiError); // ErrCde
           *n int(10) const options(*nopass); // LenCSE
           *n char(20) const options(*nopass); // CSEQual
           *n int(10) const options(*nopass); // DspWait
@@ -90,13 +90,15 @@
         // Global data-structures
         // Structures de données globales
         Dcl-s savobjuspptr Pointer;
-        dcl-ds savobjusp Based(savobjuspptr) End-ds;
+        dcl-ds savobjusp Based(savobjuspptr);
+          User_Space Char(32766);
+        End-ds;
 
 
         // Nombres de clef utilisées dans l'API
         Dcl-s Nbr_post_cle_ptr Pointer;
         Dcl-ds Ds_Nbr_post_cle_var Based(Nbr_post_cle_ptr);
-          g_Nbr_post_cle_var Int(10:0) inz(5);
+          g_Nbr_post_cle_var Int(10:0);
         End-ds;
 
         // Library info record.
@@ -158,13 +160,7 @@
         //-----------------------------------------------------
         // API error code data structure
         //-----------------------------------------------------
-        Dcl-ds MyErrCode;
-          BytesProv int(10) inz(%size(myerrcode));
-          BytesAvail int(10) inz(0);
-          MsgID char(7);
-          Reserved char(1);
-          MessageData char(32767);
-        End-ds;
+        Dcl-ds MyErrCode Likeds(ApiError);
 
         // Activiation de l'attribut autoextensible du User space
         Dcl-ds DS_Usr_space_Attrs qualified;
@@ -231,7 +227,7 @@
             //              Le SAVF utilisé comme support
             //              l'option de ne pas sauvegarder les accès liés à des physiques présents
             //              dans la liste d'objets à sauvegarder
-            Init_keys_SAVOBJ();
+            Init_keys_SAVOBJ(p_Num_lot);
 
             // Alimentation du user space USPSAVOBJ avec la clef 1 et les objets à sauvegarder
 
@@ -283,7 +279,7 @@
             // UsrSpc not found, so create it
 
             Creation_usr_space( c_Usr_sp_SAVOBJ
-                               :SavObjUspPtr
+                               :'ListObjLot'
                                :4096
                                :x'00'
                                :'*ALL'
@@ -306,8 +302,9 @@
           other;
             // Serious problem, so report it
 
-            g_MsgTxt = 'Erreur d''accès au user space ' + c_Usr_sp_SAVOBJ + ': ' +
-                     MyErrCode.MsgID;
+            g_MsgTxt = 'Erreur d''accès au user space ' + c_Usr_sp_SAVOBJ +
+                        ': ' + MyErrCode.MsgID;
+
             SndMsg('*DIAG' :'CPF9897'
                    :g_MsgTxt :%len(%trimr(g_MsgTxt)));
             SndAPIMsg();
@@ -467,8 +464,15 @@
 
           Dcl-s l_MsgKey char(4);
 
-          SndPgmMsg(MsgID :'QCPFMSG   *LIBL' :MsgDta :LenMsgDta
-                   :MsgType :'*PGMBDY' :1 :l_MsgKey :QUSEC);
+          SndPgmMsg( MsgID
+                    :'QCPFMSG   *LIBL'
+                    :MsgDta
+                    :LenMsgDta
+                    :MsgType
+                    :'*PGMBDY'
+                    :1
+                    :l_MsgKey
+                    :MyErrCode);
         End-proc;
 
 
@@ -489,5 +493,5 @@
 
           SndPgmMsg( MyErrCode.MsgID :'QCPFMSG   *LIBL'
                     :MyErrCode.MessageData :LenMsgDta
-                    :'*ESCAPE' :'*PGMBDY' :1 :l_MsgKey :QUSEC);
+                    :'*ESCAPE' :'*PGMBDY' :1 :l_MsgKey :MyErrCode);
         End-proc;
