@@ -9,6 +9,7 @@
       *     >>PARM<<  CLOSQLCSR(*ENDACTGRP);                          */
       *     >>PARM<<  DATFMT(*ISO);                                   */
       *     >>PARM<<  TIMFMT(*ISO);                                   */
+      *     >>PARM<<  DBGVIEW(*SOURCE);                               */
       *     >>PARM<<  COMPILEOPT(&U0);                                */
       *   >>END-IMPORTANT<<                                           */
       *   >>EXECUTE<<                                                 */
