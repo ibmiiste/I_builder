@@ -33,6 +33,7 @@
      A            ZORDRE         6Y 0B  8  5
      A                                      EDTCDE(Z)
      A            ZTYPOBJ       10   B  8 34
+     A            HNUMOBJBLD     9S 0H
      A          R FORE1                     SFLCTL(SFL01)
      A                                      RTNCSRLOC(&WLICSR &WZOCSR &WPRCSR)
      A                                      OVERLAY

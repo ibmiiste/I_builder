@@ -21,7 +21,6 @@
      A  08                                  SFLNXTCHG
      A            ZOPT           2   B  8  2
      A  20                                  DSPATR(PR)
-     A            HROWIDLOTS    45   H
      A            HTOUT          1   H
      A            HNREC         10  0H
      A            ZNUMLOT   R        O  8  6REFFLD(LOTSF/NUMLOT *LIBL/LOTS)

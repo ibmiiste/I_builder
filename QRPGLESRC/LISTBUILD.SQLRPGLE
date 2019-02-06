@@ -101,8 +101,6 @@
        dcl-s g_alimsfl ind;
        dcl-s g_filtre ind;
 
-       dcl-s g_ROWID_BUILD char(40) dim(9999);
-       dcl-s g_ROWID_BUILDW sqltype(rowid);
 
        // Redéfinission des touches de fonction
        Dcl-S Construction ind Based(P_INKI);
@@ -198,6 +196,9 @@
         Entry_Text char(50) pos(90)
                    Inz('                                                  ');
        end-ds;
+
+       // La DS de la table LIST_OBJET_BUILD
+       Dcl-ds Ds_LIST_OBJET_BUILD Extname('LSTOBJBLD') Qualified End-ds;
 
        // Paramètre d'appel de XREF
        Dcl-s ParmEntry char(150);
@@ -417,27 +418,28 @@
          sfldspctl = *on;
          EXEC SQL CLOSE list_obj;
          // positionnement en début de fichier
-         EXEC SQL DECLARE list_obj CURSOR FOR
-                    SELECT rowid_build,
-                           lot_number,
-                           ordre,
-                           bibliotheque_source,
-                           fichier_source,
-                           membre_source,
-                           bibliotheque_destination,
-                           objet_destination,
-                           type_objet
-                      FROM list_objet_build
-                     WHERE lot_number=:p_num_lot
-                  ORDER BY ordre DESC;
+         EXEC SQL
+           DECLARE List_Obj CURSOR FOR
+             SELECT Obj_Number,
+                    Lot_Number,
+                    Ordre,
+                    Bibliotheque_Source,
+                    Fichier_Source,
+                    Membre_Source,
+                    Bibliotheque_Destination,
+                    Objet_Destination,
+                    Type_Objet
+               FROM List_Objet_Build
+               WHERE Lot_Number = :P_Num_Lot
+               ORDER BY Ordre DESC;
 
          exec sql open list_obj;
          // chargement de la première page
          // lecture de l'enregistrement suivant
          EXEC SQL
-           FETCH list_obj
-             INTO :g_rowid_buildw, :hlot_numbe, :zordre, :zbibsrc, :zficsrc,
-               :zmbrsrc, :zbibdst, :zobjdst, :ztypobj;
+           FETCH List_Obj
+             INTO :Hnumobjbld, :Hlot_Numbe, :Zordre, :Zbibsrc, :Zficsrc,
+               :Zmbrsrc, :Zbibdst, :Zobjdst, :Ztypobj;
          exsr chgpag;
        endsr;
        // traitement des options, on ne lit que les enregistrements modifiés
@@ -475,24 +477,24 @@
            Else;
 
              EXEC SQL
-               INSERT INTO list_objet_build(rowid_build,
-                                            lot_number,
-                                            ordre,
-                                            bibliotheque_source,
-                                            fichier_source,
-                                            membre_source,
-                                            bibliotheque_destination,
-                                            objet_destination,
-                                            type_objet)
+               INSERT INTO List_Objet_Build(Numobjbld,
+                                            Lot_Number,
+                                            Ordre,
+                                            Bibliotheque_Source,
+                                            Fichier_Source,
+                                            Membre_Source,
+                                            Bibliotheque_Destination,
+                                            Objet_Destination,
+                                            Type_Objet)
                  VALUES (DEFAULT,
-                         :p_num_lot,
-                         :zordrec,
-                         :zbibsrcc,
-                         :zficsrcc,
-                         :zmbrsrcc,
-                         :zbibdstc,
-                         :zobjdstc,
-                         :ztypobjc);
+                         :P_Num_Lot,
+                         :Zordrec,
+                         :Zbibsrcc,
+                         :Zficsrcc,
+                         :Zmbrsrcc,
+                         :Zbibdstc,
+                         :Zobjdstc,
+                         :Ztypobjc);
 
            EndIf;
 
@@ -516,25 +518,25 @@
             WHEN
              (zopt = ' 2') or (zopt = '2');
               a_chx='MO';
-              g_ROWID_BUILDW=g_ROWID_BUILD(wran01);
+
               EXEC SQL
-                UPDATE list_objet_build
-                  SET lot_number = :g_num_lot,
-                      ordre = :zordre,
-                      bibliotheque_source = :zbibsrc,
-                      fichier_source = :zficsrc,
-                      membre_source = :zmbrsrc,
-                      bibliotheque_destination = :zbibdst,
-                      objet_destination = :zobjdst,
-                      type_objet = :ztypobj
-                  WHERE rowid_build = :g_rowid_buildw;
+                UPDATE List_Objet_Build
+                  SET Lot_Number = :G_Num_Lot,
+                      Ordre = :Zordre,
+                      Bibliotheque_Source = :Zbibsrc,
+                      Fichier_Source = :Zficsrc,
+                      Membre_Source = :Zmbrsrc,
+                      Bibliotheque_Destination = :Zbibdst,
+                      Objet_Destination = :Zobjdst,
+                      Type_Objet = :Ztypobj
+                  WHERE Obj_Number = :Hnumobjbld;
 
             when (zopt = '3') or (zopt = ' 3');
               a_chx='CO';
             when (zopt = '4') or (zopt = ' 4');
-              g_ROWID_BUILDW=g_ROWID_BUILD(wran01);
-              exec sql delete LIST_OBJET_BUILD
-                         where ROWID_BUILD=:g_ROWID_BUILDW;
+
+              EXEC SQL
+                DELETE List_Objet_Build WHERE Obj_Number = :Hnumobjbld;
             when (zopt = '5') or (zopt = ' 5');
               a_chx='AF';
             when (zopt = '6') or (zopt = ' 6');
@@ -692,7 +694,6 @@
              g_nbrlig+=1;
              g_lstlig+=1;
              wran01+=1;
-             g_ROWID_BUILD(wran01)=g_ROWID_BUILDW;
              IF infos_objet( zobjdst + zbibdst
                             :ztypobj
                             :l_Base_infos_obj_light);
@@ -705,16 +706,10 @@
              write sfl01;
            endif;
            // lecture du suivant
-           EXEC SQL FETCH list_obj
-                   INTO :g_rowid_buildw,
-                        :hlot_numbe,
-                        :zordre,
-                        :zbibsrc,
-                        :zficsrc,
-                        :zmbrsrc,
-                        :zbibdst,
-                        :zobjdst,
-                        :ztypobj;
+           EXEC SQL
+             FETCH List_Obj
+               INTO :Hnumobjbld, :Hlot_Numbe, :Zordre, :Zbibsrc, :Zficsrc,
+                 :Zmbrsrc, :Zbibdst, :Zobjdst, :Ztypobj;
          enddo;
          // on quitte la boucle soit en fin de page
          //                     soit en fin de fichier

@@ -49,9 +49,6 @@
        Dcl-s p_PGM Char(10);
 
 
-       // Gestion du ROWID
-       Dcl-s g_Rowidlots SQLTYPE(ROWID);
-
        // Variable de travail de numéro de lot alphanumérique
        Dcl-s l_Num_lot_carac Like(r_Num_lot_carac);
 
@@ -176,30 +173,28 @@
          // Initialisation de l'écran si on un numéro d'enregistrement
          IF PNREC <> *BLANK;
            EXEC SQL
-             SELECT rowid_lots,
-                    lot_number,
-                    libelle_lots,
-                    liste_biblio_projet,
-                    biblio_lot,
-                    description_lots,
-                    statuts_lot,
-                    timecrt,
-                    usrcrt,
-                    timemaj,
-                    usrmaj
-               INTO :g_rowidlots,
-                    :numlot,
-                    :libellot,
-                    :listbibprj,
-                    :biblot,
-                    :descriplot,
-                    :statlot,
-                    :timecrt,
-                    :usrcrt,
-                    :timemaj,
-                    :usrmaj
-               FROM lots
-               WHERE CHAR(RRN(lots)) = :pnrec ;
+             SELECT Lot_Number,
+                    Libelle_Lots,
+                    Liste_Biblio_Projet,
+                    Biblio_Lot,
+                    Description_Lots,
+                    Statuts_Lot,
+                    Timecrt,
+                    Usrcrt,
+                    Timemaj,
+                    Usrmaj
+               INTO :Numlot,
+                    :Libellot,
+                    :Listbibprj,
+                    :Biblot,
+                    :Descriplot,
+                    :Statlot,
+                    :Timecrt,
+                    :Usrcrt,
+                    :Timemaj,
+                    :Usrmaj
+               FROM Lots
+               WHERE CHAR(RRN(Lots)) = :Pnrec ;
              IF pchx = 'CR'
                 OR pchx = 'CO';
              // en création ou copie zone non renseignée
@@ -280,23 +275,21 @@
            IF l_Confirmation_suppression;
              IF Confirmer;
                // touche F15 on supprime si indicateur confirmation_suppression
-               EXEC SQL SELECT rowid_lots,
-                               lot_number,
-                               libelle_lots,
-                               liste_biblio_projet,
-                               biblio_lot,
-                               description_lots,
-                               statuts_lot
-                          INTO :g_rowidlots,
-                               :numlot,
-                               :libellot,
-                               :listbibprj,
-                               :biblot,
-                               :descriplot,
-                               :statlot
-                          FROM lots
-                         WHERE CHAR( RRN( lots)) = :pnrec
-                         ;
+               EXEC SQL
+                 SELECT Lot_Number,
+                        Libelle_Lots,
+                        Liste_Biblio_Projet,
+                        Biblio_Lot,
+                        Description_Lots,
+                        Statuts_Lot
+                   INTO :Numlot,
+                        :Libellot,
+                        :Listbibprj,
+                        :Biblot,
+                        :Descriplot,
+                        :Statlot
+                   FROM Lots
+                   WHERE CHAR(RRN(Lots)) = :Pnrec ;
 
 
                If SQLcode=c_Trouve;
@@ -359,22 +352,21 @@
          IF PCHX = 'SU';
            // La suppression se fait par la touche F15
          ELSE;
-           EXEC SQL SELECT rowid_lots,
-                           lot_number,
-                           libelle_lots,
-                           liste_biblio_projet,
-                           biblio_lot,
-                           description_lots,
-                           statuts_lot
-                      INTO :g_rowidlots,
-                           :numlot,
-                           :libellot,
-                           :biblot,
-                           :listbibprj,
-                           :descriplot,
-                           :statlot
-                      FROM lots
-                     WHERE lot_number=:znumlot;
+           EXEC SQL
+             SELECT Lot_Number,
+                    Libelle_Lots,
+                    Liste_Biblio_Projet,
+                    Biblio_Lot,
+                    Description_Lots,
+                    Statuts_Lot
+               INTO :Numlot,
+                    :Libellot,
+                    :Biblot,
+                    :Listbibprj,
+                    :Descriplot,
+                    :Statlot
+               FROM Lots
+               WHERE Lot_Number = :Znumlot;
 
            If Sqlcode=c_trouve;
              l_MAJ_Lots=*On;
