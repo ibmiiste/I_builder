@@ -14,7 +14,7 @@
              DCL        VAR(&INT) TYPE(*INT) LEN(2)
 
              CHGVAR     VAR(&NUMLOTC) VALUE(&NUMLOT)
-             DOFOR      VAR(&INT) FROM(1) TO(6) BY(1)
+             DOFOR      VAR(&INT) FROM(1) TO(9) BY(1)
                 IF         COND(%SST(&NUMLOTC &INT 1) *EQ ' ') THEN(DO)
                    CHGVAR     VAR(%SST(&NUMLOTC &INT 1)) VALUE('0')
                 ENDDO
