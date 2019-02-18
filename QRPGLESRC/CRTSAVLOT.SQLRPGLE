@@ -1,13 +1,6 @@
-        // Option de compilation et de programme
+        // Spécification de contrôles
          /Copy Qcpysrc,Cpyctlstm
 
-
-        // Main procedure prototype
-        // Prototype Procédure principale
-        // dcl-pr programme extpgm('PGM');
-        //   paramentre char(5);
-        //   paramsortie packed(9:6);
-        // END-PR;
 
         // External subprocedures prototypes globales
         // prototype sous-procédures externes
