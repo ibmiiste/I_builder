@@ -604,7 +604,7 @@
               if  g_Failed<>0;
                 EnvRapMel();
               EndIf;
-            when zopt = '19';
+            when zopt = '11';
               g_BIBSRC_pre=ZBIBSRC;
               g_FicSrc_pre=ZFICSRC;
               g_MbrSrc_pre=ZMBRSRC;
