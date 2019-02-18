@@ -186,7 +186,7 @@
         // Procedure-Interface definition
         Dcl-proc Sauv_obj_lot Export;
           Dcl-pi Sauv_obj_lot;
-            p_Num_lot Like(r_Num_lot);
+            p_Num_lot Like(r_Num_lot) const;
           END-PI;
 
           // local functions prototypes

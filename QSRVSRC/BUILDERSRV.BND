@@ -45,4 +45,5 @@
              EXPORT     SYMBOL(CMD_CHK)
              EXPORT     SYMBOL(EDTLIBLOT)
              EXPORT     SYMBOL(SAVLIBLOT)
+             EXPORT     SYMBOL(SAUV_OBJ_LOT)
              ENDPGMEXP
