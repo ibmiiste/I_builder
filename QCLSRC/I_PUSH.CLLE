@@ -1,0 +1,76 @@
+/* ================================================================================ */
+/* i_PUSH est un programme qui envoi un objet sur une autre marchine par ftp        */
+/* et qui le restaure sur la machine cible                                          */
+/* =================================================================================*/
+             PGM        PARM(&OBJETQ &MACHINE &USER &MDP)
+
+             DCL        VAR(&OBJETQ) TYPE(*CHAR) LEN(20)
+             DCL        VAR(&OBJET) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&BIBLIO) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&MACHINE) TYPE(*CHAR) LEN(32)
+             DCL        VAR(&USER) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&MDP) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&SAVF) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&SRCF) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&CMD) TYPE(*CHAR) LEN(2000)
+             DCL        VAR(&NUMALEA) TYPE(*DEC) LEN(15 0)
+             DCL        VAR(&NUMALEC) TYPE(*CHAR) LEN(9)
+             DCL        VAR(&RAND) TYPE(*DEC) LEN(15 0) VALUE(999999999)
+
+
+             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Livraison sur une autre machine') BNDDIR(SERVICE)
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
+
+
+             CHGVAR     VAR(&OBJET) VALUE(%SST( &OBJETQ 1 10))
+             CHGVAR     VAR(&BIBLIO) VALUE(%SST( &OBJETQ 11 10))
+
+             CALLPRC    PRC(ALEATOIRE) PARM((&RAND)) RTNVAL(&NUMALEA)
+
+             CHGVAR     VAR(&NUMALEC) VALUE(&NUMALEA)
+
+             CHGVAR     VAR(&SAVF) VALUE('S' *TCAT &NUMALEC)
+
+             CRTSAVF    FILE(QTEMP/&SAVF)
+
+             /* On vérifie si 1SAVF est en ligne, s'il ne l'est pas c'est que QTEMP  */
+             /* n'est pas en ligne                                                   */
+             CHKOBJ     OBJ(&SAVF) OBJTYPE(*FILE)
+             MONMSG     MSGID(CPF9801) EXEC(ADDLIBLE QTEMP)
+
+             CHGVAR     VAR(&CMD) VALUE('CRTSAVF FILE(QGPL/' *TCAT &SAVF *TCAT ')')
+
+             RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) RMTPWD(&MDP)
+
+             SAVOBJ     OBJ(&OBJET) LIB(&BIBLIO) DEV(*SAVF) SAVF(QTEMP/&SAVF) +
+                          TGTRLS(V7R1M0)
+
+             CALLPRC    PRC(SCRIPTFTP) PARM((&USER) (&MDP) (&SAVF) (&SRCF))
+
+             OVRDBF     FILE(INPUT) TOFILE(&SRCF) MBR(IN)
+             OVRDBF     FILE(OUTPUT) TOFILE(&SRCF) MBR(OUT)
+
+             FTP        RMTSYS(&MACHINE)
+
+             CHGVAR     VAR(&CMD) VALUE('SBMJOB CMD( RSTOBJ OBJ(*ALL) +
+                          SAVLIB(' *TCAT &BIBLIO *TCAT ') DEV(*SAVF) +
+                          SAVF(QGPL/' *TCAT &SAVF *TCAT ') MBROPT(*NEW) +
+                          ALWOBJDIF(*ALL)) JOB(RCP_I_PUSH) USER(RTSFLR)')
+
+             RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) RMTPWD(&MDP)
+
+             CHGVAR     VAR(&CMD) VALUE('SBMJOB CMD(DLTF FILE(QGPL/' *TCAT +
+                          &SAVF *TCAT ')) JOB(DLT_I_PUSH) USER(RTSFLR)')
+
+             RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) RMTPWD(&MDP)
+
+             DLTF       FILE(QTEMP/&SAVF)
+
+             DLTOVR     FILE(*ALL)
+
+             GOTO       CMDLBL(FIN)
+
+ ERREUR:     DMPCLPGM
+             CALLPRC    PRC(gest_erreur)
+ FIN:
+             ENDPGM
