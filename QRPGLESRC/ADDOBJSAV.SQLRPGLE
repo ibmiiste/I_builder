@@ -7,9 +7,6 @@
 
         /Copy Qcpysrc,Prtbuilder
 
-        // DS descriptive des erreurs d'API
-        Dcl-ds Erreur_API LikeDS(ApiError);
-
         // API de création de User Space
         Dcl-pr Creation_usr_space extpgm('QUSCRTUS');
           *n char(20) const; // QualUsrSpcN
@@ -226,7 +223,7 @@
             Ajout_clef_obj_sauv(p_Num_lot);
 
             // Sauvegarde des objets
-            Sauve_objets(c_usr_sp_SAVOBJ :Erreur_API);
+            Sauve_objets(c_usr_sp_SAVOBJ :APIError);
 
           on-error;
             dump(a);
@@ -264,13 +261,13 @@
           // et récupére le pointeur du User space
           Recup_Usr_Spc_Ptr( c_usr_sp_SAVOBJ
                             :savobjuspptr
-                            :Erreur_API);
+                            :APIError);
 
           select;
-          when Erreur_API.BytesProv = 0;
+          when APIError.BytesProv = 0;
           // All is OK
 
-          when Erreur_API.MsgID = 'CPF9801';
+          when APIError.MsgID = 'CPF9801';
             // UsrSpc not found, so create it
 
             Creation_usr_space( c_Usr_sp_SAVOBJ
@@ -278,9 +275,9 @@
                                :4096
                                :x'00'
                                :'*ALL'
-                               :'Utilise par CRTSAVLOT'
+                               :'Utilise par Sauv_obj_lot'
                                :'*YES'
-                               :Erreur_API
+                               :APIError
                                :'*DEFAULT'
                                :0
                                :'1');
@@ -288,17 +285,17 @@
             Chg_attrib_usr_space( g_biblio_retournee
                                  :c_Usr_sp_SAVOBJ
                                  :DS_Usr_space_Attrs
-                                 :Erreur_API);
+                                 :APIError);
 
             Recup_Usr_Spc_Ptr( c_Usr_sp_SAVOBJ
                               :SavObjUspPtr
-                              :Erreur_API);
+                              :APIError);
 
           other;
             // Serious problem, so report it
 
             g_MsgTxt = 'Erreur d''accès au user space ' + c_Usr_sp_SAVOBJ +
-                        ': ' + Erreur_API.MsgID;
+                        ': ' + APIError.MsgID;
 
             SndMsg('*DIAG' :'CPF9897'
                    :g_MsgTxt :%len(%trimr(g_MsgTxt)));
@@ -467,7 +464,7 @@
                     :'*PGMBDY'
                     :1
                     :l_MsgKey
-                    :Erreur_API);
+                    :APIError);
         End-proc;
 
 
@@ -478,15 +475,15 @@
           Dcl-s l_MsgKey char(4);
 
           Select;
-          When Erreur_API.BytesAvail <= 16;
+          When APIError.BytesAvail <= 16;
              LenMsgDta = 0;
-          When Erreur_API.BytesAvail > %size(Erreur_API);
-             LenMsgDta = %size(Erreur_API.MessageData);
+          When APIError.BytesAvail > %size(APIError);
+             LenMsgDta = %size(APIError.MessageData);
           Other;
-             LenMsgDta = Erreur_API.BytesAvail - %size(Erreur_API);
+             LenMsgDta = APIError.BytesAvail - %size(APIError);
           Endsl;
 
-          SndPgmMsg( Erreur_API.MsgID :'QCPFMSG   *LIBL'
-                    :Erreur_API.MessageData :LenMsgDta
-                    :'*ESCAPE' :'*PGMBDY' :1 :l_MsgKey :Erreur_API);
+          SndPgmMsg( APIError.MsgID :'QCPFMSG   *LIBL'
+                    :APIError.MessageData :LenMsgDta
+                    :'*ESCAPE' :'*PGMBDY' :1 :l_MsgKey :APIError);
         End-proc;
