@@ -23,9 +23,6 @@
       *?Déclaration de le PSDS
      d*copy qcpysrc,CPY_PSDS
       *
-      * Copie API
-
-      /Copy qcpysrc,STDMSGINFO
 
       * Programme data structure
 
