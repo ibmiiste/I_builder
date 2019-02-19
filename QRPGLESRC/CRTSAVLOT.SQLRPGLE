@@ -7,6 +7,9 @@
 
         /Copy Qcpysrc,Prtbuilder
 
+        // DS descriptive des erreurs d'API
+        Dcl-ds Erreur_API LikeDS(ApiError);
+
         // API de création de User Space
         Dcl-pr Creation_usr_space extpgm('QUSCRTUS');
           *n char(20) const; // QualUsrSpcN
@@ -72,13 +75,14 @@
         End-pr;
 
         Dcl-pr Init_keys_SAVOBJ;
-            p_Num_lot like(r_Num_lot);
+            p_Num_lot like(r_Num_lot) Value;
         END-Pr;
 
 
         // inherited variables
         // héritage des types
         /copy Qcpysrc,INHBuilder
+
 
         // Global data-structures
         // Structures de données globales
@@ -150,10 +154,6 @@
           g_Type_objet Like(r_Typobj);
         End-ds;
 
-        //-----------------------------------------------------
-        // API error code data structure
-        //-----------------------------------------------------
-        Dcl-ds MyErrCode Likeds(ApiError);
 
         // Activiation de l'attribut autoextensible du User space
         Dcl-ds DS_Usr_space_Attrs qualified;
@@ -186,7 +186,7 @@
         // Procedure-Interface definition
         Dcl-proc Sauv_obj_lot Export;
           Dcl-pi Sauv_obj_lot;
-            p_Num_lot Like(r_Num_lot) const;
+            p_Num_lot Like(r_Num_lot) Value;
           END-PI;
 
           // local functions prototypes
@@ -223,8 +223,10 @@
             Init_keys_SAVOBJ(p_Num_lot);
 
             // Alimentation du user space USPSAVOBJ avec la clef 1 et les objets à sauvegarder
-
             Ajout_clef_obj_sauv(p_Num_lot);
+
+            // Sauvegarde des objets
+            Sauve_objets(c_usr_sp_SAVOBJ :Erreur_API);
 
           on-error;
             dump(a);
@@ -250,7 +252,7 @@
         //          Option de non sauvegarde des logiques
         // Returns:
         // --------------------------------------------------
-        DCL-PROC Creat_user_space;
+        DCL-PROC Creat_user_space Export;
 
           // Pavé de création de SavObjSpc user space QTEMP/SAVLIST utilisé par l'API Save Objects
           // List QSRSAVO
@@ -262,13 +264,13 @@
           // et récupére le pointeur du User space
           Recup_Usr_Spc_Ptr( c_usr_sp_SAVOBJ
                             :savobjuspptr
-                            :MyErrCode);
+                            :Erreur_API);
 
           select;
-          when MyErrCode.BytesProv = 0;
+          when Erreur_API.BytesProv = 0;
           // All is OK
 
-          when MyErrCode.MsgID = 'CPF9801';
+          when Erreur_API.MsgID = 'CPF9801';
             // UsrSpc not found, so create it
 
             Creation_usr_space( c_Usr_sp_SAVOBJ
@@ -278,7 +280,7 @@
                                :'*ALL'
                                :'Utilise par CRTSAVLOT'
                                :'*YES'
-                               :MyErrCode
+                               :Erreur_API
                                :'*DEFAULT'
                                :0
                                :'1');
@@ -286,17 +288,17 @@
             Chg_attrib_usr_space( g_biblio_retournee
                                  :c_Usr_sp_SAVOBJ
                                  :DS_Usr_space_Attrs
-                                 :MyErrCode);
+                                 :Erreur_API);
 
             Recup_Usr_Spc_Ptr( c_Usr_sp_SAVOBJ
                               :SavObjUspPtr
-                              :MyErrCode);
+                              :Erreur_API);
 
           other;
             // Serious problem, so report it
 
             g_MsgTxt = 'Erreur d''accès au user space ' + c_Usr_sp_SAVOBJ +
-                        ': ' + MyErrCode.MsgID;
+                        ': ' + Erreur_API.MsgID;
 
             SndMsg('*DIAG' :'CPF9897'
                    :g_MsgTxt :%len(%trimr(g_MsgTxt)));
@@ -313,9 +315,9 @@
         // Purpose:
         // Returns:
         // --------------------------------------------------
-        DCL-PROC Init_keys_SAVOBJ;
+        DCL-PROC Init_keys_SAVOBJ Export;
           Dcl-pi Init_keys_SAVOBJ;
-            p_Num_lot like(r_Num_lot);
+            p_Num_lot like(r_Num_lot) Value;
           END-PI;
 
           Dcl-s l_Num_lot like(r_Num_lot);
@@ -361,7 +363,7 @@
           g_Clef_SAVF=4;
           g_Longueur_valeurs_SAVF=20;
           g_Nombre_valeur_SAVF=1;
-          g_Nom_SAVF='S' + %Editc(p_Num_lot:'X') + 'L' + %Editc(p_Num_lot:'X');
+          g_Nom_SAVF='S' + %Editc(l_Num_lot:'X') + 'L' + %Editc(l_Num_lot:'X');
 
           SavObjUspPtr+=%Size(Ds_SAVF_define);
           Nbr_post_cle_ptr+=1;
@@ -385,9 +387,9 @@
         //                          ns le User Space utilisé par l'API QSRSAVO
         // Returns:
         // --------------------------------------------------
-        DCL-PROC Ajout_clef_obj_sauv ;
+        DCL-PROC Ajout_clef_obj_sauv Export;
           Dcl-pi Ajout_clef_obj_sauv;
-            p_Num_lot like(r_Num_lot);
+            p_Num_lot like(r_Num_lot) Value;
           END-PI;
 
           Dcl-s l_Objdst Like(r_Nom_obj_IBMi);
@@ -447,7 +449,7 @@
           return ;
         END-PROC ;
 
-        Dcl-proc SndMsg;
+        Dcl-proc SndMsg Export;
           Dcl-pi SndMsg;
             MsgType char(10) const;
             MsgID char(7) const;
@@ -465,26 +467,26 @@
                     :'*PGMBDY'
                     :1
                     :l_MsgKey
-                    :MyErrCode);
+                    :Erreur_API);
         End-proc;
 
 
-        Dcl-proc SndAPIMsg;
+        Dcl-proc SndAPIMsg Export;
           Dcl-pi SndAPIMsg end-pi;
 
           Dcl-s LenMsgDta int(10);
           Dcl-s l_MsgKey char(4);
 
           Select;
-          When MyErrCode.BytesAvail <= 16;
+          When Erreur_API.BytesAvail <= 16;
              LenMsgDta = 0;
-          When MyErrCode.BytesAvail > %size(MyErrCode);
-             LenMsgDta = %size(MyErrCode.MessageData);
+          When Erreur_API.BytesAvail > %size(Erreur_API);
+             LenMsgDta = %size(Erreur_API.MessageData);
           Other;
-             LenMsgDta = MyErrCode.BytesAvail - %size(MyErrCode);
+             LenMsgDta = Erreur_API.BytesAvail - %size(Erreur_API);
           Endsl;
 
-          SndPgmMsg( MyErrCode.MsgID :'QCPFMSG   *LIBL'
-                    :MyErrCode.MessageData :LenMsgDta
-                    :'*ESCAPE' :'*PGMBDY' :1 :l_MsgKey :MyErrCode);
+          SndPgmMsg( Erreur_API.MsgID :'QCPFMSG   *LIBL'
+                    :Erreur_API.MessageData :LenMsgDta
+                    :'*ESCAPE' :'*PGMBDY' :1 :l_MsgKey :Erreur_API);
         End-proc;
