@@ -17,18 +17,20 @@
     /*                      &LI/EXECUTION +                          */
     /*                      &LI/EDTLIBLOT +                          */
     /*                      &LI/SAVLIBLOT +                          */
-    /*                      &LI/CRTSAVLOT +                          */
+    /*                      &LI/ADDOBJSAV +                          */
     /*                      &LI/GSTERRSTR);                          */
-    /*     >>PARM<<  BNDDIR(SERVICE);                                */
+    /*     >>PARM<<  TEXT('Programme de service +                    */
+    /*                     de l''outils i_builder');                 */
     /*     >>PARM<<  OPTION(*DUPPROC);                               */
+    /*     >>PARM<<  BNDSRVPGM(LAUNCHSRV);                           */
     /*     >>PARM<<  DETAIL(*FULL);                                  */
     /*     >>PARM<<  ALWLIBUPD(*YES);                                */
-    /*     >>PARM<<  TEXT('Programme de service +                    */
-    /*                       de l''outils i_builder');               */
     /*   >>END-IMPORTANT<<                                           */
+    /*   >>CMD<<  RMVLIBLE I_BUILDER;                                */
     /*   >>EXECUTE<<                                                 */
+    /*   >>CMD<<  ADDLIBLE I_BUILDER;                                */
     /* >>END-PRE-COMPILER<<                                          */
-             STRPGMEXP  PGMLVL(*CURRENT) LVLCHK(*YES) SIGNATURE('20170428')
+             STRPGMEXP  PGMLVL(*CURRENT) LVLCHK(*YES) SIGNATURE('20190219')
              EXPORT     SYMBOL(EXISTS)
              EXPORT     SYMBOL(ALEATOIRE)
              EXPORT     SYMBOL(LIVRAISON)
