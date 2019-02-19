@@ -17,6 +17,7 @@
     /*                      &LI/EXECUTION +                          */
     /*                      &LI/EDTLIBLOT +                          */
     /*                      &LI/SAVLIBLOT +                          */
+    /*                      &LI/CRTSAVLOT +                          */
     /*                      &LI/GSTERRSTR);                          */
     /*     >>PARM<<  BNDDIR(SERVICE);                                */
     /*     >>PARM<<  OPTION(*DUPPROC);                               */
