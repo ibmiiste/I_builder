@@ -1,22 +1,5 @@
       /copy qcpysrc,cpyctlstm
 
-      // >>PRE-COMPILER<<                                              */
-      //   >>CRTCMD<<  CRTSQLRPGI SRCFILE(&SL/&SF) SRCMBR(&SM);        */
-      //   >>IMPORTANT<<                                               */
-      //     >>PARM<<  OBJ(&LI/&OB);                                   */
-      //     >>PARM<<  OBJTYPE(*MODULE);                               */
-      //     >>PARM<<  OPTION(*EVENTF);                                */
-      //     >>PARM<<  RPGPPOPT(*LVL2);                                */
-      //     >>PARM<<  CLOSQLCSR(*ENDACTGRP);                          */
-      //     >>PARM<<  DATFMT(*ISO);                                   */
-      //     >>PARM<<  TIMFMT(*ISO);                                   */
-      //     >>PARM<<  COMPILEOPT(&U0);                                */
-      //   >>END-IMPORTANT<<                                           */
-      //   >>CMD<<  CRTSRCPF FILE(QTEMP/FTPCMD) RCDLEN(112);           */
-      //   >>EXECUTE<<                                                 */
-      //   >>CMD<<  DLTF FILE(QTEMP/FTPCMD);                           */
-      // >>END-PRE-COMPILER<<                                          */
-
        dcl-f ftpcmd usage(*output) rename(ftpcmd:ftpcmdf) usropn;
        /copy qcpysrc,inhbuilder
 
