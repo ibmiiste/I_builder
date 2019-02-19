@@ -77,7 +77,7 @@
 
          Dcl-s ObjL char(20);
          Dcl-ds Objd likeDS(OBJD0100_t);
-         Dcl-ds ErrDS likeDS(ERRAPI);
+         Dcl-ds ErrDS likeDS(ApiError);
 
          monitor;
            ObjL = Obj;
@@ -115,7 +115,7 @@
          DCL-S retField IND;
          Dcl-s ObjL char(20);
          Dcl-ds Objd likeDS(OBJD0200_t);
-         Dcl-ds ErrDS likeDS(ERRAPI);
+         Dcl-ds ErrDS likeDS(ApiError);
 
          monitor;
            ObjL = Obj;
