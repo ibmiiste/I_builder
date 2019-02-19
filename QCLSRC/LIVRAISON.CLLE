@@ -26,10 +26,12 @@
              DCL        VAR(&CHEMINSAVO) TYPE(*CHAR) LEN(256)
              DCL        VAR(&CHEMINSAVD) TYPE(*CHAR) LEN(256)
              DCL        VAR(&PTYP) TYPE(*CHAR) LEN(1) VALUE('5')
-             DCL        VAR(&PFICM) TYPE(*CHAR) LEN(10) VALUE ('BUILDMSGF')
+             DCL        VAR(&PFICM) TYPE(*CHAR) LEN(10) VALUE('BUILDMSGF')
              DCL        VAR(&PMGID) TYPE(*CHAR) LEN(7)
              DCL        VAR(&PMGDT) TYPE(*CHAR) LEN(99)
+             DCL        VAR(&SRCF) TYPE(*CHAR) LEN(10)
              DCL        VAR(&PGM) TYPE(*CHAR) LEN(10) VALUE('GSTLOT20')
+
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Préparation à la livraison et +
                           livraison') BNDDIR(I_BUILDER)
 
@@ -67,7 +69,7 @@
              ENDDO
 
              /* Sauvegarde des objets du lots dans une SAVF                               */
-             CALLPRC    PRC(CRTSAVLOT) PARM((&NUMLOT))
+             CALLPRC    PRC(SAUV_OBJ_LOT) PARM((&NUMLOT))
 
 
              CHGVAR     VAR(&CHEMINSAVO) VALUE('/QSYS.LIB/' *TCAT &BIBLIO *TCAT +
