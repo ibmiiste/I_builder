@@ -321,10 +321,13 @@
 
           l_Num_lot=p_Num_lot;
 
-          g_Nbr_post_cle_var=0;
           //Le pointer Nbr_post_cle_ptr est positionné au début du pointer de SavObjUspPtr
           // pour pouvoir modifier le nombre de clef au fur et à mesure des ajouts
           Nbr_post_cle_ptr=SavObjUspPtr;
+
+          // Initialisation du nombre de poste et on le palce au début du pointeur.
+          g_Nbr_post_cle_var=0;
+
           // On déplace le pointeur de la taille de Ds_Nbr_post_cle_var pour écrire à la suite
           SavObjUspPtr += %Size(Ds_Nbr_post_cle_var);
 
@@ -341,7 +344,7 @@
 
           // On déplace le pointeur de la taille de la DS alimentée précédemment
           SavObjUspPtr+=%Size(DS_Biblio_define);
-          Nbr_post_cle_ptr+=1;
+          g_Nbr_post_cle_var+=1;
 
           // Device information.
           g_Device_define=SavObjUspPtr;
@@ -352,7 +355,7 @@
           g_nom_device='*SAVF';
 
           SavObjUspPtr+=%Size(Ds_Device_define);
-          Nbr_post_cle_ptr+=1;
+          g_Nbr_post_cle_var+=1;
 
           // SAVF information.
           g_SAVF_define=SavObjUspPtr;
@@ -363,7 +366,7 @@
           g_Nom_SAVF='S' + %Editc(l_Num_lot:'X') + 'L' + %Editc(l_Num_lot:'X');
 
           SavObjUspPtr+=%Size(Ds_SAVF_define);
-          Nbr_post_cle_ptr+=1;
+          g_Nbr_post_cle_var+=1;
 
           // Save access paths information.
           g_Access_Path_define=SavObjUspPtr;
@@ -374,7 +377,7 @@
           g_valeur_Access_Path='0';
 
           SavObjUspPtr+=%Size(Ds_Access_Path_define);
-          Nbr_post_cle_ptr+=1;
+          g_Nbr_post_cle_var+=1;
         End-proc;
 
 
@@ -419,7 +422,7 @@
           g_Nombre_valeur_Objet=0;
 
           // Ajout de 1 au nombre de clef
-          Nbr_post_cle_ptr+=1;
+          g_Nbr_post_cle_var+=1;
           // On déplace le pointeur de la longueur de la DS d'entête de la clef 1
           SavObjUspPtr += %Size(DS_Objet_define);
           // On place le pointeur de description d'objet sur le pointeur du user space de sauvegarde
