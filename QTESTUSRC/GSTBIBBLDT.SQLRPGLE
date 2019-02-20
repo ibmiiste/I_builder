@@ -7,12 +7,14 @@
       *   >>END-IMPORTANT<<                                           */
       *   >>EXECUTE<<                                                 */
       * >>END-PRE-COMPILER<<                                          */
-       ctl-opt NoMain bnddir('I_BUILDER');
+       ctl-opt NoMain bnddir('I_BUILDER':'SERVICE');
 
       /copy RPGUNIT1,TESTCASE
 
 
-      /copy qcpysrc,Inh32766
+      /Copy Qcpysrc,prtbuilder
+
+      /include Qcpysrc,Multiappr
 
        Dcl-s l_Num_lot_carac Like(r_Num_lot_carac);
        Dcl-s l_nom_bib_lot like(r_Nom_obj_IBMi);
@@ -27,6 +29,8 @@
        Dcl-proc Test_creat_bib export;
        Dcl-pi Test_creat_bib End-Pi;
 
+       Dcl-s l_libel_lot Char(50);
+       Dcl-s g_Exists Ind;
 
          l_Num_lot_carac='131541120';
          l_libel_lot='Test de création de lot';

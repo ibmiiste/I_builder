@@ -11,18 +11,18 @@
 
       /copy RPGUNIT1,TESTCASE
 
-      /copy qcpysrc,UtiProc
+      /copy qcpysrc,prtbuilder
 
-      /copy qcpysrc,Inh32766
+      /copy qcpysrc,Inhbuilder
 
-       Dcl-S g_PreBibSrc LIKE(R_NomObj);
-       Dcl-S g_PreFicSrc LIKE(R_NomObj);
-       Dcl-S g_UseSrcMbr LIKE(R_NomObj);
-       Dcl-S g_BibDst LIKE(R_NomObj);
-       Dcl-S g_ObjDst LIKE(R_NomObj);
-       Dcl-S g_BibSrc LIKE(R_NomObj);
-       Dcl-S g_FicSrc LIKE(R_NomObj);
-       Dcl-S g_MbrSrc LIKE(R_NomObj);
+       Dcl-S g_PreBibSrc LIKE(r_Nom_obj_IBMi);
+       Dcl-S g_PreFicSrc LIKE(r_Nom_obj_IBMi);
+       Dcl-S g_UseSrcMbr LIKE(r_Nom_obj_IBMi);
+       Dcl-S g_BibDst LIKE(r_Nom_obj_IBMi);
+       Dcl-S g_ObjDst LIKE(r_Nom_obj_IBMi);
+       Dcl-S g_BibSrc LIKE(r_Nom_obj_IBMi);
+       Dcl-S g_FicSrc LIKE(r_Nom_obj_IBMi);
+       Dcl-S g_MbrSrc LIKE(r_Nom_obj_IBMi);
        Dcl-S g_Optimize CHAR(20);
        Dcl-S g_Failed packed(10:0);
        Dcl-S g_FileAttach char(10000);
