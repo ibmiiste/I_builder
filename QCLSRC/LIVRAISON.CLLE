@@ -16,12 +16,7 @@
              DCL        VAR(&USER) TYPE(*CHAR) LEN(10)
              DCL        VAR(&MDP) TYPE(*CHAR) LEN(10)
              DCL        VAR(&JOBNAME) TYPE(*CHAR) LEN(10)
-             DCL        VAR(&GESTDATA) TYPE(*CHAR) LEN(1)
-             DCL        VAR(&NUMALEA) TYPE(*DEC) LEN(15 0)
-             DCL        VAR(&NUMALEC) TYPE(*CHAR) LEN(9)
              DCL        VAR(&CMD) TYPE(*CHAR) LEN(2000)
-             DCL        VAR(&FICSV) TYPE(*CHAR) LEN(10)
-             DCL        VAR(&RAND) TYPE(*DEC) LEN(15 0) VALUE(999999999)
              DCL        VAR(&SAVF) TYPE(*CHAR) LEN(10)
              DCL        VAR(&CHEMINSAVO) TYPE(*CHAR) LEN(256)
              DCL        VAR(&CHEMINSAVD) TYPE(*CHAR) LEN(256)
@@ -31,6 +26,7 @@
              DCL        VAR(&PMGDT) TYPE(*CHAR) LEN(99)
              DCL        VAR(&SRCF) TYPE(*CHAR) LEN(10)
              DCL        VAR(&PGM) TYPE(*CHAR) LEN(10) VALUE('GSTLOT20')
+             DCL        VAR(&REQUETE) TYPE(*CHAR) LEN(1024)
 
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Préparation à la livraison et +
                           livraison') BNDDIR(I_BUILDER)
@@ -98,7 +94,8 @@
 
              CHGVAR     VAR(&JOBNAME) VALUE('R' *TCAT &NUMLOTC)
 
-             /* Lancement du programme de restauration des objets                    */
+             /* Restauration du programme qui va extraire les objets et les copier à leur  */
+             /* destination */
              CHGVAR     VAR(&CMD) VALUE('RSTOBJ OBJ(DSTLOT10) SAVLIB(' *TCAT +
                           &BIBLIO *TCAT ') DEV(*SAVF) SAVF(' *TCAT &BIBLIO *TCAT +
                           '/' *TCAT &SAVF *TCAT ') MBROPT(*NEW) ALWOBJDIF(*ALL)')
@@ -111,7 +108,8 @@
                 GOTO       CMDLBL(FIN)
              ENDDO
 
-
+             /* Lancement du programme qui va extraire les objets et les copier à leur */
+             /* destination                                                            */
              CHGVAR     VAR(&CMD) VALUE('CALL' *BCAT &BIBLIO *TCAT '/DSTLOT10 +
                           PARM(' *TCAT &NUMLOTC *TCAT ')')
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
