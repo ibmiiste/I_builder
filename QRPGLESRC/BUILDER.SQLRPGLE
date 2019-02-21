@@ -150,7 +150,7 @@
            EnvRapMel();
          Else;
            If P_Livr_Env_Dst;
-             Livraison( P_Biblio_Lot
+             Livraison( g_num_lot
                        :P_Sys_Dst
                        :P_User
                        :P_Mot_De_Passe);
