@@ -68,7 +68,7 @@
                 GOTO       CMDLBL(FIN)
              ENDDO
 
-
+             /* Créer une SAVF comportant le numéro du lot sur le système distant */
              CHGVAR     VAR(&CMD) VALUE('CRTSAVF FILE(' *TCAT &BIBLIO *TCAT '/' +
                           *TCAT &SAVF *TCAT ')')
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
