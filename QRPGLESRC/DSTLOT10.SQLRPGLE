@@ -1,51 +1,23 @@
 **FREE
 // --------------------------------------------------
-// Prototype for procedure: Restauration_objet
+// Procedure: Restauration_objet
 // --------------------------------------------------
-
 
 // Option de compilation et de programme
 /Copy Qcpysrc,Cpyctlstm
-
+Ctl-opt bnddir('I_BUILDER');
 
 // Déclaration des fichiers
 // dcl-f fichier disk;
 
-// Main procedure prototype
-// Prototype Procédure principale
-// dcl-pr programme extpgm('PGM');
-//   paramentre char(5);
-//   paramsortie packed(9:6);
-// END-PR;
-
 // External subprocedures prototypes globales
 // prototype sous-procédures externes
-// dcl-pr proc_ext varchar(300) extproc('PROC_EXT1');
-//   donnees1 packed(10:0);
-// end-pr;
+/Copy Qcpysrc,Prtbuilder
 
-// Internal subprocedures prototypes globales
-// Prototype sous-procédures internes globales
-// dcl-pr proc_int varchar(150);
-//   donnees1 packed(10:0);
-// end-pr;
-
-// Global data-structures
-// Structures de données globales
-// Indicateurs renommés avec Indara et INDDS
-// dcl-ds ds1;
-//   donneeds1 like(r_ref4);
-//   donneeds2 like(r_ref5);
-// end-ds;
-
-// global variables
-// variables globales
-// Dcl-s g_Donnee3 like(r_ref3);
 
 // Program status data structure
 // Data Structure d'information programme
-///copy qcpysrc,psds
-
+/copy qcpysrc,psds
 
 
 // inherited variables
@@ -59,7 +31,7 @@ dcl-c  c_Trouve 0;
 // Définition de l'Interface de la procédure
 // Paramètres d'appel
 // Procedure-Interface definition
-DCL-PI Restauration_objet;
+DCL-PI Restauration_objet ExtPGM('DSTLOT10');
   p_Num_lot LIKE(r_Num_lot);
 END-PI;
 
@@ -69,6 +41,8 @@ Dcl-s l_Typobj Like(r_TypObj);
 Dcl-s l_Num_lot like(r_Num_lot);
 Dcl-s l_Cmd Like(r_commande_CLLE);
 
+Dcl-s l_Bib_lot Like(r_Nom_obj_IBMi);
+Dcl-s l_Sav_lot Like(r_Nom_obj_IBMi);
 // main function
 // Procédure principale
 
@@ -133,7 +107,7 @@ endmon;
 // indicateur de fin de programme
 *inlr = *on;
 
-Retunr;
+Return;
 
 // les sous-routines
 // traitement de l'écran
