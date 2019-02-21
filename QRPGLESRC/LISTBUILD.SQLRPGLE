@@ -583,10 +583,10 @@
               g_FicSrc_pre=ZFICSRC;
               g_MbrSrc_pre=ZMBRSRC;
               g_optimize='*NONE';
-              Construct( g_BIBSRC_pre
+              Construct( g_Lib_lot
                         :g_FicSrc_pre
                         :g_MbrSrc_pre
-                        :ZBIBDST
+                        :g_Lib_lot
                         :ZOBJDST
                         :ZTYPOBJ
                         :ZBIBSRC
@@ -613,10 +613,10 @@
               g_FicSrc_pre=ZFICSRC;
               g_MbrSrc_pre=ZMBRSRC;
               g_optimize='*FULL';
-              Construct( g_BIBSRC_pre
+              Construct( g_Lib_lot
                         :g_FicSrc_pre
                         :g_MbrSrc_pre
-                        :ZBIBDST
+                        :g_Lib_lot
                         :ZOBJDST
                         :ZTYPOBJ
                         :ZBIBSRC
