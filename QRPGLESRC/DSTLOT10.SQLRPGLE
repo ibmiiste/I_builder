@@ -82,7 +82,7 @@ Monitor;
 
   // Mise en ligne de la bibliothèque temporaire de livraison
   l_Cmd='Addlible ' + l_Bib_lot;
-  CMD_EXEC(l_Cmd);
+  Cmd_exec(l_Cmd);
 
   EXEC SQL
     CLOSE Csr_Obj_Sav;
@@ -114,7 +114,7 @@ Monitor;
            'SAVF(' + l_Bib_lot + '/' + l_Sav_lot + ') ' +
            'RSTLIB(' + L_Bibdst + ')';
 
-    CMD_EXEC(l_Cmd);
+    Cmd_exec(l_Cmd);
 
     EXEC SQL
       FETCH Csr_Obj_Sav INTO :L_Bibdst, :L_Objdst, :L_Typobj;
@@ -122,6 +122,8 @@ Monitor;
 
   EXEC SQL CLOSE Csr_Obj_Sav;
 
+  l_Cmd = 'DLTLIB ' + l_Bib_lot;
+  Cmd_exec(l_Cmd);
 
 on-error;
   dump(a);
