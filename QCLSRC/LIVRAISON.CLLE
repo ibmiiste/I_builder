@@ -57,6 +57,7 @@
              CHGVAR     VAR(&SAVF) VALUE('S' *TCAT &NUMLOTC)
              CRTSAVF    FILE(&BIBLIO/&SAVF)
 
+             /* Création de la bibliothèque Lot sur le système cible          */
              CHGVAR     VAR(&CMD) VALUE('CRTLIB LIB(' *TCAT &BIBLIO *TCAT ')')
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
                           RMTPWD(&MDP)
@@ -66,6 +67,8 @@
                 CALL       PGM(GSTMSG01) PARM(&PTYP &PFICM &PMGID &PMGDT &PGM)
                 GOTO       CMDLBL(FIN)
              ENDDO
+
+
              CHGVAR     VAR(&CMD) VALUE('CRTSAVF FILE(' *TCAT &BIBLIO *TCAT '/' +
                           *TCAT &SAVF *TCAT ')')
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
