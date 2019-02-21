@@ -44,10 +44,6 @@
              CRTDUPOBJ  OBJ(DSTLOT10) FROMLIB(I_BUILDER) +
                           OBJTYPE(*PGM) TOLIB(&BIBLIO)
 
-             /* Création de la SAVF qui va être envoyée via FTP               */
-             CHGVAR     VAR(&SAVF) VALUE('S' *TCAT &NUMLOTC)
-             CRTSAVF    FILE(&BIBLIO/&SAVF)
-
              /* Copier liste des objets à livrer dans une table dans le lot Séquence/Bib */
              /* source/Fichier source/membre source/bib objet */
              CHGVAR     VAR(&REQUETE) VALUE('CREATE TABLE' *BCAT &BIBLIO *TCAT +
@@ -56,6 +52,10 @@
                           WHERE LOT_NUMBER =' *BCAT &NUMLOTC *TCAT ') WITH DATA')
              RUNSQL     SQL(&REQUETE) COMMIT(*NONE) NAMING(*SQL)
 
+
+             /* Création de la SAVF qui va être envoyée via FTP               */
+             CHGVAR     VAR(&SAVF) VALUE('S' *TCAT &NUMLOTC)
+             CRTSAVF    FILE(&BIBLIO/&SAVF)
 
              CHGVAR     VAR(&CMD) VALUE('CRTLIB LIB(' *TCAT &BIBLIO *TCAT ')')
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
