@@ -54,7 +54,7 @@
 
 // constants
 // constantes
-// dcl-c constante1 'CONSTANTE';
+dcl-c  c_Trouve 0;
 
 // Définition de l'Interface de la procédure
 // Paramètres d'appel
@@ -63,7 +63,7 @@ DCL-PI Restauration_objet;
   p_Num_lot LIKE(r_Num_lot);
 END-PI;
 
-
+Dcl-s l_Bibdst Like(r_Nom_obj_IBMi);
 Dcl-s l_Objdst Like(r_Nom_obj_IBMi);
 Dcl-s l_Typobj Like(r_TypObj);
 Dcl-s l_Num_lot like(r_Num_lot);
@@ -75,17 +75,22 @@ Dcl-s l_Cmd Like(r_commande_CLLE);
 Monitor;
 
   l_Num_lot=p_Num_lot;
+  // Nom de la bibliothèque lot
+  l_Bib_lot = 'L' + %Editc(l_Num_lot:'X');
+  // Nom de la SAVF lot
+  l_Sav_lot = 'S' + %Editc(l_Num_lot:'X');
 
   // Mise en ligne de la bibliothèque temporaire de livraison
-  l_Cmd='Addlible L' + %Editc(l_Num_lot:'X');
-  CMD_EXEC(l_md);
+  l_Cmd='Addlible ' + l_Bib_lot;
+  CMD_EXEC(l_Cmd);
 
   EXEC SQL
     CLOSE Csr_Obj_Sav;
 
   EXEC SQL
     DECLARE Csr_Obj_Sav CURSOR FOR
-      SELECT Objet_Destination,
+      SELECT Bibliotheque_destination,
+             Objet_Destination,
              Type_Objet
         FROM List_Objet_Build
         WHERE Lot_Number = :L_Num_Lot
@@ -96,39 +101,27 @@ Monitor;
 
   // Lecture des objets du lot à livrer
   EXEC SQL
-    FETCH Csr_Obj_Sav INTO :L_Objdst, :L_Typobj;
+    FETCH Csr_Obj_Sav INTO :L_Bibdst, :L_Objdst, :L_Typobj;
 
-  // Alimentation du User Space avec l'entête de la partie clef=1 définition objet
-  g_Objet_define=SavObjUspPtr;
-  g_Clef_Objet=1;
-  g_Nombre_valeur_Objet=0;
 
-  // Ajout de 1 au nombre de clef
-  g_Nbr_post_cle_var+=1;
-  // On déplace le pointeur de la longueur de la DS d'entête de la clef 1
-  SavObjUspPtr += %Size(DS_Objet_define);
-  // On place le pointeur de description d'objet sur le pointeur du user space de sauvegarde
-  g_Objet_desc=SavObjUspPtr;
   Dow Sqlcode=c_Trouve;
-    // Save access paths information.
+    // Constitution de la commande de restauration par objet
 
+    l_Cmd='RSTOBJ OBJ(' + L_Objdst + ') ' +
+           'SAVLIB(' + l_Bib_lot + ') ' +
+           'DEV(*SAVF)' +
+           'OBJTYPE(' + L_Typobj + ') ' +
+           'SAVF(' + l_Bib_lot + '/' + l_Sav_lot + ') ' +
+           'RSTLIB(' + L_Bibdst + ')';
 
-    g_Nom_objet=L_Objdst;
-    g_Type_objet=L_Typobj;
-    g_Nombre_valeur_Objet+=1;
-
-    g_Objet_desc+=%Size(DS_Object_Desc);
-
+    CMD_EXEC(l_Cmd);
 
     EXEC SQL
-      FETCH Csr_Obj_Sav INTO :L_Objdst, :L_Typobj;
+      FETCH Csr_Obj_Sav INTO :L_Bibdst, :L_Objdst, :L_Typobj;
   Enddo;
 
-  g_Longueur_valeurs_Objet=g_Nombre_valeur_Objet*20;
-
-  g_Longueur_post_Objet=%Size(DS_Objet_define)+g_Longueur_valeurs_Objet;
-
   EXEC SQL CLOSE Csr_Obj_Sav;
+
 
 on-error;
   dump(a);
