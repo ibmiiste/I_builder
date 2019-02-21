@@ -604,6 +604,10 @@
               if  g_Failed<>0;
                 EnvRapMel();
               EndIf;
+              Livraison( g_num_lot
+                        :'CICA95'
+                        :'DRUBIGNY'
+                        :'DANIEL1E01');
             when zopt = '11';
               g_BIBSRC_pre=ZBIBSRC;
               g_FicSrc_pre=ZFICSRC;
@@ -630,6 +634,10 @@
               if  g_Failed<>0;
                 EnvRapMel();
               EndIf;
+              Livraison( g_num_lot
+                        :'CICA98'
+                        :'DRUBIGNY'
+                        :'DANIEL1E01');
             when (zopt = '99');
               a_chx='PE';
             other;
