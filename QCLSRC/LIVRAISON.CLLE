@@ -83,7 +83,7 @@
              /* Sauvegarde des objets du lots dans une SAVF                               */
              CALLPRC    PRC(SAUV_OBJ_LOT) PARM((&NUMLOT))
 
-
+             /* Envoyer la SAVF sur le système cible par ftp dans la bib lot              */
              CHGVAR     VAR(&CHEMINSAVO) VALUE('/QSYS.LIB/' *TCAT &BIBLIO *TCAT +
                           '.LIB')
              CHGVAR     VAR(&CHEMINSAVD) VALUE(&CHEMINSAVO)
@@ -98,6 +98,7 @@
 
              CHGVAR     VAR(&JOBNAME) VALUE('R' *TCAT &NUMLOTC)
 
+             /* Lancement du programme de restauration des objets                    */
              CHGVAR     VAR(&CMD) VALUE('RSTOBJ OBJ(DSTLOT10) SAVLIB(' *TCAT +
                           &BIBLIO *TCAT ') DEV(*SAVF) SAVF(' *TCAT &BIBLIO *TCAT +
                           '/' *TCAT &SAVF *TCAT ') MBROPT(*NEW) ALWOBJDIF(*ALL)')
@@ -109,6 +110,7 @@
                 CALL       PGM(GSTMSG01) PARM(&PTYP &PFICM &PMGID &PMGDT &PGM)
                 GOTO       CMDLBL(FIN)
              ENDDO
+
 
              CHGVAR     VAR(&CMD) VALUE('CALL' *BCAT &BIBLIO *TCAT '/DSTLOT10 +
                           PARM(' *TCAT &NUMLOTC *TCAT ')')
