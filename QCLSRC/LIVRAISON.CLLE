@@ -12,6 +12,7 @@
              DCL        VAR(&NUMLOT) TYPE(*DEC) LEN(9 0)
              DCL        VAR(&NUMLOTC) TYPE(*CHAR) LEN(9)
              DCL        VAR(&BIBLIO) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&LISTOBJ) TYPE(*CHAR) LEN(10)
              DCL        VAR(&MACHINE) TYPE(*CHAR) LEN(32)
              DCL        VAR(&USER) TYPE(*CHAR) LEN(10)
              DCL        VAR(&MDP) TYPE(*CHAR) LEN(10)
@@ -36,15 +37,17 @@
              CHGVAR     VAR(&NUMLOTC) VALUE(&NUMLOT)
 
              CHGVAR     VAR(&BIBLIO) VALUE('L' *TCAT &NUMLOTC)
+             CHGVAR     VAR(&LISTOBJ) VALUE('O' *TCAT &NUMLOTC)
 
              CRTDUPOBJ  OBJ(DSTLOT10) FROMLIB(*LIBL) OBJTYPE(*PGM) TOLIB(&BIBLIO)
 
              /* Copier liste des objets à livrer dans une table dans le lot Séquence/Bib */
              /* source/Fichier source/membre source/bib objet */
-             CHGVAR     VAR(&REQUETE) VALUE('CREATE TABLE' *BCAT &BIBLIO *TCAT +
-                          '.LSTOBJBLD AS ( SELECT ORDRE, BIBLIOTHEQUE_DESTINATION, +
-                          OBJET_DESTINATION, TYPE_OBJET FROM I_BUILDER.LSTOBJBLD +
-                          WHERE LOT_NUMBER =' *BCAT &NUMLOTC *TCAT ') WITH DATA')
+             CHGVAR     VAR(&REQUETE) VALUE('CREATE TABLE' *BCAT &BIBLIO *TCAT '.' +
+                          *TCAT &LISTOBJ *BCAT 'AS ( SELECT ORDRE, +
+                          BIBLIOTHEQUE_DESTINATION, OBJET_DESTINATION, TYPE_OBJET +
+                          FROM I_BUILDER.LSTOBJBLD WHERE LOT_NUMBER =' *BCAT +
+                          &NUMLOTC *TCAT ') WITH DATA')
              RUNSQL     SQL(&REQUETE) COMMIT(*NONE) NAMING(*SQL)
 
 
@@ -121,6 +124,7 @@
              ENDDO
 
              DLTF       FILE(&BIBLIO/&SAVF)
+             DLTF       FILE(&BIBLIO/&LISTOBJ)
              DLTOBJ     OBJ(&BIBLIO/DSTLOT10) OBJTYPE(*PGM)
 
              GOTO       CMDLBL(FIN)

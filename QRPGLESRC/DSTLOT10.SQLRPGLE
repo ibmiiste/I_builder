@@ -43,6 +43,10 @@ Dcl-s l_Cmd Like(r_commande_CLLE);
 
 Dcl-s l_Bib_lot Like(r_Nom_obj_IBMi);
 Dcl-s l_Sav_lot Like(r_Nom_obj_IBMi);
+Dcl-s l_Objet_lot Like(r_Nom_obj_IBMi);
+
+Dcl-s l_Requete Char(1024);
+
 // main function
 // Procédure principale
 
@@ -53,6 +57,8 @@ Monitor;
   l_Bib_lot = 'L' + %Editc(l_Num_lot:'X');
   // Nom de la SAVF lot
   l_Sav_lot = 'S' + %Editc(l_Num_lot:'X');
+    // Nom de la table contenant les objets à livrer
+  l_Objet_lot = 'O' + %Editc(l_Num_lot:'X');
 
   // Mise en ligne de la bibliothèque temporaire de livraison
   l_Cmd='Addlible ' + l_Bib_lot;
@@ -61,14 +67,17 @@ Monitor;
   EXEC SQL
     CLOSE Csr_Obj_Sav;
 
+  l_Requete='SELECT Bibliotheque_destination, ' +
+                   'Objet_Destination, ' +
+                   'Type_Objet ' +
+              'FROM ' + l_Objet_lot +
+             'WHERE Lot_Number = :L_Num_Lot ' +
+             'ORDER BY Ordre';
+
+  EXEC SQL PREPARE Obj_List FROM :L_Requete;
+
   EXEC SQL
-    DECLARE Csr_Obj_Sav CURSOR FOR
-      SELECT Bibliotheque_destination,
-             Objet_Destination,
-             Type_Objet
-        FROM List_Objet_Build
-        WHERE Lot_Number = :L_Num_Lot
-        ORDER BY Ordre;
+    DECLARE Csr_Obj_Sav CURSOR FOR Obj_List;
 
   EXEC SQL
     OPEN Csr_Obj_Sav;
