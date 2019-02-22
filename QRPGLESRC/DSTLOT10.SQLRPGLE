@@ -105,6 +105,10 @@ Monitor;
 
   EXEC SQL CLOSE Csr_Obj_Sav;
 
+  // Suppression de la bibliothèque lot de la liste
+  l_Cmd='Rmvlible ' + l_Bib_lot;
+  Cmd_exec(l_Cmd);
+
   l_Cmd = 'DLTLIB ' + l_Bib_lot;
   Cmd_exec(l_Cmd);
 
