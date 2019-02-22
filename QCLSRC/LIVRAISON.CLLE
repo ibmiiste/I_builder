@@ -28,7 +28,6 @@
              DCL        VAR(&PMGDT) TYPE(*CHAR) LEN(99)
              DCL        VAR(&SRCF) TYPE(*CHAR) LEN(10)
              DCL        VAR(&PGM) TYPE(*CHAR) LEN(10) VALUE('GSTLOT20')
-             DCL        VAR(&REQUETE) TYPE(*CHAR) LEN(1024)
 
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Préparation à la livraison et +
                           livraison') BNDDIR(I_BUILDER)
@@ -44,12 +43,7 @@
 
              /* Copier liste des objets à livrer dans une table dans le lot Séquence/Bib */
              /* source/Fichier source/membre source/bib objet */
-             CHGVAR     VAR(&REQUETE) VALUE('CREATE TABLE' *BCAT &BIBLIO *TCAT '.' +
-                          *TCAT &LISTOBJ *BCAT 'AS ( SELECT ORDRE, +
-                          BIBLIOTHEQUE_DESTINATION, OBJET_DESTINATION, TYPE_OBJET +
-                          FROM I_BUILDER.LSTOBJBLD WHERE LOT_NUMBER =' *BCAT +
-                          &NUMLOTC *TCAT ') WITH DATA')
-             RUNSQL     SQL(&REQUETE) COMMIT(*NONE) NAMING(*SQL)
+             CALLPRC    PRC(COPIE_LISTE_OBJET_A_LIVRES) PARM((&NUMLOT))
 
 
              /* Création de la SAVF qui va être envoyée via FTP               */

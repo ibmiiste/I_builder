@@ -467,6 +467,18 @@ DCL-PROC Ajout_clef_obj_sauv Export;
       FETCH Csr_Obj_Sav INTO :L_Objdst, :L_Typobj;
   Enddo;
 
+  g_Nom_objet='DSTLOT10';
+  g_Type_objet='*PGM';
+  g_Nombre_valeur_Objet+=1;
+
+  g_Objet_desc+=%Size(DS_Object_Desc);
+
+  g_Nom_objet='O' + %Editc(l_Num_lot:'X');
+  g_Type_objet='*FILE';
+  g_Nombre_valeur_Objet+=1;
+
+  g_Objet_desc+=%Size(DS_Object_Desc);
+
   g_Longueur_valeurs_Objet=g_Nombre_valeur_Objet*20;
 
   g_Longueur_post_Objet=%Size(DS_Objet_define)+g_Longueur_valeurs_Objet;
