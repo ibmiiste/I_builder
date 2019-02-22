@@ -89,8 +89,8 @@
              CALLPRC    PRC(SCRIPTFTP) PARM((&USER) (&MDP) (&SAVF) (&SRCF) +
                           (&CHEMINSAVO) (&CHEMINSAVD))
 
-             OVRDBF     FILE(INPUT) TOFILE(&SRCF) MBR(IN)
-             OVRDBF     FILE(OUTPUT) TOFILE(&SRCF) MBR(OUT)
+             OVRDBF     FILE(INPUT) TOFILE(&SRCF) MBR(IN) OVRSCOPE(*CALLLVL)
+             OVRDBF     FILE(OUTPUT) TOFILE(&SRCF) MBR(OUT) OVRSCOPE(*CALLLVL)
 
              FTP        RMTSYS(&MACHINE)
 
