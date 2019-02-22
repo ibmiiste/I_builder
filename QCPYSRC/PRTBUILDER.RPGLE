@@ -575,3 +575,14 @@
          p_Num_lot LIKE(r_Num_lot);
          p_Target_release Like(r_Target_release);
        END-PR ;
+
+       // --------------------------------------------------
+       // Procedure name: Copie_liste_objet_a_livres
+       // Purpose:        Liste dans une table les objets à livrer avec les e...
+       //                          mplacements où les envoyés
+       // Returns:
+       // Parameter:      p_Numero_lot => Numéro de lot
+       // --------------------------------------------------
+       DCL-Pr Copie_liste_objet_a_livres;
+         p_Numero_lot LIKE(r_Num_lot);
+       END-Pr;
