@@ -73,7 +73,7 @@ Dcl-pr SndMsg;
 End-pr;
 
 Dcl-pr Init_keys_SAVOBJ;
-  p_Num_lot like(r_Num_lot) Value;
+  p_Num_lot like(r_Num_lot);
 END-Pr;
 
 
@@ -182,7 +182,7 @@ Dcl-c c_Trouve 0;
 // Procedure-Interface definition
 Dcl-proc Sauv_obj_lot Export;
   Dcl-pi Sauv_obj_lot;
-    p_Num_lot Like(r_Num_lot) Value;
+    p_Num_lot Like(r_Num_lot);
   END-PI;
 
   // local functions prototypes
@@ -313,7 +313,7 @@ END-PROC ;
 // --------------------------------------------------
 DCL-PROC Init_keys_SAVOBJ Export;
   Dcl-pi Init_keys_SAVOBJ;
-    p_Num_lot like(r_Num_lot) Value;
+    p_Num_lot like(r_Num_lot);
   END-PI;
 
   Dcl-s l_Num_lot like(r_Num_lot);
@@ -390,7 +390,7 @@ End-proc;
 // --------------------------------------------------
 DCL-PROC Ajout_clef_obj_sauv Export;
   Dcl-pi Ajout_clef_obj_sauv;
-    p_Num_lot like(r_Num_lot) Value;
+    p_Num_lot like(r_Num_lot);
   END-PI;
 
   Dcl-s l_Objdst Like(r_Nom_obj_IBMi);

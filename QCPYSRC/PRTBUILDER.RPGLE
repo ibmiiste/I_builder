@@ -562,3 +562,15 @@
          Reserved char(1);                       // Reserved  data
          MessageData char(32767);                //  Exception data
        end-ds;
+
+
+       // --------------------------------------------------
+       // Procedure name: Sauv_obj_lot
+       // Purpose:        Sauvegarder les objets présent dans une bibliothèqu...
+       //                          e LOT
+       // Returns:
+       // Parameter:      p_Num_lot => Numéro du lot
+       // --------------------------------------------------
+       DCL-PR Sauv_obj_lot;
+         p_Num_lot LIKE(r_Num_lot);
+       END-PR ;
