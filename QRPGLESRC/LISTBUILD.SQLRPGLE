@@ -331,6 +331,7 @@
 
          if Livraison_recette;
             g_optimize='*NONE';
+            Testlot(l_Num_lot_Dec);
             builder( g_Num_lot
                     :g_lib_lot
                     :''
@@ -339,12 +340,14 @@
                     :'CICA95'
                     :'DRUBIGNY'
                     :'DANIEL1E01');
+            RMVlot(l_Num_lot_Dec);
             EXEC SQL
               UPDATE lots SET statlot = 'R' WHERE lot_number = :p_num_lot;
          EndIf;
 
          if Livraison_production;
             g_optimize='*FULL';
+            Testlot(l_Num_lot_Dec);
             builder( g_Num_lot
                     :g_lib_lot
                     :''
@@ -353,6 +356,7 @@
                     :'CICA98'
                     :'DRUBIGNY'
                     :'DANIEL1E01');
+            RMVlot(l_Num_lot_Dec);
             EXEC SQL
               UPDATE lots SET statlot = 'P' WHERE lot_number = :p_num_lot;
          EndIf;
@@ -583,6 +587,7 @@
               g_FicSrc_pre=ZFICSRC;
               g_MbrSrc_pre=ZMBRSRC;
               g_optimize='*NONE';
+              Testlot(l_Num_lot_Dec);
               Construct( g_Lib_lot
                         :g_FicSrc_pre
                         :g_MbrSrc_pre
@@ -604,6 +609,7 @@
               if  g_Failed<>0;
                 EnvRapMel();
               EndIf;
+              RMVlot(l_Num_lot_Dec);
               Livraison( g_num_lot
                         :'CICA95'
                         :'DRUBIGNY'
@@ -613,6 +619,7 @@
               g_FicSrc_pre=ZFICSRC;
               g_MbrSrc_pre=ZMBRSRC;
               g_optimize='*FULL';
+              Testlot(l_Num_lot_Dec);
               Construct( g_Lib_lot
                         :g_FicSrc_pre
                         :g_MbrSrc_pre
@@ -634,12 +641,13 @@
               if  g_Failed<>0;
                 EnvRapMel();
               EndIf;
+              RMVlot(l_Num_lot_Dec);
               Livraison( g_num_lot
                         :'CICA98'
                         :'DRUBIGNY'
                         :'DANIEL1E01');
-            when (zopt = '99');
-              a_chx='PE';
+            //when (zopt = '99');
+            //  a_chx='PE';
             other;
               // la saisie ne correspond  rien
               g_filtre = *off;
