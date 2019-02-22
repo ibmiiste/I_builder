@@ -37,8 +37,7 @@
 
              CHGVAR     VAR(&BIBLIO) VALUE('L' *TCAT &NUMLOTC)
 
-             CRTDUPOBJ  OBJ(DSTLOT10) FROMLIB(I_BUILDER) +
-                          OBJTYPE(*PGM) TOLIB(&BIBLIO)
+             CRTDUPOBJ  OBJ(DSTLOT10) FROMLIB(*LIBL) OBJTYPE(*PGM) TOLIB(&BIBLIO)
 
              /* Copier liste des objets à livrer dans une table dans le lot Séquence/Bib */
              /* source/Fichier source/membre source/bib objet */
@@ -122,6 +121,7 @@
              ENDDO
 
              DLTF       FILE(&BIBLIO/&SAVF)
+             DLTOBJ     OBJ(&BIBLIO/DSTLOT10) OBJTYPE(*PGM)
 
              GOTO       CMDLBL(FIN)
 
