@@ -95,7 +95,20 @@
              /* destination */
              CHGVAR     VAR(&CMD) VALUE('RSTOBJ OBJ(DSTLOT10) SAVLIB(' *TCAT +
                           &BIBLIO *TCAT ') DEV(*SAVF) SAVF(' *TCAT &BIBLIO *TCAT +
-                          '/' *TCAT &SAVF *TCAT ') MBROPT(*NEW) ALWOBJDIF(*ALL)')
+                          '/' *TCAT &SAVF *TCAT ') MBROPT(*NEW)')
+             RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
+                          RMTPWD(&MDP)
+             MONMSG     MSGID(CPF91CF) EXEC(DO)
+                CHGVAR     VAR(&PMGDT) VALUE(&MACHINE)
+                CHGVAR     VAR(&PMGID) VALUE('ERR0004')
+                CALL       PGM(GSTMSG01) PARM(&PTYP &PFICM &PMGID &PMGDT &PGM)
+                GOTO       CMDLBL(FIN)
+             ENDDO
+
+             /* Restauration de la table de référence  */
+             CHGVAR     VAR(&CMD) VALUE('RSTOBJ OBJ(' *TCAT &LISTOBJ *TCAT ') +
+                          SAVLIB(' *TCAT &BIBLIO *TCAT ') DEV(*SAVF) SAVF(' *TCAT +
+                          &BIBLIO *TCAT '/' *TCAT &SAVF *TCAT ') MBROPT(*NEW)')
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
                           RMTPWD(&MDP)
              MONMSG     MSGID(CPF91CF) EXEC(DO)
