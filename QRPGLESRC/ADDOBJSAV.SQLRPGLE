@@ -74,6 +74,7 @@ End-pr;
 
 Dcl-pr Init_keys_SAVOBJ;
   p_Num_lot like(r_Num_lot);
+  p_Target_release Like(r_Target_release);
 END-Pr;
 
 
@@ -143,6 +144,16 @@ Dcl-Ds DS_Objet_define Based(g_Objet_define);
   g_Nombre_valeur_Objet Int(10:0);
 End-ds;
 
+// Description des Version cible
+Dcl-s g_Target_release Pointer;
+Dcl-ds DS_Target_release Based(g_Target_release);
+  g_Longueur_post_Target_release Int(10:0);
+  g_Clef_Target_release Int(10:0);
+  g_Longueur_valeurs_Target_release Int(10:0);
+  g_valeurs_Target_release Like(r_Target_release);
+End-ds;
+
+
 // Description des objets à sauvegarder
 Dcl-s g_Objet_desc Pointer;
 Dcl-ds DS_Object_Desc Based(g_Objet_desc);
@@ -183,6 +194,7 @@ Dcl-c c_Trouve 0;
 Dcl-proc Sauv_obj_lot Export;
   Dcl-pi Sauv_obj_lot;
     p_Num_lot Like(r_Num_lot);
+    p_Target_release Like(r_Target_release);
   END-PI;
 
   // local functions prototypes
@@ -216,7 +228,8 @@ Dcl-proc Sauv_obj_lot Export;
     //              Le SAVF utilisé comme support
     //              l'option de ne pas sauvegarder les accès liés à des physiques présents
     //              dans la liste d'objets à sauvegarder
-    Init_keys_SAVOBJ(p_Num_lot);
+    Init_keys_SAVOBJ( p_Num_lot
+                     :p_Target_release);
 
     // Alimentation du user space USPSAVOBJ avec la clef 1 et les objets à sauvegarder
     Ajout_clef_obj_sauv(p_Num_lot);
@@ -314,6 +327,7 @@ END-PROC ;
 DCL-PROC Init_keys_SAVOBJ Export;
   Dcl-pi Init_keys_SAVOBJ;
     p_Num_lot like(r_Num_lot);
+    p_Target_release Like(r_Target_release);
   END-PI;
 
   Dcl-s l_Num_lot like(r_Num_lot);
@@ -375,6 +389,16 @@ DCL-PROC Init_keys_SAVOBJ Export;
   g_Clef_Access_Path=18;
   g_Longueur_valeurs_Access_Path=%Size(g_valeur_Access_Path);
   g_valeur_Access_Path='0';
+
+  SavObjUspPtr+=%Size(Ds_Access_Path_define);
+  g_Nbr_post_cle_var+=1;
+
+  // Version cible.
+  g_Target_release=SavObjUspPtr;
+  g_Longueur_post_Target_release=%Size(Ds_Target_release);
+  g_Clef_Target_release=11;
+  g_Longueur_valeurs_Target_release=%Size(g_valeurs_Target_release);
+  g_valeurs_Target_release=p_Target_release;
 
   SavObjUspPtr+=%Size(Ds_Access_Path_define);
   g_Nbr_post_cle_var+=1;

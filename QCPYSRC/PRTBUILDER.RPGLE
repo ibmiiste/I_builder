@@ -573,4 +573,5 @@
        // --------------------------------------------------
        DCL-PR Sauv_obj_lot;
          p_Num_lot LIKE(r_Num_lot);
+         p_Target_release Like(r_Target_release);
        END-PR ;

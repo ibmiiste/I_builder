@@ -10,6 +10,7 @@
              PGM        PARM(&NUMLOT &MACHINE &USER &MDP)
 
              DCL        VAR(&NUMLOT) TYPE(*DEC) LEN(9 0)
+             DCL        VAR(&TGTRLS) TYPE(*CHAR) LEN(10) VALUE('V7R1M0')
              DCL        VAR(&NUMLOTC) TYPE(*CHAR) LEN(9)
              DCL        VAR(&BIBLIO) TYPE(*CHAR) LEN(10)
              DCL        VAR(&LISTOBJ) TYPE(*CHAR) LEN(10)
@@ -79,7 +80,7 @@
              ENDDO
 
              /* Sauvegarde des objets du lots dans une SAVF                               */
-             CALLPRC    PRC(SAUV_OBJ_LOT) PARM((&NUMLOT))
+             CALLPRC    PRC(SAUV_OBJ_LOT) PARM((&NUMLOT) (&TGTRLS))
 
              /* Envoyer la SAVF sur le système cible par ftp dans la bib lot              */
              CHGVAR     VAR(&CHEMINSAVO) VALUE('/QSYS.LIB/' *TCAT &BIBLIO *TCAT +
@@ -127,15 +128,6 @@
              DLTF       FILE(&BIBLIO/&LISTOBJ)
              DLTOBJ     OBJ(&BIBLIO/DSTLOT10) OBJTYPE(*PGM)
 
-             CHGVAR     VAR(&CMD) VALUE('DLTLIB LIB(' *TCAT &BIBLIO *TCAT ')')
-             RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
-                          RMTPWD(&MDP)
-             MONMSG     MSGID(CPF91CF) EXEC(DO)
-                CHGVAR     VAR(&PMGDT) VALUE(&MACHINE)
-                CHGVAR     VAR(&PMGID) VALUE('ERR0002')
-                CALL       PGM(GSTMSG01) PARM(&PTYP &PFICM &PMGID &PMGDT &PGM)
-                GOTO       CMDLBL(FIN)
-             ENDDO
 
              GOTO       CMDLBL(FIN)
 
