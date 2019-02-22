@@ -400,7 +400,7 @@ DCL-PROC Init_keys_SAVOBJ Export;
   g_Longueur_valeurs_Target_release=%Size(g_valeurs_Target_release);
   g_valeurs_Target_release=p_Target_release;
 
-  SavObjUspPtr+=%Size(Ds_Access_Path_define);
+  SavObjUspPtr+=%Size(Ds_Target_release);
   g_Nbr_post_cle_var+=1;
 
 End-proc;
