@@ -127,6 +127,16 @@
              DLTF       FILE(&BIBLIO/&LISTOBJ)
              DLTOBJ     OBJ(&BIBLIO/DSTLOT10) OBJTYPE(*PGM)
 
+             CHGVAR     VAR(&CMD) VALUE('DLTLIB LIB(' *TCAT &BIBLIO *TCAT ')')
+             RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
+                          RMTPWD(&MDP)
+             MONMSG     MSGID(CPF91CF) EXEC(DO)
+                CHGVAR     VAR(&PMGDT) VALUE(&MACHINE)
+                CHGVAR     VAR(&PMGID) VALUE('ERR0002')
+                CALL       PGM(GSTMSG01) PARM(&PTYP &PFICM &PMGID &PMGDT &PGM)
+                GOTO       CMDLBL(FIN)
+             ENDDO
+
              GOTO       CMDLBL(FIN)
 
  ERREUR:     DMPCLPGM
