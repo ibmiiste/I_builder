@@ -86,8 +86,6 @@
        dcl-s a_mdt like(r_msgdta);
 
        Dcl-s g_Num_lot Like(r_Num_lot);
-       // Numéro de lot en packé
-       Dcl-s l_Num_lot_Dec Packed(9:0);
 
        dcl-s a_chx char(2);
        //dcl-s a_nrec like(r_uuid_db2);
@@ -215,6 +213,10 @@
        // fonction principale
       /free
        monitor;
+
+         // Initialisation de variables
+         g_Num_lot=p_Bum_lot;
+
          // le nombre de lignes affichables, déclaration Ã  la volée
          g_nblis1=18;
          // initialisation des variables générales
@@ -314,8 +316,7 @@
          // on ne fait ceci que s'il n'y a eu rien d'autre
          if Construction;
             g_optimize='*NONE';
-            l_Num_lot_Dec=g_Num_lot;
-            Testlot(l_Num_lot_Dec);
+            Testlot(g_Num_lot);
             builder( g_Num_lot
                     :g_lib_lot
                     :''
@@ -324,14 +325,14 @@
                     :''
                     :''
                     :'');
-            RMVlot(l_Num_lot_Dec);
+            RMVlot(g_Num_lot);
           EXEC SQL
             UPDATE lots SET statlot = 'D' WHERE lot_number = :p_num_lot;
          EndIf;
 
          if Livraison_recette;
             g_optimize='*NONE';
-            Testlot(l_Num_lot_Dec);
+            Testlot(g_Num_lot);
             builder( g_Num_lot
                     :g_lib_lot
                     :''
@@ -340,14 +341,14 @@
                     :'CICA95'
                     :'DRUBIGNY'
                     :'DANIEL1E01');
-            RMVlot(l_Num_lot_Dec);
+            RMVlot(g_Num_lot);
             EXEC SQL
               UPDATE lots SET statlot = 'R' WHERE lot_number = :p_num_lot;
          EndIf;
 
          if Livraison_production;
             g_optimize='*FULL';
-            Testlot(l_Num_lot_Dec);
+            Testlot(g_Num_lot);
             builder( g_Num_lot
                     :g_lib_lot
                     :''
@@ -356,7 +357,7 @@
                     :'CICA98'
                     :'DRUBIGNY'
                     :'DANIEL1E01');
-            RMVlot(l_Num_lot_Dec);
+            RMVlot(g_Num_lot);
             EXEC SQL
               UPDATE lots SET statlot = 'P' WHERE lot_number = :p_num_lot;
          EndIf;
@@ -373,7 +374,6 @@
          // initialisation de la variable de sélection
          g_wsobp=ZSOBJET;
          l_sobjet=*blank;
-         g_Num_lot=p_num_lot;
 
          //Récupération de la list de bibliothèque
          EXEC SQL
@@ -558,8 +558,7 @@
               g_FicSrc_pre=ZFICSRC;
               g_MbrSrc_pre=ZMBRSRC;
               g_optimize='*NONE';
-              l_Num_lot_Dec=g_Num_lot;
-              Testlot(l_Num_lot_Dec);
+              Testlot(g_Num_lot);
               Construct( g_Lib_lot
                         :g_FicSrc_pre
                         :g_MbrSrc_pre
@@ -578,7 +577,7 @@
                         :''
                         :''
                         :'');
-              Rmvlot(l_Num_lot_Dec);
+              Rmvlot(g_Num_lot);
               if  g_Failed<>0;
                 EnvRapMel();
               EndIf;
@@ -587,7 +586,7 @@
               g_FicSrc_pre=ZFICSRC;
               g_MbrSrc_pre=ZMBRSRC;
               g_optimize='*NONE';
-              Testlot(l_Num_lot_Dec);
+              Testlot(g_Num_lot);
               Construct( g_Lib_lot
                         :g_FicSrc_pre
                         :g_MbrSrc_pre
@@ -609,7 +608,7 @@
               if  g_Failed<>0;
                 EnvRapMel();
               EndIf;
-              RMVlot(l_Num_lot_Dec);
+              RMVlot(g_Num_lot);
               Livraison( g_num_lot
                         :'CICA95'
                         :'DRUBIGNY'
@@ -619,7 +618,7 @@
               g_FicSrc_pre=ZFICSRC;
               g_MbrSrc_pre=ZMBRSRC;
               g_optimize='*FULL';
-              Testlot(l_Num_lot_Dec);
+              Testlot(g_Num_lot);
               Construct( g_Lib_lot
                         :g_FicSrc_pre
                         :g_MbrSrc_pre
@@ -641,7 +640,7 @@
               if  g_Failed<>0;
                 EnvRapMel();
               EndIf;
-              RMVlot(l_Num_lot_Dec);
+              RMVlot(g_Num_lot);
               Livraison( g_num_lot
                         :'CICA98'
                         :'DRUBIGNY'
