@@ -215,7 +215,7 @@
        monitor;
 
          // Initialisation de variables
-         g_Num_lot=p_Bum_lot;
+         g_Num_lot=p_Num_lot;
 
          // le nombre de lignes affichables, déclaration Ã  la volée
          g_nblis1=18;
