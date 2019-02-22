@@ -332,7 +332,7 @@
          if Livraison_recette;
             g_optimize='*NONE';
             builder( g_Num_lot
-                    :''
+                    :g_lib_lot
                     :''
                     :g_optimize
                     :'1'
@@ -346,7 +346,7 @@
          if Livraison_production;
             g_optimize='*FULL';
             builder( g_Num_lot
-                    :''
+                    :g_lib_lot
                     :''
                     :g_optimize
                     :'1'
