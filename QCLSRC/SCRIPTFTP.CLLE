@@ -22,7 +22,7 @@
              DCL        VAR(&NUMALEC) TYPE(*CHAR) LEN(9)
              DCL        VAR(&RAND) TYPE(*DEC) LEN(15 0) VALUE(999999999)
              DCL        VAR(&FILE) TYPE(*CHAR) LEN(128)
-             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Envoi ftp') BNDDIR(VERSIOBND)
+             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Envoi ftp') BNDDIR(BUILDERSRV)
 
              CALLPRC    PRC(ALEATOIRE) PARM((&RAND)) RTNVAL(&NUMALEA)
 
