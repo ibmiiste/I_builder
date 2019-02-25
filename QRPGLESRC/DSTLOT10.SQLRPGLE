@@ -5,14 +5,38 @@
 
 // Option de compilation et de programme
 /Copy Qcpysrc,Cpyctlstm
-Ctl-opt bnddir('I_BUILDER');
 
 // Déclaration des fichiers
 // dcl-f fichier disk;
 
-// External subprocedures prototypes globales
-// prototype sous-procédures externes
-/Copy Qcpysrc,Prtbuilder
+// Prototype Procédures Externe
+//---------------------------------------------------------------*
+//                                                               *
+// Programme qcmdexc   : permet de lancer l'API                  *
+//                                                               *
+// paramètres en entrée : la chaine contenant la commande        *
+//                        la longueur de la chaine de commande   *
+//                                                               *
+// REMARQUE            : sera appelé par la procédure exec
+//                       ou cmd_exec                             *
+//---------------------------------------------------------------*
+DCL-PR qcmdexc extpgm('QCMDEXC');
+  command char(1024) const options(*varsize);
+  length  packed(15:5) const;
+END-PR;
+
+
+// Prototypes des sous-procédures interne
+//---------------------------------------------------------------*
+//                                                               *
+// Procedure cmd_exec  : lance une commande (alias de exec)      *
+//                                                               *
+// paramètre en entrée : la commande                             *
+//                                                               *
+//---------------------------------------------------------------*
+DCL-PR cmd_exec;
+  cmd varchar(1024) const;
+END-PR;
 
 
 // Program status data structure
@@ -57,7 +81,7 @@ Monitor;
   l_Bib_lot = 'L' + %Editc(l_Num_lot:'X');
   // Nom de la SAVF lot
   l_Sav_lot = 'S' + %Editc(l_Num_lot:'X');
-    // Nom de la table contenant les objets à livrer
+  // Nom de la table contenant les objets à livrer
   l_Objet_lot = 'O' + %Editc(l_Num_lot:'X');
 
   // Mise en ligne de la bibliothèque temporaire de livraison
@@ -105,10 +129,6 @@ Monitor;
 
   EXEC SQL CLOSE Csr_Obj_Sav;
 
-  // Suppression de la bibliothèque lot de la liste
-  l_Cmd='Rmvlible ' + l_Bib_lot;
-  Cmd_exec(l_Cmd);
-
   l_Cmd = 'DLTLIB ' + l_Bib_lot;
   Cmd_exec(l_Cmd);
 
@@ -129,22 +149,19 @@ Return;
 // endsr;
 
 
-// --------------------------------------------------
-// Procedure name: sous_proc1
-// Purpose:
-// Returns:
-// --------------------------------------------------
-// DCL-PROC sous_proc1 ;
+//---------------------------------------------------------------*
+//                                                               *
+// Procedure exec      : lance une commande                      *
+//                                                               *
+// paramètre en entrée : la commande                             *
+//                                                               *
+//---------------------------------------------------------------*
+DCL-PROC cmd_exec;
 
-// dcl-pi sous_proc1 ind;
-//   donnees2 char(150);
-// end-pi;
-// Données locales
-// DCL-S l_donnee1 like(r_ref6);
-// Programmation
+  DCL-PI *n;
+    cmd varchar(1024) const;
+  END-PI;
 
+  qcmdexc(%trim(cmd):%len(%trim(cmd)));
 
-// END-PROC ;
-
-
-
+END-PROC;
