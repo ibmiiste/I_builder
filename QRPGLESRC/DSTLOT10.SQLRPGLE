@@ -56,7 +56,7 @@ dcl-c  c_Trouve 0;
 // Paramètres d'appel
 // Procedure-Interface definition
 DCL-PI Restauration_objet ExtPGM('DSTLOT10');
-  p_Num_lot LIKE(r_Num_lot);
+  p_Num_lot LIKE(r_Num_lot_carac) Const;
 END-PI;
 
 Dcl-s l_Bibdst Like(r_Nom_obj_IBMi);
@@ -76,7 +76,7 @@ Dcl-s l_Requete Char(1024);
 
 Monitor;
 
-  l_Num_lot=p_Num_lot;
+  l_Num_lot=%Dec(p_Num_lot:9:0);
   // Nom de la bibliothèque lot
   l_Bib_lot = 'L' + %Editc(l_Num_lot:'X');
   // Nom de la SAVF lot
@@ -95,8 +95,8 @@ Monitor;
                    'Objet_Destination, ' +
                    'Type_Objet ' +
               'FROM ' + l_Objet_lot +
-             'WHERE Lot_Number = :L_Num_Lot ' +
-             'ORDER BY Ordre';
+             ' WHERE Lot_Number = ' + %Char(L_Num_Lot) +
+             ' ORDER BY Ordre';
 
   EXEC SQL PREPARE Obj_List FROM :L_Requete;
 
@@ -116,7 +116,7 @@ Monitor;
 
     l_Cmd='RSTOBJ OBJ(' + L_Objdst + ') ' +
            'SAVLIB(' + l_Bib_lot + ') ' +
-           'DEV(*SAVF)' +
+           'DEV(*SAVF) ' +
            'OBJTYPE(' + L_Typobj + ') ' +
            'SAVF(' + l_Bib_lot + '/' + l_Sav_lot + ') ' +
            'RSTLIB(' + L_Bibdst + ')';
@@ -129,13 +129,15 @@ Monitor;
 
   EXEC SQL CLOSE Csr_Obj_Sav;
 
+  l_Cmd = 'RMVLIBLE ' + l_Bib_lot;
+  Cmd_exec(l_Cmd);
+
   l_Cmd = 'DLTLIB ' + l_Bib_lot;
   Cmd_exec(l_Cmd);
 
 on-error;
   dump(a);
-  gest_erreur();
-endmon;
+Endmon;
 
 // indicateur de fin de programme
 *inlr = *on;

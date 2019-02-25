@@ -121,7 +121,7 @@
              /* Lancement du programme qui va extraire les objets et les copier à leur */
              /* destination                                                            */
              CHGVAR     VAR(&CMD) VALUE('CALL' *BCAT &BIBLIO *TCAT '/DSTLOT10 +
-                          PARM(' *TCAT &NUMLOTC *TCAT ')')
+                          PARM(''' *TCAT &NUMLOTC *TCAT ''')')
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
                           RMTPWD(&MDP)
              MONMSG     MSGID(CPF91CF) EXEC(DO)
