@@ -38,6 +38,7 @@
          ParmEntry char(150);
        End-pr;
 
+
        DCL-PI liste_objet_construction;
          p_Num_lot Like(r_Num_lot) Const;
        END-PI ;
@@ -66,9 +67,9 @@
 
        // local functions prototypes
        // prototypes fonctions locales
-         Dcl-pr reincrement_liste_objet;
-           p_num_Lot like(r_Num_lot) const;
-         End-Pr;
+       Dcl-pr reincrement_liste_objet;
+         p_num_Lot like(r_Num_lot) const;
+       End-Pr;
 
        // global variables
        // variables globales
@@ -115,6 +116,11 @@
        Dcl-S g_MbrSrc_pre LIKE(r_Nom_obj_IBMi);
        Dcl-s g_list_biblio LIKE(r_Nom_obj_IBMi);
        Dcl-s g_lib_lot Like(r_Nom_obj_IBMi);
+
+      // API QUSRMBRD (Retreive Member Description)
+      // --------------------------------------------------
+       dcl-s bOvr char(1) inz('0');
+       dcl-s Fmt char(8) inz('MBRD0100');
 
        // Touches de fonction
        /copy qcpysrc,fonction
@@ -479,7 +485,12 @@
                          : a_mid
                          : a_mdt);
            Else;
-
+             API_RtvMbrDesc( MbrD0100
+                            :%Size(MbrD0100)
+                            :Fmt
+                            :Zficsrcc + Zbibsrcc
+                            :Zmbrsrcc
+                            :bOvr);
              EXEC SQL
                INSERT INTO List_Objet_Build(Numobjbld,
                                             Lot_Number,
@@ -489,7 +500,8 @@
                                             Membre_Source,
                                             Bibliotheque_Destination,
                                             Objet_Destination,
-                                            Type_Objet)
+                                            Type_Objet,
+                                            Type_Source)
                  VALUES (DEFAULT,
                          :P_Num_Lot,
                          :Zordrec,
@@ -498,9 +510,10 @@
                          :Zmbrsrcc,
                          :Zbibdstc,
                          :Zobjdstc,
-                         :Ztypobjc);
+                         :Ztypobjc,
+                         :Mbrd0100.Srctype);
+           Endif;
 
-           EndIf;
 
            zoptc=*blank;
            zordrec=*zero;
