@@ -68,6 +68,10 @@ Dcl-s l_Cmd Like(r_commande_CLLE);
 Dcl-s l_Bib_lot Like(r_Nom_obj_IBMi);
 Dcl-s l_Sav_lot Like(r_Nom_obj_IBMi);
 Dcl-s l_Objet_lot Like(r_Nom_obj_IBMi);
+Dcl-s L_Ficsrc Like(r_Nom_obj_IBMi);
+Dcl-s L_Mbrsrc Like(r_Nom_obj_IBMi);
+Dcl-s L_Typsrc Like(r_Typsrc);
+Dcl-s L_List_Lib Like(r_Nom_obj_IBMi);
 
 Dcl-s l_Requete Char(1024);
 
@@ -93,12 +97,14 @@ Monitor;
 
   l_Requete='SELECT Bibliotheque_destination, ' +
                    'Objet_Destination, ' +
-                   'Type_Objet ' +
+                   'Type_Objet, ' +
+                   'Fichier_source, ' +
+                   'Membre_sourc, ' +
+                   'Type_source, ' +
+                   'Liste_biblio_projet ' +
               'FROM ' + l_Objet_lot +
              ' WHERE Lot_Number = ' + %Char(L_Num_Lot) +
              ' ORDER BY Ordre';
-
-  EXEC SQL PREPARE Obj_List FROM :L_Requete;
 
   EXEC SQL
     DECLARE Csr_Obj_Sav CURSOR FOR Obj_List;
@@ -108,23 +114,44 @@ Monitor;
 
   // Lecture des objets du lot à livrer
   EXEC SQL
-    FETCH Csr_Obj_Sav INTO :L_Bibdst, :L_Objdst, :L_Typobj;
-
+    FETCH Csr_Obj_Sav
+      INTO :L_Bibdst, :L_Objdst, :L_Typobj, :L_Ficsrc, :L_Mbrsrc, :L_Typsrc, :L_List_Lib;
 
   Dow Sqlcode=c_Trouve;
     // Constitution de la commande de restauration par objet
+    If L_Typsrc <> 'SQL';
+      l_Cmd='RSTOBJ OBJ(' + L_Objdst + ') ' +
+             'SAVLIB(' + l_Bib_lot + ') ' +
+             'DEV(*SAVF) ' +
+             'OBJTYPE(' + L_Typobj + ') ' +
+             'SAVF(' + l_Bib_lot + '/' + l_Sav_lot + ') ' +
+             'RSTLIB(' + L_Bibdst + ')';
 
-    l_Cmd='RSTOBJ OBJ(' + L_Objdst + ') ' +
-           'SAVLIB(' + l_Bib_lot + ') ' +
-           'DEV(*SAVF) ' +
-           'OBJTYPE(' + L_Typobj + ') ' +
-           'SAVF(' + l_Bib_lot + '/' + l_Sav_lot + ') ' +
-           'RSTLIB(' + L_Bibdst + ')';
-
-    Cmd_exec(l_Cmd);
-
+        Cmd_exec(l_Cmd);
+    Else;
+        l_Cmd='RSTOBJ SAVLIB(' + L_BIB_LOT + ') ' +
+              'DEV(*SAVF) ' +
+              'SAVF(' + L_BIB_LOT + '/' + L_SAV_LOT + ') ' +
+              'FILEMBR((' + L_FICSRC + ' (' + L_MBRSRC + ')))';
+        Cmd_exec(l_Cmd);
+         Construct( L_BIB_LOT
+                   :L_FICSRC
+                   :L_MBRSRC
+                   :L_Bibdst
+                   :L_Objdst
+                   :L_Typobj
+                   :L_BIB_LOT
+                   :L_FICSRC
+                   :L_MBRSRC
+                   :''
+                   :l_Failed
+                   :l_FileAttach
+                   :l_List_Lib
+                   :l_option_donnees);
+    Endif;
     EXEC SQL
-      FETCH Csr_Obj_Sav INTO :L_Bibdst, :L_Objdst, :L_Typobj;
+      FETCH Csr_Obj_Sav
+        INTO :L_Bibdst, :L_Objdst, :L_Typobj, :L_Ficsrc, :L_Mbrsrc, :L_Typsrc, :L_List_Lib;
   Enddo;
 
   EXEC SQL CLOSE Csr_Obj_Sav;
