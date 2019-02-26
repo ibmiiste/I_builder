@@ -128,11 +128,7 @@
                        :g_Failed
                        :g_FileAttach
                        :g_list_biblio
-                       :g_option_donnees
-                       :P_Sys_Dst
-                       :P_User
-                       :P_Mot_De_Passe
-                       :P_Livr_Env_Dst);
+                       :g_option_donnees);
            Else;
              i_MrgMsgf( g_ObjDst + g_BibDst
                        :g_BibSrc

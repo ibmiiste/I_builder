@@ -10,8 +10,7 @@
 
              PGM        PARM(&PREBIBSRC &PREFICSRC &PRESRCMBR &BIBDST &OBJDST +
                           &TYPOBJ &BIBSRC &FICSRC &MBRSRC &OPTIMIZE &FAILED +
-                          &FILEATTACH &LISTBIB &GESTDATA &MACHINE &USER &MDP +
-                          &LIVRAISON)
+                          &FILEATTACH &LISTBIB &GESTDATA)
 
 
 
@@ -45,12 +44,7 @@
                           commande POSLIB */
              DCL        VAR(&QUOTE) TYPE(*CHAR) LEN(1) VALUE('''')
              DCL        VAR(&GESTDATA) TYPE(*CHAR) LEN(1)
-             DCL        VAR(&LIVRAISON) TYPE(*LGL)
              DCL        VAR(&OBJETQ) TYPE(*CHAR) LEN(20)
-             DCL        VAR(&MACHINE) TYPE(*CHAR) LEN(32)
-             DCL        VAR(&USER) TYPE(*CHAR) LEN(10)
-             DCL        VAR(&MDP) TYPE(*CHAR) LEN(10)
-             DCL        VAR(&NOM_TRAV) TYPE(*CHAR) LEN(10)
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Génération d''un objet avec +
                           STRPREPRC') BNDDIR(I_BUILDER)
 
@@ -92,7 +86,6 @@
                 CALLPRC    PRC(ALEATOIRE) PARM((&RAND)) RTNVAL(&NUMALEA)
                 CHGVAR     VAR(&NUMALEC) VALUE(&NUMALEA)
              CHGVAR     VAR(&SAUV_TAB) VALUE('A' *TCAT &NUMALEC)
-             CHGVAR     VAR(&NOM_TRAV) VALUE('SAV' *TCAT &OBJDST)
              CPYF       FROMFILE(&BIBDST/&OBJDST) TOFILE(&QTEMP/&SAUV_TAB) +
                           FROMMBR(*ALL) TOMBR(*FROMMBR) MBROPT(*REPLACE) +
                           CRTFILE(*YES) ERRLVL(*NOMAX)

@@ -572,10 +572,6 @@
                         :g_Failed
                         :g_FileAttach
                         :g_list_biblio
-                        :''
-                        :''
-                        :''
-                        :''
                         :'');
               Rmvlot(g_Num_lot);
               if  g_Failed<>0;
@@ -600,11 +596,7 @@
                         :g_Failed
                         :g_FileAttach
                         :g_list_biblio
-                        :''
-                        :'CICA95'
-                        :'DRUBIGNY'
-                        :'DANIEL1E01'
-                        :'1');
+                        :'');
               if  g_Failed<>0;
                 EnvRapMel();
               EndIf;
@@ -632,11 +624,7 @@
                         :g_Failed
                         :g_FileAttach
                         :g_list_biblio
-                        :''
-                        :'CICA98'
-                        :'DRUBIGNY'
-                        :'DANIEL1E01'
-                        :'1');
+                        :'');
               if  g_Failed<>0;
                 EnvRapMel();
               EndIf;
