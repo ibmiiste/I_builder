@@ -418,6 +418,7 @@ DCL-PROC Ajout_clef_obj_sauv Export;
   END-PI;
 
   Dcl-s l_Objdst Like(r_Nom_obj_IBMi);
+  Dcl-s L_Srcdst Like(r_Nom_obj_IBMi);
   Dcl-s l_Typobj Like(r_TypObj);
   Dcl-s l_Num_lot like(r_Num_lot);
 
@@ -453,8 +454,6 @@ DCL-PROC Ajout_clef_obj_sauv Export;
   // On place le pointeur de description d'objet sur le pointeur du user space de sauvegarde
   g_Objet_desc=SavObjUspPtr;
   Dow Sqlcode=c_Trouve;
-    // Save access paths information.
-
 
     g_Nom_objet=L_Objdst;
     g_Type_objet=L_Typobj;
@@ -467,7 +466,40 @@ DCL-PROC Ajout_clef_obj_sauv Export;
       FETCH Csr_Obj_Sav INTO :L_Objdst, :L_Typobj;
   Enddo;
 
-  g_Nom_objet='DSTLOT10';
+  // Ajout des sources SQL
+    EXEC SQL
+    CLOSE Csr_Sql_Sav;
+
+  EXEC SQL
+    DECLARE Csr_Sql_Sav CURSOR FOR
+      SELECT DISTINCT Fichier_Source
+        FROM List_Objet_Build
+        WHERE Lot_Number = :L_Num_Lot
+          AND Type_Source='SQL'
+        ORDER BY Ordre;
+
+  EXEC SQL
+    OPEN Csr_Sql_Sav;
+
+  // Lecture des objets du lot à livrer
+  EXEC SQL
+    FETCH Csr_Sql_Sav INTO :L_Srcdst;
+
+  Dow Sqlcode=c_Trouve;
+
+    g_Nom_objet=L_Srcdst;
+    g_Type_objet='*FILE';
+    g_Nombre_valeur_Objet+=1;
+
+    g_Objet_desc+=%Size(DS_Object_Desc);
+
+
+    EXEC SQL
+    FETCH Csr_Sql_Sav INTO :L_Srcdst;
+  Enddo;
+
+  // Ajout du programme de restauration distante
+  G_Nom_Objet='DSTLOT10';
   g_Type_objet='*PGM';
   g_Nombre_valeur_Objet+=1;
 
