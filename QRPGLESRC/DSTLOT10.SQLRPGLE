@@ -4,7 +4,8 @@
 // --------------------------------------------------
 
 // Option de compilation et de programme
-/Copy Qcpysrc,Cpyctlstm
+ctl-opt datedit(*ymd) decedit('0,');
+ctl-opt option(*nodebugio:*srcstmt:*nounref) CCSIDCVT(*LIST);
 
 // Déclaration des fichiers
 // dcl-f fichier disk;
@@ -25,6 +26,22 @@ DCL-PR qcmdexc extpgm('QCMDEXC');
   length  packed(15:5) const;
 END-PR;
 
+// --------------------------------------------------
+// Prototype for procedure: Construct
+// --------------------------------------------------
+DCL-PR Crtobjsql;
+  P_PreBibSrc CHAR(10) CONST;
+  P_PreFicSrc CHAR(10) CONST;
+  P_UseSrcMbr CHAR(10) CONST;
+  P_BibDst CHAR(10) CONST;
+  P_ObjDst CHAR(10) CONST;
+  P_TypObj char(7) CONST;
+  P_BibSrc CHAR(10)  CONST;
+  P_FicSrc CHAR(10)  CONST;
+  P_MbrSrc CHAR(10) CONST;
+  P_liste_biblio Like(r_Nom_obj_IBMi);
+  P_gestion_donnees Char(1) Const;
+END-PR ;
 
 // Prototypes des sous-procédures interne
 //---------------------------------------------------------------*
@@ -71,7 +88,8 @@ Dcl-s l_Objet_lot Like(r_Nom_obj_IBMi);
 Dcl-s L_Ficsrc Like(r_Nom_obj_IBMi);
 Dcl-s L_Mbrsrc Like(r_Nom_obj_IBMi);
 Dcl-s L_Typsrc Like(r_Typsrc);
-Dcl-s L_List_Lib Like(r_Nom_obj_IBMi);
+Dcl-s L_ListLib Like(r_Nom_obj_IBMi);
+Dcl-s l_option_donnees Char(1);
 
 Dcl-s l_Requete Char(1024);
 
@@ -115,7 +133,7 @@ Monitor;
   // Lecture des objets du lot à livrer
   EXEC SQL
     FETCH Csr_Obj_Sav
-      INTO :L_Bibdst, :L_Objdst, :L_Typobj, :L_Ficsrc, :L_Mbrsrc, :L_Typsrc, :L_List_Lib;
+      INTO :L_Bibdst, :L_Objdst, :L_Typobj, :L_Ficsrc, :L_Mbrsrc, :L_Typsrc, :L_Listlib;
 
   Dow Sqlcode=c_Trouve;
     // Constitution de la commande de restauration par objet
@@ -134,7 +152,7 @@ Monitor;
               'SAVF(' + L_BIB_LOT + '/' + L_SAV_LOT + ') ' +
               'FILEMBR((' + L_FICSRC + ' (' + L_MBRSRC + ')))';
         Cmd_exec(l_Cmd);
-         Construct( L_BIB_LOT
+         Crtobjsql( L_BIB_LOT
                    :L_FICSRC
                    :L_MBRSRC
                    :L_Bibdst
@@ -143,15 +161,12 @@ Monitor;
                    :L_BIB_LOT
                    :L_FICSRC
                    :L_MBRSRC
-                   :''
-                   :l_Failed
-                   :l_FileAttach
-                   :l_List_Lib
+                   :L_ListLib
                    :l_option_donnees);
     Endif;
     EXEC SQL
       FETCH Csr_Obj_Sav
-        INTO :L_Bibdst, :L_Objdst, :L_Typobj, :L_Ficsrc, :L_Mbrsrc, :L_Typsrc, :L_List_Lib;
+        INTO :L_Bibdst, :L_Objdst, :L_Typobj, :L_Ficsrc, :L_Mbrsrc, :L_Typsrc, :L_Listlib;
   Enddo;
 
   EXEC SQL CLOSE Csr_Obj_Sav;
