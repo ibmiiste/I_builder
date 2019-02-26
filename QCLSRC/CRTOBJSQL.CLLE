@@ -1,0 +1,90 @@
+      /* >>PRE-COMPILER<<                                                 */
+      /*   >>CRTCMD<<  CRTCLMOD MODULE(&LI/&OB) SRCFILE(&SL/&SF) +        */
+      /*                 SRCMBR(&SM);                                     */
+      /*   >>IMPORTANT<<                                                  */
+      /*     >>PARM<<  OPTION(*EVENTF);                                   */
+      /*     >>PARM<<  DBGVIEW(*ALL);                                     */
+      /*   >>END-IMPORTANT<<                                              */
+      /*   >>EXECUTE<<                                                    */
+      /* >>END-PRE-COMPILER<<                                             */
+
+             PGM        PARM(&PREBIBSRC &PREFICSRC &PRESRCMBR &BIBDST &OBJDST +
+                          &TYPOBJ &BIBSRC &FICSRC &MBRSRC &LISTBIB &GESTDATA)
+
+
+
+             DCL        VAR(&PREBIBSRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&PREFICSRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&PRESRCMBR) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&BIBDST) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&OBJDST) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&TYPOBJ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&BIBSRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&FICSRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&MBRSRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&TYPSRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&SAUV_TAB) TYPE(*CHAR) LEN(10) VALUE('          ')
+             DCL        VAR(&ATROBJ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&QTEMP) TYPE(*CHAR) LEN(10) VALUE('QGPL')
+             DCL        VAR(&TYPOBJE) TYPE(*CHAR) LEN(10) VALUE('*FILE     ')
+             DCL        VAR(&LISTBIB) TYPE(*CHAR) LEN(10) /* Liste de bibliothèque +
+                          à utiliser avec la commande POSLIB */
+             DCL        VAR(&GESTDATA) TYPE(*CHAR) LEN(1)
+             DCL        VAR(&OBJETQ) TYPE(*CHAR) LEN(20)
+             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Génération d''un objet avec +
+                          STRPREPRC')
+
+             /* Récupération du type de source                             */
+             RTVMBRD    FILE(&BIBSRC/&FICSRC) MBR(&MBRSRC *SAME) SRCTYPE(&TYPSRC)
+
+             POSLIB     LISTE(&LISTBIB) LIB(*NONE)
+
+             /* Récupération du type d'objet pour s'assurer que s'il existe il  */
+             /* faut sauvegarder les données avant création de la table/fichier */
+ RTVOBJD:    RTVOBJD    OBJ(&BIBDST/&OBJDST) OBJTYPE(&TYPOBJE) OBJATR(&ATROBJ)
+             MONMSG     MSGID(CPF9812 CPF9801 CPF9811)
+             MONMSG     MSGID(CPF3203) EXEC(DO)
+                SNDPGMMSG  MSG('''Objet en cours d''utilisation, nouvel essai dans +
+                             30 secondes''')
+                DLYJOB     DLY(30)
+                GOTO       CMDLBL(RTVOBJD)
+             ENDDO
+             /* Si le type d'objet est TABLE ou FICHIER, les données sont conservées */
+             /* dans un fichier temporaire pour être recopiées en fin de CONSTRUCT   */
+             IF         COND(&ATROBJ *EQ 'PF') THEN(DO)
+                CHKOBJ     OBJ(&BIBDST/&OBJDST) OBJTYPE(*FILE) MBR(*NONE)
+                MONMSG     MSGID(CPF9801) EXEC(GOTO CMDLBL(STANDARD))
+                CHGVAR     VAR(&SAUV_TAB) VALUE('SAUV_TAB')
+                CPYF       FROMFILE(&BIBDST/&OBJDST) TOFILE(&QTEMP/&SAUV_TAB) +
+                             FROMMBR(*ALL) TOMBR(*FROMMBR) MBROPT(*REPLACE) +
+                             CRTFILE(*YES) ERRLVL(*NOMAX)
+             ENDDO
+
+             /* Création de l'objet                                                */
+ STANDARD:   STRPREPRC  USESRCFILE(&PREBIBSRC/&PREFICSRC) USESRCMBR(&PRESRCMBR) +
+                          OPTION(*EVENTF) CHGOBJD(*NO) LIB(&BIBDST) OBJ(&OBJDST) +
+                          SRCLIB(&BIBSRC) SRCFILE(&FICSRC) SRCMBR(&MBRSRC) +
+                          USER0(*NONE)
+             /* Au cas où il n'y a pas de scripts spécifique dans le source */
+             /* On va rechercher le script standard PRE de création         */
+             MONMSG     MSGID(PRZ0028) EXEC(DO)
+                CHGVAR     VAR(&PRESRCMBR) VALUE('STDSQL')
+                CHGVAR     VAR(&PREFICSRC) VALUE('QBLDSCTSRC')
+                GOTO       CMDLBL(STANDARD)
+             ENDDO
+             MONMSG     MSGID(PRZ0002) EXEC(DO)
+                DMPCLPGM
+             ENDDO
+
+             IF         COND(&SAUV_TAB *NE '          ') THEN(CPYF +
+                          FROMFILE(&QTEMP/&SAUV_TAB) TOFILE(&BIBDST/&OBJDST) +
+                          FROMMBR(*ALL) TOMBR(*FROMMBR) MBROPT(*REPLACE) +
+                          CRTFILE(*YES) FMTOPT(*MAP *DROP) ERRLVL(*NOMAX))
+
+             RTVOBJD    OBJ(&BIBDST/&OBJDST) OBJTYPE(&TYPOBJE) OBJATR(&ATROBJ)
+             MONMSG     MSGID(CPF9812 CPF9801 CPF9811)
+             IF         COND(&ATROBJ *EQ 'LF') THEN(GRTOBJAUT OBJ(&BIBDST/&OBJDST) +
+                          OBJTYPE(*FILE) USER(*PUBLIC) AUT(*ALL))
+             CHGVAR     VAR(&OBJETQ) VALUE(&OBJDST *CAT &BIBDST)
+
+             ENDPGM
