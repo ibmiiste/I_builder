@@ -1,0 +1,11 @@
+      /* >>PRE-COMPILER<<                                              */
+      /*   >>CRTCMD<<  CRTPGM;                                         */
+      /*   >>IMPORTANT<<                                               */
+      /*     >>PARM<<  PGM(&LI/&OB);                                   */
+      /*     >>PARM<<  MODULE(&LI/DSTLOT10 +                           */
+      /*                      &LI/CRTOBJSQL);                          */
+      /*     >>PARM<<  ENTMOD(&LI/DSTLOT10);                           */
+      /*     >>PARM<<  DETAIL(*FULL);                                  */
+      /*   >>END-IMPORTANT<<                                           */
+      /*   >>EXECUTE<<                                                 */
+      /* >>END-PRE-COMPILER<<                                          */
