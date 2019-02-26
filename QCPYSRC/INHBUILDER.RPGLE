@@ -17,3 +17,4 @@
        Dcl-s r_Target_release Char(10) Template;
        Dcl-s r_typmsg char(1) Template;
        Dcl-s R_TypObj Char(10) Template;
+       Dcl-s R_TypSrc Char(10) Template;
