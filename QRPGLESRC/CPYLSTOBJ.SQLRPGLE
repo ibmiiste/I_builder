@@ -28,9 +28,12 @@ Dcl-s l_requete_sql Char(1024);
 
 
 l_requete_sql='Create Table L' + %editc(p_Numero_lot:'X') +
-'.O' +  %editc(p_Numero_lot:'X') + ' as ( Select * from ' +
-'list_objet_build Where LOT_NUMBER = ' + %Char(p_Numero_lot) +
-') With data';
+              '.O' +  %editc(p_Numero_lot:'X') +
+              ' as ( Select a.*, ' +
+                           'b.LISTE_BIBLIO_PROJET ' +
+                      'From list_objet_build a, Lots b ' +
+                     'Where a.LOT_NUMBER = ' + %Char(p_Numero_lot) +
+                      ' And a.LOT_NUMBER = b.LOT_NUMBER) With data';
 
 EXEC SQL
 EXECUTE IMMEDIATE :L_Requete_Sql;
