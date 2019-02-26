@@ -174,10 +174,6 @@
          P_FileAttach char(10000);
          P_liste_biblio Like(r_Nom_obj_IBMi);
          P_gestion_donnees Char(1) Const;
-         p_Sys_Dst char(32) Const;
-         P_User Char(10) Const;
-         P_Mot_De_Passe Char(10) Const;
-         P_Livr_Env_Dst IND const;
        END-PR ;
        /Endif
 
