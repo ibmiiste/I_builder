@@ -145,24 +145,24 @@ Monitor;
              'SAVF(' + l_Bib_lot + '/' + l_Sav_lot + ') ' +
              'RSTLIB(' + L_Bibdst + ')';
 
-        Cmd_exec(l_Cmd);
+      Cmd_exec(l_Cmd);
     Else;
-        l_Cmd='RSTOBJ SAVLIB(' + L_BIB_LOT + ') ' +
-              'DEV(*SAVF) ' +
-              'SAVF(' + L_BIB_LOT + '/' + L_SAV_LOT + ') ' +
-              'FILEMBR((' + L_FICSRC + ' (' + L_MBRSRC + ')))';
-        Cmd_exec(l_Cmd);
-         Crtobjsql( L_BIB_LOT
-                   :L_FICSRC
-                   :L_MBRSRC
-                   :L_Bibdst
-                   :L_Objdst
-                   :L_Typobj
-                   :L_BIB_LOT
-                   :L_FICSRC
-                   :L_MBRSRC
-                   :L_ListLib
-                   :l_option_donnees);
+      l_Cmd='RSTOBJ SAVLIB(' + L_BIB_LOT + ') ' +
+            'DEV(*SAVF) ' +
+            'SAVF(' + L_BIB_LOT + '/' + L_SAV_LOT + ') ' +
+            'FILEMBR((' + L_FICSRC + ' (' + L_MBRSRC + ')))';
+      Cmd_exec(l_Cmd);
+      Crtobjsql( L_BIB_LOT
+                 :L_FICSRC
+                 :L_MBRSRC
+                 :L_Bibdst
+                 :L_Objdst
+                 :L_Typobj
+                 :L_BIB_LOT
+                 :L_FICSRC
+                 :L_MBRSRC
+                 :L_ListLib
+                 :l_option_donnees);
     Endif;
     EXEC SQL
       FETCH Csr_Obj_Sav
