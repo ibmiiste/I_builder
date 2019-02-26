@@ -39,7 +39,7 @@
              CHGVAR     VAR(&BIBLIO) VALUE('L' *TCAT &NUMLOTC)
              CHGVAR     VAR(&LISTOBJ) VALUE('O' *TCAT &NUMLOTC)
 
-             CRTDUPOBJ  OBJ(DSTLOT10) FROMLIB(*LIBL) OBJTYPE(*PGM) TOLIB(&BIBLIO)
+             CRTDUPOBJ  OBJ(RSTOBJSQL) FROMLIB(*LIBL) OBJTYPE(*PGM) TOLIB(&BIBLIO)
 
              /* Copier liste des objets à livrer dans une table dans le lot Séquence/Bib */
              /* source/Fichier source/membre source/bib objet */
@@ -93,7 +93,7 @@
 
              /* Restauration du programme qui va extraire les objets et les copier à leur  */
              /* destination */
-             CHGVAR     VAR(&CMD) VALUE('RSTOBJ OBJ(DSTLOT10) SAVLIB(' *TCAT +
+             CHGVAR     VAR(&CMD) VALUE('RSTOBJ OBJ(RSTOBJSQL) SAVLIB(' *TCAT +
                           &BIBLIO *TCAT ') DEV(*SAVF) SAVF(' *TCAT &BIBLIO *TCAT +
                           '/' *TCAT &SAVF *TCAT ') MBROPT(*NEW)')
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
@@ -120,7 +120,7 @@
 
              /* Lancement du programme qui va extraire les objets et les copier à leur */
              /* destination                                                            */
-             CHGVAR     VAR(&CMD) VALUE('CALL' *BCAT &BIBLIO *TCAT '/DSTLOT10 +
+             CHGVAR     VAR(&CMD) VALUE('CALL' *BCAT &BIBLIO *TCAT '/RSTOBJSQL +
                           PARM(''' *TCAT &NUMLOTC *TCAT ''')')
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
                           RMTPWD(&MDP)
@@ -133,7 +133,7 @@
 
              DLTF       FILE(&BIBLIO/&SAVF)
              DLTF       FILE(&BIBLIO/&LISTOBJ)
-             DLTOBJ     OBJ(&BIBLIO/DSTLOT10) OBJTYPE(*PGM)
+             DLTOBJ     OBJ(&BIBLIO/RSTOBJSQL) OBJTYPE(*PGM)
 
 
              GOTO       CMDLBL(FIN)
