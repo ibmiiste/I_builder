@@ -117,12 +117,15 @@ Monitor;
                    'Objet_Destination, ' +
                    'Type_Objet, ' +
                    'Fichier_source, ' +
-                   'Membre_sourc, ' +
+                   'Membre_source, ' +
                    'Type_source, ' +
                    'Liste_biblio_projet ' +
               'FROM ' + l_Objet_lot +
              ' WHERE Lot_Number = ' + %Char(L_Num_Lot) +
              ' ORDER BY Ordre';
+
+  EXEC SQL
+    PREPARE Obj_List FROM :L_Requete;
 
   EXEC SQL
     DECLARE Csr_Obj_Sav CURSOR FOR Obj_List;
@@ -147,7 +150,8 @@ Monitor;
 
       Cmd_exec(l_Cmd);
     Else;
-      l_Cmd='RSTOBJ SAVLIB(' + L_BIB_LOT + ') ' +
+      l_Cmd='RSTOBJ OBJ(' + L_Objdst + ') ' +
+            'SAVLIB(' + L_BIB_LOT + ') ' +
             'DEV(*SAVF) ' +
             'SAVF(' + L_BIB_LOT + '/' + L_SAV_LOT + ') ' +
             'FILEMBR((' + L_FICSRC + ' (' + L_MBRSRC + ')))';
