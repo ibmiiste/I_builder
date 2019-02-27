@@ -94,62 +94,25 @@
              FROM lots
              WHERE lot_number = :g_num_lot ;
 
-         Ouvrir_curseur_list_obj();
-
-         Lecture_curseur_list_obj();
-
-         dow sqlcode = 0;
-           If g_typobj<>'*MSGF';
-             If g_attribut_objet='PF';
-               g_option_donnees ='C';
-             Else;
-               g_option_donnees ='';
-             EndIf;
-             g_optimize=P_Optim_Compil;
-             If P_Biblio_Lot<>*Blank;
-               g_BIBSRC_pre=P_Biblio_Lot;
-               g_BibSrc=P_Biblio_Lot;
-               g_BibDst =P_Biblio_Lot;
-             Else;
-               g_BIBSRC_pre=g_BIBSRC;
-             Endif;
-             g_FicSrc_pre=g_FicSrc;
-             g_MbrSrc_pre=g_MbrSrc;
-             Construct( g_BIBSRC_pre
-                       :g_FicSrc_pre
-                       :g_MbrSrc_pre
-                       :g_BibDst
-                       :g_ObjDst
-                       :g_typobj
-                       :g_BibSrc
-                       :g_FicSrc
-                       :g_MbrSrc
-                       :g_optimize
-                       :g_Failed
-                       :g_FileAttach
-                       :g_list_biblio
-                       :g_option_donnees);
-           Else;
-             i_MrgMsgf( g_ObjDst + g_BibDst
-                       :g_BibSrc
-                       :g_MbrSrc
-                       :P_Sys_Dst
-                       :P_User
-                       :P_Mot_De_Passe);
-           EndIf;
-
-           Lecture_curseur_list_obj();
-
-         enddo;
+         Construction( p_num_lot
+                      :P_Biblio_Lot
+                      :P_Optim_Compil);
 
          if g_Failed<>0;
-           EnvRapMel();
+           EnvRapMel( p_num_lot
+                     :P_Biblio_Lot
+                     :P_Env_Dest
+                     :P_Optim_Compil);
          Else;
            If P_Livr_Env_Dst;
              Livraison( g_num_lot
                        :P_Sys_Dst
                        :P_User
                        :P_Mot_De_Passe);
+             Copie_source(g_num_lot);
+             Construction( p_num_lot
+                          :''
+                          :P_Optim_Compil);
            Endif;
          EndIf;
 
@@ -201,5 +164,70 @@
                :g_objdst, :g_typobj, :g_attribut_objet;
 
          return Sqlcode ;
+       END-PROC ;
+
+
+
+       // --------------------------------------------------
+       // Procedure name: Construction_lot
+       // Purpose:
+       // Returns:
+       // --------------------------------------------------
+       DCL-PROC Construction;
+         Dcl-pi Construction;
+           p_num_lot Like(r_Num_lot);
+           P_Biblio_Lot LIKE(r_Nom_obj_IBMi) const;
+           P_Optim_Compil CHAR(20);
+         End-pi;
+
+         Ouvrir_curseur_list_obj();
+
+         Lecture_curseur_list_obj();
+
+         dow sqlcode = 0;
+           If g_typobj<>'*MSGF';
+             If g_attribut_objet='PF';
+               g_option_donnees ='C';
+             Else;
+               g_option_donnees ='';
+             EndIf;
+             g_optimize=P_Optim_Compil;
+             If P_Biblio_Lot<>*Blank;
+               g_BIBSRC_pre=P_Biblio_Lot;
+               g_BibSrc=P_Biblio_Lot;
+               g_BibDst =P_Biblio_Lot;
+             Else;
+               g_BIBSRC_pre=g_BIBSRC;
+             Endif;
+             g_FicSrc_pre=g_FicSrc;
+             g_MbrSrc_pre=g_MbrSrc;
+             Construct( g_BIBSRC_pre
+                       :g_FicSrc_pre
+                       :g_MbrSrc_pre
+                       :g_BibDst
+                       :g_ObjDst
+                       :g_typobj
+                       :g_BibSrc
+                       :g_FicSrc
+                       :g_MbrSrc
+                       :g_optimize
+                       :g_Failed
+                       :g_FileAttach
+                       :g_list_biblio
+                       :g_option_donnees);
+           Else;
+             i_MrgMsgf( g_ObjDst + g_BibDst
+                       :g_BibSrc
+                       :g_MbrSrc
+                       :P_Sys_Dst
+                       :P_User
+                       :P_Mot_De_Passe);
+           EndIf;
+
+           Lecture_curseur_list_obj();
+
+         enddo;
+
+         return ;
        END-PROC ;
 
