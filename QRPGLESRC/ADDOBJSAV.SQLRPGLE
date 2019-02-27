@@ -433,6 +433,7 @@ DCL-PROC Ajout_clef_obj_sauv Export;
              Type_Objet
         FROM List_Objet_Build
         WHERE Lot_Number = :L_Num_Lot
+              AND Type_Source <> 'SQL'
         ORDER BY Ordre;
 
   EXEC SQL
@@ -475,8 +476,7 @@ DCL-PROC Ajout_clef_obj_sauv Export;
       SELECT DISTINCT Fichier_Source
         FROM List_Objet_Build
         WHERE Lot_Number = :L_Num_Lot
-          AND Type_Source='SQL'
-        ORDER BY Ordre;
+              AND Type_Source = 'SQL';
 
   EXEC SQL
     OPEN Csr_Sql_Sav;
@@ -499,7 +499,7 @@ DCL-PROC Ajout_clef_obj_sauv Export;
   Enddo;
 
   // Ajout du programme de restauration distante
-  G_Nom_Objet='DSTLOT10';
+  G_Nom_Objet='RSTOBJSQL';
   g_Type_objet='*PGM';
   g_Nombre_valeur_Objet+=1;
 
