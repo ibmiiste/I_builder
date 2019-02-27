@@ -150,7 +150,7 @@ Monitor;
 
       Cmd_exec(l_Cmd);
     Else;
-      l_Cmd='RSTOBJ OBJ(' + L_Objdst + ') ' +
+      l_Cmd='RSTOBJ OBJ(' + L_Ficsrc + ') ' +
             'SAVLIB(' + L_BIB_LOT + ') ' +
             'DEV(*SAVF) ' +
             'SAVF(' + L_BIB_LOT + '/' + L_SAV_LOT + ') ' +
@@ -176,8 +176,6 @@ Monitor;
 
   EXEC SQL CLOSE Csr_Obj_Sav;
 
-  l_Cmd = 'RMVLIBLE ' + l_Bib_lot;
-  Cmd_exec(l_Cmd);
 
   l_Cmd = 'DLTLIB ' + l_Bib_lot;
   Cmd_exec(l_Cmd);
