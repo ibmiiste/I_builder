@@ -154,7 +154,8 @@ Monitor;
             'SAVLIB(' + L_BIB_LOT + ') ' +
             'DEV(*SAVF) ' +
             'SAVF(' + L_BIB_LOT + '/' + L_SAV_LOT + ') ' +
-            'FILEMBR((' + L_FICSRC + ' (' + L_MBRSRC + ')))';
+            'FILEMBR((' + L_FICSRC + ' (' + L_MBRSRC + '))) ' +
+            'MBROPT(*ALL)'  ;
       Cmd_exec(l_Cmd);
       Crtobjsql( L_BIB_LOT
                  :L_FICSRC
