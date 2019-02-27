@@ -25,7 +25,7 @@
              DCL        VAR(&TYPSRC) TYPE(*CHAR) LEN(10)
              DCL        VAR(&SAUV_TAB) TYPE(*CHAR) LEN(10) VALUE('          ')
              DCL        VAR(&ATROBJ) TYPE(*CHAR) LEN(10)
-             DCL        VAR(&QTEMP) TYPE(*CHAR) LEN(10) VALUE('QGPL')
+             DCL        VAR(&QTEMP) TYPE(*CHAR) LEN(10) VALUE('QTEMP')
              DCL        VAR(&TYPOBJE) TYPE(*CHAR) LEN(10) VALUE('*FILE     ')
              DCL        VAR(&LISTBIB) TYPE(*CHAR) LEN(10) /* Liste de bibliothèque +
                           à utiliser avec la commande POSLIB */
