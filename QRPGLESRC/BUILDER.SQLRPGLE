@@ -99,10 +99,7 @@
                       :P_Optim_Compil);
 
          if g_Failed<>0;
-           EnvRapMel( p_num_lot
-                     :P_Biblio_Lot
-                     :P_Env_Dest
-                     :P_Optim_Compil);
+           EnvRapMel();
          Else;
            If P_Livr_Env_Dst;
              Livraison( g_num_lot
