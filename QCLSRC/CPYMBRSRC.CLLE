@@ -1,0 +1,25 @@
+             PGM        PARM(&BIBORISRC &FICORISRC &MBRORISRC &BIBDSTSRC +
+                          &FICDSTSRC &MBRDSTSRC)
+
+             DCL        VAR(&BIBORISRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&FICORISRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&MBRORISRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&BIBDSTSRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&FICDSTSRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&MBRDSTSRC) TYPE(*CHAR) LEN(10)
+             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Copie d''un source') +
+                          BNDDIR(I_BUILDER)
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
+
+             CPYSRCF    FROMFILE(&BIBORISRC/&FICORISRC) +
+                          TOFILE(&BIBDSTSRC/&FICDSTSRC) FROMMBR(&MBRORISRC) +
+                          TOMBR(&MBRDSTSRC) SRCTYPE(*FROMMBR)
+
+             GOTO       CMDLBL(FIN)
+
+ ERREUR:     DMPCLPGM
+             CALLPRC    PRC(GEST_ERREUR)
+
+
+ FIN:        RETURN
+             ENDPGM
