@@ -85,7 +85,7 @@
              %Subst( ObjL : 11 : 10) = '*LIBL';
            endif;
            RtvObj( Objd : %len(ObjD) : 'OBJD0100' : Objl : ObjType : ErrDS);
-           if ErrDS.ErrRtn > 0;
+           if ErrDS.BytesAvail > 0;
              return *OFF;
            endif;
            return *ON;
@@ -123,7 +123,7 @@
              %Subst( ObjL : 11 : 10) = '*LIBL';
            endif;
            RtvObj( Objd : %len(ObjD) : 'OBJD0200' : Objl : ObjType : ErrDS);
-           if ErrDS.ErrRtn > 0;
+           if ErrDS.BytesAvail > 0;
              retField=*OFF;
            endif;
            retField=*ON;
