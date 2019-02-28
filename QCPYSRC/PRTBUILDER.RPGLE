@@ -618,3 +618,36 @@ dcl-ds Mbrd0100 Qualified inz;
   MbrText char(50);
   bIsSource char(1);
 end-ds;
+
+
+// Copie des sources d'un lot vers les biblio référence des APPLI
+//---------------------------------------------------------------
+// --------------------------------------------------
+// Procedure name: Copie_sources
+// Purpose:        Copie des sources d'un lot vers les biblio
+//                           référence des APPLI
+// Returns:
+// Parameter:      p_Numero_lot => Numéro de lot
+// --------------------------------------------------
+DCL-PR Copie_sources IND;
+  p_Num_lot LIKE(r_Num_lot);
+END-Pr ;
+
+
+// Copie d'un source d'un endroit à un autre
+//---------------------------------------------------------------
+// --------------------------------------------------
+// Procedure name: CPYMBRSRC
+// Purpose:        Copie des sources d'un lot vers les biblio
+//                           référence des APPLI
+// Returns:
+// Parameter:      p_Numero_lot => Numéro de lot
+// --------------------------------------------------
+DCL-PR CPYMBRSRC;
+   p_Biblio_source_origine Like(r_Nom_obj_IBMi);
+   p_Fichier_source_origine Like(r_Nom_obj_IBMi);
+   p_Membre_source_origine Like(r_Nom_obj_IBMi);
+   p_Biblio_source_destination Like(r_Nom_obj_IBMi);
+   p_Fichier_source_destination Like(r_Nom_obj_IBMi);
+   p_Membre_source_destination LIKE(r_Nom_obj_IBMi);
+END-Pr ;
