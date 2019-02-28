@@ -13,6 +13,7 @@ Ctl-opt bnddir('I_BUILDER');
 // Prototype for procedure: Ouvrir_curseur
 // --------------------------------------------------
 DCL-PR Ouvrir_curseur_list_obj LIKE(sqlcode);
+  p_Num_lot Like(r_Num_lot);
 END-PR ;
 
 
@@ -20,6 +21,17 @@ END-PR ;
 // Prototype for procedure: Lecture_curseur_list_obj
 // --------------------------------------------------
 DCL-PR Lecture_curseur_list_obj LIKE(sqlcode);
+  p_num_lot Like(r_Num_lot);
+  p_BibSrc LIKE(r_Nom_obj_IBMi);
+  p_FicSrc LIKE(r_Nom_obj_IBMi);
+  p_MbrSrc LIKE(r_Nom_obj_IBMi);
+  p_BibSrc_pre LIKE(r_Nom_obj_IBMi);
+  p_FicSrc_pre LIKE(r_Nom_obj_IBMi);
+  p_MbrSrc_pre LIKE(r_Nom_obj_IBMi);
+  p_BibDst LIKE(r_Nom_obj_IBMi);
+  p_ObjDst LIKE(r_Nom_obj_IBMi);
+  p_TypObj like(r_Nom_obj_IBMi);
+  p_attribut_objet like(r_Nom_obj_IBMi);
 END-PR ;
 
 
@@ -29,7 +41,7 @@ END-PR ;
 // Returns:
 // Parameter:      p_Num_lot
 // --------------------------------------------------
-DCL-PROC Copie_sources ;
+DCL-PROC Copie_sources Export;
   DCL-PI *N IND;
     p_Num_lot LIKE(r_Num_lot);
   END-PI ;
@@ -37,7 +49,6 @@ DCL-PROC Copie_sources ;
   Dcl-s l_num_lot Like(r_Num_lot);
   DCL-S retField IND;
   Dcl-s l_Biblio_Lot Like(r_Nom_obj_IBMi);
-  Dcl-s l_num_lot Like(r_Num_lot);
   Dcl-S l_BibSrc LIKE(r_Nom_obj_IBMi);
   Dcl-S l_FicSrc LIKE(r_Nom_obj_IBMi);
   Dcl-S l_MbrSrc LIKE(r_Nom_obj_IBMi);
