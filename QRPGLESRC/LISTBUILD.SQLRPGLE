@@ -363,6 +363,16 @@
                     :'CICA98'
                     :'DRUBIGNY'
                     :'DANIEL1E01');
+            Copie_sources(g_Num_lot);
+            g_optimize='*NONE';
+            builder( g_Num_lot
+                    :''
+                    :''
+                    :g_optimize
+                    :''
+                    :''
+                    :''
+                    :'');
             RMVlot(g_Num_lot);
             EXEC SQL
               UPDATE lots SET statlot = 'P' WHERE lot_number = :p_num_lot;
