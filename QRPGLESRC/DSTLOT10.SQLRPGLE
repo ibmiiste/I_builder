@@ -176,6 +176,9 @@ Monitor;
 
   EXEC SQL CLOSE Csr_Obj_Sav;
 
+  // Mise en ligne de la bibliothèque temporaire de livraison
+  l_Cmd='Rmvlible ' + l_Bib_lot;
+  Cmd_exec(l_Cmd);
 
   l_Cmd = 'DLTLIB ' + l_Bib_lot;
   Cmd_exec(l_Cmd);
