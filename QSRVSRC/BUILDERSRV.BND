@@ -19,6 +19,8 @@
     /*                      &LI/SAVLIBLOT +                          */
     /*                      &LI/ADDOBJSAV +                          */
     /*                      &LI/CPYLSTOBJ +                          */
+    /*                      &LI/CPYSRCLOT +                          */
+    /*                      &LI/CPYMBRSRC +                          */
     /*                      &LI/GSTERRSTR);                          */
     /*     >>PARM<<  TEXT('Programme de service +                    */
     /*                     de l''outils i_builder');                 */
@@ -51,4 +53,6 @@
              EXPORT     SYMBOL(SAVLIBLOT)
              EXPORT     SYMBOL(SAUV_OBJ_LOT)
              EXPORT     SYMBOL(Copie_liste_objet_a_livres)
+             EXPORT     SYMBOL(Copie_sources)
+             EXPORT     SYMBOL(CPYMBRSRC)
              ENDPGMEXP
