@@ -109,10 +109,6 @@
                        :P_Sys_Dst
                        :P_User
                        :P_Mot_De_Passe);
-             Copie_source(g_num_lot);
-             Construction( p_num_lot
-                          :''
-                          :P_Optim_Compil);
            Endif;
          EndIf;
 
