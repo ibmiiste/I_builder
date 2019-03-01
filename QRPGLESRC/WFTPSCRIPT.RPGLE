@@ -16,13 +16,7 @@
 dcl-f ftpcmd usage(*output) rename(ftpcmd:ftpcmdf) usropn;
 /copy qcpysrc,inhbuilder
 
-dcl-pr ECRITURE_SCRIPT_FTP;
-  USER like(r_profil);
-  MDP like(r_profil);
-  Nom_Objet char(128);
-  CHEMIN_origine like(r_chemin);
-  CHEMIN_destination like(r_chemin);
-End-Pr;
+/Copy Qcpysrc,prtbuilder
 
 dcl-proc ECRITURE_SCRIPT_FTP export;
   dcl-pi ECRITURE_SCRIPT_FTP;

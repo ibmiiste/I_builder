@@ -44,6 +44,9 @@ DCL-PROC source_standard export;
   // Héritage des variables
   /copy Qcpysrc,Inhbuilder
 
+  // Sous-procédures externe
+  /copy Qcpysrc,prtbuilder
+
   // Variables Standalone locales
   DCL-S Retour IND;
 
