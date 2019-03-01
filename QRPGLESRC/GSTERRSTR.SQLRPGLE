@@ -57,74 +57,80 @@ DCL-PROC Recup_erreur Export;
 
   Dcl-ds ds_event Extname('EVFEVENT') Qualified End-ds;
 
-  EXEC SQL
-    SET OPTION COMMIT = *NONE;
-
-  l_instruction_SQL='CREATE ALIAS QTEMP/' + %Trim(p_Objet_destination) +
-                    ' FOR ' + %Trim(p_biblio_dest) + '/EVFEVENT (' +
-                    %Trim(p_Objet_destination) + ')';
-
-  EXEC SQL
-    EXECUTE IMMEDIATE :L_Instruction_Sql;
-
-  l_instruction_SQL='SELECT EVFEVENT ' +
-                    'FROM QTEMP/' + %Trim(p_Objet_destination);
-
-  IF NOT exists('ERRORLIST QTEMP     ' :'*FILE');
+  Monitor;
     EXEC SQL
-      DECLARE GLOBAL TEMPORARY TABLE Errorlist
-        (Bibliotheque CHAR(10),
+      SET OPTION COMMIT = *NONE;
+
+    l_instruction_SQL='CREATE ALIAS QTEMP/' + %Trim(p_Objet_destination) +
+                      ' FOR ' + %Trim(p_biblio_dest) + '/EVFEVENT (' +
+                      %Trim(p_Objet_destination) + ')';
+
+    EXEC SQL
+      EXECUTE IMMEDIATE :L_Instruction_Sql;
+
+    l_instruction_SQL='SELECT EVFEVENT ' +
+                      'FROM QTEMP/' + %Trim(p_Objet_destination);
+
+    IF NOT exists('ERRORLIST QTEMP     ' :'*FILE');
+      EXEC SQL
+        DECLARE GLOBAL TEMPORARY TABLE Errorlist
+          (Bibliotheque CHAR(10),
                                                Objet CHAR(10),
                                                Gravite CHAR(2),
                                                Id_Message CHAR(7),
                                                Ligne CHAR(3),
                                                Text_Message CHAR(234),
                                                Emplacement CHAR(50))
-        WITH REPLACE;
-  Endif;
-
-  EXEC SQL
-    PREPARE Statment_Event FROM :L_Instruction_Sql;
-
-  EXEC SQL
-    DECLARE Curseur_Event CURSOR FOR Statment_Event;
-
-  EXEC SQL
-    OPEN Curseur_Event;
-
-  EXEC SQL
-    FETCH FROM Curseur_Event INTO :Ds_Event;
-
-  Dow sqlcode<>100 and sqlcode>=0 ;
-    If %subst(ds_event:1:10)='FILEID';
-      ds_event_fileid=Ds_Event;
-      l_emplacement=%subst(ds_event_fileid.source:1:%scan(')':
-                                    ds_event_fileid.source));
+          WITH REPLACE;
     Endif;
 
-    If %subst(ds_event:1:10)='ERROR';
-      ds_event_error=Ds_Event;
-      EXEC SQL
-        INSERT INTO Qtemp.Errorlist
-          VALUES (:P_Biblio_Dest,
-                  :P_Objet_Destination,
-                  :Ds_Event_Error.Gravite,
-                  :Ds_Event_Error.Msgid,
-                  :Ds_Event_Error.Ligne,
-                  :Ds_Event_Error.Texte_Message,
-                  :L_Emplacement);
-    endif;
+    EXEC SQL
+      PREPARE Statment_Event FROM :L_Instruction_Sql;
+
+    EXEC SQL
+      DECLARE Curseur_Event CURSOR FOR Statment_Event;
+
+    EXEC SQL
+      OPEN Curseur_Event;
+
     EXEC SQL
       FETCH FROM Curseur_Event INTO :Ds_Event;
-  Enddo;
 
-  EXEC SQL
-    CLOSE Curseur_Event;
+    Dow sqlcode<>100 and sqlcode>=0 ;
+      If %subst(ds_event:1:10)='FILEID';
+        ds_event_fileid=Ds_Event;
+        l_emplacement=%subst(ds_event_fileid.source:1:%scan(')':
+                                      ds_event_fileid.source));
+      Endif;
 
-  l_instruction_SQL='DROP ALIAS QTEMP/' + %Trim(p_Objet_destination);
+      If %subst(ds_event:1:10)='ERROR';
+        ds_event_error=Ds_Event;
+        EXEC SQL
+          INSERT INTO Qtemp.Errorlist
+            VALUES (:P_Biblio_Dest,
+                    :P_Objet_Destination,
+                    :Ds_Event_Error.Gravite,
+                    :Ds_Event_Error.Msgid,
+                    :Ds_Event_Error.Ligne,
+                    :Ds_Event_Error.Texte_Message,
+                    :L_Emplacement);
+      endif;
+      EXEC SQL
+        FETCH FROM Curseur_Event INTO :Ds_Event;
+    Enddo;
 
-  EXEC SQL
-    EXECUTE IMMEDIATE :L_Instruction_Sql;
+    EXEC SQL
+      CLOSE Curseur_Event;
+
+    l_instruction_SQL='DROP ALIAS QTEMP/' + %Trim(p_Objet_destination);
+
+    EXEC SQL
+      EXECUTE IMMEDIATE :L_Instruction_Sql;
+
+  On-error;
+    Dump(a);
+    Gest_erreur();
+  Endmon;
 
   RETURN ;
 END-PROC ;

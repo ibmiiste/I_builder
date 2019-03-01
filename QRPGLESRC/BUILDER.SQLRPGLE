@@ -84,33 +84,38 @@ END-PR ;
 DCL-PR Lecture_curseur_list_obj LIKE(sqlcode);
 END-PR ;
 
-*InLr=*On;
-g_Num_lot=p_Num_lot;
+Monitor;
+  *InLr=*On;
+  g_Num_lot=p_Num_lot;
 
-//Récupération de la list de bibliothèque
-EXEC SQL
-  SELECT Liste_Biblio_Projet
-    INTO :G_List_Biblio
-    FROM Lots
-    WHERE Lot_Number = :G_Num_Lot ;
+  //Récupération de la list de bibliothèque
+  EXEC SQL
+    SELECT Liste_Biblio_Projet
+      INTO :G_List_Biblio
+      FROM Lots
+      WHERE Lot_Number = :G_Num_Lot ;
 
-Construction( p_num_lot
-             :P_Biblio_Lot
-             :P_Optim_Compil);
+  Construction( p_num_lot
+               :P_Biblio_Lot
+               :P_Optim_Compil);
 
-if g_Failed<>0;
-  EnvRapMel();
-Else;
-  If P_Livr_Env_Dst;
-    // Copier liste des objets à livrer dans une table dans le lot Séquence/Bib
-    // source/Fichier source/membre source/bib objet
-    Copie_liste_objet_a_livres(g_num_lot);
-    Livraison( g_num_lot
-              :P_Sys_Dst
-              :P_User
-              :P_Mot_De_Passe);
-  Endif;
-EndIf;
+  if g_Failed<>0;
+    EnvRapMel();
+  Else;
+    If P_Livr_Env_Dst;
+      // Copier liste des objets à livrer dans une table dans le lot Séquence/Bib
+      // source/Fichier source/membre source/bib objet
+      Copie_liste_objet_a_livres(g_num_lot);
+      Livraison( g_num_lot
+                :P_Sys_Dst
+                :P_User
+                :P_Mot_De_Passe);
+    Endif;
+  EndIf;
+On-error;
+  Dump(a);
+  Gest_erreur();
+Endmon;
 
 Return;
 

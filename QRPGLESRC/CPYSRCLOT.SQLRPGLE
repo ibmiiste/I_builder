@@ -64,36 +64,13 @@ DCL-PROC Copie_sources Export;
   Dcl-S l_TypObj like(r_Nom_obj_IBMi);
 
 
-  // Your calculation code goes here
-  l_Num_lot=p_Num_lot;
+  Monitor;
+    l_Num_lot=p_Num_lot;
 
-  l_Biblio_Lot= 'L' + %Editc(l_Num_lot:'X');
+    l_Biblio_Lot= 'L' + %Editc(l_Num_lot:'X');
 
-  Ouvrir_curseur_list_obj( l_Num_lot
-                          :p_Objet_number);
-
-  Lecture_curseur_list_obj( l_num_lot
-                           :l_BibSrc
-                           :l_FicSrc
-                           :l_MbrSrc
-                           :l_BibSrc_pre
-                           :l_FicSrc_pre
-                           :l_MbrSrc_pre
-                           :l_BibDst
-                           :l_ObjDst
-                           :l_TypObj
-                           :l_attribut_objet);
-
-
-  dow sqlcode = 0;
-
-    Cpymbrsrc( l_Biblio_Lot
-              :l_Ficsrc
-              :l_Mbrsrc
-              :l_Bibsrc
-              :l_Ficsrc
-              :l_Mbrsrc);
-
+    Ouvrir_curseur_list_obj( l_Num_lot
+                            :p_Objet_number);
 
     Lecture_curseur_list_obj( l_num_lot
                              :l_BibSrc
@@ -107,11 +84,37 @@ DCL-PROC Copie_sources Export;
                              :l_TypObj
                              :l_attribut_objet);
 
-  enddo;
 
-  EXEC SQL
-    CLOSE Csr_List_Obj;
+    dow sqlcode = 0;
 
+      Cpymbrsrc( l_Biblio_Lot
+                :l_Ficsrc
+                :l_Mbrsrc
+                :l_Bibsrc
+                :l_Ficsrc
+                :l_Mbrsrc);
+
+
+      Lecture_curseur_list_obj( l_num_lot
+                               :l_BibSrc
+                               :l_FicSrc
+                               :l_MbrSrc
+                               :l_BibSrc_pre
+                               :l_FicSrc_pre
+                               :l_MbrSrc_pre
+                               :l_BibDst
+                               :l_ObjDst
+                               :l_TypObj
+                               :l_attribut_objet);
+
+    enddo;
+
+    EXEC SQL
+      CLOSE Csr_List_Obj;
+  On-error;
+    Dump(a);
+    Gest_erreur();
+  Endmon;
   return retField ;
 END-PROC ;
 
@@ -157,8 +160,8 @@ DCL-PROC Ouvrir_curseur_list_obj;
   EXEC SQL
     DECLARE Csr_List_Obj CURSOR FOR List_Obj;
 
-    EXEC SQL
-      OPEN Csr_List_Obj;
+  EXEC SQL
+    OPEN Csr_List_Obj;
 
   return Sqlcode;
 END-PROC ;

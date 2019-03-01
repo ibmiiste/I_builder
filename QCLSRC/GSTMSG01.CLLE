@@ -17,6 +17,9 @@
              DCL        VAR(&PMGID) TYPE(*CHAR) LEN(7)
              DCL        VAR(&PMGDT) TYPE(*CHAR) LEN(99)
              DCL        VAR(&PGM) TYPE(*CHAR) LEN(10)
+
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
+
  /* MESSAGE TYPE 1 = DEF = INFO                                */
              IF         COND(&PTYP = '1') THEN(DO)
                 SNDPGMMSG  MSGID(&PMGID) MSGF(*LIBL/&PFICM) MSGDTA(&PMGDT)
@@ -51,4 +54,12 @@
                 GOTO       CMDLBL(FINI)
              ENDDO
  /* LA FIN */
+
+             GOTO       CMDLBL(FIN)
+
+ ERREUR:     DMPCLPGM
+             CALLPRC    PRC(GEST_ERREUR)
+
+
+ FIN:        RETURN
  FINI:       ENDPGM

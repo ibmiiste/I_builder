@@ -16,7 +16,7 @@
              DCL        VAR(&DESC_LOT) TYPE(*CHAR) LEN(50)
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Archivage des lots') +
                           BNDDIR(I_BUILDER)
-
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
              CHGVAR     VAR(&BIBLOT) VALUE('L' *TCAT &NUMLOTC)
 
              RTVOBJD    OBJ(QSYS/&BIBLOT) OBJTYPE(*LIB) TEXT(&DESC_LOT)
@@ -38,6 +38,12 @@
              ENDDO
 
              DLTLIB     LIB(&BIBLOT)
+             GOTO       CMDLBL(FIN)
 
- FIN:        ENDPGM
+ ERREUR:     DMPCLPGM
+             CALLPRC    PRC(GEST_ERREUR)
+
+
+ FIN:        RETURN
+             ENDPGM
 

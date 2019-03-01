@@ -24,6 +24,8 @@
              DCL        VAR(&FILE) TYPE(*CHAR) LEN(128)
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Envoi ftp') BNDDIR(BUILDERSRV)
 
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
+
              CALLPRC    PRC(ALEATOIRE) PARM((&RAND)) RTNVAL(&NUMALEA)
 
              CHGVAR     VAR(&NUMALEC) VALUE(&NUMALEA)
@@ -40,4 +42,11 @@
              CALLPRC    PRC(ECRITURE_SCRIPT_FTP) PARM((&USER) (&MDP) (&FILE) (&CHEMINSAVO) +
                           (&CHEMINSAVD))
 
+             GOTO       CMDLBL(FIN)
+
+ ERREUR:     DMPCLPGM
+             CALLPRC    PRC(GEST_ERREUR)
+
+
+ FIN:        RETURN
              ENDPGM

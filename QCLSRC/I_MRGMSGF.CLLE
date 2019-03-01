@@ -10,7 +10,6 @@
              PGM        PARM(&OBJETQ &BIBORG &MSGID &MACHINE &USER &MDP)
 
 
-
              DCL        VAR(&OBJETQ) TYPE(*CHAR) LEN(20)
              DCL        VAR(&MSGID) TYPE(*CHAR) LEN(7)
              DCL        VAR(&OBJET) TYPE(*CHAR) LEN(10)
@@ -29,7 +28,7 @@
 
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Fusion de fichier de message sur +
                           système distant') BNDDIR(SERVICE)
-             MONMSG     MSGID(CPF0000)
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
 
 
              CHGVAR     VAR(&OBJET) VALUE(%SST( &OBJETQ 1 10))
@@ -108,5 +107,13 @@
 
                 DLTOVR     FILE(*ALL)
 
-                ENDDO
+             ENDDO
+
+             GOTO       CMDLBL(FIN)
+
+ ERREUR:     DMPCLPGM
+             CALLPRC    PRC(GEST_ERREUR)
+
+
+ FIN:        RETURN
              ENDPGM

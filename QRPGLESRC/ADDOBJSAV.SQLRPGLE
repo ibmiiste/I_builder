@@ -1,6 +1,6 @@
 **FREE
 // Spécification de contrôles
-/Copy Qcpysrc,Cpyctlstm
+ctl-opt nomain;
 
 
 // External subprocedures prototypes globales

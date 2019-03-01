@@ -46,24 +46,30 @@ DCL-PROC source_standard export;
 
   // Variables Standalone locales
   DCL-S Retour IND;
-  // Your calculation code goes here
-  EXEC SQL
-    SELECT Biblio_Src_Pre,
-           Fichier_Src_Pre,
-           Membre_Src_Pre
-      INTO :P_Biblio_Src_Pre,
-           :P_Fichier_Src_Pre,
-           :P_Membre_Src_Pre
-      FROM Sources_Pre_Standard
-      WHERE Type_Source = :P_Type_Source
-            AND Type_Objet = :P_Type_Objet;
 
-  If sqlcode=0;
-    Retour = *ON;
-  Else;
+  Monitor;
+    EXEC SQL
+      SELECT Biblio_Src_Pre,
+             Fichier_Src_Pre,
+             Membre_Src_Pre
+        INTO :P_Biblio_Src_Pre,
+             :P_Fichier_Src_Pre,
+             :P_Membre_Src_Pre
+        FROM Sources_Pre_Standard
+        WHERE Type_Source = :P_Type_Source
+              AND Type_Objet = :P_Type_Objet;
+
+    If sqlcode=0;
+      Retour = *ON;
+    Else;
+      Retour = *off;
+    EndIf;
+
+  On-error;
     Retour = *off;
-  EndIf;
-
+    Dump(a);
+    Gest_erreur();
+  Endmon;
 
   RETURN Retour ;
 

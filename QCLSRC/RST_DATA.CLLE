@@ -19,12 +19,20 @@
              DCL        VAR(&BIBDST) TYPE(*CHAR) LEN(10)
              DCL        VAR(&OBJDST) TYPE(*CHAR) LEN(10)
 
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
+
              CPYF       FROMFILE(&QTEMP/&SAUV_TAB) TOFILE(&BIBDST/&OBJDST) +
                           FROMMBR(*ALL) TOMBR(*FROMMBR) MBROPT(*ADD) CRTFILE(*YES) +
                           FMTOPT(*MAP *DROP) ERRLVL(*NOMAX)
 
              DLTF       FILE(&QTEMP/&SAUV_TAB)
 
+             GOTO       CMDLBL(FIN)
 
+ ERREUR:     DMPCLPGM
+             CALLPRC    PRC(GEST_ERREUR)
+
+
+ FIN:        RETURN
              ENDPGM
 

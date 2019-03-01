@@ -14,6 +14,8 @@
              DCL        VAR(&CCSID) TYPE(*CHAR) LEN(10)
              DCLPRCOPT  ALWRTVSRC(*YES) BNDDIR(SERVICE I_BUILDER)
 
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
+
              ADDLIBLE LAUNCHER
              MONMSG CPF0000
 
@@ -34,4 +36,11 @@
 
              DLTF QTEMP/ERRORLIST
 
+             GOTO       CMDLBL(FIN)
+
+ ERREUR:     DMPCLPGM
+             CALLPRC    PRC(GEST_ERREUR)
+
+
+ FIN:        RETURN
              ENDPGM

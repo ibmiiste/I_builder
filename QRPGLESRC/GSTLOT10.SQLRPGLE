@@ -118,26 +118,32 @@ Dcl-c Non_trouve 100;
 Dcl-c Trouve 0;
 Dcl-c c_nbr_ligne_page 17;
 
-// initialisation des variables système affichées à l'écran
-Zpgm = Procedure;
-Zdate=%Date;
-Zheur=%Time;
-Zjob=Job_name;
+Monitor;
+  // initialisation des variables système affichées à l'écran
+  Zpgm = Procedure;
+  Zdate=%Date;
+  Zheur=%Time;
+  Zjob=Job_name;
 
-// Initialisation du sous=fichier des messages
-WPGMQ='*  ';
-WMGKEY='CC01';
+  // Initialisation du sous=fichier des messages
+  WPGMQ='*  ';
+  WMGKEY='CC01';
 
-Sflend_Msgf = *ON;
-Sflinz_Msgf = *ON;
-// Indicateur fin
-g_Sortie = *ON;
-// Debut du traitement,
-INITSF();
-// Boucle d'attente de sortie
-DOW g_Sortie;
-  TRTSFL();
-ENDDO;
+  Sflend_Msgf = *ON;
+  Sflinz_Msgf = *ON;
+  // Indicateur fin
+  g_Sortie = *ON;
+  // Debut du traitement,
+  INITSF();
+  // Boucle d'attente de sortie
+  DOW g_Sortie;
+    TRTSFL();
+  ENDDO;
+On-error;
+  Dump(a);
+  Gest_erreur();
+Endmon;
+
 // Indicateur de fin de programme
 *INLR = *ON;
 // Les procédures

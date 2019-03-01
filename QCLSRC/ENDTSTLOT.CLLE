@@ -4,6 +4,8 @@
              DCL        VAR(&NUMLOTC) TYPE(*CHAR) LEN(9)
              DCL        &INT *INT 2
 
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
+
              CHGVAR     VAR(&NUMLOTC) VALUE(&NUMLOT)
              DOFOR      VAR(&INT) FROM(1) TO(9) BY(1)
                 IF         COND(%SST(&NUMLOTC &INT 1) *EQ ' ') THEN(DO)
@@ -17,4 +19,12 @@
                          n''est pas en cours'))
              MONMSG     MSGID(CPF2110) EXEC(SNDPGMMSG MSG('Ce lot +
                          n''existe pas'))
+
+             GOTO       CMDLBL(FIN)
+
+ ERREUR:     DMPCLPGM
+             CALLPRC    PRC(GEST_ERREUR)
+
+
+ FIN:        RETURN
              ENDPGM

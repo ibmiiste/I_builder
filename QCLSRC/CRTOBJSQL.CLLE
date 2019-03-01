@@ -34,6 +34,8 @@
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Génération d''un objet avec +
                           STRPREPRC')
 
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
+
              /* Récupération du type de source                             */
              RTVMBRD    FILE(&BIBSRC/&FICSRC) MBR(&MBRSRC *SAME) SRCTYPE(&TYPSRC)
 
@@ -86,5 +88,9 @@
              IF         COND(&ATROBJ *EQ 'LF') THEN(GRTOBJAUT OBJ(&BIBDST/&OBJDST) +
                           OBJTYPE(*FILE) USER(*PUBLIC) AUT(*ALL))
              CHGVAR     VAR(&OBJETQ) VALUE(&OBJDST *CAT &BIBDST)
+             GOTO       CMDLBL(FIN)
 
-             ENDPGM
+ ERREUR:     DMPCLPGM
+             CALLPRC    PRC(GEST_ERREUR)
+
+ FIN:        ENDPGM

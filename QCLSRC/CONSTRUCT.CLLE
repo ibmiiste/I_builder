@@ -56,6 +56,8 @@
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Génération d''un objet avec +
                           STRPREPRC') BNDDIR(I_BUILDER)
 
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
+
              CHGVAR     VAR(&PREBIBSRC) Value(&PPREBIBSRC)
              CHGVAR     VAR(&PREFICSRC) Value(&PPREFICSRC)
              CHGVAR     VAR(&PRESRCMBR) Value(&PPRESRCMBR)
@@ -146,4 +148,11 @@
                           USER(*PUBLIC) AUT(*ALL))
              CHGVAR     VAR(&OBJETQ) VALUE(&OBJDST *CAT &BIBDST)
 
+             GOTO       CMDLBL(FIN)
+
+ ERREUR:     DMPCLPGM
+             CALLPRC    PRC(GEST_ERREUR)
+
+
+ FIN:        RETURN
              ENDPGM

@@ -35,57 +35,63 @@ dcl-proc ECRITURE_SCRIPT_FTP export;
 
   dcl-s l_seq packed(6:2) inz(1);
 
-  open ftpcmd;
+  Monitor;
+    open ftpcmd;
 
-  srcseq=l_seq;
-  srcdat=*zero;
-  srcdta = %trimr(l_USER) + ' ' + l_MDP;
+    srcseq=l_seq;
+    srcdat=*zero;
+    srcdta = %trimr(l_USER) + ' ' + l_MDP;
 
-  write ftpcmdf;
+    write ftpcmdf;
 
-  l_seq+=1;
-  srcseq=l_seq;
-  srcdat=*zero;
-  srcdta='NAMEFMT 1';
+    l_seq+=1;
+    srcseq=l_seq;
+    srcdat=*zero;
+    srcdta='NAMEFMT 1';
 
-  write ftpcmdf;
+    write ftpcmdf;
 
-  l_seq+=1;
-  srcseq=l_seq;
-  srcdat=*zero;
-  srcdta='bin';
+    l_seq+=1;
+    srcseq=l_seq;
+    srcdat=*zero;
+    srcdta='bin';
 
-  write ftpcmdf;
+    write ftpcmdf;
 
-  l_seq+=1;
-  srcseq=l_seq;
-  srcdat=*zero;
-  srcdta='cd ' + %trim( l_CHEMIN_destination);
+    l_seq+=1;
+    srcseq=l_seq;
+    srcdat=*zero;
+    srcdta='cd ' + %trim( l_CHEMIN_destination);
 
-  write ftpcmdf;
+    write ftpcmdf;
 
-  l_seq+=1;
-  srcseq=l_seq;
-  srcdat=*zero;
-  srcdta='lcd ' + %trim( l_chemin_origine);
+    l_seq+=1;
+    srcseq=l_seq;
+    srcdat=*zero;
+    srcdta='lcd ' + %trim( l_chemin_origine);
 
-  write ftpcmdf;
+    write ftpcmdf;
 
-  l_seq+=1;
-  srcseq=l_seq;
-  srcdat=*zero;
-  srcdta='put ' + %trim( l_Nom_Objet) + '.FILE';
+    l_seq+=1;
+    srcseq=l_seq;
+    srcdat=*zero;
+    srcdta='put ' + %trim( l_Nom_Objet) + '.FILE';
 
-  write ftpcmdf;
+    write ftpcmdf;
 
-  l_seq+=1;
-  srcseq=l_seq;
-  srcdat=*zero;
-  srcdta='quit';
+    l_seq+=1;
+    srcseq=l_seq;
+    srcdat=*zero;
+    srcdta='quit';
 
-  write ftpcmdf;
+    write ftpcmdf;
 
-  close ftpcmd;
+    close ftpcmd;
+
+  On-error;
+    Dump(a);
+    Gest_erreur();
+  Endmon;
 
   return;
 end-proc;

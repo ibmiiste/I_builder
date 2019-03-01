@@ -49,8 +49,11 @@ DCL-PROC cmd_chk EXPORT;
   END-PI;
 
   DCL-S long packed(15:5);
-
-  long = %len(%trim(cmd));
-  qcmdchk(cmd:long);
-
+  monitor;
+    long = %len(%trim(cmd));
+    qcmdchk(cmd:long);
+  On-error;
+    Dump(a);
+    Gest_erreur();
+  Endmon;
 END-PROC;

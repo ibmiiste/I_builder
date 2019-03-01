@@ -12,6 +12,7 @@
              DCL        VAR(&BIBLOT) TYPE(*CHAR) LEN(10)
              DCL        VAR(&NUMLOTC) TYPE(*CHAR) LEN(9)
              DCL        VAR(&INT) TYPE(*INT) LEN(2)
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
 
              CHGVAR     VAR(&NUMLOTC) VALUE(&NUMLOT)
              DOFOR      VAR(&INT) FROM(1) TO(9) BY(1)
@@ -24,6 +25,14 @@
              CHGSYSLIBL LIB(&BIBLOT)
              MONMSG     MSGID(CPF2103) EXEC(SNDPGMMSG MSG('Ce test +
                           est déjà en cours'))
-             MONMSG     MSGID(CPF2110) EXEC(SNDPGMMSG MSG('Ce lot +
-                          n''est plus disponible ou n''existe pas'))
+             MONMSG     MSGID(CPF2110) EXEC(SNDPGMMSG MSG('Ce lot n''est plus +
+                          disponible ou n''existe pas'))
+
+             GOTO       CMDLBL(FIN)
+
+ ERREUR:     DMPCLPGM
+             CALLPRC    PRC(GEST_ERREUR)
+
+
+ FIN:        RETURN
              ENDPGM

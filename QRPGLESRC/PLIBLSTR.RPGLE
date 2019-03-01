@@ -92,39 +92,44 @@ Dcl-s l_Selection Ind Inz('0');
 // Nombre d'option utilisé
 Dcl-s l_Nbre_option Packed(4:0);
 
-sflini();
+Monitor;
+  sflini();
 
-dow not Sortie and Not l_Selection;
+  dow not Sortie and Not l_Selection;
 
-  if rrnsav <> 0;
-    sflrrn = rrnsav;
-  endif;
-
-  write sflfn1;
-  exfmt sflctl1;
-
-  clear msgfn1;
-
-  rrnsav = 0;
-
-  if Creer;
-    fmtadd();
-  else;
-    if sflrrn > 0;
-      sflchg();
+    if rrnsav <> 0;
+      sflrrn = rrnsav;
     endif;
-  endif;
 
-  if updsfl = *on;
-    Sflclr = *on;
-    Not_SFLDSP = *on;
-    write sflctl1;
-    Sflclr = *off;
-    Not_SFLDSP = *off;
-    sflini();
-  endif;
+    write sflfn1;
+    exfmt sflctl1;
 
-enddo;
+    clear msgfn1;
+
+    rrnsav = 0;
+
+    if Creer;
+      fmtadd();
+    else;
+      if sflrrn > 0;
+        sflchg();
+      endif;
+    endif;
+
+    if updsfl = *on;
+      Sflclr = *on;
+      Not_SFLDSP = *on;
+      write sflctl1;
+      Sflclr = *off;
+      Not_SFLDSP = *off;
+      sflini();
+    endif;
+
+  enddo;
+On-error;
+  Dump(a);
+  Gest_erreur();
+Endmon;
 
 *inlr = *on;
 
