@@ -395,7 +395,7 @@ Dcl-proc VALID1;
                          Statuts_Lot,
                          Timecrt,
                          Usrcrt)
-          VALUES (:Zlibellot, :Zlistbibpr, :Zdescripl, :Zstatlot, CURRENT_TIMESTAMP, :User) ;
+          VALUES (:Zlibellot, :Zlistbibpr, :Zdescripl, 'D', CURRENT_TIMESTAMP, :User) ;
 
       // On récupère le numéro du lot créé
       EXEC SQL
