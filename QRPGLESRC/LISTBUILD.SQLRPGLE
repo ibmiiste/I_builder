@@ -588,7 +588,7 @@
                         :g_Lib_lot
                         :ZOBJDST
                         :ZTYPOBJ
-                        :ZBIBSRC
+                        :g_Lib_lot
                         :ZFICSRC
                         :ZMBRSRC
                         :g_optimize
@@ -612,7 +612,7 @@
                         :g_Lib_lot
                         :ZOBJDST
                         :ZTYPOBJ
-                        :ZBIBSRC
+                        :g_Lib_lot
                         :ZFICSRC
                         :ZMBRSRC
                         :g_optimize
@@ -624,6 +624,8 @@
                 EnvRapMel();
               EndIf;
               RMVlot(g_Num_lot);
+              Copie_liste_objet_a_livres( g_num_lot
+                                         :Hnumobjbld);
               Livraison( g_num_lot
                         :'CICA95'
                         :'DRUBIGNY'
@@ -640,7 +642,7 @@
                         :g_Lib_lot
                         :ZOBJDST
                         :ZTYPOBJ
-                        :ZBIBSRC
+                        :g_Lib_lot
                         :ZFICSRC
                         :ZMBRSRC
                         :g_optimize
@@ -652,10 +654,29 @@
                 EnvRapMel();
               EndIf;
               RMVlot(g_Num_lot);
+              Copie_liste_objet_a_livres( g_num_lot
+                                         :Hnumobjbld);
               Livraison( g_num_lot
                         :'CICA98'
                         :'DRUBIGNY'
                         :'DANIEL1E01');
+              Copie_sources( g_Num_lot
+                            :Hnumobjbld);
+              g_optimize='*NONE';
+              Construct( g_BibSrc_pre
+                        :g_FicSrc_pre
+                        :g_MbrSrc_pre
+                        :Zbibdst
+                        :ZOBJDST
+                        :ZTYPOBJ
+                        :ZBIBSRC
+                        :ZFICSRC
+                        :ZMBRSRC
+                        :g_optimize
+                        :g_Failed
+                        :g_FileAttach
+                        :g_list_biblio
+                        :'');
             //when (zopt = '99');
             //  a_chx='PE';
             other;

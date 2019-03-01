@@ -8,6 +8,7 @@
        Dcl-s r_Nom_obj_IBMi Char(10) Template;
        Dcl-s r_Nom_travail Char(10) Template;
        Dcl-s r_nblign packed(4:0) Template;
+       Dcl-s r_Auto_Number Packed(9:0) Template;
        Dcl-s r_Num_lot Packed(9:0) Template;
        Dcl-s r_Num_lot_carac Char(9) Template;
        Dcl-s r_Numero_msg char(7) Template;
