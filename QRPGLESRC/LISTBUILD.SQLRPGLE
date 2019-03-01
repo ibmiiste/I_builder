@@ -218,7 +218,6 @@ Dcl-s ParmEntry char(150);
 
 // main function
 // fonction principale
-/free
 monitor;
 
   // Initialisation de variables
@@ -498,12 +497,15 @@ begsr trtopt;
                   : a_mid
                   : a_mdt);
     Else;
-      API_RtvMbrDesc( MbrD0100
-                     :%Size(MbrD0100)
-                     :Fmt
-                     :Zficsrcc + Zbibsrcc
-                     :Zmbrsrcc
-                     :bOvr);
+      Monitor;
+        API_RtvMbrDesc( MbrD0100
+                       :%Size(MbrD0100)
+                       :Fmt
+                       :Zficsrcc + Zbibsrcc
+                       :Zmbrsrcc
+                       :bOvr);
+      On-error;
+      Endmon;
       EXEC SQL
         INSERT INTO List_Objet_Build(Numobjbld,
                                      Lot_Number,
