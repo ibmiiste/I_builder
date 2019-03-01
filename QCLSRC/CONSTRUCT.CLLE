@@ -8,12 +8,20 @@
       /*   >>EXECUTE<<                                                    */
       /* >>END-PRE-COMPILER<<                                             */
 
-             PGM        PARM(&PREBIBSRC &PREFICSRC &PRESRCMBR &BIBDST &OBJDST +
-                          &TYPOBJ &BIBSRC &FICSRC &MBRSRC &OPTIMIZE &FAILED +
+             PGM        PARM(&PPREBIBSRC &PPREFICSRC &PPRESRCMBR &PBIBDST &POBJDST +
+                          &TYPOBJ &PBIBSRC &PFICSRC &PMBRSRC &OPTIMIZE &FAILED +
                           &FILEATTACH &LISTBIB &GESTDATA)
 
 
-
+             DCL        VAR(&PPREBIBSRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&PPREFICSRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&PPRESRCMBR) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&PBIBDST) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&POBJDST) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&PTYPOBJ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&PBIBSRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&PFICSRC) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&PMBRSRC) TYPE(*CHAR) LEN(10)
              DCL        VAR(&PREBIBSRC) TYPE(*CHAR) LEN(10)
              DCL        VAR(&PREFICSRC) TYPE(*CHAR) LEN(10)
              DCL        VAR(&PRESRCMBR) TYPE(*CHAR) LEN(10)
@@ -47,6 +55,16 @@
              DCL        VAR(&OBJETQ) TYPE(*CHAR) LEN(20)
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Génération d''un objet avec +
                           STRPREPRC') BNDDIR(I_BUILDER)
+
+             CHGVAR     VAR(&PREBIBSRC) Value(&PPREBIBSRC)
+             CHGVAR     VAR(&PREFICSRC) Value(&PPREFICSRC)
+             CHGVAR     VAR(&PRESRCMBR) Value(&PPRESRCMBR)
+             CHGVAR     VAR(&BIBDST) Value(&PBIBDST)
+             CHGVAR     VAR(&OBJDST) Value(&POBJDST)
+             CHGVAR     VAR(&TYPOBJ) Value(&PTYPOBJ)
+             CHGVAR     VAR(&BIBSRC) Value(&PBIBSRC)
+             CHGVAR     VAR(&FICSRC) Value(&PFICSRC)
+             CHGVAR     VAR(&MBRSRC) Value(&PMBRSRC)
 
              /* Récupération du type de source                             */
              RTVMBRD    FILE(&BIBSRC/&FICSRC) MBR(&MBRSRC *SAME) +
