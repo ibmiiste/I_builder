@@ -73,6 +73,10 @@
                           SRCTYPE(&TYPSRC)
 
              POSLIB     LISTE(&LISTBIB) LIB(*NONE)
+             MONMSG     MSGID(CPF0000)
+
+             ADDLIBLE   LIB(ISPHERE) POSITION(*LAST)
+             MONMSG     MSGID(CPF0000)
 
              /* En cas de précompilation SQL l'OPTIMIZE doit être mis dans COMPILOPT*/
              /* de la commande de compilation                                       */
