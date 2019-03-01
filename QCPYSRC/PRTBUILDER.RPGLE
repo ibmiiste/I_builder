@@ -582,6 +582,7 @@ END-PR ;
 // --------------------------------------------------
 DCL-Pr Copie_liste_objet_a_livres;
   p_Numero_lot LIKE(r_Num_lot);
+  p_Objet_number Like(r_Auto_Number) Options(*Nopass);
 END-Pr;
 
 //******************************************************************************
@@ -631,6 +632,7 @@ end-ds;
 // --------------------------------------------------
 DCL-PR Copie_sources IND;
   p_Num_lot LIKE(r_Num_lot);
+  p_Objet_number Like(r_Auto_Number) Options(*Nopass);
 END-Pr ;
 
 
