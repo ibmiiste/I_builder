@@ -14,6 +14,7 @@ Ctl-opt bnddir('I_BUILDER');
 // --------------------------------------------------
 DCL-PR Ouvrir_curseur_list_obj LIKE(sqlcode);
   p_Num_lot Like(r_Num_lot);
+  p_Objet_number Like(r_Auto_Number) Options(*Nopass);
 END-PR ;
 
 
@@ -44,7 +45,9 @@ END-PR ;
 DCL-PROC Copie_sources Export;
   DCL-PI *N IND;
     p_Num_lot LIKE(r_Num_lot);
+    p_Objet_number Like(r_Auto_Number) Options(*Nopass);
   END-PI ;
+
   // Variables locales
   Dcl-s l_num_lot Like(r_Num_lot);
   DCL-S retField IND;
@@ -66,7 +69,8 @@ DCL-PROC Copie_sources Export;
 
   l_Biblio_Lot= 'L' + %Editc(l_Num_lot:'X');
 
-  Ouvrir_curseur_list_obj(l_Num_lot);
+  Ouvrir_curseur_list_obj( l_Num_lot
+                          :p_Objet_number);
 
   Lecture_curseur_list_obj( l_num_lot
                            :l_BibSrc
@@ -105,6 +109,9 @@ DCL-PROC Copie_sources Export;
 
   enddo;
 
+  EXEC SQL
+    CLOSE Csr_List_Obj;
+
   return retField ;
 END-PROC ;
 
@@ -116,26 +123,42 @@ END-PROC ;
 DCL-PROC Ouvrir_curseur_list_obj;
   DCL-PI *N LIKE(sqlcode);
     p_num_lot Like(r_Num_lot);
+    p_Objet_number Like(r_Auto_Number) Options(*Nopass);
   END-PI ;
 
+  Dcl-s l_requete Char(1024);
+
   EXEC SQL
-    CLOSE List_Obj;
+    CLOSE Csr_List_Obj;
+
   // positionnement en début de fichier
+  l_Requete='SELECT Lot_Number, ' +
+            'Bibliotheque_Source, ' +
+            'Fichier_Source, ' +
+            'Membre_Source, ' +
+            'Bibliotheque_Destination, ' +
+            'Objet_Destination, ' +
+            'Type_Objet, ' +
+            'Attribut_Objet ' +
+       'FROM List_Objet_Build ' +
+       'WHERE Lot_Number = ' + %Char(P_Num_Lot)
+       ;
+
+  If %Parms = 2;
+    l_requete=l_requete + ' And OBJ_NUMBER = ' + %Char(p_Objet_number) +
+                          ' ORDER BY Ordre;';
+  Else;
+    l_requete=l_requete + ' ORDER BY Ordre;';
+  ENDIF;
+
   EXEC SQL
-    DECLARE List_Obj CURSOR FOR
-      SELECT Lot_Number,
-             Bibliotheque_Source,
-             Fichier_Source,
-             Membre_Source,
-             Bibliotheque_Destination,
-             Objet_Destination,
-             Type_Objet,
-             Attribut_Objet
-        FROM List_Objet_Build
-        WHERE Lot_Number = :P_Num_Lot
-        ORDER BY Ordre;
+    PREPARE List_Obj FROM :L_Requete;
+
+  EXEC SQL
+    DECLARE Csr_List_Obj CURSOR FOR List_Obj;
+
     EXEC SQL
-      OPEN List_Obj;
+      OPEN Csr_List_Obj;
 
   return Sqlcode;
 END-PROC ;
@@ -162,7 +185,7 @@ DCL-PROC Lecture_curseur_list_obj ;
 
 
   EXEC SQL
-    FETCH List_Obj
+    FETCH Csr_List_Obj
       INTO :P_Num_Lot , :P_Bibsrc, :P_Ficsrc, :P_Mbrsrc, :P_Bibdst, :P_Objdst, :P_Typobj,
         :P_Attribut_Objet;
 
