@@ -9,7 +9,7 @@
       /* >>END-PRE-COMPILER<<                                             */
 
              PGM        PARM(&PPREBIBSRC &PPREFICSRC &PPRESRCMBR &PBIBDST &POBJDST +
-                          &TYPOBJ &PBIBSRC &PFICSRC &PMBRSRC &OPTIMIZE &FAILED +
+                          &PTYPOBJ &PBIBSRC &PFICSRC &PMBRSRC &OPTIMIZE &FAILED +
                           &FILEATTACH &LISTBIB &GESTDATA)
 
 
