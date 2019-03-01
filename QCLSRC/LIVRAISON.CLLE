@@ -41,11 +41,6 @@
 
              CRTDUPOBJ  OBJ(RSTOBJSQL) FROMLIB(*LIBL) OBJTYPE(*PGM) TOLIB(&BIBLIO)
 
-             /* Copier liste des objets à livrer dans une table dans le lot Séquence/Bib */
-             /* source/Fichier source/membre source/bib objet */
-             CALLPRC    PRC(COPIE_LISTE_OBJET_A_LIVRES) PARM((&NUMLOT))
-
-
              /* Création de la SAVF qui va être envoyée via FTP               */
              CHGVAR     VAR(&SAVF) VALUE('S' *TCAT &NUMLOTC)
              CRTSAVF    FILE(&BIBLIO/&SAVF)
