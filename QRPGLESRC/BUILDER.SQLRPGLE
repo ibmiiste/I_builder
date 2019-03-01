@@ -102,6 +102,9 @@
            EnvRapMel();
          Else;
            If P_Livr_Env_Dst;
+             // Copier liste des objets à livrer dans une table dans le lot Séquence/Bib
+             // source/Fichier source/membre source/bib objet
+             Copie_liste_objet_a_livres(g_num_lot);
              Livraison( g_num_lot
                        :P_Sys_Dst
                        :P_User
