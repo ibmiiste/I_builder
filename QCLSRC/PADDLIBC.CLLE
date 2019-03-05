@@ -89,11 +89,11 @@
              DLTF       FILE(QTEMP/WLIBLST2)
              MONMSG     MSGID(CPF0000)
 
-             GOTO       CMDLBL(FIN)
+             GOTO       CMDLBL(FIN2)
 
  ERREUR:     DMPCLPGM
              CALLPRC    PRC(GEST_ERREUR)
 
 
- FIN:        RETURN
+ FIN2:       RETURN
              ENDPGM
