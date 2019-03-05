@@ -20,7 +20,7 @@
 //   >>EXECUTE<<                                                 */
 // >>END-PRE-COMPILER<<                                          */
 //****************************************************************
-ctl-opt datedit(*dmy) dftactgrp(*no);
+ctl-opt datedit(*dmy) dftactgrp(*no) Bnddir('I_BUILDER');
 dcl-f FLIBLST workstn sfile(sfl1:sflrrn) sfile(sfl2:sflrrn) indds(IndDs);
 dcl-f FLIBLST1 keyed usage(*update: *output:*Delete) usropn;
 dcl-f FLIBLST2 keyed usage(*update: *output:*Delete) prefix(f2_);
@@ -31,6 +31,10 @@ dcl-pr Gestion_liste_bibliotheque extpgm('PLIBLSTR');
   *n Char(2); // Option action
   *n Char(10); // Liste sélectionnée par l'option 1
 end-pr;
+
+/Copy Qcpysrc,inhbuilder
+
+/Copy Qcpysrc,Prtbuilder
 
 dcl-pi Gestion_liste_bibliotheque;
   selusr char(10);
