@@ -88,6 +88,9 @@ Dcl-s g_Selection_generique Ind;
 Dcl-s g_Selection_OK Ind;
 Dcl-s g_Traitement_option Ind;
 
+// Indique si on affiche les lots actifs ou tous les lots
+Dcl-s g_tous_lots Ind Inz(*off);
+
 // La DS du programme, noter le S indispensable
 /copy qcpysrc,Psds
 
@@ -96,7 +99,7 @@ Dcl-ds IndDs;
   Rollup Ind Pos(2);
   Sflnxtchg Ind Pos(8);
   Zoptpr Ind Pos(20);
-  Znomred Ind Pos(30);
+  l_inactif Ind Pos(21);
   Sfldsp Ind Pos(4);
   Sfldspctl Ind Pos(5);
   Sflclr Ind Pos(6);
@@ -218,6 +221,17 @@ Dcl-proc TRTSFL;
     clear p_Num_lot;
     g_Fin_actions = *OFF;
   ENDIF;
+
+  If permut_act_inact;
+    If g_tous_lots=*Off;
+      g_tous_lots=*on;
+    Else;
+      g_tous_lots=*off;
+    Endif;
+    INITSF();
+    g_Fin_actions = *OFF;
+  ENDIF;
+
   // On ne fait ceci que s'il n'y a eu rien d'autre
   IF g_Fin_actions = '1';
     TRTOPT();
@@ -279,7 +293,8 @@ Dcl-proc INITSF;
              Liste_Biblio_Projet,
              Biblio_Lot,
              Statuts_Lot,
-             RRN(Lots)
+             RRN(Lots),
+             Statut_Enreg
         FROM Lots
         ORDER BY Lot_Number ;
   EXEC SQL
@@ -301,12 +316,12 @@ Dcl-proc TRTOPT;
   //
   DOW not %Eof;
     NREC=%Char(HNREC);
-    // IF htout = '1';
-    //   IF ZOPT='2' OR ZOPT='3' OR ZOPT='4' OR ZOPT='99';
-    //     // Si l'employé à quitté on ne peut plus rien modifier
-    //     ZOPT = '5 ';
-    //   ENDIF;
-    // ENDIF;
+    IF HSTATENREG=0;
+      IF %Trim(ZOPT)='2' OR %Trim(ZOPT)='3' OR %Trim(ZOPT)='4' OR %Trim(ZOPT)='99';
+        // Si le lot a été fermé, on ne peut plus rien modifier
+        ZOPT = '5 ';
+      ENDIF;
+    ENDIF;
     g_Traitement_option = *ON;
     // Selection en fonction du choix saisi
     SELECT;
@@ -375,7 +390,9 @@ Dcl-proc CHGPAG;
   Wran01 = LSTLIG;
   // Lexture de l'enregistrement suivant
   EXEC SQL
-    FETCH Curs_Lots02 INTO :Numlot, :Libellot, :Listbibprj, :Biblot, :Statlot, :G_Numero_Relatif;
+    FETCH Curs_Lots02
+      INTO :Numlot, :Libellot, :Listbibprj, :Biblot, :Statlot, :G_Numero_Relatif,
+        :Ds_Lots.Statenreg;
   // Remise à zéro du compteur de ligne, mais on pourrait faire autrement
   Clear NBRLIG;
   //
@@ -397,6 +414,13 @@ Dcl-proc CHGPAG;
         ENDIF;
       ENDIF;
     ENDIF;
+
+    // On ne charge pas les lots fermés
+    If g_tous_lots=*off
+    And Ds_Lots.STATENREG=0;
+      g_Selection_OK=*off;
+    ENDIF;
+
     // L'indicateur est à '1' si sélection OK ou pas de sélection
     IF g_Selection_OK;
       ZNUMLOT = NUMLOT;
@@ -412,13 +436,12 @@ Dcl-proc CHGPAG;
         ZSTATLOT  = 'PRODUCTION';
       Endsl;
       HNREC=g_numero_relatif;
-      IF STATLOT = '0';
+      HSTATENREG=Ds_lots.STATENREG;
+      IF Ds_lots.STATENREG = 0;
         // Top statut Lot fermé
-        HTOUT = '0';
-        Znomred = *OFF;
+        l_inactif = *ON;
       ELSE;
-        HTOUT = '1';
-        Znomred = *ON;
+        l_inactif = *OFF;
       ENDIF;
       // Les compteurs, attention au WRAN01
       NBRLIG+=1;
@@ -429,7 +452,9 @@ Dcl-proc CHGPAG;
     ENDIF;
     // Lecture du suivant
     EXEC SQL
-      FETCH Curs_Lots02 INTO :Numlot, :Libellot, :Listbibprj, :Biblot, :Statlot, :G_Numero_Relatif;
+      FETCH Curs_Lots02
+        INTO :Numlot, :Libellot, :Listbibprj, :Biblot, :Statlot, :G_Numero_Relatif,
+          :Ds_Lots.Statenreg;
 
   ENDDO;
   // On quitte la boucle soit en fin de page

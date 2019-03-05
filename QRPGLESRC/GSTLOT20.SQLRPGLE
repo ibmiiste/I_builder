@@ -161,6 +161,7 @@ Monitor;
     // affichage
     ZMODE=WTXT4;
   // aucune zone n'est saisisable
+  Protection = *ON;
   WHEN (PCHX = 'CR');
     // création
     ZMODE=WTXT5;
@@ -299,7 +300,7 @@ Dcl-proc TRTSCR;
           Savliblot(l_Num_lot_carac);
 
           EXEC SQL
-            DELETE FROM Lots WHERE CHAR(RRN(Lots)) = :Pnrec ;
+            UPDATE Lots SET Statut_Enreg = 0 WHERE CHAR(RRN(Lots)) = :Pnrec ;
         endif;
 
         l_traitenement_ecran = *OFF;

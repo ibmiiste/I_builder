@@ -34,6 +34,7 @@
        dcl-s Imprimer ind based(p_inkh);
        dcl-s P_INKI pointer inz(%addr(*inki));
        dcl-s F9 ind based(p_inki);
+       dcl-s permut_act_inact ind based(p_inki);
        dcl-s P_INKJ pointer inz(%addr(*inkj));
        dcl-s F10 ind based(p_inkj);
        dcl-s P_INKK pointer inz(%addr(*inkk));

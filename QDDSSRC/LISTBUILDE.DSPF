@@ -22,17 +22,31 @@
      A            ZOPT           2   B  8  2
      A  20                                  DSPATR(PR)
      A            ZOBJDST       10   B  8 12
-     A  30                                  COLOR(RED)
+     A  21                                  COLOR(WHT)
+     A  21                                  DSPATR(PR)
      A            ZDESCOBJET    50   O  8 45
+     A  21                                  COLOR(WHT)
      A            HNREC         40   H
      A            HLOT_NUMBE     9S 0H
      A            ZBIBDST       10   B  8 23
+     A  21                                  COLOR(WHT)
+     A  21                                  DSPATR(PR)
      A            ZBIBSRC       10   B  8 97
+     A  21                                  COLOR(WHT)
+     A  21                                  DSPATR(PR)
      A            ZFICSRC       10   B  8110
+     A  21                                  COLOR(WHT)
+     A  21                                  DSPATR(PR)
      A            ZMBRSRC       10   B  8122
+     A  21                                  COLOR(WHT)
+     A  21                                  DSPATR(PR)
      A            ZORDRE         6Y 0B  8  5
      A                                      EDTCDE(Z)
+     A  21                                  COLOR(WHT)
+     A  21                                  DSPATR(PR)
      A            ZTYPOBJ       10   B  8 34
+     A  21                                  COLOR(WHT)
+     A  21                                  DSPATR(PR)
      A            HNUMOBJBLD     9S 0H
      A          R FORE1                     SFLCTL(SFL01)
      A                                      RTNCSRLOC(&WLICSR &WZOCSR &WPRCSR)
@@ -69,7 +83,7 @@
      A                                  3  3'Indiquez vos options, puis appuyez-
      A                                       sur ENTREE.'
      A                                      COLOR(BLU)
-     A                                  4  3'2=Modifier'
+     A N21                              4  3'2=Modifier'
      A                                      COLOR(BLU)
      A                                  5  3'Selection par nom :'
      A            ZSOBJET       10   B  5 23
@@ -87,20 +101,27 @@
      A            WCOLN          3S 0H
      A            ZPROJET       50   O  2 42COLOR(WHT)
      A            ZOPTC          2   B  7  2
+     A  21                                  DSPATR(PR)
      A            ZORDREC        6  0B  7  5EDTCDE(Z)
+     A  21                                  DSPATR(PR)
      A            ZOBJDSTC      10   B  7 12
+     A  21                                  DSPATR(PR)
      A            ZBIBDSTC      10   B  7 23
-     A            ZDESCOBJEC    50   B  7 45
-     A  15                                  DSPATR(PC)
+     A  21                                  DSPATR(PR)
+     A            ZDESCOBJEC    50   O  7 45
      A            ZBIBSRCC      10   B  7 97
+     A  21                                  DSPATR(PR)
      A            ZFICSRCC      10   B  7110
+     A  21                                  DSPATR(PR)
      A            ZMBRSRCC      10   B  7122
+     A  21                                  DSPATR(PR)
      A            ZTYPOBJC      10   B  7 34CHECK(ER)
+     A  21                                  DSPATR(PR)
      A                                  4 14'3=Copier'
+     A  21                                  DSPATR(ND)
      A                                      COLOR(BLU)
      A                                  4 23'4=Supprimer'
-     A                                      COLOR(BLU)
-     A                                  4 35'5=Afficher'
+     A  21                                  DSPATR(ND)
      A                                      COLOR(BLU)
      A                                  4 46'6=Imprimer'
      A                                      COLOR(BLU)
@@ -108,14 +129,16 @@
      A                                      COLOR(BLU)
      A                                  4 73'9=Construction'
      A                                      COLOR(BLU)
+     A  21                                  DSPATR(ND)
      A                                  4 88'10=Livraison Recette'
+     A  21                                  DSPATR(ND)
      A                                      COLOR(BLU)
      A                                  4109'11=Livraison Production'
+     A  21                                  DSPATR(ND)
      A                                      COLOR(BLU)
      A          R FORB1
      A                                      CF03
      A                                      CF05
-     A                                      CF06
      A                                      CF08
      A                                      CF12
      A                                      RTNCSRLOC(&WLICSR &WZOCSR &WPRCSR)
@@ -124,25 +147,37 @@
      A                                      CSRLOC(WLIGN WCOLN)
      A                                      CHANGE(91)
      A                                      HLPCLR
-     A                                      CF10
-     A                                      CF09
-     A                                      CF11
+     A N21                                  CF06
+     A N21                                  CF09
+     A N21                                  CF10
+     A N21                                  CF11
      A          H                           HLPARA(6 23 6 58)
      A                                      HLPPNLGRP('ZSNOM' PGMF01)
      A          H                           HLPARA(8 2 26 3)
      A                                      HLPPNLGRP('ZOPT' PGMF01)
-     A                                 26  3'F3=Exit  F5=Réafficher  F6=Créer  -
-     A                                      F8=Imprimer  F09=Construction  F10=-
-     A                                      Livraison recette  F11=Livraison pr-
-     A                                      oduction  F12=Annuler'
+     A                                 26  3'F3=Exit'
      A                                      COLOR(BLU)
      A            WLICSR        10A  H
      A            WZOCSR        10A  H
      A            WPRCSR         4S 0H
      A            WLIGN          3S 0H
      A            WCOLN          3S 0H
+     A                                 26 11'F5=Réafficher'
+     A                                      COLOR(BLU)
+     A N21                             26 25'F6=Créer'
+     A                                      COLOR(BLU)
+     A                                 26 34'F8=Imprimer'
+     A                                      COLOR(BLU)
+     A N21                             26 46'F09=Construction'
+     A                                      COLOR(BLU)
+     A N21                             26 63'F10=Livraison recette'
+     A                                      COLOR(BLU)
+     A N21                             26 85'F11=Livraison production'
+     A                                      COLOR(BLU)
+     A                                 26110'F12=Annuler'
+     A                                      COLOR(BLU)
      A          R WSFMSG                    SFL
-     A                                      SFLMSGRCD(24)
+     A                                      SFLMSGRCD(27)
      A            WMGKEY                    SFLMSGKEY
      A            WPGMQ                     SFLPGMQ
      A          R WSFCTL                    SFLCTL(WSFMSG)
@@ -163,4 +198,7 @@
      A*%%RS+  <record-write record-format="WSFMSG" />
      A*%%RS+  <record-write record-format="WSFCTL" />
      A*%%RS+ </sequence>
+     A*%%RS </record-sequences>
+     A*%%RS </record-sequences>
+     A*%%RS </record-sequences>
      A*%%RS </record-sequences>

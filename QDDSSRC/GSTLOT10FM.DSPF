@@ -21,14 +21,29 @@
      A  08                                  SFLNXTCHG
      A            ZOPT           2   B  8  2
      A  20                                  DSPATR(PR)
-     A            HTOUT          1   H
      A            HNREC         10  0H
      A            ZNUMLOT   R        O  8  6REFFLD(LOTSF/NUMLOT *LIBL/LOTS)
      A                                      EDTCDE(Z)
+     A  21                                  COLOR(WHT)
+     A N21                                  COLOR(GRN)
+     A N21                                  DSPATR(HI)
      A            ZLIBELLOT R        O  8 17REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
+     A  21                                  COLOR(WHT)
+     A N21                                  COLOR(GRN)
+     A N21                                  DSPATR(HI)
      A            ZLISTBIBPRR        O  8 70REFFLD(LOTSF/LISTBIBPRJ *LIBL/LOTS)
+     A  21                                  COLOR(WHT)
+     A N21                                  COLOR(GRN)
+     A N21                                  DSPATR(HI)
      A            ZBIBLOT   R        O  8 83REFFLD(LOTSF/BIBLOT *LIBL/LOTS)
+     A  21                                  COLOR(WHT)
+     A N21                                  COLOR(GRN)
+     A N21                                  DSPATR(HI)
      A            ZSTATLOT      13   O  8 96
+     A  21                                  COLOR(WHT)
+     A N21                                  COLOR(GRN)
+     A N21                                  DSPATR(HI)
+     A            HSTATENREG     1N 0H
      A          R FORE1                     SFLCTL(SFL01)
      A                                      RTNCSRLOC(&WLICSR &WZOCSR &WPRCSR)
      A                                      OVERLAY
@@ -97,6 +112,7 @@
      A                                      CSRLOC(WLIGN WCOLN)
      A                                      CHANGE(91)
      A                                      HLPCLR
+     A                                      CF09
      A          H                           HLPARA(6 23 6 58)
      A                                      HLPPNLGRP('ZSNOM' PGMF01)
      A          H                           HLPARA(8 2 22 3)
@@ -133,8 +149,6 @@
      A*%%RS+    <field name="ZNUMLOT" value="1" />
      A*%%RS+    <field name="ZOPT" value="2" />
      A*%%RS+    <field name="ZLIBELLOT" value="Projet MIRUS" />
-     A*%%RS+    <field name="HROWIDLOTS" value="345654eazd4r654zd6541D684d65a4D6
-     A*%%RS+3SZDa4d65" />
      A*%%RS+   </field-data>
      A*%%RS+  </record-write>
      A*%%RS+  <record-write record-format="FORE1" />

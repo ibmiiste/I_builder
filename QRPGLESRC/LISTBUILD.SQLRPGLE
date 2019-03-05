@@ -146,8 +146,8 @@ Dcl-ds IndDS;
   SFLNXTCHG ind pos(8);
   SFLENDMSG ind pos(9);
   SFLINZ ind pos(10);
-  PCDESC ind pos(15);
   PROTECT ind pos(20);
+  g_lot_inactif ind pos(21);
 end-ds;
 
 // la ds du sous=fichier
@@ -204,6 +204,9 @@ end-ds;
 
 // La DS de la table LIST_OBJET_BUILD
 Dcl-ds Ds_LIST_OBJET_BUILD Extname('LSTOBJBLD') Qualified End-ds;
+
+// La DS de la table LOTS
+Dcl-ds Ds_Lots Extname('LOTS') Qualified End-ds;
 
 // Paramètre d'appel de XREF
 Dcl-s ParmEntry char(150);
@@ -395,13 +398,20 @@ begsr initsf;
   EXEC SQL
     SELECT Libelle_Lots,
            Liste_Biblio_Projet,
-           Biblot
+           Biblot,
+           Statut_Enreg
       INTO :Zprojet,
            :G_List_Biblio,
-           :G_Lib_Lot
+           :G_Lib_Lot,
+           :Ds_Lots.Statenreg
       FROM Lots
       WHERE Lot_Number = :P_Num_Lot;
 
+  IF Ds_Lots.Statenreg=0;
+    g_lot_inactif=*on;
+  Else;
+    g_lot_inactif=*off;
+  ENDIF;
   ZOBJDST=*blank;
   g_selection = *off;
   g_filtre = *off;
@@ -545,6 +555,17 @@ begsr trtopt;
   dow not %eof;
     //a_nrec=hnrec;
     g_filtre = *on;
+    // Si le lot est inactif, certaine option en sont pas possible
+    IF g_lot_inactif;
+       If %Trim(zopt)='2'
+       Or %Trim(zopt)='3'
+       Or %Trim(zopt)='4'
+       Or %Trim(zopt)='9'
+       Or %Trim(zopt)='10'
+       Or %Trim(zopt)='11';
+         Zopt='5';
+       Endif;
+    ENDIF;
     // selection en fonction du choix saisi
     select;
     WHEN
