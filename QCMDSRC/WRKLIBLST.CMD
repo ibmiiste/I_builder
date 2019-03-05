@@ -1,3 +1,11 @@
+      /* >>PRE-COMPILER<<                                                 */
+      /*   >>CRTCMD<<  CRTCMD CMD(&LI/&OB) SRCFILE(&SL/&SF) +             */
+      /*                 SRCMBR(&SM);                                     */
+      /*   >>IMPORTANT<<                                                  */
+      /*     >>PARM<<  PGM(I_BUILDER/PLIBLSTR);                           */
+      /*   >>END-IMPORTANT<<                                              */
+      /*   >>EXECUTE<<                                                    */
+      /* >>END-PRE-COMPILER<<                                             */
              CMD        PROMPT('Gestion liste de bibliothèques')
 
              PARM       KWD(USER) TYPE(*NAME) LEN(10) DFT(*CURRENT) +

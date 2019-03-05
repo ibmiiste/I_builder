@@ -1,3 +1,11 @@
+      /* >>PRE-COMPILER<<                                                 */
+      /*   >>CRTCMD<<  CRTCMD CMD(&LI/&OB) SRCFILE(&SL/&SF) +             */
+      /*                 SRCMBR(&SM);                                     */
+      /*   >>IMPORTANT<<                                                  */
+      /*     >>PARM<<  PGM(I_BUILDER/POSLIBC);                            */
+      /*   >>END-IMPORTANT<<                                              */
+      /*   >>EXECUTE<<                                                    */
+      /* >>END-PRE-COMPILER<<                                             */
              CMD        PROMPT('Positionnement bibliothèques')
 
              PARM       KWD(SAVRST) TYPE(*NAME) LEN(4) RSTD(*YES) +
