@@ -56,7 +56,7 @@
      A  05                                  SFLDSPCTL
      A  06                                  SFLCLR
      A  07                                  SFLEND
-     A                                      SFLSIZ(17)
+     A                                      SFLSIZ(9996)
      A                                      SFLPAG(17)
      A                                      SFLCSRRRN(&WRACSR)
      A            WRACSR         5S 0H
