@@ -300,6 +300,12 @@ Dcl-proc INITSF;
   EXEC SQL
     OPEN Curs_Lots02;
 
+  // Lexture de l'enregistrement suivant
+  EXEC SQL
+    FETCH Curs_Lots02
+      INTO :Numlot, :Libellot, :Listbibprj, :Biblot, :Statlot, :G_Numero_Relatif,
+        :Ds_Lots.Statenreg;
+
   // Chargement de la première page
   CHGPAG();
 End-proc;
@@ -388,11 +394,7 @@ Dcl-proc CHGPAG;
   Sflnxtchg = *OFF;
   //                  SETON                                        04
   Wran01 = LSTLIG;
-  // Lexture de l'enregistrement suivant
-  EXEC SQL
-    FETCH Curs_Lots02
-      INTO :Numlot, :Libellot, :Listbibprj, :Biblot, :Statlot, :G_Numero_Relatif,
-        :Ds_Lots.Statenreg;
+
   // Remise à zéro du compteur de ligne, mais on pourrait faire autrement
   Clear NBRLIG;
   //
