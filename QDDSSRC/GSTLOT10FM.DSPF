@@ -101,7 +101,6 @@
      A                                  7 96'Statut'
      A                                      COLOR(WHT)
      A          R FORB1
-     A                                      CF03
      A                                      CF05
      A                                      CF06
      A                                      CF08
@@ -113,19 +112,30 @@
      A                                      CHANGE(91)
      A                                      HLPCLR
      A                                      CF09
+     A                                      CA03
      A          H                           HLPARA(6 23 6 58)
      A                                      HLPPNLGRP('ZSNOM' PGMF01)
      A          H                           HLPARA(8 2 22 3)
      A                                      HLPPNLGRP('ZOPT' PGMF01)
-     A                                 26  3'F3=Exit  F5=Réafficher  -
-     A                                      F6=Créer  F8=Imprimer  -
-     A                                      F12=Annuler'
+     A                                 26  3'F3=Exit'
      A                                      COLOR(BLU)
      A            WLICSR        10A  H
      A            WZOCSR        10A  H
      A            WPRCSR         4S 0H
      A            WLIGN          3S 0H
      A            WCOLN          3S 0H
+     A                                 26 11'F5=Réafficher'
+     A                                      COLOR(BLU)
+     A                                 26 25'F6=Créer'
+     A                                      COLOR(BLU)
+     A                                 26 34'F8=Imprimer'
+     A                                      COLOR(BLU)
+     A  21                             26 46'F9=Lots en cours'
+     A                                      COLOR(BLU)
+     A N21                             26 46'F9=Tous les lots'
+     A                                      COLOR(BLU)
+     A                                 26 63'F12=Précédent'
+     A                                      COLOR(BLU)
      A          R WSFMSG                    SFL
      A                                      SFLMSGRCD(27)
      A            WMGKEY                    SFLMSGKEY
