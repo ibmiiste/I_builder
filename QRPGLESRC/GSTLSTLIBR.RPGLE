@@ -21,9 +21,9 @@
 // >>END-PRE-COMPILER<<                                          */
 //****************************************************************
 ctl-opt datedit(*dmy) dftactgrp(*no) Bnddir('I_BUILDER');
-dcl-f FLIBLST workstn sfile(sfl1:sflrrn) sfile(sfl2:sflrrn) indds(IndDs);
-dcl-f FLIBLST1 keyed usage(*update: *output:*Delete) usropn;
-dcl-f FLIBLST2 keyed usage(*update: *output:*Delete) prefix(f2_);
+dcl-f gstlstlibe workstn sfile(sfl1:sflrrn) sfile(sfl2:sflrrn) indds(IndDs);
+dcl-f deflstlib1 keyed usage(*update: *output:*Delete) usropn;
+dcl-f gstlstlib1 keyed usage(*update: *output:*Delete) prefix(f2_);
 
 dcl-pr Gestion_liste_bibliotheque extpgm('PLIBLSTR');
   *n char(10); // selusr
@@ -159,8 +159,8 @@ Dcl-proc sflchg;
       when opt = '6';
         edtlib();
       when opt = '7';
-        chain (lstname) fliblst2;
-        if %found(fliblst2);
+        chain (lstname) gstlstlib1;
+        if %found(gstlstlib1);
           addlib (lstname);
         else;
           msgfn1 = 'Liste ' + %trim(lstname) +
@@ -186,9 +186,9 @@ Dcl-proc sflchg;
 End-proc;
 
 Dcl-proc fmtdsp;
-  open fliblst1;
-  chain (lstname) fliblst1;
-  close fliblst1;
+  open deflstlib1;
+  chain (lstname) deflstlib1;
+  close deflstlib1;
   Not_SFLDSP = *off;
   Not_LSTNAME_PR = *off;
   exfmt fmt001;
@@ -197,18 +197,18 @@ End-proc;
 Dcl-proc fmtdlt;
   exfmt windlt;
   if optdlt = 'O';
-    open fliblst1;
-    chain lstname fliblst1;
-    chain lstname fliblst2;
-    if %found(fliblst2);
-      dow not %eof(fliblst2)
-        or not %found(fliblst2);
-        delete fliblst2;
-        reade lstname fliblst2;
+    open deflstlib1;
+    chain lstname deflstlib1;
+    chain lstname gstlstlib1;
+    if %found(gstlstlib1);
+      dow not %eof(gstlstlib1)
+        or not %found(gstlstlib1);
+        delete gstlstlib1;
+        reade lstname gstlstlib1;
       enddo;
     endif;
-    delete fliblst1;
-    close fliblst1;
+    delete deflstlib1;
+    close deflstlib1;
   endif;
   updsfl = *on;
   if sflrrn > 1 and optdlt = 'O';
@@ -226,10 +226,10 @@ Dcl-proc fmtadd;
   lsttime = %time;
   lstuser = user;
   exfmt fmt001;
-  open fliblst1;
+  open deflstlib1;
   if lstname <> '';
-    chain lstname fliblst1;
-    if not %found(fliblst1);
+    chain lstname deflstlib1;
+    if not %found(deflstlib1);
       lstdate = %date;
       lsttime = %time;
       lstuser = user;
@@ -244,7 +244,7 @@ Dcl-proc fmtadd;
       msgfn1= 'La liste ' + %trim(lstname) + ' existe déjà !';
     endif;
   endif;
-  close fliblst1;
+  close deflstlib1;
 
   sflini();
 End-proc;
@@ -260,8 +260,8 @@ Dcl-proc Sellist;
 End-proc;
 
 Dcl-proc fmtmaj;
-  open fliblst1;
-  chain (lstname) fliblst1;
+  open deflstlib1;
+  chain (lstname) deflstlib1;
   Not_SFLDSP = *off;
   Not_LSTNAME_PR = *off;
   Not_RESTE_PR = *on;
@@ -272,7 +272,7 @@ Dcl-proc fmtmaj;
       ' en accès privé impossible.';
   endif;
   update flibls1r;
-  close fliblst1;
+  close deflstlib1;
   update sfl1;
 End-proc;
 
@@ -289,10 +289,10 @@ Dcl-proc sflini;
   Not_SFLDSP = *off;
 
   sflrrn = 0;
-  open fliblst1;
-  setll (*loval) fliblst1;
-  read fliblst1;
-  dow not %eof(fliblst1);
+  open deflstlib1;
+  setll (*loval) deflstlib1;
+  read deflstlib1;
+  dow not %eof(deflstlib1);
     if sellst = '*ALL' and user = lstuser
       or sellst = '*ALL' and selusr = lstuser
       or sellst = '*ALL' and selusr = '*ALL'
@@ -302,7 +302,7 @@ Dcl-proc sflini;
       sflrrn = sflrrn + 1;
       write sfl1;
     endif;
-    read fliblst1;
+    read deflstlib1;
   enddo;
   if sflrrn > 0;
     sflrrn = 1;
@@ -310,7 +310,7 @@ Dcl-proc sflini;
     Sflclr = *off;
     Not_SFLDSP = *on;
   endif;
-  close fliblst1;
+  close deflstlib1;
 End-proc;
 
 Dcl-proc edtlib;
@@ -325,18 +325,18 @@ Dcl-proc edtlib;
     Not_SFLDSP = *off;
 
     sflrrn = 0;
-    setll lstname fliblst2;
-    reade lstname fliblst2;
+    setll lstname gstlstlib1;
+    reade lstname gstlstlib1;
     curlib = f2_lib;
-    reade lstname fliblst2;
+    reade lstname gstlstlib1;
     seqlib = 10;
 
-    dow not %eof(fliblst2);
+    dow not %eof(gstlstlib1);
       sflrrn = sflrrn + 1;
       lib = f2_lib;
       write sfl2;
       seqlib = seqlib + 10;
-      reade lstname fliblst2;
+      reade lstname gstlstlib1;
     enddo;
 
     dou sflrrn = 39;
@@ -402,8 +402,8 @@ Dcl-proc edtlib;
     endif;
     f2_seqlib = 0;
     f2_lstname = lstname;
-    chain (lstname:f2_seqlib) fliblst2;
-    if %found(fliblst2);
+    chain (lstname:f2_seqlib) gstlstlib1;
+    if %found(gstlstlib1);
       f2_lib = curlib;
       update flibls2r;
     else;
@@ -414,8 +414,8 @@ Dcl-proc edtlib;
     for i = 1 by 1 to 39;
       f2_lstname = lstname;
       f2_seqlib = f2_seqlib + 10;
-      chain (lstname:f2_seqlib) fliblst2;
-      if %found(fliblst2);
+      chain (lstname:f2_seqlib) gstlstlib1;
+      if %found(gstlstlib1);
         if  %subst(dyndta(i):5:10) <> '';
           f2_lib = %subst(dyndta(i):5:10);
           update flibls2r;
@@ -435,11 +435,11 @@ Dcl-proc edtlib;
 End-proc;
 
 Dcl-proc chkaut;
-  open fliblst1;
-  chain (lstname) fliblst1;
+  open deflstlib1;
+  chain (lstname) deflstlib1;
   if user <> lstuser and lsttype = '2';
     msgfn1 = 'Non autorisé à modifier liste ' + lstname;
     clear opt;
   endif;
-  close fliblst1;
+  close deflstlib1;
 End-proc;

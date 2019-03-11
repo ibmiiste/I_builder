@@ -85,7 +85,7 @@ Dcl-pr Gestion_message Extpgm('GSTMSG01');
 End-pr;
 
 // Guide vers la liste des listes de bibliothèques
-dcl-pr Gestion_liste_bibliotheque extpgm('PLIBLSTR');
+dcl-pr Gestion_liste_bibliotheque extpgm('GSTLSTLIBR');
   *n char(10); // selusr
   *n char(8); // sellst
   *n Char(2); // Option action
@@ -337,7 +337,7 @@ Dcl-proc CTLDTA;
     EXEC SQL
       SELECT '1'
         INTO :G_Exist
-        FROM Fliblst1
+        FROM Deflstlib
         WHERE Lstname = :Zlistbibpr;
     If Sqlcode=c_Non_trouve;
       l_anomalie=*On;
