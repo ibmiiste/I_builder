@@ -49,7 +49,7 @@
              DCL        VAR(&FILEATTACH) TYPE(*CHAR) LEN(10000)
              DCL        VAR(&LISTBIB) TYPE(*CHAR) LEN(10) /* Liste +
                           de bibliothèque à utiliser avec la +
-                          commande POSLIB */
+                          commande POSLSTLIB */
              DCL        VAR(&QUOTE) TYPE(*CHAR) LEN(1) VALUE('''')
              DCL        VAR(&GESTDATA) TYPE(*CHAR) LEN(1)
              DCL        VAR(&OBJETQ) TYPE(*CHAR) LEN(20)
@@ -72,7 +72,7 @@
              RTVMBRD    FILE(&BIBSRC/&FICSRC) MBR(&MBRSRC *SAME) +
                           SRCTYPE(&TYPSRC)
 
-             POSLIB     LISTE(&LISTBIB) LIB(*NONE)
+             POSLSTLIB  LISTE(&LISTBIB) LIB(*NONE)
              MONMSG     MSGID(CPF0000)
 
              ADDLIBLE   LIB(ISPHERE) POSITION(*LAST)
