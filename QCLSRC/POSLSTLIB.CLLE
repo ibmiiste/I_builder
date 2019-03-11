@@ -20,6 +20,8 @@
              DCL        VAR(&LIB) TYPE(*CHAR) LEN(10)
              DCL        VAR(&P) TYPE(*DEC) LEN(3 0)
              DCL        VAR(&RSTCURLIB) TYPE(*CHAR) LEN(4)
+             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Mise en ligne d''une liste +
+                          de biblio') BNDDIR(I_BUILDER)
 
              MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
 
@@ -54,7 +56,7 @@
              IF         COND(&SAVRST *EQ 'RST' *OR &SAVRST *EQ '*RST') THEN(DO)
 
                 IF         COND(&PLIB *EQ '*NONE') THEN(DO)
-                   CALL       PGM(PADDLIBC) PARM(&LISTE &RSTCURLIB)
+                   CALL       PGM(PADDLIB) PARM(&LISTE &RSTCURLIB)
                    GOTO       CMDLBL(FIN)
                 ENDDO
                 ELSE       CMD(DO)

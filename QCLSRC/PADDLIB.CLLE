@@ -25,7 +25,7 @@
       /*     >>PARM<<  DBGVIEW(*LIST);                                    */
       /*   >>END-IMPORTANT<<                                              */
       /*   >>CMD<<  RUNSQL SQL('DECLARE GLOBAL TEMPORARY TABLE WLIBLST2 + */
-      /*                   LIKE FLIBLST2 WITH REPLACE');                  */
+      /*                   LIKE GSTLSTLIB WITH REPLACE');                 */
       /*   >>EXECUTE<<                                                    */
       /* >>END-PRE-COMPILER<<                                             */
              PGM        PARM(&LSTLIB &RSTCURLIB)
@@ -35,6 +35,8 @@
              DCL        VAR(&SQL) TYPE(*CHAR) LEN(400)
              DCL        VAR(&RSTCURLIB) TYPE(*CHAR) LEN(4)
              DCL        VAR(&RSTCURLIB2) TYPE(*CHAR) LEN(4)
+             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Mise en ligne d''une liste +
+                          de biblio') BNDDIR(I_BUILDER)
 
              DCLF       FILE(QTEMP/WLIBLST2)
              MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
@@ -52,19 +54,16 @@
                 CHGVAR     VAR(&RSTCURLIB2) VALUE(&RSTCURLIB)
              ENDDO
 
-             ADDLIBLE   LIB(BERGER) POSITION(*LAST)
-             MONMSG     MSGID(CPF0000)
-
-             RTVOBJD    OBJ(FLIBLST2) OBJTYPE(*FILE) RTNLIB(&RTNLIB)
-             CHGVAR     VAR(&SQL) VALUE('DECLARE GLOBAL TEMPORARY +
-                          TABLE WLIBLST2 AS (SELECT * FROM' *BCAT +
-                          &RTNLIB *TCAT '.FLIBLST2 WHERE LSTNAME = +
-                          ''' *TCAT &LSTLIB *TCAT ''') WITH DATA +
-                          WITH REPLACE')
+             RTVOBJD    OBJ(GSTLSTLIB) OBJTYPE(*FILE) RTNLIB(&RTNLIB)
+             CHGVAR     VAR(&SQL) VALUE('DECLARE GLOBAL TEMPORARY TABLE +
+                          WLIBLST2 AS (SELECT * FROM' *BCAT &RTNLIB *TCAT +
+                          '.GSTLSTLIB WHERE LSTNAME = ''' *TCAT &LSTLIB +
+                          *TCAT ''') WITH DATA WITH REPLACE')
              RUNSQL     SQL(&SQL) COMMIT(*NONE) NAMING(*SQL)
              MONMSG     MSGID(CPF0000)
 
-             OVRDBF     FILE(WLIBLST2) TOFILE(QTEMP/WLIBLST2) LVLCHK(*NO) SHARE(*YES)
+             OVRDBF     FILE(WLIBLST2) TOFILE(QTEMP/WLIBLST2) LVLCHK(*NO) +
+                          SHARE(*YES)
              OPNQRYF    FILE((QTEMP/WLIBLST2)) KEYFLD((SEQLIB *DESCEND))
              CHGLIBL    LIBL(*NONE)
  LOOP:       RCVF
