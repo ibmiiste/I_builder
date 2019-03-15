@@ -87,6 +87,9 @@ dcl-s a_fim like(r_Nom_obj_IBMi);
 dcl-s a_mid like(r_numero_msg);
 dcl-s a_mdt like(r_msgdta);
 
+Dcl-s G_Num_Lot_Doublon Like(r_Num_lot);
+Dcl-s G_User_Doublon like(r_profil);
+
 Dcl-s g_Num_lot Like(r_Num_lot);
 
 dcl-s a_chx char(2);
@@ -498,7 +501,7 @@ begsr trtopt;
         WHERE Lot_Number = :P_Num_Lot
               AND Ordre = :Zordrec;
     if sqlcode = 0;
-      // envoyer un message pour dire que l'option n'existe pas
+      // envoyer un message pour dire que l'emplacement est déjà pris
       a_typ='1';
       a_fim='BUILDMSGF';
       a_mid='MSG0002';
@@ -516,6 +519,30 @@ begsr trtopt;
                        :bOvr);
       On-error;
       Endmon;
+      EXEC SQL
+        SELECT A.Lot_Number,
+               A.User_Creation
+          INTO :G_Num_Lot_Doublon,
+               :G_User_Doublon
+          FROM List_Objet_Build A
+          WHERE A.Bibliotheque_Destination = :Zbibdstc
+                AND A.Objet_Destination = :Zobjdstc
+                AND A.Type_Objet = :Ztypobjc
+                AND Exists (SELECT 1
+                              FROM Lots B
+                              WHERE A.Lot_Number = B.Lot_Number
+                                    AND B.Statenreg = 1);
+      if sqlcode = 0;
+        // envoyer un message pour dire que l'objet est déjà dans un autre lot
+        a_typ='1';
+        a_fim='BUILDMSGF';
+        a_mid='MSG0001';
+        a_mdt=%EDITC(G_Num_Lot_Doublon:'X') + G_User_Doublon;
+        gst_message_CL(  a_typ
+                    : a_fim
+                    : a_mid
+                    : a_mdt);
+      Endif;
       EXEC SQL
         INSERT INTO List_Objet_Build(Numobjbld,
                                      Lot_Number,
@@ -557,14 +584,14 @@ begsr trtopt;
     g_filtre = *on;
     // Si le lot est inactif, certaine option en sont pas possible
     IF g_lot_inactif;
-       If %Trim(zopt)='2'
-       Or %Trim(zopt)='3'
-       Or %Trim(zopt)='4'
-       Or %Trim(zopt)='9'
-       Or %Trim(zopt)='10'
-       Or %Trim(zopt)='11';
-         Zopt='5';
-       Endif;
+      If %Trim(zopt)='2'
+      Or %Trim(zopt)='3'
+      Or %Trim(zopt)='4'
+      Or %Trim(zopt)='9'
+      Or %Trim(zopt)='10'
+      Or %Trim(zopt)='11';
+        Zopt='5';
+      Endif;
     ENDIF;
     // selection en fonction du choix saisi
     select;
@@ -711,7 +738,7 @@ begsr trtopt;
       // envoyer un message pour dire que l'option n'existe pas
       a_typ='1';
       a_fim='BUILDMSGF ';
-      a_mid='MSG0002';
+      a_mid='ERR0006';
       gst_message_CL(  a_typ
                   : a_fim
                   : a_mid
