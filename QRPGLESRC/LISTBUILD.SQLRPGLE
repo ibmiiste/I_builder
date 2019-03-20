@@ -92,6 +92,9 @@ Dcl-s G_User_Doublon like(r_profil);
 
 Dcl-s g_Num_lot Like(r_Num_lot);
 
+// transmission d'un nom d"objet qualifié
+Dcl-s g_objet_msg Char(21);
+
 dcl-s a_chx char(2);
 //dcl-s a_nrec like(r_uuid_db2);
 //dcl-s a_uuid like(r_uuid_db2);
@@ -125,6 +128,7 @@ Dcl-s g_lib_lot Like(r_Nom_obj_IBMi);
 // --------------------------------------------------
 dcl-s bOvr char(1) inz('0');
 dcl-s Fmt char(8) inz('MBRD0100');
+
 
 // Touches de fonction
 /copy qcpysrc,fonction
@@ -537,7 +541,9 @@ begsr trtopt;
         a_typ='1';
         a_fim='BUILDMSGF';
         a_mid='MSG0001';
-        a_mdt=%EDITC(G_Num_Lot_Doublon:'X') + G_User_Doublon;
+        g_objet_msg=%Trim(Zbibdstc) + '/' + %Trim(Zobjdstc);
+        a_mdt= g_objet_msg + Ztypobjc  +
+              %EDITC(G_Num_Lot_Doublon:'X') + G_User_Doublon;
         gst_message_CL(  a_typ
                     : a_fim
                     : a_mid
@@ -553,7 +559,8 @@ begsr trtopt;
                                      Bibliotheque_Destination,
                                      Objet_Destination,
                                      Type_Objet,
-                                     Type_Source)
+                                     Type_Source,
+                                     User_Creation)
           VALUES (DEFAULT,
                   :P_Num_Lot,
                   :Zordrec,
@@ -563,7 +570,9 @@ begsr trtopt;
                   :Zbibdstc,
                   :Zobjdstc,
                   :Ztypobjc,
-                  :Mbrd0100.Srctype);
+                  :Mbrd0100.Srctype,
+                  USER) ;
+
     Endif;
 
 
@@ -598,7 +607,33 @@ begsr trtopt;
     WHEN
      (zopt = ' 2') or (zopt = '2');
       a_chx='MO';
-
+      EXEC SQL
+        SELECT A.Lot_Number,
+               A.User_Creation
+          INTO :G_Num_Lot_Doublon,
+               :G_User_Doublon
+          FROM List_Objet_Build A
+          WHERE A.Bibliotheque_Destination = :Zbibdst
+                AND A.Objet_Destination = :Zobjdst
+                AND A.Type_Objet = :Ztypobj
+                AND Exists (SELECT 1
+                              FROM Lots B
+                              WHERE A.Lot_Number = B.Lot_Number
+                                    AND B.Lot_Number <> :P_Num_Lot
+                                    AND B.Statenreg = 1);
+      if sqlcode = 0;
+        // envoyer un message pour dire que l'objet est déjà dans un autre lot
+        a_typ='1';
+        a_fim='BUILDMSGF';
+        a_mid='MSG0001';
+        g_objet_msg=%Trim(Zbibdstc) + '/' + %Trim(Zobjdstc);
+        a_mdt= g_objet_msg + Ztypobjc  +
+              %EDITC(G_Num_Lot_Doublon:'X') + G_User_Doublon;
+        gst_message_CL( a_typ
+                       :a_fim
+                       :a_mid
+                       :a_mdt);
+      Endif;
       EXEC SQL
         UPDATE List_Objet_Build
           SET Lot_Number = :G_Num_Lot,
@@ -608,7 +643,8 @@ begsr trtopt;
               Membre_Source = :Zmbrsrc,
               Bibliotheque_Destination = :Zbibdst,
               Objet_Destination = :Zobjdst,
-              Type_Objet = :Ztypobj
+              Type_Objet = :Ztypobj,
+              User_Modification = USER
           WHERE Obj_Number = :Hnumobjbld;
 
     when (zopt = '3') or (zopt = ' 3');
