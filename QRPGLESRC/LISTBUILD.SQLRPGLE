@@ -834,9 +834,12 @@ begsr chgpag;
                      :ztypobj
                      :l_Base_infos_obj_light);
         zDescobjet=l_Base_infos_obj_light.Txt;
-      Elseif infos_objet( g_Lib_lot + zbibdst
-                         :ztypobj
-                         :l_Base_infos_obj_light);
+      Endif;
+
+      If zDescobjet=*Blank;
+        infos_objet( zobjdst + g_Lib_lot
+                    :ztypobj
+                    :l_Base_infos_obj_light);
         zDescobjet=l_Base_infos_obj_light.Txt;
       Endif;
 
