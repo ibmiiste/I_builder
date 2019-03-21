@@ -110,6 +110,10 @@ Monitor;
   l_Cmd='Addlible ' + l_Bib_lot;
   Cmd_exec(l_Cmd);
 
+// Mise en ligne de la bibliothèque de la commande STRPREPRC
+  l_Cmd='Addlible ISPHERE';
+  Cmd_exec(l_Cmd);
+
   EXEC SQL
     CLOSE Csr_Obj_Sav;
 
