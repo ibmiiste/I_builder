@@ -76,8 +76,8 @@
      A                                       5=Afficher  6=Imprimer  12=Gérer l-
      A                                      e lot'
      A                                      COLOR(BLU)
-     A                                  6  3'La description contient :'
-     A            ZSLIBELLOTR        B  6 29REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
+     A                                  6  3'La description contient (REGEXP) :'
+     A            ZSLIBELLOTR        B  6 38REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
      A                                      CHECK(LC)
      A                                      COLOR(WHT)
      A                                      OVRDTA
@@ -130,9 +130,9 @@
      A                                      COLOR(BLU)
      A                                 26 34'F8=Imprimer'
      A                                      COLOR(BLU)
-     A  21                             26 46'F9=Lots en cours'
+     A  22                             26 46'F9=Lots en cours'
      A                                      COLOR(BLU)
-     A N21                             26 46'F9=Tous les lots'
+     A N22                             26 46'F9=Tous les lots'
      A                                      COLOR(BLU)
      A                                 26 63'F12=Précédent'
      A                                      COLOR(BLU)

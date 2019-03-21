@@ -88,9 +88,6 @@ Dcl-s g_Selection_generique Ind;
 Dcl-s g_Selection_OK Ind;
 Dcl-s g_Traitement_option Ind;
 
-// Indique si on affiche les lots actifs ou tous les lots
-Dcl-s g_tous_lots Ind Inz(*off);
-
 // La DS du programme, noter le S indispensable
 /copy qcpysrc,Psds
 
@@ -99,7 +96,9 @@ Dcl-ds IndDs;
   Rollup Ind Pos(2);
   Sflnxtchg Ind Pos(8);
   Zoptpr Ind Pos(20);
-  l_inactif Ind Pos(21);
+  g_inactif Ind Pos(21);
+  // Indique si on affiche les lots actifs ou tous les lots
+  g_tous_lots Ind Pos(22);
   Sfldsp Ind Pos(4);
   Sfldspctl Ind Pos(5);
   Sflclr Ind Pos(6);
@@ -241,6 +240,10 @@ End-proc;
 
 // Initialisation du sous-fichier
 Dcl-proc INITSF;
+
+  // Variable de préparation de la requête SQL dynamique
+  Dcl-s l_requete Char(1024);
+
   //    l'indicateur 20 conditionne la zone OPT (protection)
   Zoptpr = *OFF;
   // Initialisation de la variable de sélection
@@ -250,22 +253,6 @@ Dcl-proc INITSF;
   Clear NUMLOT;
   g_Selection = *OFF;
   g_Selection_generique = *OFF;
-  IF ZSLIBELLOT <> *BLANK;
-    // Si différent de blank il y a selection
-    g_Selection = *ON;
-    Reset I;
-    I = %Scan('*':ZSLIBELLOT);
-
-    //g_Selection_generique =
-    IF I > 0;
-      I=I-1;
-      WSLIBELLOT=%Subst(ZSLIBELLOT:1:I);
-      // On est dans le cas d'une sélection générique
-      g_Selection_generique = *ON;
-      // On se positionnera juste au bon endroit dans le fichier
-      LIBELLOT = WSLIBELLOT;
-    ENDIF;
-  ENDIF;
 
   // La dernière ligne écrite
   Clear LSTLIG;
@@ -286,17 +273,36 @@ Dcl-proc INITSF;
   // Positionnement en début de fichier
   EXEC SQL
     CLOSE Curs_Lots02;
+
+  If ZSLIBELLOT<>*Blank;
+    l_requete='SELECT Lot_Number, ' +
+                     'Libelle_Lots, ' +
+                     'Liste_Biblio_Projet, ' +
+                     'Biblio_Lot, ' +
+                     'Statuts_Lot, ' +
+                     'RRN(Lots), ' +
+                     'Statut_Enreg ' +
+                'FROM Lots ' +
+               'WHERE Regexp_Like(Libelle_Lots, ''' +
+                      %Trim(Zslibellot) + ''') ' +
+            'ORDER BY Lot_Number DESC';
+  Else;
+    L_Requete = 'SELECT Lot_Number, ' +
+                       'Libelle_Lots, ' +
+                       'Liste_Biblio_Projet, ' +
+                       'Biblio_Lot, ' +
+                       'Statuts_Lot, ' +
+                       'RRN(Lots), ' +
+                       'Statut_Enreg ' +
+                 'FROM Lots ' +
+              'ORDER BY Lot_Number DESC';
+  ENDIF;
   EXEC SQL
-    DECLARE Curs_Lots02 CURSOR FOR
-      SELECT Lot_Number,
-             Libelle_Lots,
-             Liste_Biblio_Projet,
-             Biblio_Lot,
-             Statuts_Lot,
-             RRN(Lots),
-             Statut_Enreg
-        FROM Lots
-        ORDER BY Lot_Number ;
+    PREPARE Curs_Lots02v FROM :L_Requete;
+  EXEC SQL
+    DECLARE Curs_Lots02 CURSOR FOR Curs_Lots02v;
+
+
   EXEC SQL
     OPEN Curs_Lots02;
 
@@ -402,20 +408,6 @@ Dcl-proc CHGPAG;
   AND NBRLIG < c_nbr_ligne_page;
     // Remplissage des zones écran
     g_Selection_OK = *ON;
-    // Test s'il y a selection
-    IF g_Selection = '1' OR g_Selection_generique = '1';
-      IF g_Selection = '1' AND g_Selection_generique = '0';
-        // On recherche la stricte égalité de nom
-        IF LIBELLOT <> ZSLIBELLOT;
-          g_Selection_OK = *OFF;
-        ENDIF;
-      ELSE;
-        // On recherche si le nom commence par la valeur avant le '*'
-        IF %Subst(LIBELLOT:1:I) <> WSLIBELLOT;
-          g_Selection_OK = *OFF;
-        ENDIF;
-      ENDIF;
-    ENDIF;
 
     // On ne charge pas les lots fermés
     If g_tous_lots=*off
@@ -441,9 +433,9 @@ Dcl-proc CHGPAG;
       HSTATENREG=Ds_lots.STATENREG;
       IF Ds_lots.STATENREG = 0;
         // Top statut Lot fermé
-        l_inactif = *ON;
+        g_inactif = *ON;
       ELSE;
-        l_inactif = *OFF;
+        g_inactif = *OFF;
       ENDIF;
       // Les compteurs, attention au WRAN01
       NBRLIG+=1;
