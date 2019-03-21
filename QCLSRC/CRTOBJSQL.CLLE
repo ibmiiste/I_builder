@@ -91,6 +91,5 @@
              GOTO       CMDLBL(FIN)
 
  ERREUR:     DMPCLPGM
-             CALLPRC    PRC(GEST_ERREUR)
 
  FIN:        ENDPGM
