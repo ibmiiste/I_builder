@@ -1,4 +1,5 @@
-             CMD        PROMPT('Positionnement bibliothèques')
+             CMD        PROMPT('Positionnement bibliothèques') +
+                          PRDLIB(I_BUILDER)
 
              PARM       KWD(SAVRST) TYPE(*NAME) LEN(4) RSTD(*YES) +
                           DFT(*RST) VALUES(SAV RST) SPCVAL((*RST *RST) +
