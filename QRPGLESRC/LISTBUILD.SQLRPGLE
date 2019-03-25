@@ -50,6 +50,7 @@ dcl-pr gst_message_CL extpgm('GSTMSG01');
   a_fim like(r_Nom_obj_IBMi);
   a_mid like(r_numero_msg);
   a_mdt like(r_msgdta);
+  p_nom_PGM like(r_Nom_obj_IBMi) Options(*OMIT);
 end-pr;
 
 // external functions prototypes
@@ -87,13 +88,8 @@ dcl-s a_fim like(r_Nom_obj_IBMi);
 dcl-s a_mid like(r_numero_msg);
 dcl-s a_mdt like(r_msgdta);
 
-Dcl-s G_Num_Lot_Doublon Like(r_Num_lot);
-Dcl-s G_User_Doublon like(r_profil);
 
 Dcl-s g_Num_lot Like(r_Num_lot);
-
-// transmission d'un nom d"objet qualifié
-Dcl-s g_objet_msg Char(21);
 
 dcl-s a_chx char(2);
 //dcl-s a_nrec like(r_uuid_db2);
@@ -218,6 +214,7 @@ Dcl-ds Ds_Lots Extname('LOTS') Qualified End-ds;
 // Paramètre d'appel de XREF
 Dcl-s ParmEntry char(150);
 
+
 // inherited variables
 // héritage des types
 /copy Qcpysrc,inhbuilder
@@ -272,7 +269,8 @@ begsr trtsfl;
   gst_message_CL(  a_typ
               : a_fim
               : a_mid
-              : a_mdt);
+              : a_mdt
+              :*OMIT);
   write wsfctl;
   // ecriture de l'écran
   sfldsp = *on;
@@ -343,7 +341,7 @@ begsr trtsfl;
             :'');
     RMVlot(g_Num_lot);
     EXEC SQL
-      UPDATE Lots SET Statlot = 'D' WHERE Lot_Number = :P_Num_Lot;
+      UPDATE Lots SET Statlot = 'D' WHERE Lot_Number = :G_Num_Lot;
   EndIf;
 
   if Livraison_recette;
@@ -359,7 +357,7 @@ begsr trtsfl;
             :'DANIEL1E01');
     RMVlot(g_Num_lot);
     EXEC SQL
-      UPDATE Lots SET Statlot = 'R' WHERE Lot_Number = :P_Num_Lot;
+      UPDATE Lots SET Statlot = 'R' WHERE Lot_Number = :G_Num_Lot;
   EndIf;
 
   if Livraison_production;
@@ -385,7 +383,7 @@ begsr trtsfl;
             :'');
     RMVlot(g_Num_lot);
     EXEC SQL
-      UPDATE Lots SET Statlot = 'P' WHERE Lot_Number = :P_Num_Lot;
+      UPDATE Lots SET Statlot = 'P' WHERE Lot_Number = :G_Num_Lot;
   EndIf;
 
   if g_trt_opt;
@@ -412,7 +410,7 @@ begsr initsf;
            :G_Lib_Lot,
            :Ds_Lots.Statenreg
       FROM Lots
-      WHERE Lot_Number = :P_Num_Lot;
+      WHERE Lot_Number = :G_Num_Lot;
 
   IF Ds_Lots.Statenreg=0;
     g_lot_inactif=*on;
@@ -468,7 +466,7 @@ begsr initsf;
              Objet_Destination,
              Type_Objet
         FROM List_Objet_Build
-        WHERE Lot_Number = :P_Num_Lot
+        WHERE Lot_Number = :G_Num_Lot
         ORDER BY Ordre DESC;
 
   EXEC SQL
@@ -502,17 +500,18 @@ begsr trtopt;
       SELECT 1
         INTO :G_Verif
         FROM List_Objet_Build
-        WHERE Lot_Number = :P_Num_Lot
+        WHERE Lot_Number = :G_Num_Lot
               AND Ordre = :Zordrec;
     if sqlcode = 0;
       // envoyer un message pour dire que l'emplacement est déjà pris
       a_typ='1';
       a_fim='BUILDMSGF';
       a_mid='MSG0002';
-      gst_message_CL(  a_typ
-                  : a_fim
-                  : a_mid
-                  : a_mdt);
+      gst_message_CL( a_typ
+                     :a_fim
+                     :a_mid
+                     :a_mdt
+                     :*OMIT);
     Else;
       Monitor;
         API_RtvMbrDesc( MbrD0100
@@ -523,32 +522,13 @@ begsr trtopt;
                        :bOvr);
       On-error;
       Endmon;
-      EXEC SQL
-        SELECT A.Lot_Number,
-               A.User_Creation
-          INTO :G_Num_Lot_Doublon,
-               :G_User_Doublon
-          FROM List_Objet_Build A
-          WHERE A.Bibliotheque_Destination = :Zbibdstc
-                AND A.Objet_Destination = :Zobjdstc
-                AND A.Type_Objet = :Ztypobjc
-                AND Exists (SELECT 1
-                              FROM Lots B
-                              WHERE A.Lot_Number = B.Lot_Number
-                                    AND B.Statenreg = 1);
-      if sqlcode = 0;
-        // envoyer un message pour dire que l'objet est déjà dans un autre lot
-        a_typ='1';
-        a_fim='BUILDMSGF';
-        a_mid='MSG0001';
-        g_objet_msg=%Trim(Zbibdstc) + '/' + %Trim(Zobjdstc);
-        a_mdt= g_objet_msg + Ztypobjc  +
-              %EDITC(G_Num_Lot_Doublon:'X') + G_User_Doublon;
-        gst_message_CL(  a_typ
-                    : a_fim
-                    : a_mid
-                    : a_mdt);
-      Endif;
+
+      // Ajoute tous les lots où se trouve l'objet dans la file de message
+      verif_presence_autre_lot( Zbibdstc
+                               :Zobjdstc
+                               :Ztypobjc
+                               :g_Num_lot);
+
       EXEC SQL
         INSERT INTO List_Objet_Build(Numobjbld,
                                      Lot_Number,
@@ -562,7 +542,7 @@ begsr trtopt;
                                      Type_Source,
                                      User_Creation)
           VALUES (DEFAULT,
-                  :P_Num_Lot,
+                  :G_Num_Lot,
                   :Zordrec,
                   :Zbibsrcc,
                   :Zficsrcc,
@@ -607,33 +587,11 @@ begsr trtopt;
     WHEN
      (zopt = ' 2') or (zopt = '2');
       a_chx='MO';
-      EXEC SQL
-        SELECT A.Lot_Number,
-               A.User_Creation
-          INTO :G_Num_Lot_Doublon,
-               :G_User_Doublon
-          FROM List_Objet_Build A
-          WHERE A.Bibliotheque_Destination = :Zbibdst
-                AND A.Objet_Destination = :Zobjdst
-                AND A.Type_Objet = :Ztypobj
-                AND Exists (SELECT 1
-                              FROM Lots B
-                              WHERE A.Lot_Number = B.Lot_Number
-                                    AND B.Lot_Number <> :P_Num_Lot
-                                    AND B.Statenreg = 1);
-      if sqlcode = 0;
-        // envoyer un message pour dire que l'objet est déjà dans un autre lot
-        a_typ='1';
-        a_fim='BUILDMSGF';
-        a_mid='MSG0001';
-        g_objet_msg=%Trim(Zbibdstc) + '/' + %Trim(Zobjdstc);
-        a_mdt= g_objet_msg + Ztypobjc  +
-              %EDITC(G_Num_Lot_Doublon:'X') + G_User_Doublon;
-        gst_message_CL( a_typ
-                       :a_fim
-                       :a_mid
-                       :a_mdt);
-      Endif;
+      // Ajoute tous les lots où se trouve l'objet dans la file de message
+      verif_presence_autre_lot( Zbibdst
+                               :Zobjdst
+                               :Ztypobj
+                               :g_Num_lot);
       EXEC SQL
         UPDATE List_Objet_Build
           SET Lot_Number = :G_Num_Lot,
@@ -775,10 +733,11 @@ begsr trtopt;
       a_typ='1';
       a_fim='BUILDMSGF ';
       a_mid='ERR0006';
-      gst_message_CL(  a_typ
-                  : a_fim
-                  : a_mid
-                  : a_mdt);
+      gst_message_CL( a_typ
+                     :a_fim
+                     :a_mid
+                     :a_mdt
+                     :*OMIT);
     endsl;
     // nettoyage
     zopt=*blanks;
@@ -932,4 +891,69 @@ Dcl-Proc reincrement_liste_objet;
   EndDo;
 
 End-proc;
+
+
+
+// --------------------------------------------------
+// Procedure name: verif_presence_autre_lot
+// Purpose:        Lister la présence de l'objet dans d'autre lots actif
+// Returns:
+// --------------------------------------------------
+DCL-PROC verif_presence_autre_lot ;
+  Dcl-pi verif_presence_autre_lot;
+    p_biblio_objet Like(r_Nom_obj_IBMi);
+    p_Nom_objet Like(r_Nom_obj_IBMi);
+    p_Type_objet Like(r_TypObj);
+    p_Num_Lot Like(r_Num_lot);
+  END-PI;
+
+  // DS d'envoi des variables du message MSG0001
+  Dcl-ds DS_MSG0001;
+    // transmission d'un nom d"objet qualifié
+    l_objet_msg Char(21);
+    l_type_objet Like(R_TypObj);
+    l_Num_Lot_Doublon Like(r_Num_lot);
+    l_User_Doublon Like(r_profil);
+  END-DS;
+
+
+  EXEC SQL
+    CLOSE Curs_Objet_Lot;
+
+  EXEC SQL
+    DECLARE Curs_Objet_Lot CURSOR FOR
+      SELECT A.Lot_Number,
+             A.User_Creation
+        FROM List_Objet_Build A
+        WHERE A.Bibliotheque_Destination = :P_Biblio_Objet
+              AND A.Objet_Destination = :P_Nom_Objet
+              AND A.Type_Objet = :P_Type_Objet
+              AND Exists (SELECT 1
+                            FROM Lots B
+                            WHERE A.Lot_Number = B.Lot_Number
+                                  AND B.Lot_Number <> :P_Num_Lot
+                                  AND B.Statenreg = 1);
+  EXEC SQL
+    OPEN Curs_Objet_Lot;
+
+  EXEC SQL
+    FETCH Curs_Objet_Lot INTO :L_Num_Lot_Doublon, :L_User_Doublon;
+
+  Dow Sqlcode = 0;
+    // envoyer un message pour dire que l'objet est déjà dans un autre lot
+    A_Typ = '5';
+    A_Fim = 'BUILDMSGF';
+    A_Mid = 'MSG0001';
+
+    l_Objet_Msg = %trim(P_Biblio_Objet) + '/' + %trim(P_Nom_Objet);
+    l_Type_Objet = P_Type_Objet;
+    l_Num_Lot_Doublon=P_Num_Lot;
+    A_Mdt = Ds_Msg0001;
+    Gst_Message_Cl(A_Typ :A_Fim :A_Mid :A_Mdt:Procedure);
+    EXEC SQL
+      FETCH Curs_Objet_Lot INTO :L_Num_Lot_Doublon, :L_User_Doublon;
+
+  Enddo;
+  RETURN ;
+END-Proc ;
 
