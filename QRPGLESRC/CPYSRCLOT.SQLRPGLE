@@ -69,8 +69,12 @@ DCL-PROC Copie_sources Export;
 
     l_Biblio_Lot= 'L' + %Editc(l_Num_lot:'X');
 
-    Ouvrir_curseur_list_obj( l_Num_lot
-                            :p_Objet_number);
+    If %Parms=2;
+      Ouvrir_curseur_list_obj( l_Num_lot
+                             :p_Objet_number);
+    Else;
+      Ouvrir_curseur_list_obj( l_Num_lot);
+    ENDIF;
 
     Lecture_curseur_list_obj( l_num_lot
                              :l_BibSrc
