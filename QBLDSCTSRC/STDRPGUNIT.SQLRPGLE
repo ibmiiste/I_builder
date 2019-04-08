@@ -3,8 +3,8 @@
 //     >>CRTCMD<<  RUCRTTST    TSTPGM(&LI/&OB) +                       //
 //                             SRCFILE(&SL/&SF);                       //
 //     >>COMPILE<<                                                     //
-//       >>PARM<< COPTION(*SRCSTMT);                                   //
-//       >>PARM<< DBGVIEW(*LIST);                                      //
+//       >>PARM<< COPTION(*SRCSTMT *EVENTF);                           //
+//       >>PARM<< DBGVIEW(*ALL);                                       //
 //     >>END-COMPILE<<                                                 //
 //     >>EXECUTE<<                                                     //
 //   >>END-PRE-COMPILER<<                                              //
