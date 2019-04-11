@@ -947,7 +947,6 @@ DCL-PROC verif_presence_autre_lot ;
 
     l_Objet_Msg = %trim(P_Biblio_Objet) + '/' + %trim(P_Nom_Objet);
     l_Type_Objet = P_Type_Objet;
-    l_Num_Lot_Doublon=P_Num_Lot;
     A_Mdt = Ds_Msg0001;
     Gst_Message_Cl(A_Typ :A_Fim :A_Mid :A_Mdt:Procedure);
     EXEC SQL
