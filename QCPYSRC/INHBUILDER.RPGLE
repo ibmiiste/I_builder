@@ -1,8 +1,10 @@
        Dcl-s r_ccsid char(10) Template;
        Dcl-s r_chemin char(256) Template;
+       Dcl-s r_cod_parameter Char(5) template;
        Dcl-s r_commande_CLLE char(1024) Template;
        Dcl-s r_data_message char(20) Template;
        Dcl-s r_Lib_lot char( 50) Template;
+       Dcl-s r_Libel_parameter Char(50) Template;
        Dcl-s r_longueur_CMD_CLLE packed(15:5) Template;
        Dcl-s r_msgdta char(99) Template;
        Dcl-s r_Nom_obj_IBMi Char(10) Template;
@@ -19,3 +21,4 @@
        Dcl-s r_typmsg char(1) Template;
        Dcl-s R_TypObj Char(10) Template;
        Dcl-s R_TypSrc Char(10) Template;
+       Dcl-s r_value_parameter Cahr(128) Template;
