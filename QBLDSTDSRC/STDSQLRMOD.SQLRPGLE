@@ -5,6 +5,7 @@
       *     >>PARM<<  COMMIT(*NONE);                                  */
       *     >>PARM<<  OBJTYPE(*MODULE);                               */
       *     >>PARM<<  OPTION(*EVENTF);                                */
+      *     >>PARM<<  TGTRLS(*CURRENT);                               */
       *     >>PARM<<  RPGPPOPT(*LVL2);                                */
       *     >>PARM<<  CLOSQLCSR(*ENDACTGRP);                          */
       *     >>PARM<<  DATFMT(*ISO);                                   */

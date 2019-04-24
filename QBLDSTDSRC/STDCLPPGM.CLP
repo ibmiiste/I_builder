@@ -1,10 +1,10 @@
       /* >>PRE-COMPILER<<                                                 */
-      /*   >>CRTCMD<<  CRTBNDCL SRCFILE(&SL/&SF) SRCMBR(&SM);             */
+      /*   >>CRTCMD<<  CRTCLPGM SRCFILE(&SL/&SF) SRCMBR(&SM);             */
       /*   >>IMPORTANT<<                                                  */
       /*     >>PARM<<  PGM(&LI/&OB);                                      */
-      /*     >>PARM<<  OPTION(*EVENTF);                                   */
-      /*     >>PARM<<  OPTIMIZE(&U0);                                     */
-      /*     >>PARM<<  DBGVIEW(*ALL);                                     */
+      /*     >>PARM<<  TGTRLS(*CURRENT);                                  */
+      /*     >>PARM<<  OPTION(*SRCDBG *LSTDBG);                           */
       /*   >>END-IMPORTANT<<                                              */
       /*   >>EXECUTE<<                                                    */
       /* >>END-PRE-COMPILER<<                                             */
+
