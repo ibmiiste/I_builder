@@ -1,5 +1,5 @@
 **FREE
-// PROGRAMME   : PLIBLSTR               DATE CREATION : 10/01/2017
+// PROGRAMME   : GSTLIBLSTR             DATE CREATION : 10/01/2017
 // AUTEUR      : M.MIAUT                     COPYRIGHT C.I.S
 //----------------------------------------------------------------
 // Application : OUTILS
@@ -20,7 +20,7 @@
 //   >>EXECUTE<<                                                 */
 // >>END-PRE-COMPILER<<                                          */
 //****************************************************************
-ctl-opt datedit(*dmy) dftactgrp(*no) Bnddir('I_BUILDER');
+ctl-opt datedit(*dmy) dftactgrp(*no) Bnddir('I_BUILDER') Option(*srcstmt);
 dcl-f gstlstlibe workstn sfile(sfl1:sflrrn) sfile(sfl2:sflrrn) indds(IndDs);
 dcl-f deflstlib1 keyed usage(*update: *output:*Delete) usropn;
 dcl-f gstlstlib1 keyed usage(*update: *output:*Delete) prefix(f2_);
@@ -339,7 +339,7 @@ Dcl-proc edtlib;
       reade lstname gstlstlib1;
     enddo;
 
-    dou sflrrn = 39;
+    dow sflrrn < 39;
       sflrrn = sflrrn + 1;
       clear lib;
       write sfl2;
