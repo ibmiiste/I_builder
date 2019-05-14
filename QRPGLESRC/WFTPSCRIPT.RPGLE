@@ -1,12 +1,14 @@
 **FREE
-// >>PRE-COMPILER<<
-//   >>CRTCMD<<  CRTRPGMOD MODULE(&LI/&OB) SRCFILE(&SL/&SF) +
-//                 SRCMBR(&SM);
-//   >>IMPORTANT<<
-//     >>PARM<<  OPTION(*EVENTF);
-//     >>PARM<<  DBGVIEW(*LIST);
-//     >>PARM<<  TRUNCNBR(*NO);
-//   >>END-IMPORTANT<<
+// >>PRE-COMPILER<<                                             //
+//   >>CRTCMD<<  CRTRPGMOD MODULE(&LI/&OB) SRCFILE(&SL/&SF) +   //
+//                  SRCMBR(&SM);                                //
+//  >>IMPORTANT<<                                               //
+//     >>PARM<<  OPTION(*EVENTF);                               //
+//     >>PARM<<  TGTRLS(*CURRENT);                              //
+//     >>PARM<<  DBGVIEW(*ALL);                                 //
+//     >>PARM<<  OPTIMIZE(&U0);                                 //
+//     >>PARM<<  TRUNCNBR(*NO);                                 //
+//   >>END-IMPORTANT<<                                          //
 //   >>CMD<<  CRTSRCPF FILE(QTEMP/FTPCMD) RCDLEN(240);
 //   >>EXECUTE<<
 //   >>CMD<<  DLTF FILE(QTEMP/FTPCMD);

@@ -21,4 +21,4 @@
        Dcl-s r_typmsg char(1) Template;
        Dcl-s R_TypObj Char(10) Template;
        Dcl-s R_TypSrc Char(10) Template;
-       Dcl-s r_value_parameter Cahr(128) Template;
+       Dcl-s r_value_parameter Char(128) Template;

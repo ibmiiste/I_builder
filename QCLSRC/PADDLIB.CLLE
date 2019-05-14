@@ -16,16 +16,19 @@
 /* Marquage modification utilisateur  . . . :   *YES              UM*/
 /* Extraire source inclus   . . . . . . . . :   *NO               RI*/
 /*                                                                ED*/
-/*    /********************************************************************/
       /* >>PRE-COMPILER<<                                                 */
-      /*   >>CRTCMD<<  CRTBNDCL PGM(&LI/&OB) SRCFILE(&SL/&SF) +           */
-      /*                 SRCMBR(&SM);                                     */
+      /*   >>CRTCMD<<  CRTBNDCL SRCFILE(&SL/&SF) SRCMBR(&SM);             */
       /*   >>IMPORTANT<<                                                  */
+      /*     >>PARM<<  PGM(&LI/&OB);                                      */
       /*     >>PARM<<  OPTION(*EVENTF);                                   */
-      /*     >>PARM<<  DBGVIEW(*LIST);                                    */
+      /*     >>PARM<<  TGTRLS(*CURRENT);                                  */
+      /*     >>PARM<<  OPTIMIZE(&U0);                                     */
+      /*     >>PARM<<  DBGVIEW(*ALL);                                     */
       /*   >>END-IMPORTANT<<                                              */
-      /*   >>CMD<<  RUNSQL SQL('DECLARE GLOBAL TEMPORARY TABLE WLIBLST2 + */
-      /*                   LIKE GSTLSTLIB WITH REPLACE');                 */
+      /*   >>CMD<<  RUNSQL SQL('DECLARE GLOBAL TEMPORARY +                */
+      /*                        TABLE WLIBLST2 AS (SELECT * +             */
+      /*                        FROM I_BUILDER.GSTLSTLIB) +               */
+      /*                        WITH NO DATA');                           */
       /*   >>EXECUTE<<                                                    */
       /* >>END-PRE-COMPILER<<                                             */
              PGM        PARM(&LSTLIB &RSTCURLIB)

@@ -3,6 +3,8 @@
       /*                 SRCMBR(&SM);                                     */
       /*   >>IMPORTANT<<                                                  */
       /*     >>PARM<<  OPTION(*EVENTF);                                   */
+      /*     >>PARM<<  TGTRLS(*CURRENT);                                  */
+      /*     >>PARM<<  OPTIMIZE(&U0);                                     */
       /*     >>PARM<<  DBGVIEW(*ALL);                                     */
       /*   >>END-IMPORTANT<<                                              */
       /*   >>EXECUTE<<                                                    */
@@ -10,7 +12,7 @@
              PGM        PARM(&NUMLOT &MACHINE &USER &MDP)
 
              DCL        VAR(&NUMLOT) TYPE(*DEC) LEN(9 0)
-             DCL        VAR(&TGTRLS) TYPE(*CHAR) LEN(10) VALUE('V7R1M0')
+             DCL        VAR(&TGTRLS) TYPE(*CHAR) LEN(10) VALUE('*CURRENT')
              DCL        VAR(&NUMLOTC) TYPE(*CHAR) LEN(9)
              DCL        VAR(&BIBLIO) TYPE(*CHAR) LEN(10)
              DCL        VAR(&LISTOBJ) TYPE(*CHAR) LEN(10)

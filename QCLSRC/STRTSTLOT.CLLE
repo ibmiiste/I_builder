@@ -1,12 +1,15 @@
       /* >>PRE-COMPILER<<                                                 */
-      /*   >>CRTCMD<<  CRTBNDCL SRCFILE(&SL/&SF) SRCMBR(&SM);             */
+      /*   >>CRTCMD<<  CRTCLMOD MODULE(&LI/&OB) SRCFILE(&SL/&SF) +        */
+      /*                 SRCMBR(&SM);                                     */
       /*   >>IMPORTANT<<                                                  */
-      /*     >>PARM<<  PGM(&LI/&OB);                                      */
       /*     >>PARM<<  OPTION(*EVENTF);                                   */
+      /*     >>PARM<<  TGTRLS(*CURRENT);                                  */
+      /*     >>PARM<<  OPTIMIZE(&U0);                                     */
       /*     >>PARM<<  DBGVIEW(*ALL);                                     */
       /*   >>END-IMPORTANT<<                                              */
       /*   >>EXECUTE<<                                                    */
       /* >>END-PRE-COMPILER<<                                             */
+
              PGM        PARM(&NUMLOT)
              DCL        VAR(&NUMLOT) TYPE(*DEC) LEN(9 0)
              DCL        VAR(&BIBLOT) TYPE(*CHAR) LEN(10)

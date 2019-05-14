@@ -3,11 +3,13 @@
       /*                 SRCMBR(&SM);                                     */
       /*   >>IMPORTANT<<                                                  */
       /*     >>PARM<<  OPTION(*EVENTF);                                   */
-      /*     >>PARM<<  DBGVIEW(*ALL);                                     */
+      /*     >>PARM<<  TGTRLS(*CURRENT);                                  */
       /*     >>PARM<<  OPTIMIZE(&U0);                                     */
+      /*     >>PARM<<  DBGVIEW(*ALL);                                     */
       /*   >>END-IMPORTANT<<                                              */
       /*   >>EXECUTE<<                                                    */
       /* >>END-PRE-COMPILER<<                                             */
+
              PGM        PARM(&NUMLOTC)
 
              DCL        VAR(&BIBLOT) TYPE(*CHAR) LEN(10)
