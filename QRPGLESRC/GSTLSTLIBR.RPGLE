@@ -9,23 +9,25 @@
 //   AUTEUR                  OBJET                        DATE
 //----------------------------------------------------------------
 // INDICATEURS :
-//----------------------------------------------------------------
-// >>PRE-COMPILER<<                                              */
-//   >>CRTCMD<<  CRTBNDRPG SRCFILE(&SL/&SF);                     */
-//   >>IMPORTANT<<                                               */
-//     >>PARM<<  PGM(&LI/&OB);                                   */
-//     >>PARM<<  OPTION(*EVENTF);                                */
-//     >>PARM<<  DBGVIEW(*ALL);                                  */
-//   >>END-IMPORTANT<<                                           */
-//   >>EXECUTE<<                                                 */
-// >>END-PRE-COMPILER<<                                          */
-//****************************************************************
+//>>PRE-COMPILER<<                                              //
+//  >>CRTCMD<<  CRTBNDRPG SRCFILE(&SL/&SF) SRCMBR(&SM);         //
+//  >>IMPORTANT<<                                               //
+//    >>PARM<<  PGM(&LI/&OB);                                   //
+//    >>PARM<<  OPTION(*EVENTF);                                //
+//    >>PARM<<  TGTRLS(*CURRENT);                               //
+//    >>PARM<<  DBGVIEW(*ALL);                                  //
+//    >>PARM<<  OPTIMIZE(&U0);                                  //
+//    >>PARM<<  TRUNCNBR(*NO);                                  //
+//  >>END-IMPORTANT<<                                           //
+//  >>EXECUTE<<                                                 //
+//>>END-PRE-COMPILER<<                                          //
+
 ctl-opt datedit(*dmy) dftactgrp(*no) Bnddir('I_BUILDER') Option(*srcstmt);
 dcl-f gstlstlibe workstn sfile(sfl1:sflrrn) sfile(sfl2:sflrrn) indds(IndDs);
 dcl-f deflstlib1 keyed usage(*update: *output:*Delete) usropn;
 dcl-f gstlstlib1 keyed usage(*update: *output:*Delete) prefix(f2_);
 
-dcl-pr Gestion_liste_bibliotheque extpgm('PLIBLSTR');
+dcl-pr Gestion_liste_bibliotheque extpgm('GSTLSTLIBR');
   *n char(10); // selusr
   *n char(8); // sellst
   *n Char(2); // Option action
