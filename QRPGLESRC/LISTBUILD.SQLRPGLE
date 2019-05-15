@@ -40,10 +40,6 @@ Dcl-pr X_ref Extpgm('XREF');
 End-pr;
 
 
-DCL-PI liste_objet_construction;
-  p_Num_lot Like(r_Num_lot) Const;
-END-PI ;
-
 // Gestion des messages
 dcl-pr gst_message_CL extpgm('GSTMSG01');
   a_typ like(r_typmsg);
@@ -222,6 +218,9 @@ Dcl-s ParmEntry char(150);
 // constants
 // constantes
 
+DCL-PI liste_objet_construction;
+  p_Num_lot Like(r_Num_lot) Const;
+END-PI ;
 
 // main function
 // fonction principale
@@ -856,6 +855,10 @@ Dcl-Proc reincrement_liste_objet;
 
   Dcl-S l_num_Lot like(r_num_Lot);
   Dcl-S l_Ordre packed(6:0);
+  Dcl-s l_Bibliotheque_source Like(r_Nom_obj_IBMi);
+  Dcl-s l_Fichier_source Like(r_Nom_obj_IBMi);
+  Dcl-s l_Membre_source Like(r_Nom_obj_IBMi);
+
 
   EXEC SQL
     DROP SEQUENCE Order_Seq;
@@ -870,7 +873,7 @@ Dcl-Proc reincrement_liste_objet;
   EXEC SQL
     DECLARE List_Obj_Projet CURSOR FOR
       SELECT Lot_Number,
-             Ordre
+             Ordre, Bibliotheque_Source,Fichier_Source, Membre_Source
         FROM List_Objet_Build
         WHERE Lot_Number = :P_Num_Lot
         ORDER BY Ordre,
@@ -880,14 +883,40 @@ Dcl-Proc reincrement_liste_objet;
     OPEN List_Obj_Projet;
 
   EXEC SQL
-    FETCH List_Obj_Projet INTO :L_Num_Lot, :L_Ordre;
+    FETCH List_Obj_Projet
+      INTO :L_Num_Lot, :L_Ordre, :L_Bibliotheque_Source, :L_Fichier_Source,:L_Membre_Source;
 
   Dow sqlcode=0;
-    EXEC SQL
-      UPDATE List_Objet_Build SET Ordre = NEXT VALUE FOR Order_Seq WHERE CURRENT OF List_Obj_Projet;
+    Monitor;
+      API_RtvMbrDesc( MbrD0100
+                     :%Size(MbrD0100)
+                     :Fmt
+                     :L_Fichier_Source + L_Bibliotheque_Source
+                     :L_Membre_Source
+                     :bOvr);
+
+    // Si l'objet est nouveau, son source n'est pas présent dans la bib appli
+    // Il faut rechercher dans la bib lot dans ce cas.
+    On-error;
+      API_RtvMbrDesc( MbrD0100
+                    :%Size(MbrD0100)
+                    :Fmt
+                    :L_Fichier_Source + g_Lib_lot
+                    :L_Membre_Source
+                    :bOvr);
+    Endmon;
 
     EXEC SQL
-      FETCH List_Obj_Projet INTO :L_Num_Lot, :L_Ordre;
+      UPDATE List_Objet_Build
+        SET Ordre = NEXT VALUE FOR Order_Seq,
+            Type_Source = :Mbrd0100.Srctype
+        WHERE CURRENT OF List_Obj_Projet;
+
+
+    EXEC SQL
+      FETCH List_Obj_Projet
+        INTO :L_Num_Lot, :L_Ordre, :L_Bibliotheque_Source,:L_Fichier_Source,:L_Membre_Source;
+
   EndDo;
 
 End-proc;
