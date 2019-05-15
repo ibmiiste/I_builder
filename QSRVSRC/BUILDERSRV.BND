@@ -25,6 +25,7 @@
     /*     >>PARM<<  TEXT('Programme de service +                    */
     /*                     de l''outils i_builder');                 */
     /*     >>PARM<<  OPTION(*DUPPROC);                               */
+    /*     >>PARM<<  TGTRLS(*CURRENT);                               */
     /*     >>PARM<<  BNDSRVPGM(LAUNCHSRV);                           */
     /*     >>PARM<<  DETAIL(*FULL);                                  */
     /*     >>PARM<<  ALWLIBUPD(*YES);                                */
