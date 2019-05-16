@@ -1,4 +1,22 @@
 **FREE
+// >>PRE-COMPILER<<                                             //
+//   >>CRTCMD<<  CRTSQLRPGI SRCFILE(&SL/&SF) SRCMBR(&SM);       //
+//   >>IMPORTANT<<                                              //
+//     >>PARM<<  OBJ(&LI/&OB);                                  //
+//     >>PARM<<  COMMIT(*NONE);                                 //
+//     >>PARM<<  OBJTYPE(*MODULE);                              //
+//     >>PARM<<  OPTION(*EVENTF);                               //
+//     >>PARM<<  TGTRLS(*CURRENT);                              //
+//     >>PARM<<  RPGPPOPT(*LVL2);                               //
+//     >>PARM<<  CLOSQLCSR(*ENDACTGRP);                         //
+//     >>PARM<<  DATFMT(*ISO);                                  //
+//     >>PARM<<  TIMFMT(*ISO);                                  //
+//     >>PARM<<  DBGVIEW(*SOURCE);                              //
+//     >>PARM<<  COMPILEOPT(&U0);                               //
+//   >>END-IMPORTANT<<                                          //
+//   >>EXECUTE<<                                                //
+// >>END-PRE-COMPILER<<                                         //
+
 // Spécification de contrôles
 ctl-opt nomain;
 
@@ -468,7 +486,7 @@ DCL-PROC Ajout_clef_obj_sauv Export;
   Enddo;
 
   // Ajout des sources SQL
-    EXEC SQL
+  EXEC SQL
     CLOSE Csr_Sql_Sav;
 
   EXEC SQL
@@ -495,7 +513,7 @@ DCL-PROC Ajout_clef_obj_sauv Export;
 
 
     EXEC SQL
-    FETCH Csr_Sql_Sav INTO :L_Srcdst;
+      FETCH Csr_Sql_Sav INTO :L_Srcdst;
   Enddo;
 
   // Ajout du programme de restauration distante
@@ -515,7 +533,8 @@ DCL-PROC Ajout_clef_obj_sauv Export;
 
   g_Longueur_post_Objet=%Size(DS_Objet_define)+g_Longueur_valeurs_Objet;
 
-  EXEC SQL CLOSE Csr_Obj_Sav;
+  EXEC SQL
+    CLOSE Csr_Obj_Sav;
 
   return ;
 END-PROC ;
