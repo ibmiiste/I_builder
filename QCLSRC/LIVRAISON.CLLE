@@ -39,7 +39,11 @@
              CHGVAR     VAR(&BIBLIO) VALUE('L' *TCAT &NUMLOTC)
              CHGVAR     VAR(&LISTOBJ) VALUE('O' *TCAT &NUMLOTC)
 
-             CRTDUPOBJ  OBJ(RSTOBJSQL) FROMLIB(*LIBL) OBJTYPE(*PGM) TOLIB(&BIBLIO)
+CRTPGMDST:   CRTDUPOBJ  OBJ(RSTOBJSQL) FROMLIB(*LIBL) OBJTYPE(*PGM) TOLIB(&BIBLIO)
+             MONMSG     MSGID(CPF2130) EXEC(DO) /* S'il existe déjà, il est supprimé et recréer */
+             DLTOBJ     OBJ(&BIBLIO/RSTOBJSQL) OBJTYPE(*PGM)
+             GOTO       CMDLBL(CRTPGMDST)
+             ENDDO
 
              /* Création de la SAVF qui va être envoyée via FTP               */
              CHGVAR     VAR(&SAVF) VALUE('S' *TCAT &NUMLOTC)
