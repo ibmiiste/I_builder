@@ -1,4 +1,22 @@
 **FREE
+// >>PRE-COMPILER<<                                             //
+//   >>CRTCMD<<  CRTSQLRPGI SRCFILE(&SL/&SF) SRCMBR(&SM);       //
+//   >>IMPORTANT<<                                              //
+//     >>PARM<<  OBJ(&LI/&OB);                                  //
+//     >>PARM<<  COMMIT(*NONE);                                 //
+//     >>PARM<<  OBJTYPE(*MODULE);                              //
+//     >>PARM<<  OPTION(*EVENTF);                               //
+//     >>PARM<<  TGTRLS(*CURRENT);                              //
+//     >>PARM<<  RPGPPOPT(*LVL2);                               //
+//     >>PARM<<  CLOSQLCSR(*ENDACTGRP);                         //
+//     >>PARM<<  DATFMT(*ISO);                                  //
+//     >>PARM<<  TIMFMT(*ISO);                                  //
+//     >>PARM<<  DBGVIEW(*SOURCE);                              //
+//     >>PARM<<  COMPILEOPT(&U0);                               //
+//   >>END-IMPORTANT<<                                          //
+//   >>EXECUTE<<                                                //
+// >>END-PRE-COMPILER<<                                         //
+
 // --------------------------------------------------
 // Procedure: Restauration_objet
 // --------------------------------------------------
@@ -110,7 +128,7 @@ Monitor;
   l_Cmd='Addlible ' + l_Bib_lot;
   Cmd_exec(l_Cmd);
 
-// Mise en ligne de la bibliothèque de la commande STRPREPRC
+  // Mise en ligne de la bibliothèque de la commande STRPREPRC
   l_Cmd='Addlible ISPHERE';
   Cmd_exec(l_Cmd);
 
@@ -178,14 +196,21 @@ Monitor;
         INTO :L_Bibdst, :L_Objdst, :L_Typobj, :L_Ficsrc, :L_Mbrsrc, :L_Typsrc, :L_Listlib;
   Enddo;
 
-  EXEC SQL CLOSE Csr_Obj_Sav;
+  EXEC SQL
+    CLOSE Csr_Obj_Sav;
 
   // Mise en ligne de la bibliothèque temporaire de livraison
-  l_Cmd='Rmvlible ' + l_Bib_lot;
-  Cmd_exec(l_Cmd);
+  Monitor;
+    l_Cmd='Rmvlible ' + l_Bib_lot;
+    Cmd_exec(l_Cmd);
+  On-error;
+  ENDMON;
 
-  l_Cmd = 'DLTLIB ' + l_Bib_lot;
-  Cmd_exec(l_Cmd);
+  Monitor;
+    l_Cmd = 'DLTLIB ' + l_Bib_lot;
+    Cmd_exec(l_Cmd);
+  On-error;
+  ENDMON;
 
 on-error;
   dump(a);

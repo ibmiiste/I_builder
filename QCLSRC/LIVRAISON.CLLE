@@ -10,7 +10,7 @@
              PGM        PARM(&NUMLOT &MACHINE &USER &MDP)
 
              DCL        VAR(&NUMLOT) TYPE(*DEC) LEN(9 0)
-             DCL        VAR(&TGTRLS) TYPE(*CHAR) LEN(10) VALUE('V7R1M0')
+             DCL        VAR(&TGTRLS) TYPE(*CHAR) LEN(10) VALUE('*CURRENT')
              DCL        VAR(&NUMLOTC) TYPE(*CHAR) LEN(9)
              DCL        VAR(&BIBLIO) TYPE(*CHAR) LEN(10)
              DCL        VAR(&LISTOBJ) TYPE(*CHAR) LEN(10)
@@ -123,8 +123,12 @@ CRTSAVF:     CHGVAR     VAR(&SAVF) VALUE('S' *TCAT &NUMLOTC)
 
              /* Lancement du programme qui va extraire les objets et les copier à leur */
              /* destination                                                            */
-             CHGVAR     VAR(&CMD) VALUE('CALL' *BCAT &BIBLIO *TCAT '/RSTOBJSQL +
-                          PARM(''' *TCAT &NUMLOTC *TCAT ''')')
+             /*CHGVAR     VAR(&CMD) VALUE('CALL' *BCAT &BIBLIO *TCAT '/RSTOBJSQL +
+                          PARM(''' *TCAT &NUMLOTC *TCAT ''')')        */
+             CHGVAR     VAR(&CMD) VALUE('SBMJOB CMD(CALL' *BCAT +
+                          &BIBLIO *TCAT '/RSTOBJSQL PARM(''' *TCAT +
+                          &NUMLOTC *TCAT ''')) JOB(R' *TCAT &NUMLOTC *TCAT ') +
+                          HOLD(*YES)')
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
                           RMTPWD(&MDP)
              MONMSG     MSGID(CPF91CF) EXEC(DO)
