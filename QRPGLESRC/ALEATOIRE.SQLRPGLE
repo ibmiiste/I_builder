@@ -14,6 +14,12 @@
 // >>END-PRE-COMPILER<<                                          */
 ctl-opt nomain;
 
+// Héritages des modèles de variables
+/Copy Qcpysrc,Inhbuilder
+
+// Déclaration des prototypes des procédures du programme de service BUILDERSRV
+/Copy Qcpysrc,Prtbuilder
+
 Dcl-proc aleatoire export;
   Dcl-pi aleatoire packed(15:0);
     mult packed(15:0) const;
