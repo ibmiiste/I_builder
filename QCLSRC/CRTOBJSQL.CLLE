@@ -40,7 +40,9 @@
              RTVMBRD    FILE(&BIBSRC/&FICSRC) MBR(&MBRSRC *SAME) SRCTYPE(&TYPSRC)
 
              POSLIB     LISTE(&LISTBIB) LIB(*NONE)
+             MONMSG     CPF0000
 
+             ADDLIBLE   LIB(ISPHERE) POSITION(*LAST)
              /* Récupération du type d'objet pour s'assurer que s'il existe il  */
              /* faut sauvegarder les données avant création de la table/fichier */
  RTVOBJD:    RTVOBJD    OBJ(&BIBDST/&OBJDST) OBJTYPE(&TYPOBJE) OBJATR(&ATROBJ)
