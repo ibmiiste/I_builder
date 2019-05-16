@@ -46,8 +46,12 @@ CRTPGMDST:   CRTDUPOBJ  OBJ(RSTOBJSQL) FROMLIB(*LIBL) OBJTYPE(*PGM) TOLIB(&BIBLI
              ENDDO
 
              /* Création de la SAVF qui va être envoyée via FTP               */
-             CHGVAR     VAR(&SAVF) VALUE('S' *TCAT &NUMLOTC)
+CRTSAVF:     CHGVAR     VAR(&SAVF) VALUE('S' *TCAT &NUMLOTC)
              CRTSAVF    FILE(&BIBLIO/&SAVF)
+             MONMSG     MSGID(CPF7302) EXEC(DO) /* S'il existe déjà, il est supprimé et recréer */
+             DLTOBJ     OBJ(&BIBLIO/&SAVF) OBJTYPE(*FILE)
+             GOTO       CMDLBL(CRTSAVF)
+             ENDDO
 
              /* Création de la bibliothèque Lot sur le système cible          */
              CHGVAR     VAR(&CMD) VALUE('CRTLIB LIB(' *TCAT &BIBLIO *TCAT ')')
