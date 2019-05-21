@@ -118,17 +118,17 @@
  MAIL:
 
 
-             CHKOBJ     OBJ(QTEMP/ERRORLST) OBJTYPE(*FILE)
-             MONMSG     MSGID(CPF9801) EXEC(CRTPF FILE(QTEMP/ERRORLST) +
+             CHKOBJ     OBJ(QTEMP/ERRLIST) OBJTYPE(*FILE)
+             MONMSG     MSGID(CPF9801) EXEC(CRTPF FILE(QTEMP/ERRLIST) +
                           RCDLEN(80) SIZE(*NOMAX))
 
-             CPYSPLF    FILE(ERRORLST) TOFILE(QTEMP/ERRORLST) +
+             CPYSPLF    FILE(ERRLIST) TOFILE(QTEMP/ERRLIST) +
                           JOB(&JOB_NUM/&USER/&JOB_NAME) SPLNBR(*LAST) +
                           TOMBR(*FIRST)
-             CPYSPLF    FILE(QPPGMDMP) TOFILE(QTEMP/ERRORLST) +
+             CPYSPLF    FILE(QPPGMDMP) TOFILE(QTEMP/ERRLIST) +
                           JOB(&JOB_NUM/&USER/&JOB_NAME) SPLNBR(*LAST) +
                           TOMBR(*FIRST) MBROPT(*ADD)
-             CPYSPLF    FILE(QPJOBLOG) TOFILE(QTEMP/ERRORLST) +
+             CPYSPLF    FILE(QPJOBLOG) TOFILE(QTEMP/ERRLIST) +
                           JOB(&JOB_NUM/&USER/&JOB_NAME) SPLNBR(*LAST) +
                           TOMBR(*FIRST) MBROPT(*ADD)
 
@@ -136,13 +136,13 @@
 
              CHGVAR     VAR(&CMD) VALUE( 'SNDM FROM(''noreply@ista.fr'') +
                           TO(' *TCAT &ADRMAIL *TCAT ') +
-                          FILE(QTEMP/ERRORLST) MBR(*FIRST) SUBJECT(' *TCAT +
+                          FILE(QTEMP/ERRLIST) MBR(*FIRST) SUBJECT(' *TCAT +
                           &SUJET *TCAT ')')
 
              OVRPRTF    FILE(QPQUPRFIL) DEVTYPE(*AFPDS)
 
              CALL       PGM(QCMDEXC) PARM(&CMD &LNG)
 
-             DLTF       FILE(QTEMP/ERRORLST)
+             DLTF       FILE(QTEMP/ERRLIST)
 
  FIN:        ENDPGM
