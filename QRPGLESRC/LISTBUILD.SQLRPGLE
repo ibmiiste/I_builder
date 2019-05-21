@@ -328,61 +328,67 @@ begsr trtsfl;
   //endif;
   // on ne fait ceci que s'il n'y a eu rien d'autre
   if Construction;
-    g_optimize='*NONE';
-    Testlot(g_Num_lot);
-    builder( g_Num_lot
-            :g_lib_lot
-            :''
-            :g_optimize
-            :'0'
-            :''
-            :''
-            :'');
-    RMVlot(g_Num_lot);
-    EXEC SQL
-      UPDATE Lots SET Statlot = 'D' WHERE Lot_Number = :G_Num_Lot;
+    If not Control_construction();
+      g_optimize='*NONE';
+      Testlot(g_Num_lot);
+      builder( g_Num_lot
+              :g_lib_lot
+              :''
+              :g_optimize
+              :'0'
+              :''
+              :''
+              :'');
+      RMVlot(g_Num_lot);
+      EXEC SQL
+        UPDATE Lots SET Statlot = 'D' WHERE Lot_Number = :G_Num_Lot;
+    Endif;
   EndIf;
 
   if Livraison_recette;
-    g_optimize='*NONE';
-    Testlot(g_Num_lot);
-    builder( g_Num_lot
-            :g_lib_lot
-            :''
-            :g_optimize
-            :'1'
-            :'CICA95'
-            :'DRUBIGNY'
-            :'DANIEL1E01');
-    RMVlot(g_Num_lot);
-    EXEC SQL
-      UPDATE Lots SET Statlot = 'R' WHERE Lot_Number = :G_Num_Lot;
+    If not Control_construction();
+      g_optimize='*NONE';
+      Testlot(g_Num_lot);
+      builder( g_Num_lot
+              :g_lib_lot
+              :''
+              :g_optimize
+              :'1'
+              :'CICA95'
+              :'DRUBIGNY'
+              :'DANIEL1E01');
+      RMVlot(g_Num_lot);
+      EXEC SQL
+        UPDATE Lots SET Statlot = 'R' WHERE Lot_Number = :G_Num_Lot;
+    Endif;
   EndIf;
 
   if Livraison_production;
-    g_optimize='*FULL';
-    Testlot(g_Num_lot);
-    builder( g_Num_lot
-            :g_lib_lot
-            :''
-            :g_optimize
-            :'1'
-            :'CICA98'
-            :'DRUBIGNY'
-            :'DANIEL1E01');
-    Copie_sources(g_Num_lot);
-    g_optimize='*NONE';
-    builder( g_Num_lot
-            :''
-            :''
-            :g_optimize
-            :''
-            :''
-            :''
-            :'');
-    RMVlot(g_Num_lot);
-    EXEC SQL
-      UPDATE Lots SET Statlot = 'P' WHERE Lot_Number = :G_Num_Lot;
+    If not Control_construction();
+      g_optimize='*FULL';
+      Testlot(g_Num_lot);
+      builder( g_Num_lot
+              :g_lib_lot
+              :''
+              :g_optimize
+              :'1'
+              :'CICA98'
+              :'DRUBIGNY'
+              :'DANIEL1E01');
+      Copie_sources(g_Num_lot);
+      g_optimize='*NONE';
+      builder( g_Num_lot
+              :''
+              :''
+              :g_optimize
+              :''
+              :''
+              :''
+              :'');
+      RMVlot(g_Num_lot);
+      EXEC SQL
+        UPDATE Lots SET Statlot = 'P' WHERE Lot_Number = :G_Num_Lot;
+    Endif;
   EndIf;
 
   if g_trt_opt;
@@ -581,6 +587,12 @@ begsr trtopt;
         Zopt='5';
       Endif;
     ENDIF;
+
+    // Vérification qu'il n'y a pas d'anomalie
+    If Zopt<>'5';
+      l_anomalie=Control();
+    Endif;
+
     // selection en fonction du choix saisi
     select;
     WHEN
@@ -607,7 +619,6 @@ begsr trtopt;
     when (zopt = '3') or (zopt = ' 3');
       a_chx='CO';
     when (zopt = '4') or (zopt = ' 4');
-
       EXEC SQL
         DELETE List_Objet_Build WHERE Obj_Number = :Hnumobjbld;
     when (zopt = '5') or (zopt = ' 5');
@@ -873,7 +884,10 @@ Dcl-Proc reincrement_liste_objet;
   EXEC SQL
     DECLARE List_Obj_Projet CURSOR FOR
       SELECT Lot_Number,
-             Ordre, Bibliotheque_Source,Fichier_Source, Membre_Source
+             Ordre,
+             Bibliotheque_Source,
+             Fichier_Source,
+             Membre_Source
         FROM List_Objet_Build
         WHERE Lot_Number = :P_Num_Lot
         ORDER BY Ordre,
@@ -984,4 +998,45 @@ DCL-PROC verif_presence_autre_lot ;
   Enddo;
   RETURN ;
 END-Proc ;
+
+
+
+
+// --------------------------------------------------
+// Procedure name: Control_construction
+// Purpose:        Contrôler que l'on peut construire le lot et le livrer
+// Returns:
+// --------------------------------------------------
+DCL-PROC Control;
+  DCL-PI *N IND;
+  END-PI ;
+  // Your local fields go here
+
+  DCL-S retField IND Inz(*Off);
+
+  Readc sfl01;
+  Dow %eof;
+    Monitor;
+      API_RtvMbrDesc( MbrD0100
+                     :%Size(MbrD0100)
+                     :Fmt
+                     :Zficsrc + Zbibsrc
+                     :Zmbrsrc
+                     :bOvr);
+    On-error;
+      // Afficher une message d'erreur si le source n'est pas présent
+      A_Typ = '5';
+      A_Fim = 'BUILDMSGF';
+      A_Mid = 'ERR0008';
+      A_Mdt = Zbibsrc + Zficsrc + Zmbrsrc;
+      Gst_Message_Cl(A_Typ :A_Fim :A_Mid :A_Mdt:Procedure);
+      Retfield=*On;
+      Sflnxtchg=*On;
+    Endmon;
+
+    Readc sfl01;
+  Enddo;
+
+  return retField ;
+END-PROC ;
 
