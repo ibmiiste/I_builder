@@ -147,6 +147,8 @@ Dcl-ds IndDS;
   SFLINZ ind pos(10);
   PROTECT ind pos(20);
   g_lot_inactif ind pos(21);
+  Erreur_objet ind Pos(25);
+  Erreur_Source Ind Pos(26);
 end-ds;
 
 // la ds du sous=fichier
@@ -486,15 +488,16 @@ begsr trtopt;
   g_alimsfl = *off;
   // Gestion de la création d'enregistrement
   if (zoptc = '1') or (zoptc = ' 1');
-    //  rtvObj( OBJD0400_T
-    //         :%len(OBJD0400_T
-    //         :'OBJD0400'
-    //         :obj:%trim(p_type)
-    //         :obj:%trim(p_type)
-    //         :w_errApi);
-    //  if w_errApi.ErrRtn > 0;
-    //    clear OBJD0400;
-    //  endif;
+    // Récupération des informations objets si elles existent
+    if not infos_objet( zobjdstc + zbibdstc
+                       :ztypobjc
+                       :l_Base_infos_obj_light);
+
+      infos_objet( zobjdstc + g_Lib_lot
+                  :ztypobjc
+                  :l_Base_infos_obj_light);
+    Endif;
+
     EXEC SQL
       SELECT 1
         INTO :G_Verif
@@ -538,6 +541,7 @@ begsr trtopt;
                                      Bibliotheque_Destination,
                                      Objet_Destination,
                                      Type_Objet,
+                                     Attribut_Objet,
                                      Type_Source,
                                      User_Creation)
           VALUES (DEFAULT,
@@ -549,6 +553,7 @@ begsr trtopt;
                   :Zbibdstc,
                   :Zobjdstc,
                   :Ztypobjc,
+                  :L_Base_Infos_Obj_Light.Atr,
                   :Mbrd0100.Srctype,
                   USER) ;
 
@@ -591,6 +596,17 @@ begsr trtopt;
                                :Zobjdst
                                :Ztypobj
                                :g_Num_lot);
+
+      // Récupération des informations objets si elles existent
+      if not infos_objet( zobjdst + zbibdst
+                         :ztypobj
+                         :l_Base_infos_obj_light);
+
+        infos_objet( zobjdst + g_Lib_lot
+                    :ztypobj
+                    :l_Base_infos_obj_light);
+      Endif;
+
       EXEC SQL
         UPDATE List_Objet_Build
           SET Lot_Number = :G_Num_Lot,
@@ -601,6 +617,7 @@ begsr trtopt;
               Bibliotheque_Destination = :Zbibdst,
               Objet_Destination = :Zobjdst,
               Type_Objet = :Ztypobj,
+              Attribut_Objet = :L_Base_Infos_Obj_Light.Atr,
               User_Modification = USER
           WHERE Obj_Number = :Hnumobjbld;
 
@@ -800,6 +817,34 @@ begsr chgpag;
                     :l_Base_infos_obj_light);
         zDescobjet=l_Base_infos_obj_light.Txt;
       Endif;
+
+      If l_Base_infos_obj_light.RtnSize=0;
+        // envoyer un message pour dire que l'objet n'est pas présent dans le lot
+        Erreur_objet=*On;
+        A_Typ = '5';
+        A_Fim = 'BUILDMSGF';
+        A_Mid = 'ERR0009';
+        A_Mdt = zobjdst + g_Lib_lot;
+        Gst_Message_Cl(A_Typ :A_Fim :A_Mid :A_Mdt:Procedure);
+      ENDIF;
+
+      // Vérification que le source est présent dans le lot
+      Monitor;
+        API_RtvMbrDesc( MbrD0100
+                       :%Size(MbrD0100)
+                       :Fmt
+                       :ZFICSRC + g_Lib_lot
+                       :ZMBRSRC
+                       :bOvr);
+      On-error;
+        // envoyer un message pour dire que l'objet n'est pas présent dans le lot
+        Erreur_Source=*On;
+        A_Typ = '5';
+        A_Fim = 'BUILDMSGF';
+        A_Mid = 'ERR0008';
+        A_Mdt = g_Lib_lot  + ZFICSRC + ZMBRSRC;
+        Gst_Message_Cl(A_Typ :A_Fim :A_Mid :A_Mdt:Procedure);
+      Endmon;
 
       if PROTECT=*on;
         PROTECT=*off;

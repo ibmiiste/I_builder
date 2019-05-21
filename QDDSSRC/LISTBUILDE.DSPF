@@ -24,6 +24,7 @@
      A            ZOBJDST       10   B  8 12
      A  21                                  COLOR(WHT)
      A  21                                  DSPATR(PR)
+     A  25                                  DSPATR(RI PC)
      A            ZDESCOBJET    50   O  8 45
      A  21                                  COLOR(WHT)
      A            HNREC         40   H
@@ -31,15 +32,19 @@
      A            ZBIBDST       10   B  8 23
      A  21                                  COLOR(WHT)
      A  21                                  DSPATR(PR)
+     A  25                                  DSPATR(RI)
      A            ZBIBSRC       10   B  8 97
      A  21                                  COLOR(WHT)
      A  21                                  DSPATR(PR)
+     A  26                                  DSPATR(RI PC)
      A            ZFICSRC       10   B  8110
      A  21                                  COLOR(WHT)
      A  21                                  DSPATR(PR)
+     A  26                                  DSPATR(RI)
      A            ZMBRSRC       10   B  8122
      A  21                                  COLOR(WHT)
      A  21                                  DSPATR(PR)
+     A  26                                  DSPATR(RI)
      A            ZORDRE         6Y 0B  8  5
      A                                      EDTCDE(Z)
      A  21                                  COLOR(WHT)
@@ -47,6 +52,7 @@
      A            ZTYPOBJ       10   B  8 34
      A  21                                  COLOR(WHT)
      A  21                                  DSPATR(PR)
+     A  25                                  DSPATR(RI)
      A            HNUMOBJBLD     9S 0H
      A          R FORE1                     SFLCTL(SFL01)
      A                                      RTNCSRLOC(&WLICSR &WZOCSR &WPRCSR)
