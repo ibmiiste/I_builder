@@ -51,21 +51,21 @@
      A                                      OVRDTA
      A            ZJOB          10   O  2122
      A                                      OVRDTA
-     A                                 24  6'Crée le :'
-     A            ZDAC            L  O 24 18DATFMT(*EUR) OVRDTA
+     A                                 25  4'Crée le :'
+     A            ZDAC            L  O 25 16DATFMT(*EUR) OVRDTA
      A                                      COLOR(GRN)
-     A                                 24 30'à :'
-     A            ZHEC            T  O 24 34TIMFMT(*EUR) OVRDTA
-     A                                 24 44'par :'
-     A            ZUSC          10   O 24 50
+     A                                 25 28'à :'
+     A            ZHEC            T  O 25 32TIMFMT(*EUR) OVRDTA
+     A                                 25 42'par :'
+     A            ZUSC          10   O 25 48
      A                                      OVRDTA
-     A                                 25  3'Modifié le :'
-     A            ZDAM            L  O 25 18DATFMT(*EUR) OVRDTA
+     A                                 25 62'Modifié le :'
+     A            ZDAM            L  O 25 77DATFMT(*EUR) OVRDTA
      A                                      COLOR(GRN)
-     A                                 25 30'à :'
-     A            ZHEM            T  O 25 34TIMFMT(*EUR) OVRDTA
-     A                                 25 44'par :'
-     A            ZUSM          10   O 25 50
+     A                                 25 89'à :'
+     A            ZHEM            T  O 25 93TIMFMT(*EUR) OVRDTA
+     A                                 25103'par :'
+     A            ZUSM          10   O 25109
      A                                      OVRDTA
      A                                 26  2'F3=Exit   F4=Invite  F12=Annuler'
      A                                      COLOR(BLU)
@@ -103,6 +103,17 @@
      A                                  4103'Statut'
      A            ZSTATLOT      20   O  4111
      A                                      COLOR(WHT)
+     A                                 23  3'Lien Ticket'
+     A                                 24  3'Lien GIT'
+     A            ZLNKTICKET   116   B 23 15
+     A                                      COLOR(WHT)
+     A N14                                  DSPATR(UL)
+     A  14                                  DSPATR(PR)
+     A                                      CHECK(LC)
+     A            ZLNKGIT      116   B 24 15COLOR(WHT)
+     A N14                                  DSPATR(UL)
+     A  14                                  DSPATR(PR)
+     A                                      CHECK(LC)
      A          R WMGSFL                    SFL
      A                                      SFLMSGRCD(27)
      A            WMGKEY                    SFLMSGKEY
