@@ -95,6 +95,13 @@ end-pr;
 // La DS du programme
 /copy qcpysrc,Psds
 
+// Variables globales
+Dcl-s l_Null_Zlnkticket Int(5);
+Dcl-s L_Null_Zlnkgit Int(5);
+
+Dcl-s lnkticket like(Zlnkticket);
+Dcl-s lnkgit like(Zlnkgit);
+
 // Le DS des indicateurs de l'écran
 Dcl-ds IndDs;
   Protection Ind Pos(14);
@@ -119,6 +126,12 @@ Dcl-pi Gestion_Projet;
   PCHX char(2);
   PNREC CHAR(10);
 end-pi;
+
+// Variables locales
+
+
+// Constante SQL Valeur nulle
+Dcl-c c_SQL_null -1;
 
 // début du programme
 Monitor;
@@ -175,26 +188,31 @@ Monitor;
   // Initialisation de l'écran si on un numéro d'enregistrement
   IF PNREC <> *BLANK;
     EXEC SQL
-      SELECT Lot_Number,
-             Libelle_Lots,
-             Liste_Biblio_Projet,
-             Biblio_Lot,
-             Description_Lots,
-             Statuts_Lot,
-             Timecrt,
-             Usrcrt,
-             Timemaj,
-             Usrmaj
-        INTO :Numlot,
-             :Libellot,
-             :Listbibprj,
-             :Biblot,
-             :Descriplot,
-             :Statlot,
-             :Timecrt,
-             :Usrcrt,
-             :Timemaj,
-             :Usrmaj
+      --(--data-location--+-------------------------------------------+--)-><
+      SELECT Lot_Number
+             ,Libelle_Lots
+             ,Liste_Biblio_Projet
+             ,Biblio_Lot
+             ,Description_Lots
+             ,Statuts_Lot
+             ,Dlurlcomplete(Lien_Ticket)
+             ,Dlurlcomplete(Lien_Branche_Git)
+             ,Timecrt
+             ,Usrcrt
+             ,Timemaj
+             ,Usrmaj
+        INTO :Numlot
+             ,:Libellot
+             ,:Listbibprj
+             ,:Biblot
+             ,:Descriplot
+             ,:Statlot
+             ,:Lnkticket :L_Null_Zlnkticket
+             ,:Lnkgit :L_Null_Zlnkgit
+             ,:Timecrt
+             ,:Usrcrt
+             ,:Timemaj
+             ,:Usrmaj
         FROM Lots
         WHERE CHAR(RRN(Lots)) = :Pnrec ;
     IF pchx = 'CR'
@@ -208,6 +226,16 @@ Monitor;
     Zlibellot=Libellot;
     Zlistbibpr=Listbibprj;
     Zdescripl=Descriplot;
+    IF L_Null_Zlnkticket = c_SQL_null;
+      Zlnkticket=*Blanks;
+    Else;
+      Zlnkticket=Lnkticket;
+    Endif;
+    IF L_Null_ZLnkgit = c_SQL_null;
+      ZLnkgit=*Blanks;
+    Else;
+      ZLnkgit=Lnkgit;
+    Endif;
     Zstatlot=Statlot;
     zbiblot = biblot;
     ZDAC=%date(timecrt);
@@ -278,18 +306,22 @@ Dcl-proc TRTSCR;
       IF Confirmer;
         // touche F15 on supprime si indicateur confirmation_suppression
         EXEC SQL
-          SELECT Lot_Number,
-                 Libelle_Lots,
-                 Liste_Biblio_Projet,
-                 Biblio_Lot,
-                 Description_Lots,
-                 Statuts_Lot
-            INTO :Numlot,
-                 :Libellot,
-                 :Listbibprj,
-                 :Biblot,
-                 :Descriplot,
-                 :Statlot
+          SELECT Lot_Number
+                 ,Libelle_Lots
+                 ,Liste_Biblio_Projet
+                 ,Biblio_Lot
+                 ,Description_Lots
+                 ,Statuts_Lot
+                 ,Dlurlcomplete(Lien_Ticket)
+                 ,Dlurlcomplete(Lien_Branche_Git)
+            INTO :Numlot
+                 ,:Libellot
+                 ,:Listbibprj
+                 ,:Biblot
+                 ,:Descriplot
+                 ,:Statlot
+                 ,:Lnkticket :L_Null_Zlnkticket
+                 ,:Lnkgit :L_Null_Zlnkgit
             FROM Lots
             WHERE CHAR(RRN(Lots)) = :Pnrec ;
 
@@ -355,18 +387,22 @@ Dcl-proc VALID1;
   // La suppression se fait par la touche F15
   ELSE;
     EXEC SQL
-      SELECT Lot_Number,
-             Libelle_Lots,
-             Liste_Biblio_Projet,
-             Biblio_Lot,
-             Description_Lots,
-             Statuts_Lot
-        INTO :Numlot,
-             :Libellot,
-             :Biblot,
-             :Listbibprj,
-             :Descriplot,
-             :Statlot
+      SELECT Lot_Number
+             ,Libelle_Lots
+             ,Liste_Biblio_Projet
+             ,Biblio_Lot
+             ,Description_Lots
+             ,Statuts_Lot
+             ,Dlurlcomplete(Lien_Ticket)
+             ,Dlurlcomplete(Lien_Branche_Git)
+        INTO :Numlot
+             ,:Libellot
+             ,:Biblot
+             ,:Listbibprj
+             ,:Descriplot
+             ,:Statlot
+             ,:Lnkticket :L_Null_Zlnkticket
+             ,:Lnkgit :L_Null_Zlnkgit
         FROM Lots
         WHERE Lot_Number = :Znumlot;
 
@@ -382,21 +418,32 @@ Dcl-proc VALID1;
       // on met à jour directement
       EXEC SQL
         UPDATE Lots
-          SET Libelle_Lots = :Zlibellot,
-              Liste_Biblio_Projet = :Zlistbibpr,
-              Description_Lots = :Zdescripl,
-              Usrcrt = :User
+          SET Libelle_Lots = :Zlibellot
+              ,Liste_Biblio_Projet = :Zlistbibpr
+              ,Description_Lots = :Zdescripl
+              ,Lien_Ticket = DLVALUE(:Zlnkticket, 'URL')
+              ,Lien_Branche_Git = DLVALUE(:Zlnkgit, 'URL')
+              ,Usrcrt = :User
           WHERE Lot_Number = :Numlot ;
     ELSE;
       // création
       EXEC SQL
-        INSERT INTO Lots(Libelle_Lots,
-                         Liste_Biblio_Projet,
-                         Description_Lots,
-                         Statuts_Lot,
-                         Timecrt,
-                         Usrcrt)
-          VALUES (:Zlibellot, :Zlistbibpr, :Zdescripl, 'D', CURRENT_TIMESTAMP, :User) ;
+        INSERT INTO Lots(Libelle_Lots
+                         ,Liste_Biblio_Projet
+                         ,Description_Lots
+                         ,Statuts_Lot
+                         ,Lien_Ticket
+                         ,Lien_Branche_Git
+                         ,Timecrt
+                         ,Usrcrt)
+          VALUES (:Zlibellot
+                  ,:Zlistbibpr
+                  ,:Zdescripl
+                  ,'D'
+                  ,DLVALUE(:Zlnkticket, 'URL')
+                  ,DLVALUE(:Zlnkgit, 'URL')
+                  ,CURRENT_TIMESTAMP
+                  ,:User) ;
 
       // On récupère le numéro du lot créé
       EXEC SQL
