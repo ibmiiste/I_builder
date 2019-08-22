@@ -509,6 +509,7 @@ begsr trtopt;
       a_typ='1';
       a_fim='BUILDMSGF';
       a_mid='MSG0002';
+      a_mdt = %Char(Zordrec);
       gst_message_CL( a_typ
                      :a_fim
                      :a_mid
