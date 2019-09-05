@@ -21,11 +21,12 @@ GENERATED ALWAYS AS IDENTITY
    INCREMENT BY 1),
 Project_Id FOR COLUMN  Idproject INTEGER,
 IP_Address FOR COLUMN IPADDRESS CHAR(128),
-Host_name FOR COLUMN Hostname CHAR(255))
+Host_name FOR COLUMN Hostname CHAR(255),
+PRIMARY KEY(Partition_id))
 RCDFMT Partitionf;
 
 LABEL ON TABLE Liste_partition
-	IS 'Liste des partition d''un projet' ;
+	IS 'Liste des partitions d''un projet' ;
 
 LABEL ON COLUMN Liste_partition 
 ( Partition_id IS 'Identifiant' , 
