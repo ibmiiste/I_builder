@@ -310,7 +310,7 @@ Dcl-proc INITSF;
   EXEC SQL
     FETCH Curs_Lots02
       INTO :Numlot, :Libellot, :Listbibprj, :Biblot, :Statlot, :G_Numero_Relatif,
-        :Ds_Lots.Statenreg;
+        :Statenreg;
 
   // Chargement de la première page
   CHGPAG();
@@ -411,7 +411,7 @@ Dcl-proc CHGPAG;
 
     // On ne charge pas les lots fermés
     If g_tous_lots=*off
-    And Ds_Lots.STATENREG=0;
+    And STATENREG=0;
       g_Selection_OK=*off;
     ENDIF;
 
@@ -430,8 +430,8 @@ Dcl-proc CHGPAG;
         ZSTATLOT  = 'PRODUCTION';
       Endsl;
       HNREC=g_numero_relatif;
-      HSTATENREG=Ds_lots.STATENREG;
-      IF Ds_lots.STATENREG = 0;
+      HSTATENREG=STATENREG;
+      IF STATENREG = 0;
         // Top statut Lot fermé
         g_inactif = *ON;
       ELSE;

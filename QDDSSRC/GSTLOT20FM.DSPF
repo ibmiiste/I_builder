@@ -74,12 +74,12 @@
      A            WPRCUR         4S 0H
      A            WNMLGN         3S 0H
      A            WNMCOL         3S 0H
-     A                                  4  3'Numéro'
-     A                                  5  3'Titre'
+     A                                  3  3'Numéro'
+     A                                  4  3'Titre'
      A                                  6  3'Description du projet'
-     A            ZNUMLOT   R        O  4 11REFFLD(LOTSF/NUMLOT *LIBL/LOTS)
+     A            ZNUMLOT   R        O  3 11REFFLD(LOTSF/NUMLOT *LIBL/LOTS)
      A                                      COLOR(WHT)
-     A            ZLIBELLOT R        B  5 11REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
+     A            ZLIBELLOT R        B  5  3REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
      A                                      COLOR(WHT)
      A N14                                  DSPATR(UL)
      A  14                                  DSPATR(PR)
@@ -90,18 +90,18 @@
      A N14                                  DSPATR(UL)
      A  14                                  DSPATR(PR)
      A                                      CHECK(LC)
-     A                                  4 67'Bibliothèque dédiée'
-     A            ZBIBLOT   R        O  4 89REFFLD(LOTSF/BIBLOT *LIBL/LOTS)
+     A                                  3 67'Bibliothèque dédiée'
+     A            ZBIBLOT   R        O  3 89REFFLD(LOTSF/BIBLOT *LIBL/LOTS)
      A                                      COLOR(WHT)
-     A                                  5 67'Liste de biblothèques'
-     A            ZLISTBIBPRR        B  5 89REFFLD(LOTSF/LISTBIBPRJ *LIBL/LOTS)
+     A                                  3 24'Liste de biblothèques'
+     A            ZLISTBIBPRR        B  3 48REFFLD(LOTSF/LISTBIBPRJ *LIBL/LOTS)
      A                                      COLOR(WHT)
      A                                      OVRDTA
      A N14                                  DSPATR(UL)
      A  14                                  DSPATR(PR)
      A  25                                  DSPATR(RI PC)
-     A                                  4103'Statut'
-     A            ZSTATLOT      20   O  4111
+     A                                  3103'Statut'
+     A            ZSTATLOT      20   O  3111
      A                                      COLOR(WHT)
      A                                 23  3'Lien Ticket'
      A                                 24  3'Lien GIT'

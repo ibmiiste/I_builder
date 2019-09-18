@@ -22,24 +22,25 @@
      A            ZOPT           2   B  8  2
      A  20                                  DSPATR(PR)
      A            HNREC         10  0H
-     A            ZNUMLOT   R        O  8  6REFFLD(LOTSF/NUMLOT *LIBL/LOTS)
+     A            ZNUMLOT   R        O  8  5REFFLD(LOTSF/NUMLOT *LIBL/LOTS)
      A                                      EDTCDE(Z)
      A  21                                  COLOR(WHT)
      A N21                                  COLOR(GRN)
      A N21                                  DSPATR(HI)
-     A            ZLIBELLOT R        O  8 17REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
+     A            ZLIBELLOT R   81   O  8 15REFFLD(LOTSF/LIBELLOT I_BUILDER/LOT-
+     A                                      S)
      A  21                                  COLOR(WHT)
      A N21                                  COLOR(GRN)
      A N21                                  DSPATR(HI)
-     A            ZLISTBIBPRR        O  8 70REFFLD(LOTSF/LISTBIBPRJ *LIBL/LOTS)
+     A            ZLISTBIBPRR        O  8 97REFFLD(LOTSF/LISTBIBPRJ *LIBL/LOTS)
      A  21                                  COLOR(WHT)
      A N21                                  COLOR(GRN)
      A N21                                  DSPATR(HI)
-     A            ZBIBLOT   R        O  8 83REFFLD(LOTSF/BIBLOT *LIBL/LOTS)
+     A            ZBIBLOT   R        O  8108REFFLD(LOTSF/BIBLOT *LIBL/LOTS)
      A  21                                  COLOR(WHT)
      A N21                                  COLOR(GRN)
      A N21                                  DSPATR(HI)
-     A            ZSTATLOT      13   O  8 96
+     A            ZSTATLOT      13   O  8119
      A  21                                  COLOR(WHT)
      A N21                                  COLOR(GRN)
      A N21                                  DSPATR(HI)
@@ -77,7 +78,7 @@
      A                                      e lot'
      A                                      COLOR(BLU)
      A                                  6  3'La description contient (REGEXP) :'
-     A            ZSLIBELLOTR        B  6 38REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
+     A            ZSLIBELLOTR   50   B  6 38REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
      A                                      CHECK(LC)
      A                                      COLOR(WHT)
      A                                      OVRDTA
@@ -92,13 +93,13 @@
      A            ZHEUR           T  O  2 13TIMFMT(*EUR)
      A                                  7  6'Numéro'
      A                                      COLOR(WHT)
-     A                                  7 17'Sujet du lot'
+     A                                  7 15'Sujet du lot'
      A                                      COLOR(WHT)
-     A                                  7 70'Liste bib'
+     A                                  7 97'Liste bib'
      A                                      COLOR(WHT)
-     A                                  7 83'Bib. lot'
+     A                                  7108'Bib. lot'
      A                                      COLOR(WHT)
-     A                                  7 96'Statut'
+     A                                  7119'Statut'
      A                                      COLOR(WHT)
      A          R FORB1
      A                                      CF05
