@@ -76,15 +76,15 @@
      A                                      OVRDTA
      A                                  1 55'Liste des objets'
      A                                      COLOR(WHT)
-     A            ZUSER         10   O  1122
+     A            ZUSER         10   O  1112
      A                                      OVRDTA
-     A            ZDATE          8  0O  2  2
+     A            ZDATE          8  0O  1 14
      A                                      EDTWRD('  /  /    ')
      A                                      OVRDTA
-     A            ZHEUR          6  0O  2 14
+     A            ZHEUR          6  0O  1 25
      A                                      EDTWRD('  :  :  ')
      A                                      OVRDTA
-     A            ZJOB          10   O  2122
+     A            ZJOB          10   O  1123
      A                                      OVRDTA
      A                                  3  3'Indiquez vos options, puis appuyez-
      A                                       sur ENTREE.'
@@ -105,7 +105,8 @@
      A            WPRCSR         4S 0H
      A            WLIGN          3S 0H
      A            WCOLN          3S 0H
-     A            ZPROJET       50   O  2 42COLOR(WHT)
+     A            ZPROJET      128A  O  2  3
+     A                                      COLOR(WHT)
      A            ZOPTC          2   B  7  2
      A  21                                  DSPATR(PR)
      A            ZORDREC        6  0B  7  5EDTCDE(Z)
