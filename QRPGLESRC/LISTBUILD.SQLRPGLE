@@ -402,7 +402,7 @@ begsr initsf;
 
   //Récupération de la list de bibliothèque
   EXEC SQL
-    SELECT Libelle_Lots,
+    SELECT Lpad( Libelle_Lots, 0.5*CHARACTER_LENGTH( Libelle_Lots) + 64, ' '),
            Liste_Biblio_Projet,
            Biblot,
            Statut_Enreg

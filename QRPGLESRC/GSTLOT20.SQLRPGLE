@@ -436,7 +436,7 @@ Dcl-proc VALID1;
                          ,Lien_Branche_Git
                          ,Timecrt
                          ,Usrcrt)
-          VALUES (:Zlibellot
+          VALUES ( :Zlibellot
                   ,:Zlistbibpr
                   ,:Zdescripl
                   ,'D'
