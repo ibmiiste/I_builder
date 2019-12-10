@@ -93,7 +93,7 @@
      A                                  3 67'Bibliothèque dédiée'
      A            ZBIBLOT   R        O  3 89REFFLD(LOTSF/BIBLOT *LIBL/LOTS)
      A                                      COLOR(WHT)
-     A                                  3 24'Liste de biblothèques'
+     A                                  3 24'Liste de bibliothèques'
      A            ZLISTBIBPRR        B  3 48REFFLD(LOTSF/LISTBIBPRJ *LIBL/LOTS)
      A                                      COLOR(WHT)
      A                                      OVRDTA
