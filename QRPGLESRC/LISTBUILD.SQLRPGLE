@@ -54,12 +54,12 @@ end-pr;
 /copy qcpysrc,Prtbuilder
 
 // Mise en ligne de la bibliothèque du lot
-Dcl-pr Testlot Extpgm('TESTLOT');
+Dcl-pr Testlot Extpgm('STRTSTLOT');
   p_Num_lot Packed(9:0);
 End-pr;
 
 // Suppression de la bibliothèque du lot de la liste de bibliothèques système
-Dcl-pr Rmvlot Extpgm('RMVLOT');
+Dcl-pr Rmvlot Extpgm('ENDTSTLOT');
   p_Num_lot Packed(9:0);
 End-pr;
 
