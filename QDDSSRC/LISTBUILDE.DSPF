@@ -143,6 +143,7 @@
      A                                  4109'11=Livraison Production'
      A  21                                  DSPATR(ND)
      A                                      COLOR(BLU)
+     A            ZBIBLOT       10   O  1 80
      A          R FORB1
      A                                      CF03
      A                                      CF05

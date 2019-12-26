@@ -413,6 +413,9 @@ begsr initsf;
       FROM Lots
       WHERE Lot_Number = :G_Num_Lot;
 
+  // Alimentation de la bibliothèque lot dans l'entête
+  Zbiblot =G_Lib_Lot;
+
   IF Ds_Lots.Statenreg=0;
     g_lot_inactif=*on;
   Else;
