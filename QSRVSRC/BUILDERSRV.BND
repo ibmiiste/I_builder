@@ -30,33 +30,11 @@
     /*     >>PARM<<  DETAIL(*FULL);                                  */
     /*     >>PARM<<  ALWLIBUPD(*YES);                                */
     /*   >>END-IMPORTANT<<                                           */
+    /*   >>CMD<<  RMVLIBLE I_BUILDER;                                */
     /*   >>EXECUTE<<                                                 */
+    /*   >>CMD<<  ADDLIBLE I_BUILDER;                                */
     /* >>END-PRE-COMPILER<<                                          */
-             STRPGMEXP  PGMLVL(*PRV) LVLCHK(*YES) SIGNATURE('20190219')
-             EXPORT     SYMBOL(EXISTS)
-             EXPORT     SYMBOL(ALEATOIRE)
-             EXPORT     SYMBOL(LIVRAISON)
-             EXPORT     SYMBOL(CONSTRUCT)
-             EXPORT     SYMBOL(SOURCE_STANDARD)
-             EXPORT     SYMBOL(ENVRAPMEL)
-             EXPORT     SYMBOL(RECUP_ERREUR)
-             EXPORT     SYMBOL(GEST_ERREUR)
-             EXPORT     SYMBOL(MAILERR)
-             EXPORT     SYMBOL(SCRIPTFTP)
-             EXPORT     SYMBOL(CRTBIBBLD)
-             EXPORT     SYMBOL(GESTION_BIB_LOT)
-             EXPORT     SYMBOL(INFOS_OBJET)
-             EXPORT     SYMBOL(CMD_EXEC)
-             EXPORT     SYMBOL(CMD_CHK)
-             EXPORT     SYMBOL(EDTLIBLOT)
-             EXPORT     SYMBOL(SAVLIBLOT)
-             EXPORT     SYMBOL(SAUV_OBJ_LOT)
-             EXPORT     SYMBOL(Copie_liste_objet_a_livres)
-             EXPORT     SYMBOL(Copie_sources)
-             EXPORT     SYMBOL(CPYMBRSRC)
-             ENDPGMEXP
-
-             STRPGMEXP  PGMLVL(*CURRENT) LVLCHK(*YES) SIGNATURE('20200407')
+             STRPGMEXP  PGMLVL(*CURRENT) LVLCHK(*YES) SIGNATURE('20190219')
              EXPORT     SYMBOL(EXISTS)
              EXPORT     SYMBOL(ALEATOIRE)
              EXPORT     SYMBOL(LIVRAISON)

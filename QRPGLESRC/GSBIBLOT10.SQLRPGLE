@@ -38,29 +38,28 @@ Ctl-opt bnddir('I_BUILDER');
 DCL-PROC gestion_bib_lot EXPORT;
 
   DCL-PI *N IND;
-    P_Num_ticket Like(r_Num_lot) value;
+    p_Num_lot Like(r_Num_lot) value;
   END-PI ;
 
   Dcl-s l_libel_lot Like(r_Lib_lot);
   Dcl-s l_Num_lot_carac Like(r_Num_lot_carac);
   Dcl-s l_nom_bib_lot like(r_Nom_obj_IBMi);
   DCL-S retField IND Inz(*On);
-  Dcl-s l_Lettre_prefix like(r_Prefix) Inz('MEVPMD');
-  Dcl-s l_numero_lot Like(r_Num_lot);
+  Dcl-s l_Lettre_prefix like(r_Prefix) Inz('L');
 
   Monitor;
     EXEC SQL
-      SELECT Libelle_Lots, LOT_NUMBER
-        INTO :L_Libel_Lot, :l_numero_lot
+      SELECT Libelle_Lots
+        INTO :L_Libel_Lot
         FROM Lots
-        WHERE Numero_ticket = :P_Num_ticket;
+        WHERE Lot_Number = :P_Num_Lot;
 
     If sqlcode<>0;
       Retfield=*off;
       Return Retfield;
     EndIf;
 
-    l_Num_lot_carac=%Char(P_Num_ticket);
+    l_Num_lot_carac=%Editc(p_num_lot:'X');
 
     Crtbibbld(l_Num_lot_carac:l_libel_lot:l_Nom_bib_lot:l_Lettre_prefix);
 
@@ -69,7 +68,7 @@ DCL-PROC gestion_bib_lot EXPORT;
     EndIf;
 
     EXEC SQL
-      UPDATE Lots SET Biblio_Lot = :L_Nom_Bib_Lot WHERE Lot_Number = :l_numero_lot;
+      UPDATE Lots SET Biblio_Lot = :L_Nom_Bib_Lot WHERE Lot_Number = :P_Num_Lot;
 
     If sqlcode<>0;
       Retfield=*off;

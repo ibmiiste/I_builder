@@ -73,7 +73,7 @@
              /* On va rechercher le script standard PRE de création         */
              MONMSG     MSGID(PRZ0028) EXEC(DO)
                 CHGVAR     VAR(&PRESRCMBR) VALUE('STDSQL')
-                CHGVAR     VAR(&PREFICSRC) VALUE('QBLDSTDSRC')
+                CHGVAR     VAR(&PREFICSRC) VALUE('QBLDSCTSRC')
                 CHGVAR     VAR(&PREBIBSRC) VALUE('I_BUILDER')
                 GOTO       CMDLBL(STANDARD)
              ENDDO

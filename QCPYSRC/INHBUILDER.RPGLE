@@ -12,7 +12,7 @@
        Dcl-s r_Num_lot Packed(9:0) Template;
        Dcl-s r_Num_lot_carac Char(9) Template;
        Dcl-s r_Numero_msg char(7) Template;
-       Dcl-s r_Prefix Char(6) Template;
+       Dcl-s r_Prefix Char(1) Template;
        Dcl-s r_profil char(10) Template;
        Dcl-s r_qualified_name Char(20) Template;
        Dcl-s r_Target_release Char(10) Template;

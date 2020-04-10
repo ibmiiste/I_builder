@@ -173,8 +173,8 @@ Monitor;
   WHEN (PCHX = 'AF');
     // affichage
     ZMODE=WTXT4;
-    // aucune zone n'est saisisable
-    Protection = *ON;
+  // aucune zone n'est saisisable
+  Protection = *ON;
   WHEN (PCHX = 'CR');
     // création
     ZMODE=WTXT5;
@@ -189,34 +189,32 @@ Monitor;
   IF PNREC <> *BLANK;
     EXEC SQL
       --(--data-location--+-------------------------------------------+--)-><
-      SELECT Lot_Number,
-             Libelle_Lots,
-             Liste_Biblio_Projet,
-             Biblio_Lot,
-             Description_Lots,
-             Statuts_Lot,
-             DLURLCOMPLETE(Lien_Ticket),
-             DLURLCOMPLETE(Lien_Branche_Git),
-             Timecrt,
-             Usrcrt,
-             Timemaj,
-             Usrmaj,
-             Numero_Ticket
-        INTO :Numlot,
-             :Libellot,
-             :Listbibprj,
-             :Biblot,
-             :Descriplot,
-             :Statlot,
-             :Lnkticket :L_Null_Zlnkticket,
-             :Lnkgit :L_Null_Zlnkgit,
-             :Timecrt,
-             :Usrcrt,
-             :Timemaj,
-             :Usrmaj,
-             :jira
+      SELECT Lot_Number
+             ,Libelle_Lots
+             ,Liste_Biblio_Projet
+             ,Biblio_Lot
+             ,Description_Lots
+             ,Statuts_Lot
+             ,Dlurlcomplete(Lien_Ticket)
+             ,Dlurlcomplete(Lien_Branche_Git)
+             ,Timecrt
+             ,Usrcrt
+             ,Timemaj
+             ,Usrmaj
+        INTO :Numlot
+             ,:Libellot
+             ,:Listbibprj
+             ,:Biblot
+             ,:Descriplot
+             ,:Statlot
+             ,:Lnkticket :L_Null_Zlnkticket
+             ,:Lnkgit :L_Null_Zlnkgit
+             ,:Timecrt
+             ,:Usrcrt
+             ,:Timemaj
+             ,:Usrmaj
         FROM Lots
-        WHERE CHAR(RRN(Lots)) = :Pnrec;
+        WHERE CHAR(RRN(Lots)) = :Pnrec ;
     IF pchx = 'CR'
        OR pchx = 'CO';
       // en création ou copie zone non renseignée
@@ -228,7 +226,6 @@ Monitor;
     Zlibellot=Libellot;
     Zlistbibpr=Listbibprj;
     Zdescripl=Descriplot;
-    Zjira = jira;
     IF L_Null_Zlnkticket = c_SQL_null;
       Zlnkticket=*Blanks;
     Else;
@@ -261,7 +258,6 @@ Endmon;
 //
 *INLR = *ON;
 // Les procédures
-Dcl-proc TRTSCR;
 Dcl-proc TRTSCR;
   WRITE WMGCTL;
   // On écrit l'écran
@@ -310,24 +306,24 @@ Dcl-proc TRTSCR;
       IF Confirmer;
         // touche F15 on supprime si indicateur confirmation_suppression
         EXEC SQL
-          SELECT Lot_Number,
-                 Libelle_Lots,
-                 Liste_Biblio_Projet,
-                 Biblio_Lot,
-                 Description_Lots,
-                 Statuts_Lot,
-                 DLURLCOMPLETE(Lien_Ticket),
-                 DLURLCOMPLETE(Lien_Branche_Git)
-            INTO :Numlot,
-                 :Libellot,
-                 :Listbibprj,
-                 :Biblot,
-                 :Descriplot,
-                 :Statlot,
-                 :Lnkticket :L_Null_Zlnkticket,
-                 :Lnkgit :L_Null_Zlnkgit
+          SELECT Lot_Number
+                 ,Libelle_Lots
+                 ,Liste_Biblio_Projet
+                 ,Biblio_Lot
+                 ,Description_Lots
+                 ,Statuts_Lot
+                 ,Dlurlcomplete(Lien_Ticket)
+                 ,Dlurlcomplete(Lien_Branche_Git)
+            INTO :Numlot
+                 ,:Libellot
+                 ,:Listbibprj
+                 ,:Biblot
+                 ,:Descriplot
+                 ,:Statlot
+                 ,:Lnkticket :L_Null_Zlnkticket
+                 ,:Lnkgit :L_Null_Zlnkgit
             FROM Lots
-            WHERE CHAR(RRN(Lots)) = :Pnrec;
+            WHERE CHAR(RRN(Lots)) = :Pnrec ;
 
 
         If SQLcode=c_Trouve;
@@ -336,9 +332,7 @@ Dcl-proc TRTSCR;
           Savliblot(l_Num_lot_carac);
 
           EXEC SQL
-            UPDATE Lots
-              SET Statut_Enreg = 0
-              WHERE CHAR(RRN(Lots)) = :Pnrec;
+            UPDATE Lots SET Statut_Enreg = 0 WHERE CHAR(RRN(Lots)) = :Pnrec ;
         endif;
 
         l_traitenement_ecran = *OFF;
@@ -393,22 +387,22 @@ Dcl-proc VALID1;
   // La suppression se fait par la touche F15
   ELSE;
     EXEC SQL
-      SELECT Lot_Number,
-             Libelle_Lots,
-             Liste_Biblio_Projet,
-             Biblio_Lot,
-             Description_Lots,
-             Statuts_Lot,
-             DLURLCOMPLETE(Lien_Ticket),
-             DLURLCOMPLETE(Lien_Branche_Git)
-        INTO :Numlot,
-             :Libellot,
-             :Biblot,
-             :Listbibprj,
-             :Descriplot,
-             :Statlot,
-             :Lnkticket :L_Null_Zlnkticket,
-             :Lnkgit :L_Null_Zlnkgit
+      SELECT Lot_Number
+             ,Libelle_Lots
+             ,Liste_Biblio_Projet
+             ,Biblio_Lot
+             ,Description_Lots
+             ,Statuts_Lot
+             ,Dlurlcomplete(Lien_Ticket)
+             ,Dlurlcomplete(Lien_Branche_Git)
+        INTO :Numlot
+             ,:Libellot
+             ,:Biblot
+             ,:Listbibprj
+             ,:Descriplot
+             ,:Statlot
+             ,:Lnkticket :L_Null_Zlnkticket
+             ,:Lnkgit :L_Null_Zlnkgit
         FROM Lots
         WHERE Lot_Number = :Znumlot;
 
@@ -424,45 +418,39 @@ Dcl-proc VALID1;
       // on met à jour directement
       EXEC SQL
         UPDATE Lots
-          SET Libelle_Lots = :Zlibellot,
-              Liste_Biblio_Projet = :Zlistbibpr,
-              Description_Lots = :Zdescripl,
-              Lien_Ticket = DLVALUE(:Zlnkticket, 'URL'),
-              Lien_Branche_Git = DLVALUE(:Zlnkgit, 'URL'),
-              Usrcrt = :User, Numero_ticket = :zJira
-          WHERE Lot_Number = :Numlot;
+          SET Libelle_Lots = :Zlibellot
+              ,Liste_Biblio_Projet = :Zlistbibpr
+              ,Description_Lots = :Zdescripl
+              ,Lien_Ticket = DLVALUE(:Zlnkticket, 'URL')
+              ,Lien_Branche_Git = DLVALUE(:Zlnkgit, 'URL')
+              ,Usrcrt = :User
+          WHERE Lot_Number = :Numlot ;
     ELSE;
       // création
       EXEC SQL
-        INSERT INTO Lots (
-              Libelle_Lots,
-              Liste_Biblio_Projet,
-              Description_Lots,
-              Statuts_Lot,
-              Lien_Ticket,
-              Lien_Branche_Git,
-              Timecrt,
-              Usrcrt, Numero_ticket
-
-            )
-          VALUES
-            (
-              :Zlibellot,
-              :Zlistbibpr,
-              :Zdescripl,
-              'D',
-              DLVALUE(:Zlnkticket, 'URL'),
-              DLVALUE(:Zlnkgit, 'URL'),
-              Current_Timestamp,
-              :User, :zjira
-            );
+        INSERT INTO Lots(Libelle_Lots
+                         ,Liste_Biblio_Projet
+                         ,Description_Lots
+                         ,Statuts_Lot
+                         ,Lien_Ticket
+                         ,Lien_Branche_Git
+                         ,Timecrt
+                         ,Usrcrt)
+          VALUES ( :Zlibellot
+                  ,:Zlistbibpr
+                  ,:Zdescripl
+                  ,'D'
+                  ,DLVALUE(:Zlnkticket, 'URL')
+                  ,DLVALUE(:Zlnkgit, 'URL')
+                  ,CURRENT_TIMESTAMP
+                  ,:User) ;
 
       // On récupère le numéro du lot créé
       EXEC SQL
         SELECT MAX(Numlot)
           INTO :Numlot :L_Null
           FROM Lots;
-      gestion_bib_lot(zjira );
+      gestion_bib_lot(numlot);
     endif;
   ENDIF;
   l_traitenement_ecran = *OFF;

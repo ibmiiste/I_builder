@@ -26,16 +26,16 @@
      A                                      CHANGE(91)
      A                                      HLPCLR
      A          H
-     A                                      HLPARA(3 11 3 19)
+     A                                      HLPARA(4 11 4 19)
      A                                      HLPPNLGRP(FORE1 GSTPRJ20)
      A          H
-     A                                      HLPARA(5 2 5 129)
+     A                                      HLPARA(5 11 5 60)
      A                                      HLPPNLGRP(FORE1 GSTPRJ20)
      A          H
-     A                                      HLPARA(3 48 3 57)
+     A                                      HLPARA(4 88 4 98)
      A                                      HLPPNLGRP(FORE1 GSTPRJ20)
      A          H
-     A                                      HLPARA(3 89 3 98)
+     A                                      HLPARA(5 88 5 98)
      A                                      HLPPNLGRP(FORE1 GSTPRJ20)
      A          H
      A                                      HLPARA(7 3 22 130)
@@ -114,10 +114,6 @@
      A N14                                  DSPATR(UL)
      A  14                                  DSPATR(PR)
      A                                      CHECK(LC)
-     A                                  4  9'Numéro ticket'
-     A            ZJIRA          4N 0B  4 23COLOR(WHT)
-     A N14                                  DSPATR(UL)
-     A  14                                  DSPATR(PR)
      A          R WMGSFL                    SFL
      A                                      SFLMSGRCD(27)
      A            WMGKEY                    SFLMSGKEY
