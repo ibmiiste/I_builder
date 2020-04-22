@@ -439,8 +439,20 @@ DCL-PROC Ajout_clef_obj_sauv Export;
   Dcl-s L_Srcdst Like(r_Nom_obj_IBMi);
   Dcl-s l_Typobj Like(r_TypObj);
   Dcl-s l_Num_lot like(r_Num_lot);
+  // Environnement Origine
+  Dcl-s l_environnement Char(1);
+  // Bibliothèque Destination
+  Dcl-s l_BIBLIOTHEQUE_DESTINATION Like(r_Nom_obj_IBMi);
+
+  // Constantes locales
+  Dcl-c c_recette 'R';
 
   l_Num_lot=p_Num_lot;
+
+  Exec sql Select STATUTS_LOT
+             Into :l_environnement
+            From Lots
+           Where LOT_NUMBER = :L_Num_Lot;
 
   EXEC SQL
     CLOSE Csr_Obj_Sav;
@@ -448,7 +460,8 @@ DCL-PROC Ajout_clef_obj_sauv Export;
   EXEC SQL
     DECLARE Csr_Obj_Sav CURSOR FOR
       SELECT Objet_Destination,
-             Type_Objet
+             Type_Objet,
+             BIBLIOTHEQUE_DESTINATION
         FROM List_Objet_Build
         WHERE Lot_Number = :L_Num_Lot
               AND Type_Source <> 'SQL'
@@ -459,7 +472,8 @@ DCL-PROC Ajout_clef_obj_sauv Export;
 
   // Lecture des objets du lot à livrer
   EXEC SQL
-    FETCH Csr_Obj_Sav INTO :L_Objdst, :L_Typobj;
+    FETCH Csr_Obj_Sav INTO :L_Objdst, :L_Typobj, :l_BIBLIOTHEQUE_DESTINATION;
+
 
   // Alimentation du User Space avec l'entête de la partie clef=1 définition objet
   g_Objet_define=SavObjUspPtr;
@@ -473,6 +487,12 @@ DCL-PROC Ajout_clef_obj_sauv Export;
   // On place le pointeur de description d'objet sur le pointeur du user space de sauvegarde
   g_Objet_desc=SavObjUspPtr;
   Dow Sqlcode=c_Trouve;
+    If l_environnement = c_recette;
+      Cpyobj( l_BIBLIOTHEQUE_DESTINATION
+             :L_Objdst
+             :L_Typobj
+             :g_nom_biblio);
+    Endif;
 
     g_Nom_objet=L_Objdst;
     g_Type_objet=L_Typobj;
@@ -482,7 +502,7 @@ DCL-PROC Ajout_clef_obj_sauv Export;
 
 
     EXEC SQL
-      FETCH Csr_Obj_Sav INTO :L_Objdst, :L_Typobj;
+      FETCH Csr_Obj_Sav INTO :L_Objdst, :L_Typobj, :l_BIBLIOTHEQUE_DESTINATION;
   Enddo;
 
   // Ajout des sources SQL
