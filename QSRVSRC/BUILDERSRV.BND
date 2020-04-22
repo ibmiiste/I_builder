@@ -21,7 +21,8 @@
     /*                      &LI/CPYLSTOBJ +                          */
     /*                      &LI/CPYSRCLOT +                          */
     /*                      &LI/CPYMBRSRC +                          */
-    /*                      &LI/GSTERRSTR);                          */
+    /*                      &LI/GSTERRSTR +                          */
+    /*                      &LI/CPYOBJ);                             */
     /*     >>PARM<<  TEXT('Programme de service +                    */
     /*                     de l''outils i_builder');                 */
     /*     >>PARM<<  OPTION(*DUPPROC);                               */
@@ -56,4 +57,5 @@
              EXPORT     SYMBOL(Copie_liste_objet_a_livres)
              EXPORT     SYMBOL(Copie_sources)
              EXPORT     SYMBOL(CPYMBRSRC)
+             EXPORT     SYMBOL(CPYOBJ)
              ENDPGMEXP
