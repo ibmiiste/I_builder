@@ -10,6 +10,7 @@
 //     >>PARM<<  DATFMT(*ISO);                                   */
 //     >>PARM<<  TIMFMT(*ISO);                                   */
 //     >>PARM<<  COMMIT(*NONE);                                  */
+//     >>PARM<<  DBGVIEW(*SOURCE);                               */
 //     >>PARM<<  COMPILEOPT(&U0);                                */
 //   >>END-IMPORTANT<<                                           */
 // >>EXECUTE<<                                                   */
@@ -363,27 +364,16 @@ begsr trtsfl;
 
   if Livraison_production;
     g_optimize='*FULL';
-    Testlot(g_Num_lot);
+    Copie_sources(g_Num_lot);
     builder( g_Num_lot
-            :g_lib_lot
+            :''
             :''
             :g_optimize
             :'1'
             :'CICA98'
             :'DRUBIGNY'
             :'DANIEL1E01');
-    Copie_sources(g_Num_lot);
-    g_optimize='*NONE';
-    builder( g_Num_lot
-            :''
-            :''
-            :g_optimize
-            :''
-            :''
-            :''
-            :'');
-    RMVlot(g_Num_lot);
-    EXEC SQL
+   EXEC SQL
       UPDATE Lots SET Statlot = 'P' WHERE Lot_Number = :G_Num_Lot;
   EndIf;
 
