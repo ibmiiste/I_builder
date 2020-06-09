@@ -25,15 +25,15 @@
     /*                      &LI/CPYOBJ);                             */
     /*     >>PARM<<  TEXT('Programme de service +                    */
     /*                     de l''outils i_builder');                 */
+    /*     >>PARM<<  BNDDIR(I_BUILDER);                              */
     /*     >>PARM<<  OPTION(*DUPPROC);                               */
     /*     >>PARM<<  TGTRLS(*CURRENT);                               */
-    /*     >>PARM<<  BNDSRVPGM(LAUNCHSRV);                           */
     /*     >>PARM<<  DETAIL(*FULL);                                  */
     /*     >>PARM<<  ALWLIBUPD(*YES);                                */
     /*   >>END-IMPORTANT<<                                           */
-    /*   >>CMD<<  RMVLIBLE I_BUILDER;                                */
+    /*   >>CMD<<  RMVBNDDIRE BNDDIR(I_BUILDER) OBJ((&LI/&SM));       */
     /*   >>EXECUTE<<                                                 */
-    /*   >>CMD<<  ADDLIBLE I_BUILDER;                                */
+    /*   >>CMD<<  ADDBNDDIRE BNDDIR(I_BUILDER) OBJ((&LI/&SM));       */
     /* >>END-PRE-COMPILER<<                                          */
              STRPGMEXP  PGMLVL(*CURRENT) LVLCHK(*YES) SIGNATURE('20190219')
              EXPORT     SYMBOL(EXISTS)
