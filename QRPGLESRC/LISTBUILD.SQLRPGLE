@@ -373,11 +373,7 @@ begsr trtsfl;
             :'CICA98'
             :'DRUBIGNY'
             :'DANIEL1E01');
-<<<<<<< HEAD
-    EXEC SQL
-=======
-   EXEC SQL
->>>>>>> branche 'master' de https://github.com/ibmiiste/I_builder.git
+    EXEC SQL 
       UPDATE Lots SET Statlot = 'P' WHERE Lot_Number = :G_Num_Lot;
   EndIf;
 
