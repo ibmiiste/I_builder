@@ -1,0 +1,25 @@
+             PGM        PARM(&BIBORI &OBJORI &TYPOBJ &BIBDST)
+
+             DCL        VAR(&BIBORI) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&OBJORI) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&TYPOBJ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&BIBDST) TYPE(*CHAR) LEN(10)
+             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Copie d''un objet +
+                          d''une bib à une autre') BNDDIR(I_BUILDER)
+
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
+
+             CHKOBJ     OBJ(&BIBDST/&OBJORI) OBJTYPE(&TYPOBJ)
+             MONMSG     MSGID(CPF9801) EXEC(GOTO CMDLBL(COPYOBJ))
+             DLTOBJ     OBJ(&BIBDST/&OBJORI) OBJTYPE(&TYPOBJ)
+ COPYOBJ:    CRTDUPOBJ  OBJ(&OBJORI) FROMLIB(&BIBORI) +
+                          OBJTYPE(&TYPOBJ) TOLIB(&BIBDST)
+             GOTO       CMDLBL(FIN)
+
+ ERREUR:     DMPCLPGM
+             CALLPRC    PRC(GEST_ERREUR)
+
+
+ FIN:        RETURN
+             ENDPGM
+

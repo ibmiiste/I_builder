@@ -653,3 +653,22 @@ DCL-PR CPYMBRSRC;
    p_Fichier_source_destination Like(r_Nom_obj_IBMi);
    p_Membre_source_destination LIKE(r_Nom_obj_IBMi);
 END-Pr ;
+
+// Copie d'un objet d'un endroit à un autre
+//---------------------------------------------------------------
+// --------------------------------------------------
+// Procedure name: CPYOBJ
+// Purpose:        Copie un objet d'une bib à une autre
+//
+// Returns:
+// Parameter:      p_Bib_origine => Bibliothèque d'origine de l'objet
+// Parameter:      p_obj_origine => Nom de l'objet d'origine
+// Parameter:      p_typ_origine => Type de l'objet d'origine
+// Parameter:      p_Bib_destination => Bibliothèque de destination
+// --------------------------------------------------
+DCL-PR CPYOBJ;
+   p_Bib_origine Like(r_Nom_obj_IBMi);
+   p_obj_origine Like(r_Nom_obj_IBMi);
+   p_typ_origine Like(R_TypObj);
+   p_Bib_destination Like(r_Nom_obj_IBMi);
+END-Pr ;
