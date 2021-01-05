@@ -8,11 +8,20 @@
       /*   >>EXECUTE<<                                                    */
       /* >>END-PRE-COMPILER<<                                             */
 
-             PGM        PARM(&PREBIBSRC &PREFICSRC &PRESRCMBR &BIBDST &OBJDST +
-                          &TYPOBJ &BIBSRC &FICSRC &MBRSRC &LISTBIB &GESTDATA)
+             PGM        PARM(&PREBIBSRCP &PREFICSRCP &PRESRCMBRP &BIBDSTP &OBJDSTP +
+                          &TYPOBJP &BIBSRCP &FICSRCP &MBRSRCP &LISTBIB &GESTDATA)
 
 
 
+             DCL        VAR(&PREBIBSRCP) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&PREFICSRCP) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&PRESRCMBRP) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&BIBDSTP) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&OBJDSTP) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&TYPOBJP) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&BIBSRCP) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&FICSRCP) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&MBRSRCP) TYPE(*CHAR) LEN(10)
              DCL        VAR(&PREBIBSRC) TYPE(*CHAR) LEN(10)
              DCL        VAR(&PREFICSRC) TYPE(*CHAR) LEN(10)
              DCL        VAR(&PRESRCMBR) TYPE(*CHAR) LEN(10)
@@ -35,6 +44,16 @@
                           STRPREPRC')
 
              MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
+
+             CHGVAR     VAR(&PREBIBSRC) VALUE(&PREBIBSRCP)
+             CHGVAR     VAR(&PREFICSRC) VALUE(&PREFICSRCP)
+             CHGVAR     VAR(&PRESRCMBR) VALUE(&PRESRCMBRP)
+             CHGVAR     VAR(&BIBDST) VALUE(&BIBDSTP)
+             CHGVAR     VAR(&OBJDST) VALUE(&OBJDSTP)
+             CHGVAR     VAR(&TYPOBJ) VALUE(&TYPOBJP)
+             CHGVAR     VAR(&BIBSRC) VALUE(&BIBSRCP)
+             CHGVAR     VAR(&FICSRC) VALUE(&FICSRCP)
+             CHGVAR     VAR(&MBRSRC) VALUE(&MBRSRCP)
 
              /* Récupération du type de source                             */
              RTVMBRD    FILE(&BIBSRC/&FICSRC) MBR(&MBRSRC *SAME) SRCTYPE(&TYPSRC)
@@ -73,7 +92,7 @@
              /* On va rechercher le script standard PRE de création         */
              MONMSG     MSGID(PRZ0028) EXEC(DO)
                 CHGVAR     VAR(&PRESRCMBR) VALUE('STDSQL')
-                CHGVAR     VAR(&PREFICSRC) VALUE('QBLDSCTSRC')
+                CHGVAR     VAR(&PREFICSRC) VALUE('QBLDSTDSRC')
                 CHGVAR     VAR(&PREBIBSRC) VALUE('I_BUILDER')
                 GOTO       CMDLBL(STANDARD)
              ENDDO
