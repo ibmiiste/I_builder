@@ -125,10 +125,9 @@ CRTSAVF:     CHGVAR     VAR(&SAVF) VALUE('S' *TCAT &NUMLOTC)
              /* destination                                                            */
              /*CHGVAR     VAR(&CMD) VALUE('CALL' *BCAT &BIBLIO *TCAT '/RSTOBJSQL +
                           PARM(''' *TCAT &NUMLOTC *TCAT ''')')        */
-             CHGVAR     VAR(&CMD) VALUE('SBMJOB CMD(CALL' *BCAT +
-                          &BIBLIO *TCAT '/RSTOBJSQL PARM(''' *TCAT +
-                          &NUMLOTC *TCAT ''')) JOB(R' *TCAT &NUMLOTC *TCAT ') +
-                          HOLD(*YES)')
+             CHGVAR     VAR(&CMD) VALUE('SBMJOB CMD(CALL' *BCAT &BIBLIO *TCAT +
+                          '/RSTOBJSQL PARM(''' *TCAT &NUMLOTC *TCAT ''')) JOB(R' +
+                          *TCAT &NUMLOTC *TCAT ') HOLD(*YES) LOG(4 0 *SECLVL)')
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) +
                           RMTPWD(&MDP)
              MONMSG     MSGID(CPF91CF) EXEC(DO)
