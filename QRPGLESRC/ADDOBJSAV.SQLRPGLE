@@ -15,6 +15,8 @@
 //     >>PARM<<  COMPILEOPT(&U0);                               //
 //   >>END-IMPORTANT<<                                          //
 //   >>EXECUTE<<                                                //
+//   >>CMD<<  UPDSRVPGM SRVPGM(&LI/BUILDERSRV) +                //
+//                      MODULE(&LI/&OB);                        //
 // >>END-PRE-COMPILER<<                                         //
 
 // Spécification de contrôles
@@ -435,6 +437,8 @@ DCL-PROC Ajout_clef_obj_sauv Export;
     p_Num_lot like(r_Num_lot);
   END-PI;
 
+  // Requête dynamique
+  Dcl-s l_requete_sql Char(1024);
   Dcl-s l_Objdst Like(r_Nom_obj_IBMi);
   Dcl-s L_Srcdst Like(r_Nom_obj_IBMi);
   Dcl-s l_Typobj Like(r_TypObj);
@@ -457,15 +461,19 @@ DCL-PROC Ajout_clef_obj_sauv Export;
   EXEC SQL
     CLOSE Csr_Obj_Sav;
 
+   l_requete_sql='SELECT Objet_Destination,' +
+                         ' Type_Objet,' +
+                         ' BIBLIOTHEQUE_DESTINATION' +
+                   ' FROM L' + %editc(L_Num_Lot:'X') +
+                       '.O' +  %editc(L_Num_Lot:'X') +
+                    ' WHERE Lot_Number = ' + %char( L_Num_Lot) +
+                    ' AND Type_Source <> ''SQL''' +
+                    ' ORDER BY Ordre';
+
+  EXEC SQL PREPARE Select_dyn_obj FROM :l_requete_sql;
+
   EXEC SQL
-    DECLARE Csr_Obj_Sav CURSOR FOR
-      SELECT Objet_Destination,
-             Type_Objet,
-             BIBLIOTHEQUE_DESTINATION
-        FROM List_Objet_Build
-        WHERE Lot_Number = :L_Num_Lot
-              AND Type_Source <> 'SQL'
-        ORDER BY Ordre;
+    DECLARE Csr_Obj_Sav CURSOR FOR Select_dyn_obj;
 
   EXEC SQL
     OPEN Csr_Obj_Sav;
@@ -509,12 +517,16 @@ DCL-PROC Ajout_clef_obj_sauv Export;
   EXEC SQL
     CLOSE Csr_Sql_Sav;
 
+  l_requete_sql='SELECT DISTINCT Fichier_Source ' +
+                 ' FROM L' + %editc(L_Num_Lot:'X') +
+                       '.O' +  %editc(L_Num_Lot:'X') +
+                ' WHERE Lot_Number = ' + %char( L_Num_Lot)  +
+                  ' AND Type_Source = ''SQL''';
+
+  EXEC SQL PREPARE Select_dyn_sql FROM :l_requete_sql;
+
   EXEC SQL
-    DECLARE Csr_Sql_Sav CURSOR FOR
-      SELECT DISTINCT Fichier_Source
-        FROM List_Objet_Build
-        WHERE Lot_Number = :L_Num_Lot
-              AND Type_Source = 'SQL';
+    DECLARE Csr_Sql_Sav CURSOR FOR Select_dyn_sql;
 
   EXEC SQL
     OPEN Csr_Sql_Sav;
