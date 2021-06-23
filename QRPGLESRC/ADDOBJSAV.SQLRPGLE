@@ -236,6 +236,7 @@ Dcl-proc Sauv_obj_lot Export;
   // main function
   // Procédure principale
 
+  Exec sql Set option commit=*None;
 
   monitor;
 
@@ -513,6 +514,7 @@ DCL-PROC Ajout_clef_obj_sauv Export;
       FETCH Csr_Obj_Sav INTO :L_Objdst, :L_Typobj, :l_BIBLIOTHEQUE_DESTINATION;
   Enddo;
 
+
   // Ajout des sources SQL
   EXEC SQL
     CLOSE Csr_Sql_Sav;
@@ -567,6 +569,10 @@ DCL-PROC Ajout_clef_obj_sauv Export;
 
   EXEC SQL
     CLOSE Csr_Obj_Sav;
+
+  // Ajout des sources SQL
+  EXEC SQL
+    CLOSE Csr_Sql_Sav;
 
   return ;
 END-PROC ;

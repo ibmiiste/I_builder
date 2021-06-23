@@ -47,6 +47,8 @@ DCL-PROC Copie_liste_objet_a_livres Export;
 
   Dcl-s l_requete_sql Char(1024);
 
+  Exec sql Set option commit=*None;
+
   Monitor;
     If %Parms= 1;
       l_requete_sql='Create Table L' + %editc(p_Numero_lot:'X') +
