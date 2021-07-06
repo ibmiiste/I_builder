@@ -68,7 +68,9 @@ DCL-PROC gestion_bib_lot EXPORT;
     EndIf;
 
     EXEC SQL
-      UPDATE Lots SET Biblio_Lot = :L_Nom_Bib_Lot WHERE Lot_Number = :P_Num_Lot;
+      UPDATE Lots
+        SET Biblio_Lot = :L_Nom_Bib_Lot
+        WHERE Lot_Number = :P_Num_Lot;
 
     If sqlcode<>0;
       Retfield=*off;
@@ -83,3 +85,59 @@ DCL-PROC gestion_bib_lot EXPORT;
 
   RETURN retfield ;
 END-PROC ;
+
+
+
+// --------------------------------------------------
+// Procedure name: miseEnLigneListeBibsLot
+// Purpose:        Mise en ligne de la liste de bibliothèque du lot
+// Returns:
+// Parameter:      P_Numero_Lot => Numéro de lot de développement
+// --------------------------------------------------
+Dcl-Proc miseEnLigneListeBibsLot EXPORT;
+  Dcl-Pi *N IND;
+    P_Numero_Lot LIKE(r_Numero_lot);
+  End-Pi;
+
+  // Proptotype programme Externe
+  Dcl-pr miseEnLigneListeBibs Extpgm(POSLSTLIB);
+    p_Save_or_restore Char(4);
+    p_Nom_liste Char(10);
+    p_Bibliotheque Char(10);
+    p_Current_Library Char(4);
+  END-PR;
+
+  // Local fields
+  Dcl-S l_Code_Retour IND Inz(*On);
+  Dcl-S l_Liste_Biblio_Projet Char(10);
+
+
+  Dcl-c C_SAVE_OR_RESTORE '*RST';
+  Dcl-c C_CURRENT_LIBRARY '*NO';
+  Dcl-c C_BIBLIOTHEQUE  '*NONE';
+
+  // Calculation specifications
+  Monitor;
+    EXEC SQL
+      SELECT Liste_Biblio_Projet
+        INTO :L_Liste_Biblio_Projet
+        FROM Lots
+        WHERE Lot_Number = :P_Numero_Lot;
+
+    If sqlcode<>0;
+      l_Code_Retour=*off;
+    Else;
+
+      miseEnLigneListeBibs( C_SAVE_OR_RESTORE
+                           :L_Liste_Biblio_Projet
+                           :C_BIBLIOTHEQUE
+                           :C_CURRENT_LIBRARY);
+    EndIf;
+
+  On-error;
+    l_Code_Retour=*off;
+  ENdmon;
+
+  return l_Code_Retour;
+End-Proc;
+
