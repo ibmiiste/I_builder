@@ -4,12 +4,12 @@
 //                 SRCMBR(&SM);
 //   >>IMPORTANT<<
 //     >>PARM<<  OPTION(*EVENTF);
-//     >>PARM<<  DBGVIEW(*ALL);
-//     >>PARM<<  OPTIMIZE(&U0);
+//     >>PARM<<  DBGVIEW(*LIST);
 //     >>PARM<<  TRUNCNBR(*NO);
 //   >>END-IMPORTANT<<
 //   >>EXECUTE<<
 // >>END-PRE-COMPILER<<
+
 ctl-opt nomain debug;
 
 // Déclaration des fichiers
@@ -97,136 +97,136 @@ end-ds;
 dcl-s mail char(320);
 
 // Héritages des types
- /copy QCPYSRC,Inhbuilder
+/copy QCPYSRC,Inhbuilder
 
 // Constantes
 
 // Fonctions locales
 dcl-proc gest_erreur export;
 
-dcl-pi gest_erreur end-pi;
+  dcl-pi gest_erreur end-pi;
 
-// DS locales
+  // DS locales
 
-// Variables locales
+  // Variables locales
 
-dcl-ds MsgBack likeds(rcvm0300) inz;
-dcl-s InfoPtr pointer;
-dcl-ds MsgInfo likeds(rcvm0300sndrcvinfo) based(infoptr);
-dcl-s i int(10);
-dcl-s SetMsgKey char(4) inz(*allx'00');
-dcl-s BufferHandle int(10);
-dcl-s BytesReturned int(10);
-dcl-s DataPtr pointer;
-dcl-ds CatchScreen likeds(screenin) based(dataptr);
+  dcl-ds MsgBack likeds(rcvm0300) inz;
+  dcl-s InfoPtr pointer;
+  dcl-ds MsgInfo likeds(rcvm0300sndrcvinfo) based(infoptr);
+  dcl-s i int(10);
+  dcl-s SetMsgKey char(4) inz(*allx'00');
+  dcl-s BufferHandle int(10);
+  dcl-s BytesReturned int(10);
+  dcl-s DataPtr pointer;
+  dcl-ds CatchScreen likeds(screenin) based(dataptr);
 
   // Fonction principale
   Monitor;
 
-  Open ErrorLst;
-  Open MailInfol2;
-  Write Head;
-  ReceiveMsg(  MsgBack
-  : %size(MsgBack)
-  : 'RCVM0300'
-  : '*'
-  : 1
-  : '*PRV'
-  : SetMsgKey
-  : 0
-  : '*SAME'
-  : APIError);
-  If MsgBack.ByteAvail > 0;
-  MsgText = %SubSt(MsgBack.MsgData:
-  MsgBack.LenReplace1 + 1:
-  MsgBack.LenMsgReturn);
-  HlpText = %SubSt(MsgBack.MsgData:
-  MsgBack.LenReplace1 +
-  MsgBack.LenMsgReturn + 1:
-  MsgBack.LenHelpReturn);
-  InfoPtr = %Addr(MsgBack.MsgData)
-  + MsgBack.LenReplace1
-  + MsgBack.LenMsgReturn
-  + MsgBack.LenHelpReturn;
-  Program = MsgInfo.ReceivingPgm;
-  Module = MsgInfo.ReceivingModule;
-Proced = MsgInfo.ReceivingProcedure;
-Statement = MsgInfo.StateNosReceiving;
+    Open ErrorLst;
+    Open MailInfol2;
+    Write Head;
+    ReceiveMsg(  MsgBack
+    : %size(MsgBack)
+    : 'RCVM0300'
+    : '*'
+    : 1
+    : '*PRV'
+    : SetMsgKey
+    : 0
+    : '*SAME'
+    : APIError);
+    If MsgBack.ByteAvail > 0;
+      MsgText = %SubSt(MsgBack.MsgData:
+      MsgBack.LenReplace1 + 1:
+      MsgBack.LenMsgReturn);
+      HlpText = %SubSt(MsgBack.MsgData:
+      MsgBack.LenReplace1 +
+      MsgBack.LenMsgReturn + 1:
+      MsgBack.LenHelpReturn);
+      InfoPtr = %Addr(MsgBack.MsgData)
+      + MsgBack.LenReplace1
+      + MsgBack.LenMsgReturn
+      + MsgBack.LenHelpReturn;
+      Program = MsgInfo.ReceivingPgm;
+      Module = MsgInfo.ReceivingModule;
+      Proced = MsgInfo.ReceivingProcedure;
+      Statement = MsgInfo.StateNosReceiving;
 
-Write Detail;
-If OverFlow;
-Write Head;
-  OverFlow = *Off;
-  EndIf;
-  EndIf;
+      Write Detail;
+      If OverFlow;
+        Write Head;
+        OverFlow = *Off;
+      EndIf;
+    EndIf;
 
-  BufferHandle = CreateInputBuffer( 27 * 132
-  : *Omit
-  : *Omit
-  : *Omit
-  : APIError );
-  If APIError.BytesAvail = 0;
-  BytesReturned = ReadScreen( *Omit
-  : BufferHandle
-  : *Omit
-  : *Omit
-  : *Omit );
-  DataPtr = RetrieveDataPtr( BufferHandle
-  : *Omit
-  : *Omit );
-  ScreenIn = %SubSt(CatchScreen:1:BytesReturned);
-  For i = 1 to BytesReturned;
-  If (%SubSt(ScreenIn:i:1) > x'19') And
-  (%SubSt(ScreenIn:i:1) < x'40');
-  %SubSt(ScreenIn:i:1) = *Blank;
-  EndIf;
-  EndFor;
+    BufferHandle = CreateInputBuffer( 27 * 132
+    : *Omit
+    : *Omit
+    : *Omit
+    : APIError );
+    If APIError.BytesAvail = 0;
+      BytesReturned = ReadScreen( *Omit
+      : BufferHandle
+      : *Omit
+      : *Omit
+      : *Omit );
+      DataPtr = RetrieveDataPtr( BufferHandle
+      : *Omit
+      : *Omit );
+      ScreenIn = %SubSt(CatchScreen:1:BytesReturned);
+      For i = 1 to BytesReturned;
+        If (%SubSt(ScreenIn:i:1) > x'19') And
+        (%SubSt(ScreenIn:i:1) < x'40');
+          %SubSt(ScreenIn:i:1) = *Blank;
+        EndIf;
+      EndFor;
 
-  If BytesReturned = 1920;
-  Write Screen80;
-  Else;
-  Write Screen132;
-  EndIf;
-  EndIf;
-  Write Footer;
-  mail=adress_mail();
-  Close ErrorLst;
-  Close MailInfol2;
-  Mailerr(   program
-  : module
-  : proced
-  : statement
-  : mail);
+      If BytesReturned = 1920;
+        Write Screen80;
+      Else;
+        Write Screen132;
+      EndIf;
+    EndIf;
+    Write Footer;
+    mail=adress_mail();
+    Close ErrorLst;
+    Close MailInfol2;
+    Mailerr(   program
+    : module
+    : proced
+    : statement
+    : mail);
   On-error *all;
-  dsply 'Arrrrgghhhh!!!!';
+    dsply 'Arrrrgghhhh!!!!';
   endmon;
 
   return;
-  end-proc;
+end-proc;
 
-  dcl-proc adress_mail;
+dcl-proc adress_mail;
   dcl-pi adress_mail char(320) end-pi;
   // Variables locales
   dcl-s l_Adress_Mail char(320);
 
-    reference=program;
+  reference=program;
+  setll reference mailinfol2;
+  if %equal();
+    l_Adress_Mail=Comp_Adr(reference);
+  else;
+    reference='defaut';
     setll reference mailinfol2;
     if %equal();
       l_Adress_Mail=Comp_Adr(reference);
-    else;
-      reference='defaut';
-      setll reference mailinfol2;
-      if %equal();
-        l_Adress_Mail=Comp_Adr(reference);
-      endif;
     endif;
+  endif;
 
-    return l_Adress_Mail;
+  return l_Adress_Mail;
 
 
-  end-proc;
+end-proc;
 
-  dcl-proc Comp_Adr;
+dcl-proc Comp_Adr;
   dcl-pi Comp_Adr char(320);
     reference char(10);
   end-pi;
@@ -236,14 +236,14 @@ Write Head;
     t_Adress_Mail char(32) dim(10) overlay(l_adress_mail);
   end-ds;
   dcl-s i packed(3);
-    reset l_adress_mail;
+  reset l_adress_mail;
+  reade reference mailinfol2;
+  i=0;
+  dow not %eof();
+    i+=1;
+    t_adress_mail(i)=AdrMail;
     reade reference mailinfol2;
-    i=0;
-    dow not %eof();
-      i+=1;
-      t_adress_mail(i)=AdrMail;
-      reade reference mailinfol2;
-    enddo;
-    return l_adress_mail;
+  enddo;
+  return l_adress_mail;
 
-  end-proc;
+end-proc;

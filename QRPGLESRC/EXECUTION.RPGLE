@@ -1,15 +1,15 @@
 **FREE
-// >>PRE-COMPILER<<                                              */
-//   >>CRTCMD<<  CRTRPGMOD MODULE(&LI/&OB) SRCFILE(&SL/&SF) +    */
-//                 SRCMBR(&SM);                                  */
-//   >>IMPORTANT<<                                               */
-//     >>PARM<<  OPTION(*EVENTF);                                */
-//     >>PARM<<  DBGVIEW(*LIST);                                 */
-//     >>PARM<<  OPTIMIZE(&U0);                                  */
-//     >>PARM<<  TRUNCNBR(*NO);                                  */
-//   >>END-IMPORTANT<<                                           */
-//   >>EXECUTE<<                                                 */
-// >>END-PRE-COMPILER<<                                          */
+// >>PRE-COMPILER<<
+//   >>CRTCMD<<  CRTRPGMOD MODULE(&LI/&OB) SRCFILE(&SL/&SF) +
+//                 SRCMBR(&SM);
+//   >>IMPORTANT<<
+//     >>PARM<<  OPTION(*EVENTF);
+//     >>PARM<<  DBGVIEW(*LIST);
+//     >>PARM<<  TRUNCNBR(*NO);
+//   >>END-IMPORTANT<<
+//   >>EXECUTE<<
+// >>END-PRE-COMPILER<<
+
 
 /copy Qcpysrc,cpyctlstm
 

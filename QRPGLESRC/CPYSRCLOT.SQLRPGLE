@@ -1,4 +1,18 @@
 **FREE
+// >>PRE-COMPILER<<
+//   >>CRTCMD<<  CRTSQLRPGI SRCFILE(&SL/&SF) SRCMBR(&SM);
+//   >>IMPORTANT<<
+//     >>PARM<<  OBJ(&LI/&OB);
+//     >>PARM<<  OBJTYPE(*MODULE);
+//     >>PARM<<  OPTION(*EVENTF);
+//     >>PARM<<  RPGPPOPT(*LVL2);
+//     >>PARM<<  CLOSQLCSR(*ENDACTGRP);
+//     >>PARM<<  DATFMT(*ISO);
+//     >>PARM<<  TIMFMT(*ISO);
+//   >>END-IMPORTANT<<
+//   >>EXECUTE<<
+// >>END-PRE-COMPILER<<
+
 /copy qcpysrc,cpyctlstm
 Ctl-opt bnddir('I_BUILDER');
 
@@ -149,7 +163,7 @@ DCL-PROC Ouvrir_curseur_list_obj;
             'Attribut_Objet ' +
        'FROM List_Objet_Build ' +
        'WHERE Lot_Number = ' + %Char(P_Num_Lot)
-       ;
+  ;
 
   If %Parms = 2;
     l_requete=l_requete + ' And OBJ_NUMBER = ' + %Char(p_Objet_number) +
@@ -193,8 +207,14 @@ DCL-PROC Lecture_curseur_list_obj ;
 
   EXEC SQL
     FETCH Csr_List_Obj
-      INTO :P_Num_Lot , :P_Bibsrc, :P_Ficsrc, :P_Mbrsrc, :P_Bibdst, :P_Objdst, :P_Typobj,
-        :P_Attribut_Objet;
+      INTO :P_Num_Lot,
+           :P_Bibsrc,
+           :P_Ficsrc,
+           :P_Mbrsrc,
+           :P_Bibdst,
+           :P_Objdst,
+           :P_Typobj,
+           :P_Attribut_Objet;
 
   return Sqlcode ;
 END-PROC ;
