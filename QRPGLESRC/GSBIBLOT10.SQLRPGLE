@@ -96,11 +96,11 @@ END-PROC ;
 // --------------------------------------------------
 Dcl-Proc miseEnLigneListeBibsLot EXPORT;
   Dcl-Pi *N IND;
-    P_Numero_Lot LIKE(r_Numero_lot);
+    P_Numero_Lot LIKE(r_Num_lot);
   End-Pi;
 
   // Proptotype programme Externe
-  Dcl-pr miseEnLigneListeBibs Extpgm(POSLSTLIB);
+  Dcl-pr miseEnLigneListeBibs Extpgm('POSLSTLIB');
     p_Save_or_restore Char(4);
     p_Nom_liste Char(10);
     p_Bibliotheque Char(10);
@@ -112,9 +112,9 @@ Dcl-Proc miseEnLigneListeBibsLot EXPORT;
   Dcl-S l_Liste_Biblio_Projet Char(10);
 
 
-  Dcl-c C_SAVE_OR_RESTORE '*RST';
-  Dcl-c C_CURRENT_LIBRARY '*NO';
-  Dcl-c C_BIBLIOTHEQUE  '*NONE';
+  Dcl-s l_save_or_restore Char(4) Inz('*RST');
+  Dcl-s l_current_library Char(4) Inz('*NO');
+  Dcl-s l_bibliotheque  Char(10) Inz('*NONE');
 
   // Calculation specifications
   // Récupération du nom de la liste de bibliothèque du lot
@@ -129,10 +129,10 @@ Dcl-Proc miseEnLigneListeBibsLot EXPORT;
       l_Code_Retour=*off;
     Else;
       // S'il y a un nom de liste de bibliothèque dans ce lot, on la met en ligne
-      miseEnLigneListeBibs( C_SAVE_OR_RESTORE
+      miseEnLigneListeBibs( l_save_or_restore
                            :L_Liste_Biblio_Projet
-                           :C_BIBLIOTHEQUE
-                           :C_CURRENT_LIBRARY);
+                           :l_bibliotheque
+                           :l_current_library);
     EndIf;
 
   On-error;
