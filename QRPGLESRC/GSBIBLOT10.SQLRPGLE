@@ -117,6 +117,7 @@ Dcl-Proc miseEnLigneListeBibsLot EXPORT;
   Dcl-c C_BIBLIOTHEQUE  '*NONE';
 
   // Calculation specifications
+  // Récupération du nom de la liste de bibliothèque du lot
   Monitor;
     EXEC SQL
       SELECT Liste_Biblio_Projet
@@ -127,7 +128,7 @@ Dcl-Proc miseEnLigneListeBibsLot EXPORT;
     If sqlcode<>0;
       l_Code_Retour=*off;
     Else;
-
+      // S'il y a un nom de liste de bibliothèque dans ce lot, on la met en ligne
       miseEnLigneListeBibs( C_SAVE_OR_RESTORE
                            :L_Liste_Biblio_Projet
                            :C_BIBLIOTHEQUE
