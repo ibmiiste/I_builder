@@ -25,7 +25,7 @@
     /*                      &LI/CPYOBJ);                             */
     /*     >>PARM<<  TEXT('Programme de service +                    */
     /*                     de l''outils i_builder');                 */
-    /*     >>PARM<<  BNDDIR(I_BUILDER);                              */
+    /*     >>PARM<<  BNDDIR(I_BUILDER SERVICE);                      */
     /*     >>PARM<<  OPTION(*DUPPROC);                               */
     /*     >>PARM<<  TGTRLS(*CURRENT);                               */
     /*     >>PARM<<  DETAIL(*FULL);                                  */
