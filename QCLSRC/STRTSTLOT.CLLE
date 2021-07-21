@@ -12,7 +12,6 @@
              DCL        VAR(&BIBLOT) TYPE(*CHAR) LEN(10)
              DCL        VAR(&NUMLOTC) TYPE(*CHAR) LEN(9)
              DCL        VAR(&INT) TYPE(*INT) LEN(2)
-             DCL        VAR(&CODERETOUR) TYPE(*LGL)
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Mise en ligne de l''environnement du +
                           lot') BNDDIR(I_BUILDER)
 
@@ -31,12 +30,6 @@
                           est déjà en cours'))
              MONMSG     MSGID(CPF2110) EXEC(SNDPGMMSG MSG('Ce lot n''est plus +
                           disponible ou n''existe pas'))
-
-             CALLPRC    PRC(MISEENLIGNELISTEBIBSLOT) PARM((&NUMLOT)) +
-                          RTNVAL(&CODERETOUR)
-             IF         COND(&CODERETOUR *EQ '0') THEN(SNDPGMMSG MSG('La mise en +
-                          ligne de la liste de bibliothèque s''est mal passée'))
-
              GOTO       CMDLBL(FIN)
 
  ERREUR:     DMPCLPGM
