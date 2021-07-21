@@ -75,19 +75,14 @@
      A            WRACSR         5S 0H
      A            WRAN01         4S 0H      SFLRCDNBR
      A            ZPGM          10   O  1  2
-     A                                      OVRDTA
      A                                  1 55'Liste des objets'
      A                                      COLOR(WHT)
      A            ZUSER         10   O  1112
-     A                                      OVRDTA
      A            ZDATE          8  0O  1 14
      A                                      EDTWRD('  /  /    ')
-     A                                      OVRDTA
      A            ZHEUR          6  0O  1 25
      A                                      EDTWRD('  :  :  ')
-     A                                      OVRDTA
      A            ZJOB          10   O  1123
-     A                                      OVRDTA
      A                                  3  3'Indiquez vos options, puis appuyez-
      A                                       sur ENTREE.'
      A                                      COLOR(BLU)
@@ -96,7 +91,6 @@
      A                                  5  3'Selection par nom :'
      A            ZSOBJET       10   B  5 23
      A                                      COLOR(WHT)
-     A                                      OVRDTA
      A                                  6  2'Op Ordre  Nom objet  Bib.Dest.  Ty-
      A                                      p.obj.   Description de l''objet   --
      A                                                                 Bib.sour-

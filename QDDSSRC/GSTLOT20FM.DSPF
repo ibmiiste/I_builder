@@ -21,7 +21,6 @@
      A                                      CF12
      A                                      CF15
      A                                      RTNCSRLOC(&WFMCUR &WZOCUR &WPRCUR)
-     A                                      PUTOVR
      A                                      CSRLOC(WNMLGN WNMCOL)
      A                                      CHANGE(91)
      A                                      HLPCLR
@@ -41,32 +40,27 @@
      A                                      HLPARA(7 3 22 130)
      A                                      HLPPNLGRP(FORE1 GSTPRJ20)
      A            ZPGM          10   O  1  2
-     A                                      OVRDTA
      A                                  1 61'Détail Projet'
      A                                      COLOR(WHT)
-     A            ZDATE           L  O  2  2DATFMT(*EUR) OVRDTA
-     A            ZHEUR           T  O  2 13TIMFMT(*EUR) OVRDTA
+     A            ZDATE           L  O  2  2DATFMT(*EUR)
+     A            ZHEUR           T  O  2 13TIMFMT(*EUR)
      A            ZMODE         30   O  2 53
      A                                      COLOR(WHT)
-     A                                      OVRDTA
      A            ZJOB          10   O  2122
-     A                                      OVRDTA
      A                                 25  4'Crée le :'
-     A            ZDAC            L  O 25 16DATFMT(*EUR) OVRDTA
+     A            ZDAC            L  O 25 16DATFMT(*EUR)
      A                                      COLOR(GRN)
      A                                 25 28'à :'
-     A            ZHEC            T  O 25 32TIMFMT(*EUR) OVRDTA
+     A            ZHEC            T  O 25 32TIMFMT(*EUR)
      A                                 25 42'par :'
      A            ZUSC          10   O 25 48
-     A                                      OVRDTA
      A                                 25 62'Modifié le :'
-     A            ZDAM            L  O 25 77DATFMT(*EUR) OVRDTA
+     A            ZDAM            L  O 25 77DATFMT(*EUR)
      A                                      COLOR(GRN)
      A                                 25 89'à :'
-     A            ZHEM            T  O 25 93TIMFMT(*EUR) OVRDTA
+     A            ZHEM            T  O 25 93TIMFMT(*EUR)
      A                                 25103'par :'
      A            ZUSM          10   O 25109
-     A                                      OVRDTA
      A                                 26  2'F3=Exit   F4=Invite  F12=Annuler'
      A                                      COLOR(BLU)
      A            WFMCUR        10A  H
@@ -96,7 +90,6 @@
      A                                  3 24'Liste de bibliothèques'
      A            ZLISTBIBPRR        B  3 48REFFLD(LOTSF/LISTBIBPRJ *LIBL/LOTS)
      A                                      COLOR(WHT)
-     A                                      OVRDTA
      A N14                                  DSPATR(UL)
      A  14                                  DSPATR(PR)
      A  25                                  DSPATR(RI PC)

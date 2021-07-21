@@ -48,7 +48,6 @@
      A          R FORE1                     SFLCTL(SFL01)
      A                                      RTNCSRLOC(&WLICSR &WZOCSR &WPRCSR)
      A                                      OVERLAY
-     A                                      PUTOVR
      A N07                                  ROLLUP(02)
      A                                      CSRLOC(WLIGN WCOLN)
      A                                      CHANGE(91)
@@ -69,7 +68,6 @@
      A            ZUSER         10   O  1122
      A                                      OVRDTA
      A            ZJOB          10   O  2122
-     A                                      OVRDTA
      A                                  4  3'Indiquez vos options, puis appuyez-
      A                                       sur ENTREE.'
      A                                      COLOR(BLU)
@@ -81,7 +79,6 @@
      A            ZSLIBELLOTR   50   B  6 38REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
      A                                      CHECK(LC)
      A                                      COLOR(WHT)
-     A                                      OVRDTA
      A                                  7  2'Opt'
      A                                      COLOR(WHT)
      A            WLICSR        10A  H
@@ -108,7 +105,6 @@
      A                                      CF12
      A                                      RTNCSRLOC(&WLICSR &WZOCSR &WPRCSR)
      A                                      OVERLAY
-     A                                      PUTOVR
      A                                      CSRLOC(WLIGN WCOLN)
      A                                      CHANGE(91)
      A                                      HLPCLR
