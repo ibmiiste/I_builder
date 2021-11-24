@@ -100,7 +100,7 @@ Dcl-s l_Null_Zlnkticket Int(5);
 Dcl-s L_Null_Zlnkgit Int(5);
 
 Dcl-s lnkticket like(Zlnkticket);
-Dcl-s lnkgit like(Zlnkgit);
+Dcl-s lnkgit like(xlnkgit);
 
 // Le DS des indicateurs de l'écran
 Dcl-ds IndDs;

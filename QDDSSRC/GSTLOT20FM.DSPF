@@ -40,13 +40,13 @@
      A                                      HLPARA(7 3 22 130)
      A                                      HLPPNLGRP(FORE1 GSTPRJ20)
      A            ZPGM          10   O  1  2
-     A                                  1 61'Détail Projet'
+     A                                  1 34'Détail Projet'
      A                                      COLOR(WHT)
-     A            ZDATE           L  O  2  2DATFMT(*EUR)
-     A            ZHEUR           T  O  2 13TIMFMT(*EUR)
-     A            ZMODE         30   O  2 53
+     A            ZDATE           L  O  1 13DATFMT(*EUR)
+     A            ZHEUR           T  O  1 24TIMFMT(*EUR)
+     A            ZMODE         30   O  1 48
      A                                      COLOR(WHT)
-     A            ZJOB          10   O  2122
+     A            ZJOB          10   O  1 79
      A                                 25  4'Crée le :'
      A            ZDAC            L  O 25 16DATFMT(*EUR)
      A                                      COLOR(GRN)
@@ -68,45 +68,46 @@
      A            WPRCUR         4S 0H
      A            WNMLGN         3S 0H
      A            WNMCOL         3S 0H
-     A                                  3  3'Numéro'
-     A                                  4  3'Titre'
-     A                                  6  3'Description du projet'
-     A            ZNUMLOT   R        O  3 11REFFLD(LOTSF/NUMLOT *LIBL/LOTS)
+     A                                  2  3'Numéro'
+     A                                  3  3'Titre'
+     A                                  5  3'Description du projet'
+     A            ZNUMLOT   R        O  2 10REFFLD(LOTSF/NUMLOT *LIBL/LOTS)
      A                                      COLOR(WHT)
-     A            ZLIBELLOT R        B  5  3REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
+     A            ZLIBELLOT R        B  4  3REFFLD(LOTSF/LIBELLOT *LIBL/LOTS)
      A                                      COLOR(WHT)
      A N14                                  DSPATR(UL)
      A  14                                  DSPATR(PR)
      A                                      CHECK(LC)
-     A            ZDESCRIPL R        B  7  3REFFLD(LOTSF/DESCRIPLOT *LIBL/LOTS)
+     A            ZDESCRIPL R        B  6  3REFFLD(LOTSF/DESCRIPLOT *LIBL/LOTS)
      A                                      CNTFLD(128)
      A                                      COLOR(WHT)
      A N14                                  DSPATR(UL)
      A  14                                  DSPATR(PR)
      A                                      CHECK(LC)
-     A                                  3 67'Bibliothèque dédiée'
-     A            ZBIBLOT   R        O  3 89REFFLD(LOTSF/BIBLOT *LIBL/LOTS)
+     A                                  2 54'Bibliothèque dédiée'
+     A            ZBIBLOT   R        O  2 74REFFLD(LOTSF/BIBLOT *LIBL/LOTS)
      A                                      COLOR(WHT)
-     A                                  3 24'Liste de bibliothèques'
-     A            ZLISTBIBPRR        B  3 48REFFLD(LOTSF/LISTBIBPRJ *LIBL/LOTS)
+     A                                  2 20'Liste de bibliothèques'
+     A            ZLISTBIBPRR        B  2 43REFFLD(LOTSF/LISTBIBPRJ *LIBL/LOTS)
      A                                      COLOR(WHT)
      A N14                                  DSPATR(UL)
      A  14                                  DSPATR(PR)
      A  25                                  DSPATR(RI PC)
-     A                                  3103'Statut'
-     A            ZSTATLOT      20   O  3111
+     A                                  2 86'Statut'
+     A            ZSTATLOT      20   O  2 93
      A                                      COLOR(WHT)
-     A                                 23  3'Lien Ticket'
-     A                                 24  3'Lien GIT'
-     A            ZLNKTICKET   116   B 23 15
+     A                                 22  3'Lien Ticket'
+     A                                 23  3'Lien GIT'
+     A            ZLNKTICKET   116   B 22 15
      A                                      COLOR(WHT)
      A N14                                  DSPATR(UL)
      A  14                                  DSPATR(PR)
      A                                      CHECK(LC)
-     A            ZLNKGIT      116   B 24 15COLOR(WHT)
+     A            ZLNKGIT      232   B 23 15COLOR(WHT)
      A N14                                  DSPATR(UL)
      A  14                                  DSPATR(PR)
      A                                      CHECK(LC)
+     A                                      CNTFLD(116)
      A          R WMGSFL                    SFL
      A                                      SFLMSGRCD(27)
      A            WMGKEY                    SFLMSGKEY
