@@ -12,7 +12,7 @@
              DCL        VAR(&BIBLOT) TYPE(*CHAR) LEN(10)
              DCL        VAR(&NUMLOTC) TYPE(*CHAR) LEN(9)
              DCL        VAR(&INT) TYPE(*INT) LEN(2)
-             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Mise en ligne de l''environnement du +
+             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Mise en ligne de la bibliothèque du +
                           lot') BNDDIR(I_BUILDER)
 
              MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
