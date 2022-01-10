@@ -1,0 +1,31 @@
+      /* >>PRE-COMPILER<<                                                 */
+      /*   >>CRTCMD<<  CRTBNDCL SRCFILE(&SL/&SF) SRCMBR(&SM);             */
+      /*   >>IMPORTANT<<                                                  */
+      /*     >>PARM<<  PGM(&LI/&OB);                                      */
+      /*     >>PARM<<  OPTION(*EVENTF);                                   */
+      /*     >>PARM<<  DBGVIEW(*ALL);                                     */
+      /*   >>END-IMPORTANT<<                                              */
+      /*   >>EXECUTE<<                                                    */
+      /* >>END-PRE-COMPILER<<                                             */
+             PGM        PARM(&NUMLOT)
+             DCL        VAR(&NUMLOT) TYPE(*DEC) LEN(9 0)
+             DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Mise en ligne de l''environnement du +
+                          lot') BNDDIR(I_BUILDER)
+
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERREUR))
+/*           Mise en ligne de la bibliothèque du lot                                           */
+/* https://github.com/ibmiiste/I_builder/blob/master/QCLSRC/STRTSTLOT.CLLE                     */
+             STRTSTLOT  LOT(&NUMLOT)
+
+/*           Mise en ligne de la liste de bibliothèque du lot                                  */
+/* https://github.com/ibmiiste/I_builder/blob/master/QRPGLESRC/GSBIBLOT10.SQLRPGLE             */
+             CALLPRC    PRC(MISEENLIGNELISTEBIBSLOT) PARM((&NUMLOT))
+
+             GOTO       CMDLBL(FIN)
+
+ ERREUR:     DMPCLPGM
+             CALLPRC    PRC(GEST_ERREUR)
+
+
+ FIN:        RETURN
+             ENDPGM
