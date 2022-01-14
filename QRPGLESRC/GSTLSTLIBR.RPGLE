@@ -43,7 +43,7 @@ dcl-pi Gestion_liste_bibliotheque;
   P_List_selectionnee Char(10); // Liste de bibliothèques sélectionnée
 end-pi;
 
-dcl-pr Addlib extpgm('PADDLIBC');
+dcl-pr Addlib extpgm('PADDLIB');
   *n char(10);
 end-pr;
 
