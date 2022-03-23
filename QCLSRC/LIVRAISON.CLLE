@@ -6,8 +6,10 @@
       /*     >>PARM<<  DBGVIEW(*ALL);                                     */
       /*   >>END-IMPORTANT<<                                              */
       /*   >>EXECUTE<<                                                    */
+      /*   >>CMD<<  UPDSRVPGM SRVPGM(&LI/BUILDERSRV) +                    */
+      /*            MODULE(&LI/&OB);                                      */
       /* >>END-PRE-COMPILER<<                                             */
-             PGM        PARM(&NUMLOT &MACHINE &USER &MDP)
+             PGM        PARM(&NUMLOT &ENVDST &MACHINE &USER &MDP)
 
              DCL        VAR(&NUMLOT) TYPE(*DEC) LEN(9 0)
              DCL        VAR(&TGTRLS) TYPE(*CHAR) LEN(10) VALUE('*CURRENT')
@@ -28,6 +30,7 @@
              DCL        VAR(&PMGDT) TYPE(*CHAR) LEN(99)
              DCL        VAR(&SRCF) TYPE(*CHAR) LEN(10)
              DCL        VAR(&PGM) TYPE(*CHAR) LEN(10) VALUE('GSTLOT20')
+             DCL        VAR(&ENVDST) TYPE(*CHAR) LEN(1)
 
              DCLPRCOPT  ALWRTVSRC(*YES) TEXT('Préparation à la livraison et +
                           livraison') BNDDIR(I_BUILDER)
@@ -77,7 +80,7 @@ CRTSAVF:     CHGVAR     VAR(&SAVF) VALUE('S' *TCAT &NUMLOTC)
              ENDDO
 
              /* Sauvegarde des objets du lots dans une SAVF                               */
-             CALLPRC    PRC(SAUV_OBJ_LOT) PARM((&NUMLOT) (&TGTRLS))
+             CALLPRC    PRC(SAUV_OBJ_LOT) PARM((&NUMLOT) (&ENVDST) (&TGTRLS))
 
              /* Envoyer la SAVF sur le système cible par ftp dans la bib lot              */
              CHGVAR     VAR(&CHEMINSAVO) VALUE('/QSYS.LIB/' *TCAT &BIBLIO *TCAT +

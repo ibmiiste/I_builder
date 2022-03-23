@@ -115,9 +115,8 @@ END-PR ;
 DCL-PR builder EXTPGM('BUILDER');
   p_num_lot Like(r_Num_lot);
   P_Biblio_Lot LIKE(r_Nom_obj_IBMi) const;
-  P_Env_Dest CHAR(1) const;
   P_Optim_Compil CHAR(20);
-  P_Livr_Env_Dst IND const;
+  P_Livr_Env_Dst Char(1) Const;
   P_Sys_Dst CHAR(32) const;
   P_User LIKE(r_Nom_obj_IBMi) const;
   P_Mot_De_Passe CHAR(10) const;
@@ -130,6 +129,7 @@ END-PR ;
 //---------------------------------------------------
 Dcl-pr Livraison;
   p_Num_lot Like(r_Num_lot) Const;
+  pEnvironnementDestination Char(1) Const;
   p_Sys_Dst char(32) Const;
   P_User Char(10) Const;
   P_Mot_De_Passe Char(10) Const;
@@ -570,6 +570,7 @@ end-ds;
 // --------------------------------------------------
 DCL-PR Sauv_obj_lot;
   p_Num_lot LIKE(r_Num_lot);
+  pEnvironnementDestination Char(1);
   p_Target_release Like(r_Target_release);
 END-PR ;
 

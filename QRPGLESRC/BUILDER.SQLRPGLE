@@ -41,17 +41,12 @@ End-Pr;
 DCL-PI builder;
   p_num_lot Like(r_Num_lot);
   P_Biblio_Lot LIKE(r_Nom_obj_IBMi) const;
-  P_Env_Dest CHAR(1) const;
   P_Optim_Compil CHAR(20);
-  P_Livr_Env_Dst IND const;
+  P_Livr_Env_Dst Char(1) const;
   P_Sys_Dst CHAR(32) const;
   P_User LIKE(r_Nom_obj_IBMi) const;
   P_Mot_De_Passe CHAR(10) const;
 END-PI ;
-
-
-Dcl-S g_rowid_char Char(100);
-Dcl-s g_Rowid_lots SQLTYPE(ROWID);
 
 Dcl-S g_BibSrc LIKE(r_Nom_obj_IBMi);
 Dcl-S g_FicSrc LIKE(r_Nom_obj_IBMi);
@@ -84,6 +79,8 @@ END-PR ;
 DCL-PR Lecture_curseur_list_obj LIKE(sqlcode);
 END-PR ;
 
+Dcl-s l_Livr_Env_Dst Like(P_Livr_Env_Dst);
+
 Monitor;
   *InLr=*On;
   g_Num_lot=p_Num_lot;
@@ -102,11 +99,13 @@ Monitor;
   if g_Failed<>0;
     EnvRapMel();
   Else;
-    If P_Livr_Env_Dst;
+    If P_Livr_Env_Dst <> *Blank;
+       l_Livr_Env_Dst = P_Livr_Env_Dst;
       // Copier liste des objets à livrer dans une table dans le lot Séquence/Bib
       // source/Fichier source/membre source/bib objet
       Copie_liste_objet_a_livres(g_num_lot);
       Livraison( g_num_lot
+                :l_Livr_Env_Dst
                 :P_Sys_Dst
                 :P_User
                 :P_Mot_De_Passe);
