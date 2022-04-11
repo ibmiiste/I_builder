@@ -340,7 +340,7 @@ begsr trtsfl;
             :g_lib_lot
             :g_optimize
             :DEVELOPPEMENT
-            :''
+            :'CICA00'
             :''
             :'');
     RMVlot(g_Num_lot);

@@ -81,9 +81,33 @@ END-PR ;
 
 Dcl-s l_Livr_Env_Dst Like(P_Livr_Env_Dst);
 
+Dcl-ds environnementDestination LikeDs(environnement);
+
 Monitor;
   *InLr=*On;
   g_Num_lot=p_Num_lot;
+
+  // Objet Environnement de destination
+  Exec sql Select ID_ENVIR,
+                  ENVIRONNEMENT,
+                  NOM_RESEAU_DNS,
+                  SYSTEME_DISTANT,
+                  DESC_ENVIRONNEMENT,
+                  BIB_DATA,
+                  BIB_PROGRAMMES,
+                  BIB_SOURCES_PGM,
+                  BIB_SOURCES_DTA
+             Into :environnementDestination.IDENV,
+                  :environnementDestination.ENVIRONMNT,
+                  :environnementDestination.NOMRESE,
+                  :environnementDestination.SYSDIST,
+                  :environnementDestination.DESCENVIR,
+                  :environnementDestination.BIBDTA,
+                  :environnementDestination.BIBPGM,
+                  :environnementDestination.BIBSRCPGM,
+                  :environnementDestination.BIBSRCDTA
+           From ENVIRONNMENTS
+          Where ENVIRONNEMENT = :P_Sys_Dst;
 
   //Récupération de la list de bibliothèque
   EXEC SQL
@@ -99,7 +123,7 @@ Monitor;
   if g_Failed<>0;
     EnvRapMel();
   Else;
-    If P_Livr_Env_Dst <> *Blank;
+    If livraisonDistante(environnementDestination) <> *Off;
        l_Livr_Env_Dst = P_Livr_Env_Dst;
       // Copier liste des objets à livrer dans une table dans le lot Séquence/Bib
       // source/Fichier source/membre source/bib objet

@@ -673,3 +673,15 @@ DCL-PR CPYOBJ;
    p_typ_origine Like(R_TypObj);
    p_Bib_destination Like(r_Nom_obj_IBMi);
 END-Pr ;
+
+// --------------------------------------------------
+// Procedure name: livraisonDistante
+// Purpose:        Méthode livraison distante
+// Returns:        Indicateur de machine distante
+// Parameter:      pEnvironnement => Nom complet ou adresse IP de la machine ...
+//                          distante
+// --------------------------------------------------
+Dcl-Pr livraisonDistante IND;
+// Classe environnement
+   livraisonEnvironnement LikeDs(environnement);
+End-Pr;
