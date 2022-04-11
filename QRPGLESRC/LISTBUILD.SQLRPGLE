@@ -32,6 +32,9 @@ dcl-f listbuilde workstn sfile(sfl01 :wran01) infds(dssfl1) indds(IndDS);
 // --------------------------------------------------
 // Prototype for procedure: liste_objet_construction
 // --------------------------------------------------
+dcl-c DEVELOPPEMENT 'D';
+dcl-c PRODUCTION 'P';
+dcl-c RECETTE 'R';
 DCL-PR liste_objet_construction EXTPGM('LISTBUILD');
   p_Num_lot Like(r_Num_lot) Const;
 END-PR ;
@@ -335,10 +338,9 @@ begsr trtsfl;
     Testlot(g_Num_lot);
     builder( g_Num_lot
             :g_lib_lot
-            :''
             :g_optimize
-            :'0'
-            :''
+            :DEVELOPPEMENT
+            :'CICA00'
             :''
             :'');
     RMVlot(g_Num_lot);
@@ -351,9 +353,8 @@ begsr trtsfl;
     Testlot(g_Num_lot);
     builder( g_Num_lot
             :g_lib_lot
-            :''
             :g_optimize
-            :'1'
+            :RECETTE
             :'CICA95'
             :'DRUBIGNY'
             :'DANIEL1E01');
@@ -367,13 +368,12 @@ begsr trtsfl;
     Copie_sources(g_Num_lot);
     builder( g_Num_lot
             :''
-            :''
             :g_optimize
-            :'1'
+            :PRODUCTION
             :'CICA98'
             :'DRUBIGNY'
             :'DANIEL1E01');
-    EXEC SQL 
+    EXEC SQL
       UPDATE Lots SET Statlot = 'P' WHERE Lot_Number = :G_Num_Lot;
   EndIf;
 
@@ -684,6 +684,7 @@ begsr trtopt;
       Copie_liste_objet_a_livres( g_num_lot
                                  :Hnumobjbld);
       Livraison( g_num_lot
+                :RECETTE
                 :'CICA95'
                 :'DRUBIGNY'
                 :'DANIEL1E01');
@@ -714,6 +715,7 @@ begsr trtopt;
       Copie_liste_objet_a_livres( g_num_lot
                                  :Hnumobjbld);
       Livraison( g_num_lot
+                :PRODUCTION
                 :'CICA98'
                 :'DRUBIGNY'
                 :'DANIEL1E01');

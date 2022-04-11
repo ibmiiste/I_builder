@@ -214,6 +214,7 @@ Dcl-c c_Trouve 0;
 Dcl-proc Sauv_obj_lot Export;
   Dcl-pi Sauv_obj_lot;
     p_Num_lot Like(r_Num_lot);
+    pEnvironnementDestination Char(1);
     p_Target_release Like(r_Target_release);
   END-PI;
 
@@ -253,7 +254,7 @@ Dcl-proc Sauv_obj_lot Export;
                      :p_Target_release);
 
     // Alimentation du user space USPSAVOBJ avec la clef 1 et les objets à sauvegarder
-    Ajout_clef_obj_sauv(p_Num_lot);
+    Ajout_clef_obj_sauv(p_Num_lot:pEnvironnementDestination);
 
     // Sauvegarde des objets
     Sauve_objets(c_usr_sp_SAVOBJ :APIError);
@@ -436,6 +437,7 @@ End-proc;
 DCL-PROC Ajout_clef_obj_sauv Export;
   Dcl-pi Ajout_clef_obj_sauv;
     p_Num_lot like(r_Num_lot);
+    pEnvironnementDestination Char(1);
   END-PI;
 
   // Requête dynamique
@@ -450,14 +452,10 @@ DCL-PROC Ajout_clef_obj_sauv Export;
   Dcl-s l_BIBLIOTHEQUE_DESTINATION Like(r_Nom_obj_IBMi);
 
   // Constantes locales
-  Dcl-c c_recette 'R';
+  Dcl-c PRODUCTION 'P';
 
   l_Num_lot=p_Num_lot;
-
-  Exec sql Select STATUTS_LOT
-             Into :l_environnement
-            From Lots
-           Where LOT_NUMBER = :L_Num_Lot;
+  l_environnement=pEnvironnementDestination;
 
   EXEC SQL
     CLOSE Csr_Obj_Sav;
@@ -496,7 +494,7 @@ DCL-PROC Ajout_clef_obj_sauv Export;
   // On place le pointeur de description d'objet sur le pointeur du user space de sauvegarde
   g_Objet_desc=SavObjUspPtr;
   Dow Sqlcode=c_Trouve;
-    If l_environnement = c_recette;
+    If pEnvironnementDestination = PRODUCTION;
       Cpyobj( l_BIBLIOTHEQUE_DESTINATION
              :L_Objdst
              :L_Typobj
