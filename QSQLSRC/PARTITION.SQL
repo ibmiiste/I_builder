@@ -49,10 +49,8 @@ ON Liste_partition TO PUBLIC WITH GRANT OPTION ;
 GRANT ALTER , DELETE , INDEX , INSERT , REFERENCES , SELECT , UPDATE
 ON Liste_partition TO QPGMR WITH GRANT OPTION ;
 
-SET ENCRYPTION PASSWORD = 'qEPiwICF35RuGIUjd3w2';        
-
 CREATE OR REPLACE VIEW Partitionlogins( id, system, login, passwd) AS 
- SELECT Partition_id, Host_name,user_connection, DECRYPT_BIT(User_Password) 
+ SELECT Partition_id, Host_name,user_connection, DECRYPT_BIT(User_Password, '') 
  FROM Liste_partition;
  
 GRANT SELECT

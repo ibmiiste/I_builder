@@ -21,11 +21,14 @@ Ctl-opt Bnddir('I_BUILDER');
 
 //*********************************************************************
 // OD 17/11/2017
-// Liste des objets à construire
+// Liste des objets ï¿½ construire
 //*********************************************************************
-// déclaration des fichiers
+// dï¿½claration des fichiers
 dcl-f listbuilde workstn sfile(sfl01 :wran01) infds(dssfl1) indds(IndDS);
 
+
+// DÃ©claration des classes
+/Copy Qcpysrc,Dpartition
 
 // main function prototype
 // prototype fonction principale
@@ -35,6 +38,10 @@ dcl-f listbuilde workstn sfile(sfl01 :wran01) infds(dssfl1) indds(IndDS);
 dcl-c DEVELOPPEMENT 'D';
 dcl-c PRODUCTION 'P';
 dcl-c RECETTE 'R';
+Dcl-c CICA95 2;
+Dcl-c CICA98 3;
+Dcl-c PARAPHRASE 'qEPiwICF35RuGIUjd3w2';
+
 DCL-PR liste_objet_construction EXTPGM('LISTBUILD');
   p_Num_lot Like(r_Num_lot) Const;
 END-PR ;
@@ -57,12 +64,12 @@ end-pr;
 // prototype fonctions externes
 /copy qcpysrc,Prtbuilder
 
-// Mise en ligne de la bibliothèque du lot
+// Mise en ligne de la bibliothï¿½que du lot
 Dcl-pr Testlot Extpgm('STRTSTLOT');
   p_Num_lot Packed(9:0);
 End-pr;
 
-// Suppression de la bibliothèque du lot de la liste de bibliothèques système
+// Suppression de la bibliothï¿½que du lot de la liste de bibliothï¿½ques systï¿½me
 Dcl-pr Rmvlot Extpgm('ENDTSTLOT');
   p_Num_lot Packed(9:0);
 End-pr;
@@ -104,13 +111,13 @@ dcl-s g_alimsfl ind;
 dcl-s g_filtre ind;
 
 
-// Redéfinission des touches de fonction
+// Redï¿½finission des touches de fonction
 Dcl-S Construction ind Based(P_INKI);
 Dcl-S Livraison_recette ind Based(P_INKJ);
 Dcl-S Livraison_production ind Based(P_INKK);
 
 
-// Appel à CONSTRUCT
+// Appel ï¿½ CONSTRUCT
 Dcl-S g_Failed packed(10:0);
 Dcl-S g_FileAttach char(10000);
 Dcl-S g_optimize char(20);
@@ -130,7 +137,7 @@ dcl-s Fmt char(8) inz('MBRD0100');
 /copy qcpysrc,fonction
 
 // data-structures
-// structures de données
+// structures de donnï¿½es
 // Informations objets IBM i
 Dcl-ds l_Base_infos_obj_light likeDS(OBJD0200_t);
 
@@ -139,7 +146,7 @@ Dcl-ds l_Base_infos_obj_light likeDS(OBJD0200_t);
 /copy qcpysrc,psds
 
 
-// Indicateurs renommés avec Indara et INDDS
+// Indicateurs renommï¿½s avec Indara et INDDS
 Dcl-ds IndDS;
   ROLLUP ind pos(2);
   SFLDSP ind pos(4);
@@ -191,7 +198,7 @@ dcl-ds wdsfic;
   wnrcfi bindec(4:0);
 end-ds;
 
-// paramètres d'entrée de XREF
+// paramï¿½tres d'entrï¿½e de XREF
 dcl-ds ParmEntry1;
   Entry_Obj char(10);
   Entry_Lib char(10);
@@ -213,12 +220,12 @@ Dcl-ds Ds_LIST_OBJET_BUILD Extname('LSTOBJBLD') Qualified End-ds;
 // La DS de la table LOTS
 Dcl-ds Ds_Lots Extname('LOTS') Qualified End-ds;
 
-// Paramètre d'appel de XREF
+// Paramï¿½tre d'appel de XREF
 Dcl-s ParmEntry char(150);
 
 
 // inherited variables
-// héritage des types
+// hï¿½ritage des types
 /copy Qcpysrc,inhbuilder
 
 // constants
@@ -228,6 +235,9 @@ DCL-PI liste_objet_construction;
   p_Num_lot Like(r_Num_lot) Const;
 END-PI ;
 
+Dcl-ds partitionRecette LikeDS(Partition);
+Dcl-ds partitionProduction LikeDS(Partition);
+
 // main function
 // fonction principale
 monitor;
@@ -235,9 +245,13 @@ monitor;
   // Initialisation de variables
   g_Num_lot=p_Num_lot;
 
-  // le nombre de lignes affichables, déclaration Ã  la volée
+  partitionRecette=getPartitionConnection(CICA95);
+
+  partitionProduction=getPartitionConnection(CICA98);
+
+  // le nombre de lignes affichables, dï¿½claration Ã  la volï¿½e
   g_nblis1=18;
-  // initialisation des variables générales
+  // initialisation des variables gï¿½nï¿½rales
   zpgm=PROCEDURE;
   zdate=%dec(%date():*eur);
   zheur=%dec(%time():*eur);
@@ -250,7 +264,7 @@ monitor;
   sflinz = *on;
   // indicateur fin
   g_sortie = *off;
-  // début du traitement,
+  // dï¿½but du traitement,
   exsr initsf;
   // boucle d'attente de sortie
   dow not g_sortie;
@@ -264,8 +278,8 @@ endmon;
 
 // indicateur de fin de programme
 *inlr = *on;
-// les procédures
-// traitement de l'écran
+// les procï¿½dures
+// traitement de l'ï¿½cran
 begsr trtsfl;
   // effacement du sous=fichier de messages
   a_typ='3';
@@ -277,7 +291,7 @@ begsr trtsfl;
               : a_mdt
               :*OMIT);
   write wsfctl;
-  // ecriture de l'écran
+  // ecriture de l'ï¿½cran
   sfldsp = *on;
   sfldspctl = *on;
   write fore1;
@@ -286,7 +300,7 @@ begsr trtsfl;
   // attente lecture
   read fore1;
 
-  // une touche a été actionnée
+  // une touche a ï¿½tï¿½ actionnï¿½e
   // chargement de l'heure
   zheur=%dec(%time());
   // indicateur pour ne pas tester d'autres actions
@@ -299,26 +313,26 @@ begsr trtsfl;
   //
   if g_wsobp <> ZSOBJET
   and g_trt_opt;
-    // test si selection/ si changé on initialise
+    // test si selection/ si changï¿½ on initialise
     exsr initsf;
     g_trt_opt = *off;
   endif;
   // touches f3 et f12
   if sortie or
         cancel;
-    // on met l'indicateur à off = fin du programme
+    // on met l'indicateur ï¿½ off = fin du programme
     g_sortie = *on;
     g_trt_opt = *off;
   endif;
   //
   if refresh;
-    // f5 rafraichissement de l'écran
+    // f5 rafraichissement de l'ï¿½cran
     exsr initsf;
     g_trt_opt = *off;
   endif;
   //
   //if creer;
-  // f6 création d'un nouveau matricule
+  // f6 crï¿½ation d'un nouveau matricule
   //  a_chx='CR';
   //  a_nrec=*blank;
   //  detail_personnel(a_chx:a_nrec);
@@ -355,9 +369,9 @@ begsr trtsfl;
             :g_lib_lot
             :g_optimize
             :RECETTE
-            :'CICA95'
-            :'DRUBIGNY'
-            :'DANIEL1E01');
+            :partitionRecette.hostName
+            :partitionRecette.USER
+            :partitionRecette.PASSWORD);
     RMVlot(g_Num_lot);
     EXEC SQL
       UPDATE Lots SET Statlot = 'R' WHERE Lot_Number = :G_Num_Lot;
@@ -370,9 +384,9 @@ begsr trtsfl;
             :''
             :g_optimize
             :PRODUCTION
-            :'CICA98'
-            :'DRUBIGNY'
-            :'DANIEL1E01');
+            :partitionProduction.HOSTNAME
+            :partitionProduction.USER
+            :partitionProduction.PASSWORD);
     EXEC SQL
       UPDATE Lots SET Statlot = 'P' WHERE Lot_Number = :G_Num_Lot;
   EndIf;
@@ -386,11 +400,11 @@ endsr;
 begsr initsf;
   //    l'indicateur 20 conditionne la zone opt (protection)
   PROTECT = *on;
-  // initialisation de la variable de sélection
+  // initialisation de la variable de sï¿½lection
   g_wsobp=ZSOBJET;
   l_sobjet=*blank;
 
-  //Récupération de la list de bibliothèque
+  //Rï¿½cupï¿½ration de la list de bibliothï¿½que
   EXEC SQL
     SELECT Lpad( Libelle_Lots, 0.5*CHARACTER_LENGTH( Libelle_Lots) + 64, ' '),
            Liste_Biblio_Projet,
@@ -403,7 +417,7 @@ begsr initsf;
       FROM Lots
       WHERE Lot_Number = :G_Num_Lot;
 
-  // Alimentation de la bibliothèque lot dans l'entête
+  // Alimentation de la bibliothï¿½que lot dans l'entï¿½te
   Zbiblot =G_Lib_Lot;
 
   IF Ds_Lots.Statenreg=0;
@@ -415,7 +429,7 @@ begsr initsf;
   g_selection = *off;
   g_filtre = *off;
   if ZSOBJET <> *blank;
-    // si différent de blank il y a sélection
+    // si diffï¿½rent de blank il y a sï¿½lection
     g_selection = *on;
     g_i=0;
     g_i=%scan('*':ZSOBJET);
@@ -424,12 +438,12 @@ begsr initsf;
       g_filtre=*on;
       g_i=g_i-1;
       l_sobjet=%subst(ZSOBJET:1:g_i);
-      // on est dans le cas d'une sélection générique
+      // on est dans le cas d'une sï¿½lection gï¿½nï¿½rique
       // on se positionnera juste au bon endroit dans le fichier
       ZOBJDST=l_sobjet;
     endif;
   endif;
-  // la dernière ligne écrite
+  // la derniï¿½re ligne ï¿½crite
 
   g_lstlig=0;
   // le compteur de ligne par page
@@ -447,7 +461,7 @@ begsr initsf;
   sfldspctl = *on;
   EXEC SQL
     CLOSE List_Obj;
-  // positionnement en début de fichier
+  // positionnement en dï¿½but de fichier
   EXEC SQL
     DECLARE List_Obj CURSOR FOR
       SELECT Obj_Number,
@@ -465,7 +479,7 @@ begsr initsf;
 
   EXEC SQL
     OPEN List_Obj;
-  // chargement de la première page
+  // chargement de la premiï¿½re page
   // lecture de l'enregistrement suivant
   EXEC SQL
     FETCH List_Obj
@@ -473,15 +487,15 @@ begsr initsf;
         :Ztypobj;
   exsr chgpag;
 endsr;
-// traitement des options, on ne lit que les enregistrements modifiés
+// traitement des options, on ne lit que les enregistrements modifiï¿½s
 begsr trtopt;
-  // lecture des enregistrements modifiés
+  // lecture des enregistrements modifiï¿½s
   wran01=1;
-  // top pour rafrachir l'écran, si besoin
+  // top pour rafrachir l'ï¿½cran, si besoin
   g_alimsfl = *off;
-  // Gestion de la création d'enregistrement
+  // Gestion de la crï¿½ation d'enregistrement
   if (zoptc = '1') or (zoptc = ' 1');
-    // Récupération des informations objets si elles existent
+    // Rï¿½cupï¿½ration des informations objets si elles existent
     if not infos_objet( zobjdstc + zbibdstc
                        :ztypobjc
                        :l_Base_infos_obj_light);
@@ -498,7 +512,7 @@ begsr trtopt;
         WHERE Lot_Number = :G_Num_Lot
               AND Ordre = :Zordrec;
     if sqlcode = 0;
-      // envoyer un message pour dire que l'emplacement est déjà pris
+      // envoyer un message pour dire que l'emplacement est dï¿½jï¿½ pris
       a_typ='1';
       a_fim='BUILDMSGF';
       a_mid='MSG0002';
@@ -519,7 +533,7 @@ begsr trtopt;
       On-error;
       Endmon;
 
-      // Ajoute tous les lots où se trouve l'objet dans la file de message
+      // Ajoute tous les lots oï¿½ se trouve l'objet dans la file de message
       verif_presence_autre_lot( Zbibdstc
                                :Zobjdstc
                                :Ztypobjc
@@ -585,13 +599,13 @@ begsr trtopt;
     WHEN
      (zopt = ' 2') or (zopt = '2');
       a_chx='MO';
-      // Ajoute tous les lots où se trouve l'objet dans la file de message
+      // Ajoute tous les lots oï¿½ se trouve l'objet dans la file de message
       verif_presence_autre_lot( Zbibdst
                                :Zobjdst
                                :Ztypobj
                                :g_Num_lot);
 
-      // Récupération des informations objets si elles existent
+      // Rï¿½cupï¿½ration des informations objets si elles existent
       if not infos_objet( zobjdst + zbibdst
                          :ztypobj
                          :l_Base_infos_obj_light);
@@ -685,9 +699,9 @@ begsr trtopt;
                                  :Hnumobjbld);
       Livraison( g_num_lot
                 :RECETTE
-                :'CICA95'
-                :'DRUBIGNY'
-                :'DANIEL1E01');
+                :partitionRecette.HOSTNAME
+                :partitionRecette.USER
+                :partitionRecette.PASSWORD);
     when zopt = '11';
       g_BIBSRC_pre=ZBIBSRC;
       g_FicSrc_pre=ZFICSRC;
@@ -716,9 +730,9 @@ begsr trtopt;
                                  :Hnumobjbld);
       Livraison( g_num_lot
                 :PRODUCTION
-                :'CICA98'
-                :'DRUBIGNY'
-                :'DANIEL1E01');
+                :partitionProduction.HOSTNAME
+                :partitionProduction.USER
+                :partitionProduction.PASSWORD);
       Copie_sources( g_Num_lot
                     :Hnumobjbld);
       g_optimize='*NONE';
@@ -773,17 +787,17 @@ begsr chgpag;
   sflnxtchg = *off;
   //                  seton                                        04
   wran01=g_lstlig;
-  // remise à zéro du compteur de ligne, mais on pourrait faire autrement
+  // remise ï¿½zï¿½ro du compteur de ligne, mais on pourrait faire autrement
   g_nbrlig=0;
 
   dow sqlcode<>100
   and g_nbrlig < 18;
-    // remplissage des zones écran
+    // remplissage des zones ï¿½cran
     g_alimsfl = *on;
-    // test s'il y a sélection
+    // test s'il y a sï¿½lection
     if g_selection or g_filtre;
       if g_selection and not g_filtre;
-        // on recherche la stricte égalité de nom
+        // on recherche la stricte ï¿½galitï¿½ de nom
         if ZOBJDST <> ZSOBJET;
           g_alimsfl = *off;
         endif;
@@ -795,7 +809,7 @@ begsr chgpag;
         endif;
       endif;
     endif;
-    // l'indicateur est  '1' si sélection ok ou pas de sélection
+    // l'indicateur est  '1' si sï¿½lection ok ou pas de sï¿½lection
     // les compteurs, attention au wran01
     if g_alimsfl;
       g_nbrlig+=1;
@@ -815,7 +829,7 @@ begsr chgpag;
       Endif;
 
       If l_Base_infos_obj_light.RtnSize=0;
-        // envoyer un message pour dire que l'objet n'est pas présent dans le lot
+        // envoyer un message pour dire que l'objet n'est pas prï¿½sent dans le lot
         Erreur_objet=*On;
         A_Typ = '5';
         A_Fim = 'BUILDMSGF';
@@ -824,7 +838,7 @@ begsr chgpag;
         Gst_Message_Cl(A_Typ :A_Fim :A_Mid :A_Mdt:Procedure);
       ENDIF;
 
-      // Vérification que le source est présent dans le lot
+      // Vï¿½rification que le source est prï¿½sent dans le lot
       Monitor;
         API_RtvMbrDesc( MbrD0100
                        :%Size(MbrD0100)
@@ -833,7 +847,7 @@ begsr chgpag;
                        :ZMBRSRC
                        :bOvr);
       On-error;
-        // envoyer un message pour dire que l'objet n'est pas présent dans le lot
+        // envoyer un message pour dire que l'objet n'est pas prï¿½sent dans le lot
         Erreur_Source=*On;
         A_Typ = '5';
         A_Fim = 'BUILDMSGF';
@@ -857,7 +871,7 @@ begsr chgpag;
   // on quitte la boucle soit en fin de page
   //                     soit en fin de fichier
   if sqlcode=100;
-    // le caractère de suite, on est en fin de fichier
+    // le caractï¿½re de suite, on est en fin de fichier
     sflend = *on;
   else;
     sflend = *off;
@@ -871,11 +885,11 @@ begsr chgpag;
     // pas de saisie d'option
     PROTECT = *on;
     if ZSOBJET <> *blank;
-      ZDESCOBJET = 'sélection vide';
+      ZDESCOBJET = 'sï¿½lection vide';
     else;
       ZDESCOBJET = 'Fichier vide';
     endif;
-    // ne pas oublier de remettre à blanc
+    // ne pas oublier de remettre ï¿½ blanc
     ZOBJDST=*blank;
     ZBIBDST=*blank;
     ZBIBSRC=*blank;
@@ -883,7 +897,7 @@ begsr chgpag;
     ZMBRSRC=*blank;
     ZORDRE=0;
     hnrec=*blank;
-    // ecriture du message sur la première ligne
+    // ecriture du message sur la premiï¿½re ligne
     write sfl01;
   endif;
 endsr;
@@ -910,7 +924,7 @@ Dcl-Proc reincrement_liste_objet;
 
   EXEC SQL
     CLOSE List_Obj_Projet;
-  // positionnement en début de fichier
+  // positionnement en dï¿½but de fichier
   EXEC SQL
     DECLARE List_Obj_Projet CURSOR FOR
       SELECT Lot_Number,
@@ -936,7 +950,7 @@ Dcl-Proc reincrement_liste_objet;
                      :L_Membre_Source
                      :bOvr);
 
-    // Si l'objet est nouveau, son source n'est pas présent dans la bib appli
+    // Si l'objet est nouveau, son source n'est pas prï¿½sent dans la bib appli
     // Il faut rechercher dans la bib lot dans ce cas.
     On-error;
       API_RtvMbrDesc( MbrD0100
@@ -966,7 +980,7 @@ End-proc;
 
 // --------------------------------------------------
 // Procedure name: verif_presence_autre_lot
-// Purpose:        Lister la présence de l'objet dans d'autre lots actif
+// Purpose:        Lister la prï¿½sence de l'objet dans d'autre lots actif
 // Returns:
 // --------------------------------------------------
 DCL-PROC verif_presence_autre_lot ;
@@ -979,7 +993,7 @@ DCL-PROC verif_presence_autre_lot ;
 
   // DS d'envoi des variables du message MSG0001
   Dcl-ds DS_MSG0001;
-    // transmission d'un nom d"objet qualifié
+    // transmission d'un nom d"objet qualifiï¿½
     l_objet_msg Char(21);
     l_type_objet Like(R_TypObj);
     l_Num_Lot_Doublon Like(r_Num_lot);
@@ -1010,7 +1024,7 @@ DCL-PROC verif_presence_autre_lot ;
     FETCH Curs_Objet_Lot INTO :L_Num_Lot_Doublon, :L_User_Doublon;
 
   Dow Sqlcode = 0;
-    // envoyer un message pour dire que l'objet est déjà dans un autre lot
+    // envoyer un message pour dire que l'objet est dï¿½jï¿½ dans un autre lot
     A_Typ = '5';
     A_Fim = 'BUILDMSGF';
     A_Mid = 'MSG0001';
