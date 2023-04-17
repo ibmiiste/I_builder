@@ -1,0 +1,20 @@
+    /* >>PRE-COMPILER<<                                              */
+    /*   >>CRTCMD<<  CRTSRVPGM SRCFILE(&SL/&SF) SRCMBR(&SM);         */
+    /*   >>IMPORTANT<<                                               */
+    /*     >>PARM<<  SRVPGM(&LI/&SM);                                */
+    /*     >>PARM<<  MODULE(&LI/PARTITION);                          */
+    /*     >>PARM<<  TEXT('Programme de service +                    */
+    /*                     de l''outils i_builder');                 */
+    /*     >>PARM<<  BNDDIR(I_BUILDER SERVICE);                      */
+    /*     >>PARM<<  OPTION(*DUPPROC);                               */
+    /*     >>PARM<<  TGTRLS(*CURRENT);                               */
+    /*     >>PARM<<  DETAIL(*FULL);                                  */
+    /*     >>PARM<<  ALWLIBUPD(*YES);                                */
+    /*   >>END-IMPORTANT<<                                           */
+    /*   >>CMD<<  RMVBNDDIRE BNDDIR(I_BUILDER) OBJ((&LI/&SM));       */
+    /*   >>EXECUTE<<                                                 */
+    /*   >>CMD<<  ADDBNDDIRE BNDDIR(I_BUILDER) OBJ((&LI/&SM));       */
+    /* >>END-PRE-COMPILER<<                                          */
+             STRPGMEXP  PGMLVL(*CURRENT) LVLCHK(*YES) SIGNATURE('20230413')
+                EXPORT     SYMBOL(getPartitionConnection)
+             ENDPGMEXP
