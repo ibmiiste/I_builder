@@ -33,7 +33,7 @@
 
              CRTSAVF    FILE(QTEMP/&SAVF)
 
-             /* On vérifie si 1SAVF est en ligne, s'il ne l'est pas c'est que QTEMP  */
+             /* On vï¿½rifie si 1SAVF est en ligne, s'il ne l'est pas c'est que QTEMP  */
              /* n'est pas en ligne                                                   */
              CHKOBJ     OBJ(&SAVF) OBJTYPE(*FILE)
              MONMSG     MSGID(CPF9801) EXEC(ADDLIBLE QTEMP)
@@ -42,8 +42,8 @@
 
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) RMTPWD(&MDP)
 
-             SAVOBJ     OBJ(&OBJET) LIB(&BIBLIO) DEV(*SAVF) SAVF(QTEMP/&SAVF) +
-                          TGTRLS(V7R1M0)
+             SAVOBJ     OBJ(&OBJET) LIB(&BIBLIO) DEV(*SAVF) +
+                          SAVF(QTEMP/&SAVF)
 
              CALLPRC    PRC(SCRIPTFTP) PARM((&USER) (&MDP) (&SAVF) (&SRCF))
 
@@ -55,12 +55,12 @@
              CHGVAR     VAR(&CMD) VALUE('SBMJOB CMD( RSTOBJ OBJ(*ALL) +
                           SAVLIB(' *TCAT &BIBLIO *TCAT ') DEV(*SAVF) +
                           SAVF(QGPL/' *TCAT &SAVF *TCAT ') MBROPT(*NEW) +
-                          ALWOBJDIF(*ALL)) JOB(RCP_I_PUSH) USER(RTSFLR)')
+                          ALWOBJDIF(*ALL)) JOB(RCP_I_PUSH) JOBQ(QUSRNOMAX) USER(RTSFLR)')
 
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) RMTPWD(&MDP)
 
              CHGVAR     VAR(&CMD) VALUE('SBMJOB CMD(DLTF FILE(QGPL/' *TCAT +
-                          &SAVF *TCAT ')) JOB(DLT_I_PUSH) USER(RTSFLR)')
+                          &SAVF *TCAT ')) JOB(DLT_I_PUSH) JOBQ(QUSRNOMAX) USER(RTSFLR)')
 
              RUNRMTCMD  CMD(&CMD) RMTLOCNAME(&MACHINE *IP) RMTUSER(&USER) RMTPWD(&MDP)
 
