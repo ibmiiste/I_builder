@@ -2,7 +2,6 @@
       //   >>CRTCMD<<  CRTSQLRPGI SRCFILE(&SL/&SF) SRCMBR(&SM);       //
       //   >>IMPORTANT<<                                              //
       //     >>PARM<<  OBJ(&LI/&OB);                                  //
-      //     >>PARM<<  COMMIT(*NONE);                                 //
       //     >>PARM<<  OBJTYPE(*MODULE);                              //
       //     >>PARM<<  OPTION(*EVENTF);                               //
       //     >>PARM<<  TGTRLS(*CURRENT);                              //
